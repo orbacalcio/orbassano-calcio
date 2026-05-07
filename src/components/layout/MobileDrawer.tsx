@@ -154,7 +154,7 @@ export function MobileShell({
               </button>
             </div>
 
-            <nav className="flex flex-col gap-1 px-2 py-6" aria-label="Sezioni principali">
+            <nav className="flex flex-col gap-4 px-4 py-8" aria-label="Sezioni principali">
               {sidebarMainItems
                 .filter((item) => !item.isLogoItem)
                 .map((item) => (
@@ -162,10 +162,10 @@ export function MobileShell({
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="font-display text-ink-hi hover:bg-surface-1 flex items-center justify-between rounded-lg px-4 py-3 text-3xl font-extrabold tracking-[0.01em] uppercase"
+                    className="font-display text-ink-hi hover:text-brand-gold flex items-center justify-between text-5xl leading-none font-black tracking-[0.005em] uppercase transition-colors"
                   >
                     <span>{item.label}</span>
-                    <ChevronRight size={20} className="text-ink-low" />
+                    <ChevronRight size={28} className="text-ink-low" />
                   </Link>
                 ))}
             </nav>
@@ -193,7 +193,7 @@ export function MobileShell({
               <span className="text-ink-low font-display text-[10px] font-semibold tracking-[0.2em] uppercase">
                 Seguici
               </span>
-              <SocialIcons links={socialLinks} iconSize={18} />
+              <SocialIcons links={socialLinks} iconSize={16} />
             </div>
           </aside>
 
