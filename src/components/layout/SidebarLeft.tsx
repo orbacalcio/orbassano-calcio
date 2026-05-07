@@ -66,8 +66,8 @@ function SidebarItemLink({
         <Image
           src="/Logo_Orbassano_2K.png"
           alt=""
-          width={40}
-          height={56}
+          width={56}
+          height={79}
           priority
         />
       ) : Icon ? (

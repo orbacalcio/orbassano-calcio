@@ -100,8 +100,8 @@ export function MobileShell({
           <Image
             src="/Logo_Orbassano_2K.png"
             alt=""
-            width={32}
-            height={45}
+            width={28}
+            height={40}
             priority
           />
         </Link>
