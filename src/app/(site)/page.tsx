@@ -33,7 +33,7 @@ const inkSwatches = [
 
 export default function Home() {
   return (
-    <main className="relative flex flex-1 flex-col">
+    <div className="relative flex flex-1 flex-col">
       {/* Bagliore di brand sullo sfondo per dare profondità senza essere */}
       {/* gradient-y o glow neon. Resta dentro la famiglia navy+rosso. */}
       <div
@@ -197,7 +197,7 @@ export default function Home() {
           </span>
         </footer>
       </section>
-    </main>
+    </div>
   );
 }
 
