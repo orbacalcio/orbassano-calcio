@@ -6,15 +6,25 @@ import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
 
 /**
- * Topbar superiore (44px, sticky, sempre visibile).
+ * Topbar superiore (44px, sticky, sempre visibile su md+).
  *
- * Contenuto:
- * - Loghi Main Sponsor dinamici (1-5) letti da Sanity, monocromatici
- * - Divisore + icona ricerca
+ * Contenuto a destra (replica struttura juventus.com/it):
+ * - Box "main sponsor": riquadro orizzontale con i loghi/nomi degli
+ *   sponsor principali, separati da divisori verticali sottili
+ * - Divisore verticale 1px
+ * - Icona ricerca
+ * - Margine destro pr-[88px] (16px buffer dopo i 72px della sidebar dx)
  *
- * Su tablet (md..lg) mostra max 3 main sponsor (gli altri hidden).
- * Su mobile (<md) la topbar mostra solo l'hamburger + logo: i main
- * sponsor vivono in MobileSponsorStrip sotto.
+ * Comportamento sponsor:
+ * - Sanity popolato: legge i logoMonochrome, li mostra come <Image>
+ *   con opacita' 70% default, hover 100%
+ * - Sanity vuoto (caso attuale in dev): fallback testuale con i 3
+ *   nomi placeholder dei main sponsor 2025/26 in font-display 600
+ *   uppercase, in modo che la topbar non sia mai vuota
+ *
+ * Tablet md..lg: max 3 sponsor visibili (gli altri hidden lg:flex).
+ * Mobile <md: la topbar non viene mostrata, i main sponsor vivono in
+ * MobileSponsorStrip.
  */
 type Sponsor = {
   _id: string;
@@ -23,6 +33,12 @@ type Sponsor = {
   logo: string | null;
   logoMonochrome: string | null;
 };
+
+const FALLBACK_MAIN_SPONSORS: Array<{ name: string; placeholder: true }> = [
+  { name: "Studio Cambareri", placeholder: true },
+  { name: "Reale Mutua", placeholder: true },
+  { name: "Ocert", placeholder: true },
+];
 
 async function fetchMainSponsors(): Promise<Sponsor[]> {
   try {
@@ -33,14 +49,13 @@ async function fetchMainSponsors(): Promise<Sponsor[]> {
     );
     return (data ?? []) as Sponsor[];
   } catch {
-    // In dev senza credenziali Sanity restituiamo array vuoto: la
-    // topbar sara' priva di sponsor finche' .env.local non e' compilato.
     return [];
   }
 }
 
 export async function Topbar() {
   const sponsors = await fetchMainSponsors();
+  const usingFallback = sponsors.length === 0;
 
   return (
     <header
@@ -51,15 +66,30 @@ export async function Topbar() {
       role="banner"
       aria-label="Barra superiore con sponsor principali"
     >
-      <div className="flex w-full items-center justify-end gap-6 pr-4 pl-[calc(72px+1rem)]">
-        {sponsors.length > 0 && (
-          <ul className="flex items-center gap-6">
+      <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
+        {/* Box main sponsor (riquadro con divisori verticali tra loghi) */}
+        {usingFallback ? (
+          <ul className="border-border/60 bg-surface-1/60 flex h-7 items-center divide-x divide-border/60 overflow-hidden rounded-md border">
+            {FALLBACK_MAIN_SPONSORS.map((s) => (
+              <li
+                key={s.name}
+                className="font-display text-ink-mid flex h-full items-center px-3 text-[11px] font-semibold tracking-[0.15em] uppercase"
+              >
+                {s.name}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul className="border-border/60 bg-surface-1/60 flex h-7 items-center divide-x divide-border/60 overflow-hidden rounded-md border">
             {sponsors.map((s, i) => {
               const src = s.logoMonochrome ?? s.logo;
               const tabletHide = i >= 3 ? "hidden lg:flex" : "flex";
-              if (!src || !s.website) return null;
+              if (!s.website) return null;
               return (
-                <li key={s._id} className={cn("h-6 items-center", tabletHide)}>
+                <li
+                  key={s._id}
+                  className={cn("h-full items-center px-3", tabletHide)}
+                >
                   <a
                     href={s.website}
                     target="_blank"
@@ -67,27 +97,33 @@ export async function Topbar() {
                     aria-label={`${s.name} (sponsor principale)`}
                     className="opacity-70 transition-opacity hover:opacity-100"
                   >
-                    <Image
-                      src={src}
-                      alt={s.name}
-                      width={120}
-                      height={24}
-                      className="h-6 w-auto object-contain"
-                      style={
-                        s.logoMonochrome
-                          ? undefined
-                          : {
-                              filter: "brightness(0) invert(1)",
-                            }
-                      }
-                    />
+                    {src ? (
+                      <Image
+                        src={src}
+                        alt={s.name}
+                        width={100}
+                        height={20}
+                        className="h-5 w-auto object-contain"
+                        style={
+                          s.logoMonochrome
+                            ? undefined
+                            : { filter: "brightness(0) invert(1)" }
+                        }
+                      />
+                    ) : (
+                      <span className="font-display text-ink-mid text-[11px] font-semibold tracking-[0.15em] uppercase">
+                        {s.name}
+                      </span>
+                    )}
                   </a>
                 </li>
               );
             })}
           </ul>
         )}
-        <div aria-hidden className="bg-border/50 hidden h-6 w-px md:block" />
+
+        <div aria-hidden className="bg-border h-5 w-px" />
+
         <button
           type="button"
           aria-label="Cerca nel sito"
