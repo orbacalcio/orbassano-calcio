@@ -27,11 +27,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main
         id="main-content"
         tabIndex={-1}
-        className="pt-[84px] lg:pt-11 lg:pr-[72px] lg:pl-[88px]"
+        className="pt-[84px] lg:pt-11 lg:pr-[80px] lg:pl-[88px]"
       >
         {children}
       </main>
-      <div className="lg:pr-[72px] lg:pl-[88px]">
+      <div className="lg:pr-[80px] lg:pl-[88px]">
         <Footer />
       </div>
     </>

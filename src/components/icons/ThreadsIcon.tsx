@@ -1,14 +1,16 @@
 import type { SVGProps } from "react";
 
 /**
- * Icona ufficiale Threads (Meta).
+ * Icona Threads — variante semplificata "chiocciola @".
  *
- * Solid path con `fill="currentColor"`, glifo riconoscibile della "@"
- * stilizzata che identifica Threads. Stessa filosofia di XIcon:
- * fill anziche' stroke, eredita il colore dal parent.
+ * Lo SVG ufficiale Meta (path multiplo, occhio + spirale) era troppo
+ * dettagliato a 16-20px e illeggibile. Stile juventus.com: glifi
+ * minimali e immediatamente riconoscibili. Qui usiamo una @ classica
+ * (cerchio con punto interno + coda parziale) che e' lo glifo che
+ * l'utente associa istintivamente a Threads.
  */
 export function ThreadsIcon({
-  size = 16,
+  size = 20,
   ...props
 }: SVGProps<SVGSVGElement> & { size?: number | string }) {
   return (
@@ -17,11 +19,17 @@ export function ThreadsIcon({
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden="true"
       {...props}
     >
-      <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509-1.645-2.05-2.495-4.905-2.523-8.481v-.017c.028-3.576.878-6.431 2.523-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.021 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.78 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.81-1.066-.703-1.696-1.776-1.696-2.998 0-2.349 1.918-4.06 4.66-4.16.853-.03 1.671.06 2.4.265-.041-1.83-1.013-2.776-2.738-2.776-1.062 0-1.951.413-2.652 1.226l-1.547-1.288c1.085-1.265 2.629-1.94 4.221-1.94 2.799 0 4.591 1.811 4.654 4.7l.014.001c1.31.474 2.355 1.252 3.013 2.262 1.085 1.674 1.183 4.4-1.058 6.612-1.838 1.802-4.052 2.625-7.18 2.65zm-.687-9.276c-.273 0-.55.011-.831.034-1.65.092-2.681.872-2.62 1.972.064 1.146 1.193 1.79 2.342 1.736 1.05-.057 2.21-.466 2.405-2.954a8.04 8.04 0 0 0-1.296-.788z" />
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none" />
+      <path d="M15.5 12v2.2c0 1.5 1 2.3 2.2 2.3 1.7 0 3.3-1.4 3.3-4.5" />
     </svg>
   );
 }

@@ -148,7 +148,7 @@ export async function Footer() {
             </div>
           </div>
           <p className="text-ink-mid text-sm leading-relaxed">{tagline}</p>
-          <SocialIcons links={social} iconSize={16} />
+          <SocialIcons links={social} />
         </div>
 
         {/* Colonna centrale: nav per area */}

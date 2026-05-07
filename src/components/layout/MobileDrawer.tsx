@@ -193,7 +193,7 @@ export function MobileShell({
               <span className="text-ink-low font-display text-[10px] font-semibold tracking-[0.2em] uppercase">
                 Seguici
               </span>
-              <SocialIcons links={socialLinks} iconSize={16} />
+              <SocialIcons links={socialLinks} />
             </div>
           </aside>
 
