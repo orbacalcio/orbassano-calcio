@@ -54,7 +54,9 @@ function SidebarItemLink({
         "group focus-visible:outline-brand-gold relative flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4",
       )}
     >
-      {active && (
+      {/* Indicator verticale dorato sulla rotta corrente — NON sul logo home,
+          dove apparirebbe come una barra fantasma a sinistra dello stemma. */}
+      {active && !item.isLogoItem && (
         <span
           aria-hidden
           className="bg-brand-gold absolute -left-[14px] h-8 w-[2px]"
@@ -81,7 +83,7 @@ function SidebarItemLink({
       {item.microlabel && (
         <span
           className={cn(
-            "font-display text-[10px] font-semibold tracking-[0.15em] uppercase transition-colors",
+            "font-display text-[11px] font-bold tracking-[0.12em] uppercase transition-colors",
             active ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
           )}
         >
@@ -137,7 +139,7 @@ function MoreButton() {
         />
         <span
           className={cn(
-            "font-display text-[10px] font-semibold tracking-[0.15em] uppercase transition-colors",
+            "font-display text-[11px] font-bold tracking-[0.12em] uppercase transition-colors",
             open ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
           )}
         >
