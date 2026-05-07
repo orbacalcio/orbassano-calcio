@@ -1,4 +1,3 @@
-import { X as TwitterIcon } from "lucide-react";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -6,6 +5,7 @@ import {
 } from "@/components/icons/BrandIcons";
 import { ThreadsIcon } from "@/components/icons/ThreadsIcon";
 import { TikTokIcon } from "@/components/icons/TikTokIcon";
+import { XIcon } from "@/components/icons/XIcon";
 import { cn } from "@/lib/cn";
 
 /**
@@ -56,7 +56,7 @@ function PlatformIcon({
     case "youtube":
       return <YoutubeIcon size={size} />;
     case "twitter":
-      return <TwitterIcon size={size} aria-hidden />;
+      return <XIcon size={size} />;
     case "threads":
       return <ThreadsIcon size={size} />;
     case "tiktok":
