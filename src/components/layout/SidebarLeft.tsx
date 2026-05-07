@@ -14,28 +14,16 @@ import {
 } from "./SidebarLeft.items";
 
 /**
- * Sidebar sinistra desktop (≥ lg, 72px width, fixed full-height).
+ * Sidebar sinistra desktop (≥ lg, 88px width, fixed full-height).
  *
- * Estetica fluttuante sopra l'hero: trasparente + backdrop-blur quando
- * un elemento [data-hero-sentinel] e' visibile, opaca quando l'hero
- * non e' piu' nel viewport.
+ * Visibilita' gestita da ClientShell via opacity + pointer-events:
+ * mostrata solo quando l'hero e' nel viewport. Quando si scrolla oltre,
+ * la TopbarScrolled la sostituisce. Estetica sempre trasparente
+ * (bg-surface-0/55 + backdrop-blur), tarata per stare sopra le foto
+ * dell'hero.
  *
  * Voci: 6 (logo home + 4 sezioni + ALTRO popover).
  */
-function useIsOverHero() {
-  const [isOver, setIsOver] = useState(false);
-  useEffect(() => {
-    const sentinel = document.querySelector("[data-hero-sentinel]");
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsOver(Boolean(entry?.isIntersecting)),
-      { rootMargin: "-44px 0px 0px 0px", threshold: 0 },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
-  return isOver;
-}
 
 function SidebarItemLink({
   item,
@@ -178,17 +166,11 @@ function MoreButton() {
 
 export function SidebarLeft() {
   const pathname = usePathname();
-  const isOverHero = useIsOverHero();
 
   return (
     <nav
       aria-label="Navigazione principale"
-      className={cn(
-        "fixed top-0 left-0 hidden h-screen w-[88px] flex-col items-center pt-[60px] pb-6 transition-colors duration-300 lg:flex",
-        isOverHero
-          ? "bg-surface-0/55 backdrop-blur-md"
-          : "bg-surface-0 border-border border-r",
-      )}
+      className="bg-surface-0/55 fixed top-0 left-0 hidden h-screen w-[88px] flex-col items-center pt-[60px] pb-6 backdrop-blur-md lg:flex"
       style={{ zIndex: Z.sidebar }}
     >
       <ul className="flex flex-1 flex-col items-center gap-9">

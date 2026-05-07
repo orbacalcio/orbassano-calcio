@@ -1,29 +1,37 @@
+import { fetchMainSponsors } from "@/sanity/fetchers";
+import { ClientShell } from "./ClientShell";
 import { Footer } from "./Footer";
-import { MobileShell } from "./MobileDrawer";
 import { MobileSponsorStrip } from "./MobileSponsorStrip";
-import { SidebarLeft } from "./SidebarLeft";
-import { SidebarRight } from "./SidebarRight";
 import { SkipLink } from "./SkipLink";
-import { Topbar } from "./Topbar";
 
 /**
  * Shell del sito pubblico.
  *
- * Layout responsive:
- * - Desktop (≥ lg): topbar 44px + sidebar sx 72px + sidebar dx 56px,
- *   il content prende il resto (margine pl-[72px] pr-[56px] pt-11)
- * - Mobile (<lg): topbar 44px + sponsor strip 40px sticky + drawer
- *   apribile via hamburger, content full width sotto (pt-[84px])
+ * Server async: fetcha una sola volta i main sponsor (cache tag
+ * 'sponsor' per webhook revalidate) e li passa al ClientShell come
+ * data plain serializzabile. ClientShell importa Topbar / TopbarScrolled
+ * / SidebarLeft / SidebarRight / MobileTopbar / NavigationDrawer
+ * direttamente — le funzioni-prop tra server e client component non
+ * sono ammesse in App Router.
+ *
+ * Pattern desktop (≥lg) — scroll switch via ClientShell:
+ * - Hero visibile: Topbar 44px + SidebarLeft 88px + SidebarRight 80px
+ * - Scrollato oltre hero: TopbarScrolled 64px (orizzontale full)
+ * - Transizione fade 250ms con Framer Motion
+ *
+ * Mobile (<lg):
+ * - MobileTopbar sempre presente (no switch)
+ * - MobileSponsorStrip sticky sotto la topbar
+ * - NavigationDrawer condiviso (apre da hamburger mobile o TopbarScrolled)
  */
-export function AppShell({ children }: { children: React.ReactNode }) {
+export async function AppShell({ children }: { children: React.ReactNode }) {
+  const sponsors = await fetchMainSponsors();
+
   return (
     <>
       <SkipLink />
-      <Topbar />
-      <MobileShell />
+      <ClientShell sponsors={sponsors} />
       <MobileSponsorStrip />
-      <SidebarLeft />
-      <SidebarRight />
       <main
         id="main-content"
         tabIndex={-1}

@@ -1,60 +1,29 @@
+"use client";
+
 import Image from "next/image";
 import { Search } from "lucide-react";
-import { sanityClient } from "@/sanity/client";
-import { mainSponsorsQuery } from "@/sanity/queries";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
+import type { MainSponsor } from "@/sanity/fetchers";
 
 /**
- * Topbar superiore (44px, sticky, sempre visibile su md+).
+ * Topbar superiore in modalita' "hero" (44px, sticky, solo md+).
  *
- * Contenuto a destra (replica struttura juventus.com/it):
- * - Box "main sponsor": riquadro orizzontale con i loghi/nomi degli
- *   sponsor principali, separati da divisori verticali sottili
- * - Divisore verticale 1px
- * - Icona ricerca
- * - Margine destro pr-[88px] (16px buffer dopo i 72px della sidebar dx)
+ * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
+ * Quando si scrolla oltre, ClientShell la nasconde via opacity e
+ * mostra TopbarScrolled al suo posto.
  *
- * Comportamento sponsor:
- * - Sanity popolato: legge i logoMonochrome, li mostra come <Image>
- *   con opacita' 70% default, hover 100%
- * - Sanity vuoto (caso attuale in dev): fallback testuale con i 3
- *   nomi placeholder dei main sponsor della stagione corrente in font-display 600
- *   uppercase, in modo che la topbar non sia mai vuota
- *
- * Tablet md..lg: max 3 sponsor visibili (gli altri hidden lg:flex).
- * Mobile <md: la topbar non viene mostrata, i main sponsor vivono in
- * MobileSponsorStrip.
+ * Pattern: trasparente con backdrop-blur + box main sponsor a destra
+ * + divisore + icona search. Loghi sponsor monocromatici, fallback
+ * testuale quando Sanity non ha ancora gli sponsor caricati.
  */
-type Sponsor = {
-  _id: string;
-  name: string;
-  website: string | null;
-  logo: string | null;
-  logoMonochrome: string | null;
-};
-
-const FALLBACK_MAIN_SPONSORS: Array<{ name: string; placeholder: true }> = [
-  { name: "Studio Cambareri", placeholder: true },
-  { name: "Reale Mutua", placeholder: true },
-  { name: "Ocert", placeholder: true },
+const FALLBACK_MAIN_SPONSORS = [
+  { name: "Studio Cambareri" },
+  { name: "Reale Mutua" },
+  { name: "Ocert" },
 ];
 
-async function fetchMainSponsors(): Promise<Sponsor[]> {
-  try {
-    const data = await sanityClient.fetch(
-      mainSponsorsQuery,
-      {},
-      { next: { tags: ["sponsor"] } },
-    );
-    return (data ?? []) as Sponsor[];
-  } catch {
-    return [];
-  }
-}
-
-export async function Topbar() {
-  const sponsors = await fetchMainSponsors();
+export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
   const usingFallback = sponsors.length === 0;
 
   return (
@@ -67,9 +36,8 @@ export async function Topbar() {
       aria-label="Barra superiore con sponsor principali"
     >
       <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
-        {/* Box main sponsor (riquadro con divisori verticali tra loghi) */}
         {usingFallback ? (
-          <ul className="border-border/60 bg-surface-1/60 flex h-7 items-center divide-x divide-border/60 overflow-hidden rounded-md border">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
               <li
                 key={s.name}
@@ -80,7 +48,7 @@ export async function Topbar() {
             ))}
           </ul>
         ) : (
-          <ul className="border-border/60 bg-surface-1/60 flex h-7 items-center divide-x divide-border/60 overflow-hidden rounded-md border">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border">
             {sponsors.map((s, i) => {
               const src = s.logoMonochrome ?? s.logo;
               const tabletHide = i >= 3 ? "hidden lg:flex" : "flex";
