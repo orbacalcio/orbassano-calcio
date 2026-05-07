@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Menu, Search, X } from "lucide-react";
+// Search e' usata solo dentro il drawer aperto, non nella topbar mobile.
 import { useEffect, useRef, useState } from "react";
 import { SocialIcons, type SocialLinks } from "@/components/social/SocialIcons";
 import { cn } from "@/lib/cn";
@@ -100,17 +101,12 @@ export function MobileShell({
             src="/Logo_Orbassano_2K.png"
             alt=""
             width={32}
-            height={32}
+            height={45}
             priority
           />
         </Link>
-        <button
-          type="button"
-          aria-label="Cerca"
-          className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md focus-visible:outline-2"
-        >
-          <Search size={20} />
-        </button>
+        {/* Spaziatore destro: la ricerca su mobile vive solo dentro il drawer */}
+        <span aria-hidden className="h-9 w-9" />
       </header>
 
       {open && (
@@ -147,7 +143,7 @@ export function MobileShell({
                 src="/Logo_Orbassano_2K.png"
                 alt=""
                 width={36}
-                height={36}
+                height={51}
               />
               <button
                 type="button"

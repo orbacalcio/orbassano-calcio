@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { sanityClient } from "@/sanity/client";
 import { heroSlidesQuery, settingsQuery } from "@/sanity/queries";
+import { HeroNavOverlay } from "@/components/layout/HeroNavOverlay";
 import { HeroCarousel } from "./HeroCarousel";
 import { HeroOverlay } from "./HeroOverlay";
 
@@ -79,7 +80,7 @@ export async function Hero() {
               src="/Logo_Orbassano_2K.png"
               alt=""
               width={900}
-              height={900}
+              height={1266}
               priority
               className="object-contain"
             />
@@ -88,6 +89,11 @@ export async function Hero() {
           <div className="from-surface-0 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
         </div>
       )}
+
+      {/* Mobile (<lg): voci nav giganti centrate sull'hero, pattern juventus.com */}
+      <div className="absolute inset-x-0 top-[40%] z-10 flex -translate-y-1/2 justify-center lg:hidden">
+        <HeroNavOverlay />
+      </div>
 
       <HeroOverlay season={season} league={league} group={group} />
     </section>

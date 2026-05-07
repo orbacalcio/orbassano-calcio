@@ -16,10 +16,45 @@ export default function NotFound() {
         src="/Logo_Orbassano_2K.png"
         alt=""
         width={120}
-        height={120}
+        height={169}
         priority
-        className="mb-8 opacity-90"
+        className="mb-6 opacity-90"
       />
+      {/* SVG decorativo: pallone in fallo laterale, traiettoria che esce dal campo */}
+      <svg
+        aria-hidden
+        viewBox="0 0 240 80"
+        className="text-brand-gold/60 mb-8 h-16 w-60"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      >
+        <line x1="0" y1="64" x2="240" y2="64" strokeDasharray="4 6" />
+        <path
+          d="M 20 60 Q 90 -10 180 28"
+          strokeDasharray="3 5"
+          className="text-brand-gold/80"
+          stroke="currentColor"
+        />
+        <circle cx="180" cy="28" r="9" fill="currentColor" className="text-ink-hi" />
+        <circle cx="180" cy="28" r="9" stroke="currentColor" className="text-surface-0" strokeWidth="1.2" />
+        <path
+          d="M 173 23 L 187 33 M 173 33 L 187 23"
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-surface-0"
+        />
+        <text
+          x="190"
+          y="54"
+          fill="currentColor"
+          className="font-mono text-brand-gold/70 text-[8px]"
+          fontSize="8"
+        >
+          OUT
+        </text>
+      </svg>
       <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase">
         Errore 404
       </span>

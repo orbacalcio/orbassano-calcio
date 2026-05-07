@@ -25,7 +25,7 @@ export function Banner5x1000() {
             src="/Logo_Orbassano_2K.png"
             alt=""
             width={700}
-            height={700}
+            height={984}
             className="object-contain"
           />
         </div>

@@ -65,12 +65,12 @@ function SidebarItemLink({
           src="/Logo_Orbassano_2K.png"
           alt=""
           width={40}
-          height={40}
+          height={56}
           priority
         />
       ) : Icon ? (
         <Icon
-          size={22}
+          size={28}
           className={cn(
             "transition-colors",
             active ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
@@ -81,8 +81,8 @@ function SidebarItemLink({
       {item.microlabel && (
         <span
           className={cn(
-            "font-display text-[9px] font-semibold tracking-[0.15em] uppercase transition-colors",
-            active ? "text-brand-gold" : "text-ink-low group-hover:text-ink-mid",
+            "font-display text-[10px] font-semibold tracking-[0.15em] uppercase transition-colors",
+            active ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
           )}
         >
           {item.microlabel}
@@ -128,7 +128,7 @@ function MoreButton() {
         className="group focus-visible:outline-brand-gold flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4"
       >
         <MoreIcon
-          size={22}
+          size={28}
           className={cn(
             "transition-colors",
             open ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
@@ -137,8 +137,8 @@ function MoreButton() {
         />
         <span
           className={cn(
-            "font-display text-[9px] font-semibold tracking-[0.15em] uppercase transition-colors",
-            open ? "text-brand-gold" : "text-ink-low group-hover:text-ink-mid",
+            "font-display text-[10px] font-semibold tracking-[0.15em] uppercase transition-colors",
+            open ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
           )}
         >
           ALTRO
@@ -147,7 +147,7 @@ function MoreButton() {
       {open && (
         <div
           role="menu"
-          className="border-border bg-surface-1/95 absolute top-0 left-[72px] w-56 rounded-r-2xl border p-2 shadow-2xl backdrop-blur-md"
+          className="border-border bg-surface-1/95 absolute top-0 left-[88px] w-56 rounded-r-2xl border p-2 shadow-2xl backdrop-blur-md"
           style={{ zIndex: Z.tooltipPopover }}
         >
           <ul className="flex flex-col">
@@ -182,14 +182,14 @@ export function SidebarLeft() {
     <nav
       aria-label="Navigazione principale"
       className={cn(
-        "fixed top-0 left-0 hidden h-screen w-[72px] flex-col items-center pt-6 pb-6 transition-colors duration-300 lg:flex",
+        "fixed top-0 left-0 hidden h-screen w-[88px] flex-col items-center pt-[60px] pb-6 transition-colors duration-300 lg:flex",
         isOverHero
           ? "bg-surface-0/55 backdrop-blur-md"
           : "bg-surface-0 border-border border-r",
       )}
       style={{ zIndex: Z.sidebar }}
     >
-      <ul className="flex flex-1 flex-col items-center gap-8">
+      <ul className="flex flex-1 flex-col items-center gap-9">
         {sidebarMainItems.map((item) => {
           const active =
             item.href === "/"

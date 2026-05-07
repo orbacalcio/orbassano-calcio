@@ -17,7 +17,7 @@ type Props = {
 const wrapper: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.18, delayChildren: 0.1 },
   },
 };
 

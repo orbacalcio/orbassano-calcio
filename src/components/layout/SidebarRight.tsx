@@ -48,14 +48,14 @@ export function SidebarRight({
     <aside
       aria-label="Social del club"
       className={cn(
-        "fixed top-0 right-0 hidden h-screen w-[56px] flex-col items-center justify-center transition-colors duration-300 lg:flex",
+        "fixed top-0 right-0 hidden h-screen w-[72px] flex-col items-center justify-center pt-[60px] pb-6 transition-colors duration-300 lg:flex",
         isOverHero
           ? "bg-surface-0/55 backdrop-blur-md"
           : "bg-surface-0 border-border border-l",
       )}
       style={{ zIndex: Z.sidebar }}
     >
-      <SocialIcons links={links} className="flex-col gap-2" iconSize={18} />
+      <SocialIcons links={links} className="flex-col gap-6" iconSize={24} />
     </aside>
   );
 }

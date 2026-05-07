@@ -77,6 +77,13 @@ Dopo le difficoltà degli anni 2010 (fusioni con Cirié e Gabetto, sospensione a
 | 2018-19 | 5° Prima Categoria E, **finale playoff persa con Nichelino Hesperia** |
 | 2019 | Cambia nome in A.S.D. Orbassano A.S.P.A. |
 | **2022** | **Rifondazione**: torna A.S.D. Orbassano Calcio |
+| 2022-23 | 11° Prima Categoria E |
+| 2023-24 | Prima Categoria E |
+| 2024-25 | Prima Categoria, **promozione conquistata** |
+| 2025-26 | **Promozione Piemonte-VdA**, retrocessione a fine stagione |
+| **2026-27** | **Prima Categoria Piemonte-VdA** (stagione corrente) |
+
+> Fonte primaria di tutti questi dati: pagina Wikipedia di Orbassano Calcio (https://it.wikipedia.org/wiki/Orbassano_Calcio), aggiornata dal social media manager del club. Per la pagina Storia M5, gli articoli storici archiviati su La Stampa (citati nelle note di Wikipedia) possono essere consultati per recuperare aneddoti più dettagliati su stagioni specifiche degli anni '80 e 2000.
 
 ### Palmarès
 - **Eccellenza Piemonte-VdA**: 1 (2002-03 girone B)
@@ -108,13 +115,14 @@ Dopo le difficoltà degli anni 2010 (fusioni con Cirié e Gabetto, sospensione a
 
 ---
 
-## 3. STAGIONE 2025/2026 — PRIMA SQUADRA
+## 3. STAGIONE 2026/2027 — PRIMA SQUADRA
 
 ### Categoria
-**Promozione Piemonte–Valle d'Aosta** (settima divisione del calcio italiano).
-> ⚠️ Verifica: Wikipedia parla di Prima Categoria 2024-25 ma il sito attuale e il brief utente indicano Promozione 2025-26. Confermare girone (presumibilmente girone B o C).
+**Prima Categoria Piemonte–Valle d'Aosta** (ottava divisione del calcio italiano), girone ancora da definire (pubblicazione LND prevista per agosto 2026). Cronistoria recente delle ultime tre stagioni (2024/25 → 2025/26 → 2026/27) e tutte le precedenti sono nella tabella della §2.
 
-### Rosa (23 giocatori)
+### Rosa di riferimento (ultima stagione completa, 2025/26)
+
+> **Nota**: questa è la rosa che ha completato la stagione 2025/26 in Promozione. La rosa per la stagione 2026/27 in Prima Categoria sarà definita nei mesi estivi (tesseramenti tipicamente da agosto/settembre). Mantieni i 23 giocatori nel CMS come riferimento storico/transitorio finché non arrivano i nuovi tesseramenti.
 
 | Cognome Nome | Anno |
 |---|---|

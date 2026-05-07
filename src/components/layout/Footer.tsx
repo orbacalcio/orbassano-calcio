@@ -136,7 +136,7 @@ export async function Footer() {
               src="/Logo_Orbassano_2K.png"
               alt=""
               width={56}
-              height={56}
+              height={79}
             />
             <div className="flex flex-col">
               <span className="font-display text-ink-hi text-xl leading-none font-extrabold tracking-[0.01em] uppercase">
@@ -210,7 +210,7 @@ export async function Footer() {
                 </li>
               )}
               {contact.pec && (
-                <li className="text-ink-low pl-6 text-xs">PEC: {contact.pec}</li>
+                <li className="text-ink-mid pl-6 text-xs">PEC: {contact.pec}</li>
               )}
             </ul>
           </div>
@@ -251,10 +251,10 @@ export async function Footer() {
           className="flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center sm:justify-between"
           size="wide"
         >
-          <span className="text-ink-low font-mono text-[11px] tracking-wide">
+          <span className="text-ink-mid font-mono text-[11px] tracking-wide">
             © {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
           </span>
-          <span className="text-ink-low text-xs">
+          <span className="text-ink-mid text-xs">
             Sito ricostruito con cura, dal 1930 ai nostri giorni.
           </span>
         </Container>

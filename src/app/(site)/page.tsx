@@ -1,9 +1,9 @@
 import { Banner5x1000 } from "@/components/home/Banner5x1000";
-import { ChampionsMarquee } from "@/components/home/ChampionsMarquee";
 import { Hero } from "@/components/home/Hero";
 import { MatchStrip } from "@/components/home/MatchStrip";
 import { NewsGrid } from "@/components/home/NewsGrid";
 import { SponsorMarquee } from "@/components/home/SponsorMarquee";
+import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { TeamsCards } from "@/components/home/TeamsCards";
 
 /**
@@ -14,7 +14,7 @@ import { TeamsCards } from "@/components/home/TeamsCards";
  * 2. Match strip info dense
  * 3. News in evidenza 2x2
  * 4. Tre card 01/02/03 per le aree del club
- * 5. Marquee "Da qui sono passati i campioni"
+ * 5. Storia in numeri (95 anni / 23 atleti / 120+ giovani / 9 Serie D)
  * 6. Banner 5×1000 con CF in mono
  * 7. Marquee sponsor scorrimento infinito
  * (8. Footer dark — viene da AppShell)
@@ -26,7 +26,7 @@ export default function Home() {
       <MatchStrip />
       <NewsGrid />
       <TeamsCards />
-      <ChampionsMarquee />
+      <StoryNumbers />
       <Banner5x1000 />
       <SponsorMarquee />
     </>
