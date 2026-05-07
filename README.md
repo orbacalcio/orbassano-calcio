@@ -49,7 +49,7 @@ Palette estratta direttamente dal logo ufficiale (vedi
 |---|---|---|
 | `--color-brand-blue` | `#213F8C` | primario, link, focus, badge |
 | `--color-brand-red` | `#E91F22` | CTA, live, vittoria |
-| `--color-brand-gold` | `#DFB16C` | celebrazioni, palmares, 95 anni |
+| `--color-brand-gold` | `#DFB16C` | celebrazioni, palmares, anniversari |
 | `--color-brand-white` | `#FEFDFD` | stemma, wordmark |
 | `--color-surface-0` | `#0A1428` | sfondo principale (navy profondo) |
 | `--color-surface-1..3` | `#0F1D38 -> #1F3460` | card, hover, surface elevate |

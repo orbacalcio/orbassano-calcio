@@ -9,13 +9,15 @@ import { Container } from "@/components/ui/Container";
  * nel viewport. Rimpiazza la ChampionsMarquee come blocco identitario.
  *
  * Numeri (DATA_ORBASSANO §1, §2, §3, §5):
- * - 95 anni di storia (1930 → 2025)
+ * - +90 anni di rossoblù (dal 1930)  -> "+" prefisso evita la
+ *   manutenzione annuale del numero esatto
  * - 23 atleti in prima squadra
  * - 120+ giovani nel SGS
  * - 9 partecipazioni in Serie D
  */
 type Stat = {
   end: number;
+  prefix?: string;
   suffix?: string;
   label: string;
   caption: string;
@@ -23,8 +25,9 @@ type Stat = {
 
 const STATS: Stat[] = [
   {
-    end: 95,
-    label: "Anni di storia",
+    end: 90,
+    prefix: "+",
+    label: "Anni di rossoblù",
     caption: "Dal 1930 al campo, senza fermarsi davvero mai.",
   },
   {
@@ -92,7 +95,7 @@ export function StoryNumbers() {
             Storia in numeri
           </span>
           <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-            Novantacinque anni di rossoblù raccontati in quattro numeri
+            Oltre novanta anni di rossoblù raccontati in quattro numeri
           </h2>
         </header>
 
@@ -106,7 +109,10 @@ export function StoryNumbers() {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="bg-surface-2/70 flex flex-col items-start gap-3 p-8 lg:p-10"
             >
-              <span className="font-display text-brand-gold text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
+              <span className="font-display text-brand-gold flex items-baseline gap-1 text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
+                {s.prefix && (
+                  <span className="text-4xl sm:text-5xl">{s.prefix}</span>
+                )}
                 <Counter end={s.end} />
                 {s.suffix}
               </span>

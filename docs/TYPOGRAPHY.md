@@ -51,7 +51,22 @@ Big Shoulders Display è un font **variabile** con 9 weight (100-900). Carichiam
 | Titoli footer (sezioni) | **700 uppercase, text-sm** | "SOSTIENI · LEGALE" | 0.15em | 1.0 |
 | Score grande partita | 900 | "2 — 1" | 0.0em | 1.0 |
 | Numero maglia | 900 | "10" | 0.0em | 1.0 |
-| Counter animato | 900 | "95 ANNI / 23 GIOCATORI" | 0.005em | 1.0 |
+| Counter animato | 900 | "+90 ANNI / 23 GIOCATORI" | 0.005em | 1.0 |
+
+> **Nota sulla deviazione microlabel sidebar (text-[11px] anziché text-sm)**.
+> Il design system targettava `text-sm` (14px) anche per le microlabel
+> della sidebar, per coerenza con i titoli del footer. Test pratico al
+> primo render: `SOCIETÀ`, `SPONSOR`, `SQUADRE` (tutte 7 caratteri) in
+> Big Shoulders 700 uppercase a 14px con `tracking-[0.15em]` sforavano
+> i 88px di larghezza della sidebar sinistra di ~25px (≈113px richiesti).
+> Le alternative valutate: (a) ulteriore allargamento a w-[108px], che
+> avrebbe ridotto l'eleganza fluttuante della sidebar; (b) troncamento
+> con `text-overflow: ellipsis`, brutto su microlabel uppercase;
+> (c) tracking ridotto a 0.05em, ma perdeva il "feel" editoriale.
+> La scelta finale è il compromesso `text-[11px] tracking-[0.12em]`:
+> mezzo passo tra il vecchio 10px e il target 14px, leggibile e dentro
+> ai 88px senza tagli. Se in futuro la sidebar verrà allargata oltre
+> i 100px, riallineare a `text-sm tracking-[0.15em]`.
 
 ### 2.3 Considerazioni specifiche per Big Shoulders
 
@@ -265,7 +280,7 @@ Per riferimento futuro, queste erano le alternative viste e scartate dal cliente
 - **Bebas Neue** — troppo diffuso, identità debole
 - **Anton** — solido ma solo un weight, poco versatile
 - **Oswald** — sicuro ma poco distintivo
-- **Saira Condensed** — troppo "tech moderno", non si adatta ai 95 anni di storia
+- **Saira Condensed** — troppo "tech moderno", non si adatta agli oltre 90 anni di storia
 - **Teko** — feel "esports/gaming", non in linea con il club
 - **Archivo Black** — non condensed, mood "fashion magazine" che cambierebbe il sito
 - **Bowlby One** — troppo americano vintage

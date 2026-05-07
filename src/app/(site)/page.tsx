@@ -14,7 +14,7 @@ import { TeamsCards } from "@/components/home/TeamsCards";
  * 2. Match strip info dense
  * 3. News in evidenza 2x2
  * 4. Tre card 01/02/03 per le aree del club
- * 5. Storia in numeri (95 anni / 23 atleti / 120+ giovani / 9 Serie D)
+ * 5. Storia in numeri (+90 anni / 23 atleti / 120+ giovani / 9 Serie D)
  * 6. Banner 5×1000 con CF in mono
  * 7. Marquee sponsor scorrimento infinito
  * (8. Footer dark — viene da AppShell)
