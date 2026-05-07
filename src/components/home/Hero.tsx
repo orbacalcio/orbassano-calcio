@@ -18,6 +18,33 @@ type Slide = {
   credits?: string | null;
 };
 
+/**
+ * Fallback temporaneo per il carosello hero, finche' lo Studio non ha
+ * heroSlide reali caricati. Le immagini vivono in public/temp-hero/
+ * (gitignored, scaricate manualmente dal vecchio sito Wix). Quando
+ * Sanity restituisce slide attive, queste vengono ignorate.
+ */
+const FALLBACK_HERO_SLIDES: Slide[] = [
+  {
+    _id: "temp-hero-1",
+    title: "Giovani calciatori in azione",
+    alt: "Giovani calciatori del settore giovanile in azione su campo erboso",
+    image: "/temp-hero/slide-01.jpg",
+  },
+  {
+    _id: "temp-hero-2",
+    title: "Calciatore in azione",
+    alt: "Calciatore della prima squadra in fase di gioco",
+    image: "/temp-hero/slide-02.jpg",
+  },
+  {
+    _id: "temp-hero-3",
+    title: "Allenamento scuola calcio",
+    alt: "Bambini della scuola calcio durante un allenamento al Centro Sportivo",
+    image: "/temp-hero/slide-03.jpg",
+  },
+];
+
 type Settings = {
   currentSeason: string | null;
   currentLeague: string | null;
@@ -57,10 +84,14 @@ async function fetchHeroData() {
 }
 
 export async function Hero() {
-  const { slides, settings } = await fetchHeroData();
+  const { slides: sanitySlides, settings } = await fetchHeroData();
   const season = settings.currentSeason ?? FALLBACK_SETTINGS.currentSeason ?? "";
   const league = settings.currentLeague ?? FALLBACK_SETTINGS.currentLeague ?? "";
   const group = settings.currentGroup ?? FALLBACK_SETTINGS.currentGroup ?? "";
+  // Sanity prevale: usiamo i fallback temporanei solo se lo Studio
+  // non ha ancora heroSlide attive. Il carosello e' identico per
+  // entrambe le sorgenti.
+  const slides = sanitySlides.length > 0 ? sanitySlides : FALLBACK_HERO_SLIDES;
 
   return (
     <section
@@ -68,7 +99,9 @@ export async function Hero() {
       aria-label="Identità del club"
       className="relative flex min-h-[calc(100vh-44px)] flex-col justify-end overflow-hidden"
     >
-      {/* Sfondo: carosello se ci sono slide, altrimenti fallback brand */}
+      {/* Sfondo: carosello se ci sono slide (vere o fallback), altrimenti
+          fallback gradient brand quando neanche le placeholder sono
+          presenti (es. .gitignored su un fresh checkout senza i file). */}
       {slides.length > 0 ? (
         <HeroCarousel slides={slides} />
       ) : (

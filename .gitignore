@@ -42,6 +42,10 @@ __pycache__/
 /.next/dev/
 /.next/build/
 
+# Immagini hero temporanee scaricate dal vecchio sito Wix (M3, fallback
+# in attesa di asset Sanity reali). NON committare: copyright Wix.
+/public/temp-hero/
+
 # vercel
 .vercel
 
