@@ -67,7 +67,7 @@ function PlatformIcon({
 export function SocialIcons({
   links,
   className,
-  iconSize = 20,
+  iconSize = 16,
   handle = "@asdorbassanocalcio",
 }: {
   links: SocialLinks;
@@ -85,9 +85,15 @@ export function SocialIcons({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Seguici su ${LABELS[p]} (${handle})`}
-            className="text-ink-mid hover:text-brand-gold focus-visible:outline-brand-gold flex h-10 w-10 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className={cn(
+              "group focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-full",
+              "border-ink-mid/40 hover:bg-ink-hi hover:border-ink-hi border transition-all duration-300",
+              "focus-visible:outline-2 focus-visible:outline-offset-2",
+            )}
           >
-            <PlatformIcon platform={p} size={iconSize} />
+            <span className="text-ink-hi group-hover:text-surface-0 inline-flex items-center justify-center transition-colors duration-300">
+              <PlatformIcon platform={p} size={iconSize} />
+            </span>
           </a>
         </li>
       ))}

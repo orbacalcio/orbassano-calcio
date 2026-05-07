@@ -55,7 +55,7 @@ export function SidebarRight({
       )}
       style={{ zIndex: Z.sidebar }}
     >
-      <SocialIcons links={links} className="flex-col gap-6" iconSize={24} />
+      <SocialIcons links={links} className="flex-col gap-3" iconSize={16} />
     </aside>
   );
 }
