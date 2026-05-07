@@ -59,9 +59,14 @@ const settings = {
   _type: "settings",
   siteTitle: "ASD Orbassano Calcio",
   tagline: "Dal 1930 il calcio di Orbassano",
-  currentSeason: "2025/2026",
-  currentLeague: "Promozione Piemonte VdA",
-  currentGroup: "Girone B",
+  // 2026/27 in Prima Categoria dopo retrocessione 2025/26 dalla
+  // Promozione. Il girone resta vuoto finche la LND non lo pubblica
+  // (tipicamente agosto). L'admin del club aggiornera' il campo
+  // currentGroup dallo Studio quando ufficializzato — l'eyebrow hero
+  // si adatta automaticamente.
+  currentSeason: "2026/2027",
+  currentLeague: "Prima Categoria Piemonte VdA",
+  currentGroup: "",
   social: {
     instagram: "https://www.instagram.com/asdorbassanocalcio/",
     facebook: "https://facebook.com/asdorbassanocalcio",
@@ -108,9 +113,9 @@ const teams: TeamSeed[] = [
     slugSrc: "prima-squadra",
     name: "Prima Squadra",
     category: "Prima Squadra",
-    season: "2025/2026",
-    league: "Promozione Piemonte VdA",
-    group: "Girone B",
+    season: "2026/2027",
+    league: "Prima Categoria Piemonte VdA",
+    group: "",
     order: 0,
     staff: [
       { role: "Direttore Sportivo", name: "Marco Gnan" },
@@ -127,7 +132,7 @@ const teams: TeamSeed[] = [
     name: "Under 17",
     category: "Settore Giovanile",
     subcategory: "Allievi U17",
-    season: "2025/2026",
+    season: "2026/2027",
     order: 1,
     staff: [
       { role: "Mister", name: "Emanuele Strazzo" },
@@ -141,7 +146,7 @@ const teams: TeamSeed[] = [
     name: "Under 16",
     category: "Settore Giovanile",
     subcategory: "Allievi U16",
-    season: "2025/2026",
+    season: "2026/2027",
     order: 2,
     staff: [
       { role: "Mister", name: "Giuseppe Bove" },
@@ -154,7 +159,7 @@ const teams: TeamSeed[] = [
     name: "Under 15",
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U15",
-    season: "2025/2026",
+    season: "2026/2027",
     order: 3,
     staff: [
       { role: "Mister", name: "Fabio Tessarin" },
@@ -169,7 +174,7 @@ const teams: TeamSeed[] = [
     name: "Under 14",
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U14",
-    season: "2025/2026",
+    season: "2026/2027",
     order: 4,
     staff: [
       { role: "Mister", name: "Fabio Clames" },
@@ -183,7 +188,7 @@ const teams: TeamSeed[] = [
     name: "Scuola Calcio",
     category: "Scuola Calcio",
     subcategory: "Piccoli Amici / Primi Calci / Pulcini / Esordienti",
-    season: "2025/2026",
+    season: "2026/2027",
     order: 5,
     staff: [],
   },

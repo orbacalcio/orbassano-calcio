@@ -77,7 +77,7 @@ export async function SponsorMarquee() {
     >
       <Container className="flex flex-col items-center gap-3 text-center" size="default">
         <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase">
-          Sponsor & Partner 2025/26
+          Sponsor & Partner 2026/27
         </span>
         <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
           Insieme rendiamo possibile ogni partita

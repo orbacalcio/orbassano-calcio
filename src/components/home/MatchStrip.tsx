@@ -65,9 +65,13 @@ function formatDate(iso: string): { day: string; time: string } {
 
 export async function MatchStrip() {
   const { nextMatch, settings } = await fetchData();
-  const league = settings?.currentLeague ?? "Promozione Piemonte VdA";
-  const group = settings?.currentGroup ?? "Girone B";
+  const league = settings?.currentLeague ?? "Prima Categoria Piemonte VdA";
+  const group = settings?.currentGroup ?? "";
+  const season = "2026/27";
   const classificaUrl = settings?.sprintsportLinks?.classifica;
+  const subtitleParts = [group ? `Girone ${group}` : null, season].filter(
+    Boolean,
+  );
 
   return (
     <section
@@ -83,7 +87,9 @@ export async function MatchStrip() {
           <span className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.01em] uppercase">
             {league}
           </span>
-          <span className="text-ink-mid text-sm">{group} · 2025/26</span>
+          <span className="text-ink-mid text-sm">
+            {subtitleParts.join(" · ")}
+          </span>
         </div>
 
         {/* Slot 2 — prossima partita */}
@@ -132,7 +138,8 @@ export async function MatchStrip() {
           </span>
           <span className="text-ink-mid text-sm leading-relaxed">
             La classifica ufficiale del girone è gestita da Sprintesport, il
-            portale federale che aggrega risultati e stats della Promozione.
+            portale federale che aggrega risultati e statistiche di tutto il
+            campionato regionale.
           </span>
           {classificaUrl && (
             <a

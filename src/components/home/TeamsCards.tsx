@@ -12,7 +12,7 @@ const teams = [
     number: "01",
     title: "Prima Squadra",
     description:
-      "Promozione Piemonte VdA, girone B. 23 calciatori, lo staff tecnico e il sogno di riportare Orbassano in alto.",
+      "Prima Categoria Piemonte VdA. Lo staff tecnico, la rosa e il sogno di riportare Orbassano in alto.",
     href: "/squadre/prima-squadra",
   },
   {

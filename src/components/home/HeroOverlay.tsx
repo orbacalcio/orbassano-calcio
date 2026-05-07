@@ -34,6 +34,17 @@ export function HeroOverlay({ season, league, group }: Props) {
   const reduced = useReducedMotion();
   const initial = reduced ? "show" : "hidden";
 
+  // Compongo l'eyebrow filtrando i pezzi vuoti: il girone (es. "B")
+  // viene aggiunto solo quando popolato dal CMS, altrimenti l'eyebrow
+  // mostra solo "Stagione · Categoria" senza separatore vuoto.
+  const eyebrow = [
+    season ? `Stagione ${season}` : null,
+    league || null,
+    group ? `Girone ${group}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <motion.div
       variants={wrapper}
@@ -45,7 +56,7 @@ export function HeroOverlay({ season, league, group }: Props) {
         variants={item}
         className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase sm:text-sm"
       >
-        Stagione {season} · {league} · {group}
+        {eyebrow}
       </motion.span>
       <motion.h1
         variants={item}

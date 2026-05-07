@@ -74,7 +74,7 @@ export default function TypographyPage() {
               eyebrow="Eyebrow / kicker · 600 · LS 0.2em"
               className="font-display text-brand-gold text-xs font-semibold tracking-[0.2em] uppercase"
             >
-              Stagione 2025/26
+              Stagione 2026/27
             </Specimen>
             <Specimen
               eyebrow="Numero maglia · 900 · LS 0"

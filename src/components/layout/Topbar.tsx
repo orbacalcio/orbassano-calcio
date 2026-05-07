@@ -19,7 +19,7 @@ import { cn } from "@/lib/cn";
  * - Sanity popolato: legge i logoMonochrome, li mostra come <Image>
  *   con opacita' 70% default, hover 100%
  * - Sanity vuoto (caso attuale in dev): fallback testuale con i 3
- *   nomi placeholder dei main sponsor 2025/26 in font-display 600
+ *   nomi placeholder dei main sponsor della stagione corrente in font-display 600
  *   uppercase, in modo che la topbar non sia mai vuota
  *
  * Tablet md..lg: max 3 sponsor visibili (gli altri hidden lg:flex).

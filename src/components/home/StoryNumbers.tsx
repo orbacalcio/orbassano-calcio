@@ -30,7 +30,8 @@ const STATS: Stat[] = [
   {
     end: 23,
     label: "Atleti prima squadra",
-    caption: "La rosa che chiude la stagione 2025/26 in Promozione.",
+    caption:
+      "La rosa di riferimento dell'ultima stagione completa, in attesa dei nuovi tesseramenti 2026/27.",
   },
   {
     end: 120,

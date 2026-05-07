@@ -24,10 +24,13 @@ type Settings = {
   currentGroup: string | null;
 };
 
+// 2026/27 in Prima Categoria dopo retrocessione 2025/26 dalla Promozione.
+// Il girone resta vuoto finche la LND non lo pubblica (tipicamente
+// agosto): l'eyebrow hero filtra automaticamente i pezzi vuoti.
 const FALLBACK_SETTINGS: Settings = {
-  currentSeason: "2025/26",
-  currentLeague: "Promozione Piemonte VdA",
-  currentGroup: "Girone B",
+  currentSeason: "2026/27",
+  currentLeague: "Prima Categoria Piemonte VdA",
+  currentGroup: "",
 };
 
 async function fetchHeroData() {
@@ -55,9 +58,9 @@ async function fetchHeroData() {
 
 export async function Hero() {
   const { slides, settings } = await fetchHeroData();
-  const season = settings.currentSeason ?? FALLBACK_SETTINGS.currentSeason!;
-  const league = settings.currentLeague ?? FALLBACK_SETTINGS.currentLeague!;
-  const group = settings.currentGroup ?? FALLBACK_SETTINGS.currentGroup!;
+  const season = settings.currentSeason ?? FALLBACK_SETTINGS.currentSeason ?? "";
+  const league = settings.currentLeague ?? FALLBACK_SETTINGS.currentLeague ?? "";
+  const group = settings.currentGroup ?? FALLBACK_SETTINGS.currentGroup ?? "";
 
   return (
     <section
