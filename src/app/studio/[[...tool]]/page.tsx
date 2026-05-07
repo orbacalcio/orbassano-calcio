@@ -1,17 +1,40 @@
-import { Studio } from "./Studio";
+"use client";
+
+import dynamic from "next/dynamic";
 
 /**
  * Sanity Studio embedded sulla rotta /studio.
- * Lo Studio NON deve essere indicizzato dai motori di ricerca: lo
- * blocchiamo qui via metadata e in robots.txt (M7).
+ *
+ * `ssr: false` in next/dynamic disabilita il rendering server-side: lo
+ * Studio Sanity usa window/document/indexedDB al top-level dei suoi
+ * moduli, e SSR produrrebbe `ReferenceError: window is not defined`.
+ *
+ * La metadata (noindex/viewport) per la rotta vive in
+ * src/app/studio/layout.tsx perche' una "use client" page non puo'
+ * esportare metadata.
  */
-
-export { metadata, viewport } from "next-sanity/studio";
-
-// Lo Studio e' totalmente client-side: niente prerender. force-dynamic
-// evita il "ReferenceError: window is not defined" durante SSR build.
-export const dynamic = "force-dynamic";
+const SanityStudio = dynamic(() => import("@/sanity/Studio"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0a1428",
+        color: "#a8b5cc",
+        fontFamily: "Inter, sans-serif",
+        fontSize: "0.875rem",
+        letterSpacing: "0.05em",
+        textTransform: "uppercase",
+      }}
+    >
+      Caricamento Studio…
+    </div>
+  ),
+});
 
 export default function StudioPage() {
-  return <Studio />;
+  return <SanityStudio />;
 }
