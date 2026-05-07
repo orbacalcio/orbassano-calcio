@@ -57,7 +57,7 @@ def classify(rgb: tuple[int, int, int]) -> str:
     # Verde (alloro): G > R e G > B
     if g > r + 15 and g > b + 15:
         return "verde"
-    # Oro / giallo / sabbia: R e G alti vicini, B sensibilmente piu' basso
+    # Oro / giallo / sabbia: R e G alti vicini, B sensibilmente più basso
     # (es. 223,177,108 -> r-g=46, r-b=115, g-b=69 -> tipico oro caldo)
     if r > 150 and g > 100 and (g - b) > 30 and (r - b) > 50 and r >= g:
         return "oro"

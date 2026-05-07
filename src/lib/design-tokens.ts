@@ -6,6 +6,9 @@
  * Scala navy delle surface tarata sul brief (Chelsea/PSG vibe), non
  * derivata matematicamente dal blu primario per evitare il "nero puro".
  *
+ * Sistema tipografico a 3 famiglie (vedi `docs/TYPOGRAPHY.md`):
+ * Big Shoulders Display (display) + Inter (body) + Geist Mono (dati tecnici).
+ *
  * Questi token sono replicati come CSS variables in `app/globals.css`
  * (sezione `@theme`) e consumati come classi Tailwind v4. Tienili in
  * sincrono con il CSS quando aggiorni qui.
@@ -30,8 +33,9 @@ export const tokens = {
     low: "#6B7A99",
   },
   font: {
-    sans: "var(--font-inter)",
-    display: "var(--font-bebas)",
+    display: "var(--font-display)",
+    body: "var(--font-body)",
+    mono: "var(--font-mono)",
   },
 } as const;
 

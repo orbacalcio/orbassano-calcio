@@ -4,11 +4,11 @@ import { tokens } from "@/lib/design-tokens";
 /**
  * Homepage placeholder M0 — scaffolding visivo del brand.
  *
- * Verra' interamente sostituita in M3 con hero cinematografico, match
+ * Verrà interamente sostituita in M3 con hero cinematografico, match
  * strip, news, marquee "Da qui sono passati" e sponsor row. Per ora
  * questo schermo serve un solo scopo: dimostrare che palette e font
- * sono caricati correttamente e che ogni inquadratura del sito e'
- * riconoscibilmente blu navy + rossoblu.
+ * sono caricati correttamente e che ogni inquadratura del sito è
+ * riconoscibilmente blu navy + rossoblù.
  */
 
 const brandSwatches = [
@@ -34,14 +34,14 @@ const inkSwatches = [
 export default function Home() {
   return (
     <main className="relative flex flex-1 flex-col">
-      {/* Bagliore di brand sullo sfondo per dare profondita' senza essere */}
+      {/* Bagliore di brand sullo sfondo per dare profondità senza essere */}
       {/* gradient-y o glow neon. Resta dentro la famiglia navy+rosso. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
         <div className="bg-brand-blue/25 absolute -top-32 -left-32 h-[36rem] w-[36rem] rounded-full blur-[120px]" />
-        <div className="bg-brand-red/15 absolute -right-40 top-40 h-[28rem] w-[28rem] rounded-full blur-[140px]" />
+        <div className="bg-brand-red/15 absolute top-40 -right-40 h-[28rem] w-[28rem] rounded-full blur-[140px]" />
       </div>
 
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 py-20 sm:py-28 lg:px-10">
@@ -71,15 +71,18 @@ export default function Home() {
             <span className="bg-brand-red relative flex h-2 w-2 rounded-full">
               <span className="bg-brand-red absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" />
             </span>
-            <span className="text-ink-mid font-mono text-xs tracking-widest uppercase">
+            <span className="text-ink-mid font-display text-xs font-semibold tracking-[0.2em] uppercase">
               Milestone 0 · scaffolding
             </span>
           </div>
         </header>
 
-        {/* Hero: Bebas Neue gigante */}
+        {/* Eyebrow + Hero gigante (Big Shoulders 900, line-height 0.92) */}
         <div className="flex flex-col gap-8">
-          <h1 className="font-display text-ink-hi text-6xl leading-[0.9] tracking-tight sm:text-8xl lg:text-9xl">
+          <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.2em] uppercase">
+            Stagione 2025/26 · 95 anni di storia
+          </span>
+          <h1 className="font-display text-ink-hi text-7xl leading-[0.92] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]">
             Dal 1930
             <br />
             il calcio di
@@ -87,14 +90,14 @@ export default function Home() {
             <span className="text-brand-gold">Orbassano</span>
           </h1>
           <p className="text-ink-mid max-w-2xl text-lg leading-relaxed sm:text-xl">
-            Stiamo ricostruendo il sito ufficiale del club. Questa schermata e'
+            Stiamo ricostruendo il sito ufficiale del club. Questa schermata è
             il primo controllo visivo del nuovo design system: palette estratta
-            dallo stemma, tipografia editoriale, dark navy identitario. Da qui
-            si parte.
+            dallo stemma, tipografia editoriale a tre famiglie, dark navy
+            identitario. Da qui si parte.
           </p>
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
             <span className="bg-brand-red/15 text-brand-red border-brand-red/30 rounded-full border px-3 py-1 tracking-widest uppercase">
-              Rossoblu
+              Rossoblù
             </span>
             <span className="bg-brand-gold/15 text-brand-gold border-brand-gold/40 rounded-full border px-3 py-1 tracking-widest uppercase">
               95 anni
@@ -105,29 +108,45 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Tipografia in azione */}
-        <div className="border-border bg-surface-1/40 grid gap-8 rounded-3xl border p-8 sm:grid-cols-2 sm:p-10">
+        {/* Tipografia a 3 famiglie in azione */}
+        <div className="border-border bg-surface-1/40 grid gap-8 rounded-3xl border p-8 sm:grid-cols-3 sm:p-10">
           <div className="flex flex-col gap-3">
-            <span className="text-ink-low font-mono text-xs tracking-widest uppercase">
-              Display · Bebas Neue
+            <span className="text-ink-low font-mono text-[10px] tracking-widest uppercase">
+              Display · Big Shoulders
             </span>
-            <span className="font-display text-ink-hi text-7xl leading-none">
+            <span className="font-display text-ink-hi text-7xl leading-none font-black tracking-[0.005em] uppercase">
               ORBA
             </span>
             <span className="text-ink-mid text-sm">
-              Per H1, hero, numeri di maglia, score, statistiche.
+              H1 hero, score partita, numeri di maglia, counter animati.
             </span>
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-ink-low font-mono text-xs tracking-widest uppercase">
+            <span className="text-ink-low font-mono text-[10px] tracking-widest uppercase">
               Body · Inter
             </span>
-            <span className="text-ink-hi text-3xl font-semibold">
+            <span className="text-ink-hi text-2xl font-semibold">
               Ogni partita una storia.
             </span>
             <span className="text-ink-mid text-sm leading-relaxed">
-              Per navigation, body, label, form. Pesi 400, 500, 600, 700.
-              Accenti italiani gestiti correttamente: societa, perche, e/e.
+              Navigation, body, label, form. Pesi 400, 500, 600, 700. Accenti
+              italiani gestiti correttamente: Società, Città, perché, è/e.
+            </span>
+          </div>
+          <div className="flex flex-col gap-3">
+            <span className="text-ink-low font-mono text-[10px] tracking-widest uppercase">
+              Mono · Geist Mono
+            </span>
+            <span className="text-brand-gold font-mono text-base tracking-wide">
+              IT93H08530
+              <br />
+              30680000
+              <br />
+              000002547
+            </span>
+            <span className="text-ink-mid text-sm leading-relaxed">
+              Solo per dati tecnici: CF, IBAN, P.IVA, score partita, matricola
+              FIGC.
             </span>
           </div>
         </div>
@@ -147,7 +166,7 @@ export default function Home() {
         {/* Scala navy */}
         <Section
           title="Scala Navy"
-          subtitle="Sfondi e superfici. Mai nero puro: identita' blu sempre riconoscibile."
+          subtitle="Sfondi e superfici. Mai nero puro: identità blu sempre riconoscibile."
         >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {surfaceSwatches.map((s) => (
@@ -194,7 +213,7 @@ function Section({
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <h2 className="font-display text-ink-hi text-3xl tracking-wide">
+        <h2 className="font-display text-ink-hi text-4xl font-extrabold tracking-[0.01em] uppercase">
           {title}
         </h2>
         <p className="text-ink-mid text-sm">{subtitle}</p>

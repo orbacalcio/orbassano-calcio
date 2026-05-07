@@ -55,7 +55,13 @@ Palette estratta direttamente dal logo ufficiale (vedi
 | `--color-surface-1..3` | `#0F1D38 -> #1F3460` | card, hover, surface elevate |
 | `--color-ink-hi/mid/low` | `#F5F7FA / #A8B5CC / #6B7A99` | testo |
 
-**Tipografia**: Inter (UI/body) + Bebas Neue (display) via `next/font/google`.
+**Tipografia**: 3 famiglie via `next/font/google` — vedi `docs/TYPOGRAPHY.md`.
+
+| Ruolo | Famiglia | Variable |
+|---|---|---|
+| Display (H1, score, numeri) | **Big Shoulders Display** | `--font-display` |
+| Body (UI, paragrafi, form) | **Inter** | `--font-body` |
+| Mono (CF, IBAN, score) | **Geist Mono** | `--font-mono` |
 
 ## Roadmap
 
@@ -73,6 +79,8 @@ Sviluppo per milestone, dettaglio in `docs/PROMPT_CLAUDE_CODE.md`:
 
 ## Contesto
 
-Vedi `docs/DATA_ORBASSANO.md` per la fonte di verita (rosa, organigramma, sponsor, storia, dati legali). I contenuti reali andranno seedati nel CMS, non hardcoded.
+Vedi `docs/DATA_ORBASSANO.md` per la fonte di verità (rosa, organigramma, sponsor, storia, dati legali). I contenuti reali andranno seedati nel CMS, non hardcoded.
+
+Per il sistema tipografico vedi `docs/TYPOGRAPHY.md`. Per il pattern di layout/navigation (M2) vedi `docs/LAYOUT_NAVIGATION.md`.
 
 **Lingua di lavoro**: italiano (UI, commit, comunicazione).

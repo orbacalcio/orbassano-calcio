@@ -1,18 +1,37 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Bebas_Neue } from "next/font/google";
+import { Big_Shoulders, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-});
-
-const bebas = Bebas_Neue({
-  variable: "--font-bebas",
-  weight: "400",
+/**
+ * Sistema tipografico a 3 famiglie (vedi docs/TYPOGRAPHY.md):
+ * - Display: Big Shoulders Display (industrial signage americano)
+ * - Body:    Inter (latin-ext per accenti italiani perfetti)
+ * - Mono:    Geist Mono (dati tecnici: CF, IBAN, score, P.IVA)
+ *
+ * Le tre variable CSS (--font-display / --font-body / --font-mono) sono
+ * poi aliasate in app/globals.css dentro @theme con i fallback.
+ */
+const display = Big_Shoulders({
+  variable: "--font-display",
+  weight: ["400", "600", "700", "800", "900"],
   subsets: ["latin"],
   display: "swap",
+  preload: false,
+});
+
+const body = Inter({
+  variable: "--font-body",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  preload: true,
+});
+
+const mono = Geist_Mono({
+  variable: "--font-mono",
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -51,9 +70,9 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className={`${inter.variable} ${bebas.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="bg-surface-0 text-ink-hi flex min-h-full flex-col font-sans">
+      <body className="bg-surface-0 text-ink-hi font-body flex min-h-full flex-col">
         {children}
       </body>
     </html>

@@ -254,31 +254,41 @@ Campi a 5, 7, 8 e 11 — struttura moderna con focus su sicurezza e qualità.
 
 ## 8. SPONSOR & PARTNER
 
-### MAIN SPONSORS (4)
-| Sponsor | Sito |
-|---|---|
-| Studio Cambareri | https://www.studiocambareri.com |
-| L'Igienica Srl | https://www.ligienicasrl.it/ |
-| Melmec Srl | https://melmec.it/ |
-| EdiliziAcrobatica | https://ediliziacrobatica.com/ |
+> **Importante**: la struttura supporta un numero **dinamico** di Main Sponsor (oggi 3, potenzialmente 4 in futuro). Il sito deve adattarsi al numero senza modifiche di codice — vedi spec topbar in `LAYOUT_NAVIGATION.md` §2.1.
 
-### OFFICIAL SPONSORS (8)
+### MAIN SPONSORS (3, slot per un 4° in futuro)
 | Sponsor | Sito |
 |---|---|
-| Confabitare | https://www.confabitare.it/tools/ |
+| Studio Cambareri | https://www.studiocambareri.com/ |
+| Reale Mutua | https://www.realemutua.it/ |
+| Ocert | https://www.ocert.it/ |
+
+### OFFICIAL SPONSORS (7)
+| Sponsor | Sito |
+|---|---|
+| Confabitare | https://www.confabitare.it/nazionale/ |
 | Banca d'Alba | https://www.bancadalba.it/ |
-| Master Video | https://www.facebook.com/WindMasterVideo |
-| Angelillo Sas (Vittoria Assicurazioni) | https://www.vittoriaassicurazioni.com/agenzie/orbassano/506-angelillo-sas-di-angelillo-ettore-c |
-| BG Impianti Elettrici Domotici | https://www.bgimpiantielettrici.it/ |
+| L'Igienica Srl | https://www.ligienicasrl.it/ |
 | SID Srl | https://www.sidambiente.it/ |
-| Autoservizi Stupinigi | https://www.autoservizistupinigi.com/ |
-| HS Automazioni | https://www.hsaspe.com/it/ |
+| HS ASPE (Gruppo Sacma) | https://www.sacmagroup.it/it/sacma-group/hs-aspe/maschiatura-lavorazione/torni-automatici-cnc/ |
+| Melmec Srl | https://melmec.it/ |
+| Graziano Serramenti | https://grazianoserramenti.com/ |
 
 ### CORPORATE PARTNERS (2)
 | Partner | Vantaggio | Approfondimento |
 |---|---|---|
 | **Alpitour World** | Tariffe ridotte sul listino del Gruppo Alpitour | PDF dedicato |
 | **Cisalfa Sport** | Programma "Top Player": scontistiche dedicate tutto l'anno | https://www.cisalfasport.it/it-it/cisalfa-pro/ |
+
+### Sponsor rimossi rispetto alla stagione precedente (per riferimento)
+Questi sponsor erano presenti nel sito Wix attuale ma sono **stati rimossi** o **cambiati di livello** nella nuova stagione. Il CMS deve mantenere la storia (campo `isActive: false` per archiviarli, non cancellarli, così se in futuro tornano è facile riattivarli):
+
+- EdiliziAcrobatica (era Main, rimosso)
+- Master Video (era Official, rimosso)
+- Angelillo Sas / Vittoria Assicurazioni (era Official, rimpiazzato da Reale Mutua Main)
+- BG Impianti Elettrici Domotici (era Official, rimosso)
+- Autoservizi Stupinigi (era Official, rimosso)
+- HS Automazioni (Official, **rinominato HS ASPE** sotto il Gruppo Sacma — non rimosso, solo cambio brand/URL)
 
 ---
 

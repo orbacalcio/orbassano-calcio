@@ -479,7 +479,7 @@ Procedi in quest'ordine. **Non saltare avanti**: ogni milestone deve essere comp
 Quando inizi, **prima di scrivere qualsiasi riga di codice del sito**:
 
 1. Leggi `DATA_ORBASSANO.md` interamente
-2. Apri `Logo_Orbassano_2K.png` ed estrai i 4 colori dominanti con uno script Python che lanci da terminale. Stampa i valori HEX e suggerisci la palette finale
+2. Apri `Logo_Orbassano_2K.png` ed estrai i 5 colori dominanti con uno script Python che lanci da terminale. Stampa i valori HEX e suggerisci la palette finale
 3. Mostrami un piano operativo aggiornato (eventuali correzioni alla roadmap M0–M8 sopra), evidenziando quello che vuoi chiarire con me prima di partire
 4. Aspetta mio OK prima di lanciare il `pnpm create next-app`
 

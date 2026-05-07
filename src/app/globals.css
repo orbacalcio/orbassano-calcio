@@ -4,8 +4,8 @@
  * Design tokens — ASD Orbassano Calcio
  *
  * I valori brand sono estratti dal logo ufficiale
- * (vedi scripts/extract-palette.py). La scala navy delle surface e'
- * tarata sul brief: navy profondo non nero puro, identita' rossoblu+oro.
+ * (vedi scripts/extract-palette.py). La scala navy delle surface è
+ * tarata sul brief: navy profondo non nero puro, identità rossoblù+oro.
  * Tienili in sincrono con src/lib/design-tokens.ts.
  */
 @theme {
@@ -27,14 +27,24 @@
   --color-ink-mid: #a8b5cc;
   --color-ink-low: #6b7a99;
 
-  /* Font families collegate ai next/font in src/app/layout.tsx */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bebas), "Bebas Neue", ui-sans-serif, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Mono", monospace;
+  /* Famiglie tipografiche (vedi docs/TYPOGRAPHY.md).
+     I CSS custom property con il vero font sono iniettati da next/font
+     sull'elemento <html> (variable: --font-display / --font-body / --font-mono).
+     Qui li ridichiariamo in @theme con i fallback per dare a Tailwind
+     le classi font-display / font-body / font-mono e per garantire un
+     fallback decente se Google Fonts non risponde. */
+  --font-display: var(--font-display), "Arial Narrow", "Helvetica Neue Condensed",
+    sans-serif;
+  --font-body: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  --font-mono: var(--font-mono), "SF Mono", "Cascadia Mono", Consolas,
+    "Liberation Mono", monospace;
+  --font-sans: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
 }
 
 /**
- * Dark mode forzato: il brand e' navy. Niente prefers-color-scheme,
+ * Dark mode forzato: il brand è navy. Niente prefers-color-scheme,
  * niente light mode. Ogni schermata deve essere riconoscibilmente blu.
  */
 html {
@@ -46,7 +56,7 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   background-color: var(--color-surface-0);
   color: var(--color-ink-hi);
 }
@@ -59,4 +69,16 @@ body {
 /* Scrollbar discreta sul navy */
 * {
   scrollbar-color: var(--color-surface-3) var(--color-surface-0);
+}
+
+/* Riduzione movimento: rispettiamo prefers-reduced-motion ovunque */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
