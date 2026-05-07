@@ -1,8 +1,12 @@
 import { AppShell } from "@/components/layout/AppShell";
+import { NewsletterCTA } from "@/components/sections/NewsletterCTA";
+import { SearchPromptCTA } from "@/components/sections/SearchPromptCTA";
 
 /**
  * Layout del sito pubblico. Tutte le pagine sotto (site) ricevono
- * topbar + sidebar + drawer mobile via AppShell.
+ * topbar + sidebar + drawer mobile via AppShell, piu' due sezioni CTA
+ * fisse sopra il footer (newsletter + search prompt) come da pattern
+ * juventus.com.
  *
  * /studio e /dev hanno i loro layout indipendenti (NON wrappati da AppShell).
  */
@@ -11,5 +15,11 @@ export default function SiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  return (
+    <AppShell>
+      {children}
+      <NewsletterCTA />
+      <SearchPromptCTA />
+    </AppShell>
+  );
 }
