@@ -1,3 +1,4 @@
+import { Footer } from "./Footer";
 import { MobileShell } from "./MobileDrawer";
 import { MobileSponsorStrip } from "./MobileSponsorStrip";
 import { SidebarLeft } from "./SidebarLeft";
@@ -30,6 +31,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         {children}
       </main>
+      <div className="lg:pr-[56px] lg:pl-[72px]">
+        <Footer />
+      </div>
     </>
   );
 }

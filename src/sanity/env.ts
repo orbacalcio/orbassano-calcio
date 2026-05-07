@@ -1,26 +1,20 @@
 /**
  * Variabili d'ambiente Sanity, tipizzate.
  *
- * In dev se mancano cadiamo su placeholder per non bloccare la
- * compilazione dello Studio embedded (il client mostrera' errore di
- * connessione finche l'utente non popola .env.local con i valori veri
- * generati su manage.sanity.io). In produzione invece blocchiamo: niente
- * deploy con credenziali mancanti.
+ * Lettura tollerante: se mancano le env in build/dev, restituiamo un
+ * placeholder e il client mostrera' errore di connessione finche'
+ * l'utente non popola .env.local (locale) o le env vars su Vercel
+ * (produzione). Cosi' il build non si blocca e lo Studio embedded
+ * compila comunque.
  */
-
-function readEnv(key: string, fallback?: string): string {
+function readEnv(key: string, fallback: string): string {
   const value = process.env[key];
-  if (value && value.length > 0) return value;
-  if (fallback !== undefined) return fallback;
-  if (process.env.NODE_ENV === "production") {
-    throw new Error(`Variabile d'ambiente mancante: ${key}`);
-  }
-  return "";
+  return value && value.length > 0 ? value : fallback;
 }
 
 export const projectId = readEnv(
   "NEXT_PUBLIC_SANITY_PROJECT_ID",
-  process.env.NODE_ENV === "production" ? undefined : "orbassano-calcio",
+  "orbassano-calcio",
 );
 
 export const dataset = readEnv("NEXT_PUBLIC_SANITY_DATASET", "production");
