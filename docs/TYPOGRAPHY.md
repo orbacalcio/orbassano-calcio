@@ -46,8 +46,9 @@ Big Shoulders Display è un font **variabile** con 9 weight (100-900). Carichiam
 | `h2` sezioni | 800 | "Le nostre squadre" | 0.01em | 1.0 |
 | `h3` sotto-titoli | 700 | "Settore giovanile" | 0.015em | 1.05 |
 | `h4` mini-titoli | 700 | "Open day" | 0.02em | 1.1 |
-| Eyebrow / kicker | 600 uppercase | "STAGIONE 2025/26" | 0.2em | 1.0 |
-| Microlabel sidebar | 600 uppercase | "NEWS / SQUADRE" | 0.15em | 1.0 |
+| Eyebrow / kicker | **700 uppercase, text-sm md:text-base** | "STAGIONE 2026/27" | 0.2em | 1.0 |
+| Microlabel sidebar | **700 uppercase, text-[11px]** (la sidebar a 88px non regge text-sm con uppercase + tracking) | "NEWS / SQUADRE" | 0.12em | 1.0 |
+| Titoli footer (sezioni) | **700 uppercase, text-sm** | "SOSTIENI · LEGALE" | 0.15em | 1.0 |
 | Score grande partita | 900 | "2 — 1" | 0.0em | 1.0 |
 | Numero maglia | 900 | "10" | 0.0em | 1.0 |
 | Counter animato | 900 | "95 ANNI / 23 GIOCATORI" | 0.005em | 1.0 |

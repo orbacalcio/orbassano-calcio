@@ -33,7 +33,7 @@ export function Banner5x1000() {
 
       <Container className="relative grid items-center gap-12 py-24 lg:grid-cols-2 lg:py-32" size="wide">
         <div className="flex flex-col gap-6">
-          <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase">
+          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             5×1000 · senza costi per te
           </span>
           <h2 className="font-display text-ink-hi text-5xl leading-[0.95] font-black tracking-[0.005em] uppercase sm:text-6xl lg:text-7xl">
@@ -53,7 +53,7 @@ export function Banner5x1000() {
 
         <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-6 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
           <div className="flex flex-col gap-2">
-            <span className="text-ink-low font-display text-xs font-semibold tracking-[0.3em] uppercase">
+            <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
               Codice fiscale
             </span>
             <span className="text-brand-gold font-mono text-5xl font-medium tracking-[0.05em] sm:text-6xl">

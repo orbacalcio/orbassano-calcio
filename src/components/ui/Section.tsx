@@ -23,7 +23,7 @@ export function Section({
       {(eyebrow || title || subtitle) && (
         <header className="flex flex-col gap-2">
           {eyebrow && (
-            <span className="font-display text-brand-gold text-xs font-semibold tracking-[0.2em] uppercase">
+            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
               {eyebrow}
             </span>
           )}

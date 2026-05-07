@@ -142,20 +142,20 @@ export async function Footer() {
               <span className="font-display text-ink-hi text-xl leading-none font-extrabold tracking-[0.01em] uppercase">
                 Orbassano Calcio
               </span>
-              <span className="text-ink-low font-mono text-[10px] tracking-widest uppercase">
+              <span className="text-ink-mid font-mono text-xs tracking-widest uppercase">
                 A.S.D. · dal 1930
               </span>
             </div>
           </div>
           <p className="text-ink-mid text-sm leading-relaxed">{tagline}</p>
-          <SocialIcons links={social} iconSize={18} />
+          <SocialIcons links={social} iconSize={16} />
         </div>
 
         {/* Colonna centrale: nav per area */}
         <nav className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4" aria-label="Indice del sito">
           {sections.map((section) => (
             <div key={section.title} className="flex flex-col gap-3">
-              <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+              <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
                 {section.title}
               </span>
               <ul className="flex flex-col gap-2">
@@ -163,7 +163,7 @@ export async function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-ink-mid hover:text-ink-hi text-sm transition-colors"
+                      className="text-ink-mid hover:text-ink-hi text-base transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -177,7 +177,7 @@ export async function Footer() {
         {/* Colonna destra: contatti + dati legali */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
               Contatti
             </span>
             <ul className="text-ink-mid flex flex-col gap-2 text-sm">
@@ -216,10 +216,10 @@ export async function Footer() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
               Dati legali
             </span>
-            <ul className="font-mono text-ink-mid flex flex-col gap-1 text-xs">
+            <ul className="font-mono text-ink-mid flex flex-col gap-1.5 text-sm">
               {legal.fiscalCode && (
                 <li>
                   CF <span className="text-ink-hi">{legal.fiscalCode}</span>

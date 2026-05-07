@@ -81,7 +81,7 @@ export async function MatchStrip() {
       <Container className="grid grid-cols-1 gap-px md:grid-cols-3" size="wide">
         {/* Slot 1 — categoria + girone */}
         <div className="bg-surface-1/60 flex flex-col gap-2 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
             Campionato
           </span>
           <span className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.01em] uppercase">
@@ -94,7 +94,7 @@ export async function MatchStrip() {
 
         {/* Slot 2 — prossima partita */}
         <div className="bg-surface-2/60 flex flex-col gap-3 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
             <CalendarDays size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
             Prossima partita
           </span>
@@ -132,7 +132,7 @@ export async function MatchStrip() {
 
         {/* Slot 3 — classifica esterna */}
         <div className="bg-surface-1/60 flex flex-col gap-3 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-[10px] font-semibold tracking-[0.25em] uppercase">
+          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
             <Trophy size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
             Classifica
           </span>

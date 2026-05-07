@@ -48,7 +48,7 @@ export async function SponsorMarquee() {
         className="border-border/50 border-y py-12"
       >
         <Container className="flex flex-col items-center gap-3 text-center" size="default">
-          <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase">
+          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             Sponsor & Partner
           </span>
           <p className="text-ink-mid text-sm">
@@ -76,7 +76,7 @@ export async function SponsorMarquee() {
       className="border-border/50 relative overflow-hidden border-y py-16"
     >
       <Container className="flex flex-col items-center gap-3 text-center" size="default">
-        <span className="text-brand-gold font-display text-xs font-semibold tracking-[0.3em] uppercase">
+        <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
           Sponsor & Partner 2026/27
         </span>
         <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
