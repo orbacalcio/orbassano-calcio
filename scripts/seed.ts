@@ -5,8 +5,8 @@
  * puoi rilanciarlo N volte senza duplicare.
  *
  * Prerequisiti:
- *   1. Progetto Sanity creato su manage.sanity.io (project ID 'orbassano-calcio',
- *      dataset 'production').
+ *   1. Progetto Sanity creato su manage.sanity.io (project ID e dataset
+ *      sono letti da env, non hardcoded).
  *   2. .env.local compilato con:
  *        NEXT_PUBLIC_SANITY_PROJECT_ID=...
  *        NEXT_PUBLIC_SANITY_DATASET=production

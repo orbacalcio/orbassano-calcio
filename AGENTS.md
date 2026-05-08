@@ -13,7 +13,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - **Next.js 16 App Router** (Turbopack di default, Async Request APIs, no AMP, `middleware` rinominato `proxy`).
 - **TypeScript** strict + `noUncheckedIndexedAccess`.
 - **Tailwind CSS v4** con design token in `src/app/globals.css` (`@theme`). Niente `tailwind.config.ts`: la config sta nel CSS.
-- **Sanity v3** embedded su `/studio`. Project ID `orbassano-calcio`, dataset `production`.
+- **Sanity v3** embedded su `/studio`. Project ID e dataset letti da env (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`), niente hardcode. Vedi `src/sanity/env.ts`.
 - **pnpm** come package manager (lockfile pulito, niente `npm install`).
 
 ## Brief di progetto — fonti di verità
