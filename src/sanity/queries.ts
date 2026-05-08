@@ -103,3 +103,104 @@ export const firstTeamSquadQuery = defineQuery(`
     "photo": photo.asset->url
   }
 `);
+
+// Tutte le squadre per /squadre (indice). playerCount usato per
+// l'etichetta sulla card; lo Scuola Calcio ne avra' 0 finche' non
+// vengono tesserati i piccoli (gestiti da Sporting Orbassano).
+export const teamsListQuery = defineQuery(`
+  *[_type == "team"] | order(coalesce(order, 99) asc){
+    _id,
+    name,
+    "slug": slug.current,
+    category,
+    subcategory,
+    season,
+    league,
+    group,
+    "heroImage": heroImage.asset->url,
+    "playerCount": count(*[_type == "player" && references(^._id)])
+  }
+`);
+
+// Squadre filtrate per categoria (slug speciale /squadre/settore-giovanile).
+export const teamsByCategoryQuery = defineQuery(`
+  *[_type == "team" && category == $category]
+  | order(coalesce(order, 99) asc){
+    _id,
+    name,
+    "slug": slug.current,
+    subcategory,
+    season,
+    league,
+    group,
+    "heroImage": heroImage.asset->url,
+    "playerCount": count(*[_type == "player" && references(^._id)])
+  }
+`);
+
+// Singola squadra: rosa joinata + staff con foto risolte. Ordinamento
+// rosa: numero di maglia crescente (con coalesce 99 per chi non ne ha
+// ancora uno assegnato), poi cognome A→Z come fallback stabile.
+export const teamBySlugQuery = defineQuery(`
+  *[_type == "team" && slug.current == $slug][0]{
+    _id,
+    name,
+    "slug": slug.current,
+    category,
+    subcategory,
+    season,
+    league,
+    group,
+    description,
+    "heroImage": heroImage.asset->url,
+    staff[]{
+      role,
+      name,
+      "photo": photo.asset->url
+    },
+    "players": *[_type == "player" && references(^._id)]
+      | order(coalesce(shirtNumber, 99) asc, lastName asc){
+        _id,
+        firstName,
+        lastName,
+        "slug": slug.current,
+        birthYear,
+        shirtNumber,
+        role,
+        foot,
+        nationality,
+        isCaptain,
+        "photo": photo.asset->url
+      }
+  }
+`);
+
+// Scheda giocatore + riferimento alla squadra (per breadcrumb e link).
+export const playerBySlugQuery = defineQuery(`
+  *[_type == "player" && slug.current == $slug][0]{
+    _id,
+    firstName,
+    lastName,
+    "slug": slug.current,
+    birthYear,
+    shirtNumber,
+    role,
+    foot,
+    nationality,
+    isCaptain,
+    "photo": photo.asset->url,
+    "photoAction": photoAction.asset->url,
+    bio,
+    stats,
+    team->{
+      _id,
+      name,
+      "slug": slug.current,
+      category,
+      subcategory,
+      season,
+      league,
+      group
+    }
+  }
+`);
