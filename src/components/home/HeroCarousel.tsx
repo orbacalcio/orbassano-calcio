@@ -10,32 +10,40 @@ import {
 } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/cn";
 
 /**
- * Carosello hero della homepage — pattern editoriale juventus.com.
+ * Carosello hero — coreografia cinematografica stile juventus.com.
  *
- * Ogni slide porta il proprio set testuale (eyebrow / headline /
- * subhead / ctaLabel + ctaLink) sincronizzato con la foto: quando
- * l'autoplay scatta sia la foto che i testi fanno il cross-fade
- * nello stesso istante. Lo stagger interno dei testi (100ms tra
- * elementi) parte all'inizio della transizione e scorre eyebrow →
- * headline → subhead → cta.
+ * Sequenza di transizione (timing in ms; tutti scalati dal
+ * moltiplicatore = transitionMs / 300):
+ *   t=0     exit testi vecchi         (200ms, fade + y +8)
+ *   t=200   exit immagine vecchia     (300ms, fade)
+ *   t=200   enter immagine nuova      (500ms, fade + scale 1.05→1.0 easeOut)
+ *   t=600   enter eyebrow             (220ms, clip-path reveal da sx)
+ *   t=600+220+200=1020 underline gold (400ms, scaleX 0→1 origin left)
+ *   t=800   enter headline (riga per riga, stagger 80ms, clip-path)
+ *   t=1100  enter subhead             (300ms, fade + y +12 → 0)
+ *   t=1300  enter CTA                 (250ms, fade + y +8 + scale 0.96→1, back)
+ *   ultima riga headline glow oro     (600ms, fade in/out di text-shadow)
+ *   CTA primaria pulse                (800ms, scale 1→1.02→1, una volta)
  *
- * Timing controllato dallo Studio Sanity (settings.heroX): durata
- * slide, durata transizione, autoplay on/off. La singola slide puo'
- * sovrascrivere la durata via heroSlide.customDuration (utile per
- * slide con piu' testo da leggere).
+ * Ken Burns: la foto, dopo l'enter, fa scale 1 → 1.08 lineare per
+ * tutta la durata della slide. Slide dispari traslate +1% verso
+ * destra, pari restano centrali — evita ripetitività. Skip su mobile
+ * (CPU saver) e su prefers-reduced-motion.
  *
- * Edge cases gestiti runtime:
- * - <=1 slide attive: autoplay disattivato (niente senso ruotare su
- *   una sola slide).
- * - settings.heroAutoplayEnabled === false: nessun timer, viene
- *   mostrata staticamente solo la prima slide.
- * - slideDuration < transitionMs: la slide cambierebbe prima che la
- *   transizione finisca. Forziamo runtime un minimum di
- *   transitionMs + 500ms.
- * - prefers-reduced-motion: niente autoplay, niente cross-fade
- *   animato (rimane solo la prima slide statica).
+ * Anti-sfarfallio:
+ *  - 2 AnimatePresence separate: immagine senza mode (overlap
+ *    cross-fade), testi con mode="wait" (sequential, no overlap).
+ *  - Stato isTransitioning -> classe will-change attiva solo
+ *    durante l'animazione, rimossa al termine (no transform layer
+ *    permanente, no compositing waste).
+ *  - min-h-[40vh] sul layer testuale -> riserva spazio, no layout
+ *    shift quando le slide hanno headline di lunghezza diversa.
+ *
+ * Reduced motion: hard fade 150ms, niente Ken Burns / clip-path /
+ * glow / pulse CTA. La pagina resta utilizzabile e prevedibile.
  */
 
 export type HeroSlide = {
@@ -52,37 +60,21 @@ export type HeroSlide = {
 };
 
 export type HeroCarouselConfig = {
-  /** Durata di default di ogni slide in secondi (override per-slide via customDurationS). */
   slideDurationS: number;
-  /** Durata del cross-fade in millisecondi. */
   transitionMs: number;
-  /** Se false, niente autoplay: viene mostrata solo la prima slide. */
   autoplayEnabled: boolean;
 };
 
-const textWrapper: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      // 100ms di ritardo tra ogni figlio: eyebrow t=0, headline t=0.1,
-      // subhead t=0.2, cta t=0.3. Se uno e' nascosto, lo stagger si
-      // applica solo agli elementi effettivamente renderizzati.
-      staggerChildren: 0.1,
-      delayChildren: 0,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: { duration: 0.2 },
-  },
-};
+const BASE_TRANSITION_MS = 300;
 
-const textItem: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-};
+// Cubic-bezier presets — Framer Motion accetta array [x1,y1,x2,y2].
+const EASE_OUT_CUBIC: [number, number, number, number] = [0.215, 0.61, 0.355, 1];
+const EASE_OUT_QUART: [number, number, number, number] = [0.165, 0.84, 0.44, 1];
+const EASE_BACK_OUT: [number, number, number, number] = [0.34, 1.56, 0.64, 1];
+
+// Coreografia totale ms (da exit-to-enter-CTA-end, base x1):
+// ultimo step = enter CTA delay 1300 + duration 250 = 1550ms
+const CHOREO_TOTAL_MS = 1550;
 
 export function HeroCarousel({
   slides,
@@ -93,27 +85,34 @@ export function HeroCarousel({
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const reduced = useReducedMotion();
-  const transitionS = config.transitionMs / 1000;
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Autoplay: setTimeout per slide perche' la durata puo' variare
-  // (customDurationS per slide). Quando index cambia, il useEffect
-  // ri-runa e schedula il prossimo step usando la durata della
-  // slide corrente.
+  // Detect mobile via matchMedia (no SSR mismatch: initial state false,
+  // promote a true al primo paint client se serve).
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 640px)");
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  const mult = Math.max(0.3, config.transitionMs / BASE_TRANSITION_MS);
+  const transitionS = config.transitionMs / 1000;
+  const kenBurnsContinuous = !reduced && !isMobile;
+
+  // Autoplay: setTimeout per slide perche' la durata puo' variare.
   useEffect(() => {
     const autoplayActive =
-      config.autoplayEnabled &&
-      !reduced &&
-      !paused &&
-      slides.length > 1;
+      config.autoplayEnabled && !reduced && !paused && slides.length > 1;
     if (!autoplayActive) return;
 
     const current = slides[index];
     if (!current) return;
 
     const baseDurationS = current.customDurationS ?? config.slideDurationS;
-    // Edge case: durata troppo corta vs transizione → clamp a
-    // transition + 500ms in modo che il fade abbia tempo di completarsi.
     const minDurationS = transitionS + 0.5;
     const safeDurationS = Math.max(baseDurationS, minDurationS);
 
@@ -132,88 +131,148 @@ export function HeroCarousel({
     transitionS,
   ]);
 
+  // isTransitioning gating: attivo durante la coreografia, spento al termine.
+  // Usato per will-change dinamico — niente compositing layer permanente.
+  // Il setState e' wrappato in rAF per evitare cascading renders sincroni
+  // (regola react-hooks/set-state-in-effect).
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setIsTransitioning(true));
+    const totalMs = reduced ? 200 : CHOREO_TOTAL_MS * mult;
+    const id = setTimeout(() => setIsTransitioning(false), totalMs);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(id);
+    };
+  }, [index, mult, reduced]);
+
   if (slides.length === 0) return null;
   const current = slides[index];
   if (!current) return null;
 
   const headlineLines = splitHeadline(current.headline);
   const showCta = !!(current.ctaLabel && current.ctaLink);
+  const isOddSlide = index % 2 === 1;
+
+  // Durata lineare Ken Burns: dalla fine dell'enter scale (500ms) fino
+  // a 300ms prima del prossimo cross-fade (cosi' lo zoom non viene
+  // troncato bruscamente).
+  const slideTotalS = current.customDurationS ?? config.slideDurationS;
+  const enterScaleS = 0.5 * mult;
+  const exitReserveS = transitionS + 0.3;
+  const kenBurnsDurS = Math.max(0.6, slideTotalS - enterScaleS - exitReserveS);
+  const totalImageAnimS = enterScaleS + kenBurnsDurS;
 
   return (
     <div
-      className="absolute inset-0"
+      className={cn(
+        "absolute inset-0",
+        isTransitioning && "[&_*]:will-change-transform",
+      )}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-live="off"
     >
-      {/* Layer 1: foto carosello con cross-fade dinamico */}
+      {/* Layer 1: foto carosello con cross-fade overlap + Ken Burns. */}
       <AnimatePresence>
         <motion.div
           key={`img-${current._id}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: transitionS }}
+          transition={
+            reduced
+              ? { duration: 0.15 }
+              : {
+                  // Enter immagine: ritardato di 200ms × mult (mentre i
+                  // testi vecchi escono). Durata 500ms × mult.
+                  delay: 0.2 * mult,
+                  duration: 0.5 * mult,
+                  ease: EASE_OUT_CUBIC,
+                }
+          }
           className="absolute inset-0"
         >
-          <Image
-            src={current.image}
-            alt={current.alt}
-            fill
-            sizes="100vw"
-            priority={index === 0}
-            className="object-cover"
-          />
+          {/* Inner motion: gestisce scale enter + Ken Burns continuo. */}
+          <motion.div
+            initial={{ scale: reduced ? 1 : 1.05, x: "0%" }}
+            animate={
+              reduced
+                ? { scale: 1, x: "0%" }
+                : kenBurnsContinuous
+                  ? {
+                      scale: [1.05, 1.0, 1.08],
+                      x: ["0%", "0%", isOddSlide ? "1%" : "0%"],
+                    }
+                  : { scale: [1.05, 1.0] }
+            }
+            transition={
+              reduced
+                ? { duration: 0.15 }
+                : kenBurnsContinuous
+                  ? {
+                      scale: {
+                        duration: totalImageAnimS,
+                        times: [0, enterScaleS / totalImageAnimS, 1],
+                        ease: ["easeOut", "linear"],
+                      },
+                      x: {
+                        duration: totalImageAnimS,
+                        ease: "linear",
+                      },
+                    }
+                  : {
+                      duration: enterScaleS,
+                      ease: EASE_OUT_CUBIC,
+                    }
+            }
+            className="absolute inset-0"
+          >
+            <Image
+              src={current.image}
+              alt={current.alt}
+              fill
+              sizes="100vw"
+              priority={index === 0}
+              className="object-cover"
+            />
+          </motion.div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Layer 2: gradient di leggibilita' (statico, no fade) */}
+      {/* Layer 2: gradient di leggibilita' (statico, no fade). */}
       <div
         aria-hidden
         className="from-surface-0 via-surface-0/60 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
-      {/* Layer 3: testo della slide, sincronizzato con la foto */}
+      {/* Layer 3: testo della slide — mode="wait" (no overlap). */}
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-end">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
             key={`text-${current._id}`}
-            variants={textWrapper}
-            initial={reduced ? "show" : "hidden"}
+            initial="hidden"
             animate="show"
             exit="exit"
-            className="pointer-events-auto flex flex-col items-start gap-6 px-6 pb-16 sm:pb-24 lg:px-12"
+            className="pointer-events-auto flex min-h-[40vh] flex-col items-start justify-end gap-6 px-6 pb-16 sm:pb-24 lg:px-12"
           >
             {current.eyebrow && (
-              <motion.span
-                variants={textItem}
-                className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base"
-              >
-                {current.eyebrow}
-              </motion.span>
+              <EyebrowBlock
+                text={current.eyebrow}
+                mult={mult}
+                reduced={!!reduced}
+              />
             )}
 
-            <motion.h1
-              variants={textItem}
-              className="font-display text-ink-hi text-7xl leading-[0.92] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
-            >
-              {headlineLines.map((line, i) => {
-                const isLast = i === headlineLines.length - 1;
-                const highlight = isLast && headlineLines.length >= 2;
-                return (
-                  <span
-                    key={`${current._id}-line-${i}`}
-                    className={highlight ? "text-brand-gold block" : "block"}
-                  >
-                    {line}
-                  </span>
-                );
-              })}
-            </motion.h1>
+            <HeadlineBlock
+              lines={headlineLines}
+              slideId={current._id}
+              mult={mult}
+              reduced={!!reduced}
+            />
 
             {current.subhead && (
               <motion.p
-                variants={textItem}
+                variants={makeSubheadVariants(mult, !!reduced)}
                 className="text-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
               >
                 {current.subhead}
@@ -221,15 +280,12 @@ export function HeroCarousel({
             )}
 
             {showCta && (
-              <motion.div variants={textItem}>
-                <Link
-                  href={current.ctaLink!}
-                  className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
-                >
-                  {current.ctaLabel}
-                  <ArrowRight size={16} />
-                </Link>
-              </motion.div>
+              <CtaBlock
+                label={current.ctaLabel!}
+                href={current.ctaLink!}
+                mult={mult}
+                reduced={!!reduced}
+              />
             )}
           </motion.div>
         </AnimatePresence>
@@ -237,6 +293,290 @@ export function HeroCarousel({
     </div>
   );
 }
+
+// ---------- Sotto-componenti animati ----------------------------------------
+
+function EyebrowBlock({
+  text,
+  mult,
+  reduced,
+}: {
+  text: string;
+  mult: number;
+  reduced: boolean;
+}) {
+  if (reduced) {
+    return (
+      <motion.span
+        variants={makeReducedFadeVariants()}
+        className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base"
+      >
+        {text}
+      </motion.span>
+    );
+  }
+  return (
+    <motion.span
+      variants={makeEyebrowVariants(mult)}
+      className="text-brand-gold font-display relative inline-block overflow-hidden text-sm font-bold tracking-[0.2em] uppercase md:text-base"
+    >
+      <span className="block">{text}</span>
+      <motion.span
+        aria-hidden
+        className="bg-brand-gold mt-1 block h-px w-full origin-left"
+        variants={makeEyebrowUnderlineVariants(mult)}
+      />
+    </motion.span>
+  );
+}
+
+function HeadlineBlock({
+  lines,
+  slideId,
+  mult,
+  reduced,
+}: {
+  lines: string[];
+  slideId: string;
+  mult: number;
+  reduced: boolean;
+}) {
+  return (
+    <motion.h1
+      variants={makeWrapperVariants()}
+      className="font-display text-ink-hi text-7xl leading-[0.92] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
+    >
+      {lines.map((line, i) => {
+        const isLast = i === lines.length - 1;
+        const highlight = isLast && lines.length >= 2;
+        return (
+          <motion.span
+            key={`${slideId}-line-${i}`}
+            variants={makeHeadlineLineVariants(i, mult, reduced)}
+            className={cn(
+              "block",
+              highlight && "text-brand-gold",
+              !reduced && "overflow-hidden",
+            )}
+          >
+            <motion.span
+              className="block"
+              variants={
+                highlight && !reduced
+                  ? makeHeadlineGoldGlowVariants(i, mult)
+                  : undefined
+              }
+            >
+              {line}
+            </motion.span>
+          </motion.span>
+        );
+      })}
+    </motion.h1>
+  );
+}
+
+function CtaBlock({
+  label,
+  href,
+  mult,
+  reduced,
+}: {
+  label: string;
+  href: string;
+  mult: number;
+  reduced: boolean;
+}) {
+  return (
+    <motion.div
+      variants={reduced ? makeReducedFadeVariants() : makeCtaVariants(mult)}
+    >
+      <motion.div
+        animate={
+          reduced
+            ? undefined
+            : { scale: [1, 1.02, 1] }
+        }
+        transition={
+          reduced
+            ? undefined
+            : {
+                duration: 0.8 * mult,
+                delay: (1.3 + 0.25) * mult,
+                times: [0, 0.5, 1],
+                ease: EASE_OUT_CUBIC,
+              }
+        }
+      >
+        <Link
+          href={href}
+          className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
+          {label}
+          <ArrowRight size={16} />
+        </Link>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ---------- Variants factories ----------------------------------------------
+
+function makeWrapperVariants(): Variants {
+  return {
+    hidden: {},
+    show: {},
+    exit: {},
+  };
+}
+
+function makeReducedFadeVariants(): Variants {
+  return {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { duration: 0.2 } },
+    exit: { opacity: 0, transition: { duration: 0.15 } },
+  };
+}
+
+function makeEyebrowVariants(mult: number): Variants {
+  return {
+    hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+    show: {
+      clipPath: "inset(0 0 0 0)",
+      opacity: 1,
+      transition: {
+        duration: 0.22 * mult,
+        delay: 0.6 * mult,
+        ease: EASE_OUT_QUART,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 8,
+      transition: { duration: 0.2 * mult, ease: EASE_OUT_CUBIC },
+    },
+  };
+}
+
+function makeEyebrowUnderlineVariants(mult: number): Variants {
+  return {
+    hidden: { scaleX: 0, transformOrigin: "left" },
+    show: {
+      scaleX: 1,
+      transition: {
+        duration: 0.4 * mult,
+        delay: (0.6 + 0.22 + 0.2) * mult,
+        ease: EASE_OUT_QUART,
+      },
+    },
+    exit: {
+      scaleX: 0,
+      transformOrigin: "right",
+      transition: { duration: 0.2 * mult, ease: EASE_OUT_CUBIC },
+    },
+  };
+}
+
+function makeHeadlineLineVariants(
+  lineIndex: number,
+  mult: number,
+  reduced: boolean,
+): Variants {
+  if (reduced) {
+    return {
+      hidden: { opacity: 0 },
+      show: {
+        opacity: 1,
+        transition: { duration: 0.2, delay: 0.05 * lineIndex },
+      },
+      exit: { opacity: 0, transition: { duration: 0.15 } },
+    };
+  }
+  return {
+    hidden: { clipPath: "inset(0 100% 0 0)" },
+    show: {
+      clipPath: "inset(0 0 0 0)",
+      transition: {
+        duration: 0.35 * mult,
+        delay: (0.8 + lineIndex * 0.08) * mult,
+        ease: EASE_OUT_QUART,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 8,
+      transition: { duration: 0.2 * mult, ease: EASE_OUT_CUBIC },
+    },
+  };
+}
+
+function makeHeadlineGoldGlowVariants(
+  lineIndex: number,
+  mult: number,
+): Variants {
+  // Pulse glow oro sull'ultima riga (highlight) per i primi 600ms × mult
+  // dopo che la riga e' apparsa. Suggerisce "questa e' la parola chiave".
+  return {
+    hidden: { textShadow: "0 0 0px rgba(223, 177, 108, 0)" },
+    show: {
+      textShadow: [
+        "0 0 0px rgba(223, 177, 108, 0)",
+        "0 0 20px rgba(223, 177, 108, 0.3)",
+        "0 0 0px rgba(223, 177, 108, 0)",
+      ],
+      transition: {
+        duration: 0.6 * mult,
+        delay: (0.8 + lineIndex * 0.08 + 0.35) * mult,
+        times: [0, 0.5, 1],
+      },
+    },
+    exit: { textShadow: "0 0 0px rgba(223, 177, 108, 0)" },
+  };
+}
+
+function makeSubheadVariants(mult: number, reduced: boolean): Variants {
+  if (reduced) return makeReducedFadeVariants();
+  return {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3 * mult,
+        delay: 1.1 * mult,
+        ease: EASE_OUT_CUBIC,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 8,
+      transition: { duration: 0.2 * mult, ease: EASE_OUT_CUBIC },
+    },
+  };
+}
+
+function makeCtaVariants(mult: number): Variants {
+  return {
+    hidden: { opacity: 0, y: 8, scale: 0.96 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.25 * mult,
+        delay: 1.3 * mult,
+        ease: EASE_BACK_OUT,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 8,
+      transition: { duration: 0.2 * mult, ease: EASE_OUT_CUBIC },
+    },
+  };
+}
+
+// ---------- Helpers ---------------------------------------------------------
 
 function splitHeadline(input: string): string[] {
   return input
