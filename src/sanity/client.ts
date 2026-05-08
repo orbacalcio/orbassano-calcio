@@ -1,27 +1,23 @@
-import { createClient, type ClientConfig } from "next-sanity";
+import "server-only";
+import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId, readToken } from "./env";
 
-const baseConfig: ClientConfig = {
+/**
+ * Client Sanity di sola lettura per Server Components.
+ *
+ * Il dataset di questo progetto e' **privato**: le query anonime al
+ * CDN/API ritornano vuoto. Quando `SANITY_API_READ_TOKEN` e' settato
+ * lo passiamo al client e disattiviamo il CDN (gli endpoint CDN non
+ * accettano richieste autenticate).
+ *
+ * `import "server-only"` impedisce che questo modulo finisca nel
+ * bundle browser per errore: il token non puo' mai trapelare al client.
+ */
+export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  // Disabilitiamo il CDN in dev per vedere subito le modifiche dello Studio.
-  // In produzione next-sanity usa la cache HTTP del CDN automaticamente.
-  useCdn: process.env.NODE_ENV === "production",
+  useCdn: !readToken && process.env.NODE_ENV === "production",
   perspective: "published",
-};
-
-/**
- * Client Sanity di sola lettura. Usalo nelle Server Components.
- * Per draft/preview usa il client con `perspective: 'previewDrafts'`
- * configurato a parte (lo aggiungeremo in M3 con next-sanity/live).
- */
-export const sanityClient = createClient(baseConfig);
-
-/**
- * Client autenticato per lettura privilegiata server-side (es. preview).
- * Non usarlo mai in componenti client.
- */
-export const authenticatedClient = readToken
-  ? createClient({ ...baseConfig, token: readToken, useCdn: false })
-  : null;
+  ...(readToken ? { token: readToken } : {}),
+});

@@ -99,7 +99,8 @@ export async function fetchTeamsList(): Promise<TeamSummary[]> {
       { next: { tags: ["team"] } },
     );
     return (data ?? []) as TeamSummary[];
-  } catch {
+  } catch (err) {
+    console.error("[fetchTeamsList]", err);
     return [];
   }
 }
@@ -114,7 +115,8 @@ export async function fetchTeamsByCategory(
       { next: { tags: ["team"] } },
     );
     return (data ?? []) as TeamSummary[];
-  } catch {
+  } catch (err) {
+    console.error("[fetchTeamsByCategory]", err);
     return [];
   }
 }
@@ -129,7 +131,8 @@ export async function fetchTeamBySlug(
       { next: { tags: ["team", "player"] } },
     );
     return (data ?? null) as TeamDetail | null;
-  } catch {
+  } catch (err) {
+    console.error("[fetchTeamBySlug]", { slug }, err);
     return null;
   }
 }
@@ -181,7 +184,8 @@ export async function fetchPlayerBySlug(
       { next: { tags: ["player"] } },
     );
     return (data ?? null) as PlayerDetail | null;
-  } catch {
+  } catch (err) {
+    console.error("[fetchPlayerBySlug]", { slug }, err);
     return null;
   }
 }
