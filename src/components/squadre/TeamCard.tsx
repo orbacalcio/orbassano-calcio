@@ -23,6 +23,8 @@ export function TeamCard({ team }: Props) {
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             sizes="(max-width: 1024px) 100vw, 33vw"
+            placeholder={team.heroImageLqip ? "blur" : "empty"}
+            blurDataURL={team.heroImageLqip ?? undefined}
           />
         ) : (
           <div

@@ -144,6 +144,8 @@ function TeamView({ team }: { team: TeamDetail }) {
               priority
               className="object-cover"
               sizes="100vw"
+              placeholder={team.heroImageLqip ? "blur" : "empty"}
+              blurDataURL={team.heroImageLqip ?? undefined}
             />
             <div
               aria-hidden
@@ -254,6 +256,8 @@ function TeamView({ team }: { team: TeamDetail }) {
                       width={64}
                       height={64}
                       className="h-16 w-16 shrink-0 rounded-full object-cover"
+                      placeholder={s.photoLqip ? "blur" : "empty"}
+                      blurDataURL={s.photoLqip ?? undefined}
                     />
                   ) : (
                     <div

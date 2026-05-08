@@ -7,11 +7,15 @@ import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import type { MainSponsor } from "@/sanity/fetchers";
 
 /**
- * Topbar superiore in modalita' "hero" (sticky, solo md+).
+ * Topbar superiore in modalita' "hero" (sticky, solo lg+).
  *
- * Altezze responsive (la topbar e' visibile da md+):
- * - md (768-1023): h-14 (56px), loghi sponsor h-8 (32px)
- * - lg (≥1024): h-16 (64px), loghi sponsor h-9 (36px)
+ * Sotto lg (<1024px) la topbar desktop e' nascosta del tutto: il
+ * tablet eredita il pattern mobile (MobileTopbar + MobileSponsorStrip).
+ * Questa scelta evita la collisione che esisteva tra Topbar md:flex e
+ * MobileTopbar lg:hidden nel range 768-1023, dove entrambe finivano
+ * fissate a top-0 sovrapposte. Ora il gating e' netto:
+ *  - 0-1023:  MobileTopbar + MobileSponsorStrip
+ *  - 1024+:   Topbar (h-16, loghi sponsor h-9 = 36px)
  *
  * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
@@ -34,7 +38,7 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
   return (
     <header
       className={cn(
-        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-11 border-b backdrop-blur-md md:flex md:h-14 lg:h-16",
+        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-16 border-b backdrop-blur-md lg:flex",
       )}
       style={{ zIndex: Z.topbar }}
       role="banner"
@@ -42,7 +46,7 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
     >
       <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
         {usingFallback ? (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border md:h-10 lg:h-12">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
               <li
                 key={s.name}
@@ -53,14 +57,13 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
             ))}
           </ul>
         ) : (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border md:h-10 lg:h-12">
-            {sponsors.map((s, i) => {
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
+            {sponsors.map((s) => {
               if (!s.website) return null;
-              const tabletHide = i >= 3 ? "hidden lg:flex" : "flex";
               return (
                 <li
                   key={s._id}
-                  className={cn("h-full items-center px-3 lg:px-5", tabletHide)}
+                  className="flex h-full items-center px-5"
                 >
                   <a
                     href={s.website}
@@ -74,7 +77,7 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
                       variant="mono"
                       width={180}
                       height={36}
-                      className="h-5 w-auto md:h-8 lg:h-9"
+                      className="h-9 w-auto"
                     />
                   </a>
                 </li>

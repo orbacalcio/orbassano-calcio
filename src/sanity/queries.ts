@@ -87,6 +87,7 @@ export const heroSlidesQuery = defineQuery(`
     alt,
     credits,
     "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip,
     eyebrow,
     headline,
     subhead,
@@ -150,6 +151,7 @@ export const teamsListQuery = defineQuery(`
     league,
     group,
     "heroImage": heroImage.asset->url,
+    "heroImageLqip": heroImage.asset->metadata.lqip,
     "playerCount": count(*[_type == "player" && references(^._id)])
   }
 `);
@@ -166,6 +168,7 @@ export const teamsByCategoryQuery = defineQuery(`
     league,
     group,
     "heroImage": heroImage.asset->url,
+    "heroImageLqip": heroImage.asset->metadata.lqip,
     "playerCount": count(*[_type == "player" && references(^._id)])
   }
 `);
@@ -185,10 +188,12 @@ export const teamBySlugQuery = defineQuery(`
     group,
     description,
     "heroImage": heroImage.asset->url,
+    "heroImageLqip": heroImage.asset->metadata.lqip,
     staff[]{
       role,
       name,
-      "photo": photo.asset->url
+      "photo": photo.asset->url,
+      "photoLqip": photo.asset->metadata.lqip
     },
     "players": *[_type == "player" && references(^._id)]
       | order(coalesce(shirtNumber, 99) asc, lastName asc){
@@ -202,7 +207,8 @@ export const teamBySlugQuery = defineQuery(`
         foot,
         nationality,
         isCaptain,
-        "photo": photo.asset->url
+        "photo": photo.asset->url,
+        "photoLqip": photo.asset->metadata.lqip
       }
   }
 `);
@@ -221,7 +227,9 @@ export const playerBySlugQuery = defineQuery(`
     nationality,
     isCaptain,
     "photo": photo.asset->url,
+    "photoLqip": photo.asset->metadata.lqip,
     "photoAction": photoAction.asset->url,
+    "photoActionLqip": photoAction.asset->metadata.lqip,
     bio,
     stats,
     team->{
