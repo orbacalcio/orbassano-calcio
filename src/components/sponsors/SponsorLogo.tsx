@@ -2,30 +2,36 @@ import Image from "next/image";
 import { cn } from "@/lib/cn";
 
 /**
- * Renderer atomico del logo sponsor — strict mode.
+ * Renderer atomico del logo sponsor — fallback a 3 livelli per
+ * variant="mono", a 2 livelli per variant="color".
  *
- * Decisione di brand (vedi commit feat(sponsors): SponsorLogo strict):
- * niente filtro CSS automatico per derivare il monochrome dal logo a
- * colori. `brightness(0) invert(1)` rende male su loghi complessi
- * (gradient, multi-color, dettagli sottili come la banda gialla del
- * Reale Mutua) e l'admin del club preferisce gestire le versioni
- * monocromatiche manualmente con Photoshop, caso per caso.
+ * Razionale: il caricamento dei `logoMonochrome` da parte dell'admin
+ * e' graduale (Photoshop manuale, caso per caso). Senza questo
+ * fallback intermedio, durante la transizione la topbar mostrerebbe
+ * meta' loghi e meta' fallback testuali — esteticamente disomogeneo.
+ * Ammettendo il `logo` color in contesto mono, il tradeoff e':
+ * "qualche logo a colori in topbar dark" >> "logo come testo Plain".
  *
  * Comportamento:
  *
- * - variant="mono"  → usa sponsor.logoMonochrome se presente.
- *                     Se assente → fallback testuale `name` in Big
- *                     Shoulders Display 600, tracking-[0.15em],
- *                     uppercase, color text-ink-hi (#f5f7fa, "bianco
- *                     navy" del brand: la linea guida del progetto
- *                     evita il bianco puro).
+ * - variant="mono"  → ordine di fallback:
+ *      1. sponsor.logoMonochrome (versione bianca curata dall'admin)
+ *      2. sponsor.logo (color, renderizzato com'e', NESSUN filtro CSS)
+ *      3. fallback testuale `name` in Big Shoulders Display 600,
+ *         tracking-[0.15em], uppercase, color text-ink-hi (~ bianco
+ *         navy del brand; la linea guida del progetto evita il
+ *         bianco puro).
  *
- * - variant="color" → usa sponsor.logo se presente.
- *                     Se assente → stesso fallback testuale; il color
- *                     di default text-ink-hi e' overridabile via
- *                     `className` quando il contesto e' chiaro/neutro.
+ * - variant="color" → ordine di fallback:
+ *      1. sponsor.logo
+ *      2. stesso fallback testuale; color overridabile via className
+ *         per contesti chiari/neutri.
  *
- * Mai usare sponsor.logo con filter CSS in variant="mono".
+ * Mai usare brightness/invert CSS: le versioni mono sono asset
+ * editoriali, non filtri.
+ *
+ * Niente animazione hover sui path immagine: comportamento statico
+ * e prevedibile.
  */
 
 type SponsorLike = {
@@ -51,12 +57,11 @@ export function SponsorLogo({
   height = 20,
   className,
 }: Props) {
-  const src =
-    variant === "mono" ? (sponsor.logoMonochrome ?? null) : sponsor.logo;
+  const src = pickSrc(sponsor, variant);
 
-  // Asset assente per la variant richiesta → fallback testuale.
+  // Asset assente per entrambi i livelli → fallback testuale.
   // `inline-flex items-center` garantisce che il testo resti centrato
-  // verticalmente quando il consumer impone un'altezza fissa (es. h-5
+  // verticalmente quando il consumer impone un'altezza fissa (es. h-10
   // in topbar, h-12 in footer-bar).
   if (!src) {
     return (
@@ -80,4 +85,14 @@ export function SponsorLogo({
       className={cn("h-auto w-auto object-contain", className)}
     />
   );
+}
+
+function pickSrc(
+  sponsor: SponsorLike,
+  variant: "mono" | "color",
+): string | null {
+  if (variant === "mono") {
+    return sponsor.logoMonochrome ?? sponsor.logo ?? null;
+  }
+  return sponsor.logo ?? null;
 }
