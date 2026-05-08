@@ -7,7 +7,11 @@ import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import type { MainSponsor } from "@/sanity/fetchers";
 
 /**
- * Topbar superiore in modalita' "hero" (44px, sticky, solo md+).
+ * Topbar superiore in modalita' "hero" (sticky, solo md+).
+ *
+ * Altezze responsive (la topbar e' visibile da md+):
+ * - md (768-1023): h-14 (56px), loghi sponsor h-8 (32px)
+ * - lg (≥1024): h-16 (64px), loghi sponsor h-10 (40px)
  *
  * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
@@ -16,7 +20,7 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * Pattern: trasparente con backdrop-blur + box main sponsor a destra
  * + divisore + icona search. Loghi sponsor mono via <SponsorLogo
  * variant="mono"> — strict, niente filtro CSS: se logoMonochrome
- * manca compare il fallback testuale del nome sponsor.
+ * manca compare il fallback color o testuale.
  */
 const FALLBACK_MAIN_SPONSORS = [
   { name: "Studio Cambareri" },
@@ -30,7 +34,7 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
   return (
     <header
       className={cn(
-        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-11 border-b backdrop-blur-md md:flex",
+        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-11 border-b backdrop-blur-md md:flex md:h-14 lg:h-16",
       )}
       style={{ zIndex: Z.topbar }}
       role="banner"
@@ -38,7 +42,7 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
     >
       <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
         {usingFallback ? (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border md:h-10 lg:h-12">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
               <li
                 key={s.name}
@@ -49,14 +53,14 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
             ))}
           </ul>
         ) : (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-7 items-center divide-x overflow-hidden rounded-md border md:h-10 lg:h-12">
             {sponsors.map((s, i) => {
               if (!s.website) return null;
               const tabletHide = i >= 3 ? "hidden lg:flex" : "flex";
               return (
                 <li
                   key={s._id}
-                  className={cn("h-full items-center px-3", tabletHide)}
+                  className={cn("h-full items-center px-3 lg:px-5", tabletHide)}
                 >
                   <a
                     href={s.website}
@@ -68,9 +72,9 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
                     <SponsorLogo
                       sponsor={s}
                       variant="mono"
-                      width={100}
-                      height={20}
-                      className="h-5 w-auto"
+                      width={200}
+                      height={40}
+                      className="h-5 w-auto md:h-8 lg:h-10"
                     />
                   </a>
                 </li>

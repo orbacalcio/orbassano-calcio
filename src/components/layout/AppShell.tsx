@@ -35,7 +35,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
       <main
         id="main-content"
         tabIndex={-1}
-        className="pt-[84px] lg:pt-11 lg:pr-[80px] lg:pl-[88px]"
+        className="pt-[84px] lg:pt-16 lg:pr-[80px] lg:pl-[88px]"
       >
         {children}
       </main>

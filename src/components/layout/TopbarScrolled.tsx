@@ -87,7 +87,7 @@ export function TopbarScrolled({
         {/* Dx: sponsor + divider + search */}
         <div className="ml-auto flex items-center gap-4">
           {usingFallback ? (
-            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-7 items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {FALLBACK_MAIN_SPONSORS.map((s) => (
                 <li
                   key={s.name}
@@ -98,11 +98,11 @@ export function TopbarScrolled({
               ))}
             </ul>
           ) : (
-            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-7 items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {sponsors.map((s) => {
                 if (!s.website) return null;
                 return (
-                  <li key={s._id} className="flex h-full items-center px-3">
+                  <li key={s._id} className="flex h-full items-center px-5">
                     <a
                       href={s.website}
                       target="_blank"
@@ -113,9 +113,9 @@ export function TopbarScrolled({
                       <SponsorLogo
                         sponsor={s}
                         variant="mono"
-                        width={100}
-                        height={20}
-                        className="h-5 w-auto"
+                        width={200}
+                        height={40}
+                        className="h-10 w-auto"
                       />
                     </a>
                   </li>
