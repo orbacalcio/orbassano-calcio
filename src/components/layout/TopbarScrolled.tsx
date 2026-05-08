@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
+import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
 
@@ -99,13 +100,9 @@ export function TopbarScrolled({
           ) : (
             <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-7 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {sponsors.map((s) => {
-                const src = s.logoMonochrome ?? s.logo;
                 if (!s.website) return null;
                 return (
-                  <li
-                    key={s._id}
-                    className="flex h-full items-center px-3"
-                  >
+                  <li key={s._id} className="flex h-full items-center px-3">
                     <a
                       href={s.website}
                       target="_blank"
@@ -113,24 +110,13 @@ export function TopbarScrolled({
                       aria-label={`${s.name} (sponsor principale)`}
                       className="opacity-70 transition-opacity hover:opacity-100"
                     >
-                      {src ? (
-                        <Image
-                          src={src}
-                          alt={s.name}
-                          width={100}
-                          height={20}
-                          className="h-5 w-auto object-contain"
-                          style={
-                            s.logoMonochrome
-                              ? undefined
-                              : { filter: "brightness(0) invert(1)" }
-                          }
-                        />
-                      ) : (
-                        <span className="font-display text-ink-mid text-[11px] font-semibold tracking-[0.15em] uppercase">
-                          {s.name}
-                        </span>
-                      )}
+                      <SponsorLogo
+                        sponsor={s}
+                        variant="mono"
+                        width={100}
+                        height={20}
+                        className="h-5 w-auto"
+                      />
                     </a>
                   </li>
                 );

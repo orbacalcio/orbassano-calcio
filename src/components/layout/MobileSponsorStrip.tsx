@@ -1,11 +1,16 @@
-import Image from "next/image";
 import { sanityClient } from "@/sanity/client";
 import { mainSponsorsQuery } from "@/sanity/queries";
+import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Z } from "@/lib/z-indexes";
 
 /**
  * Mobile (<lg): striscia sponsor sticky a 40px sotto la topbar mobile.
  * Layout flex con scroll orizzontale snap se i loghi non entrano.
+ *
+ * Loghi mono via <SponsorLogo variant="mono">: se logoMonochrome
+ * manca compare il fallback testuale del nome sponsor — niente
+ * filtro CSS automatico (vedi commit feat(sponsors): SponsorLogo
+ * strict).
  */
 type Sponsor = {
   _id: string;
@@ -47,8 +52,7 @@ export async function MobileSponsorStrip() {
       </span>
       <ul className="flex shrink-0 items-center gap-5">
         {sponsors.map((s) => {
-          const src = s.logoMonochrome ?? s.logo;
-          if (!src || !s.website) return null;
+          if (!s.website) return null;
           return (
             <li
               key={s._id}
@@ -62,17 +66,12 @@ export async function MobileSponsorStrip() {
                 aria-label={`${s.name} (sponsor principale)`}
                 className="opacity-80 hover:opacity-100"
               >
-                <Image
-                  src={src}
-                  alt={s.name}
+                <SponsorLogo
+                  sponsor={s}
+                  variant="mono"
                   width={100}
                   height={20}
-                  className="h-5 w-auto object-contain"
-                  style={
-                    s.logoMonochrome
-                      ? undefined
-                      : { filter: "brightness(0) invert(1)" }
-                  }
+                  className="h-5 w-auto"
                 />
               </a>
             </li>
