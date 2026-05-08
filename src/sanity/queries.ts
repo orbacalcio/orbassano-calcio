@@ -53,14 +53,23 @@ export const allActiveSponsorsQuery = defineQuery(`
   }
 `);
 
-// Slide attive del carosello hero
+// Slide attive del carosello hero. Ogni slide porta il proprio set
+// testuale (eyebrow / headline / subhead / ctaLabel / ctaLink) per
+// il pattern editoriale juventus.com: l'overlay testuale cambia in
+// sincrono con l'immagine. I sotto-elementi vuoti vengono nascosti
+// dal componente HeroCarousel (rendering condizionale).
 export const heroSlidesQuery = defineQuery(`
   *[_type == "heroSlide" && isActive == true] | order(order asc){
     _id,
     title,
     alt,
     credits,
-    "image": image.asset->url
+    "image": image.asset->url,
+    eyebrow,
+    headline,
+    subhead,
+    ctaLabel,
+    ctaLink
   }
 `);
 
