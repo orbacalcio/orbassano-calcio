@@ -104,7 +104,7 @@ export async function SponsorMarquee() {
           {reel.map((s, i) => (
             <li
               key={`${s._id}-${i}`}
-              className="flex h-16 shrink-0 items-center"
+              className="flex h-20 shrink-0 items-center"
             >
               {s.website ? (
                 <a
@@ -119,7 +119,7 @@ export async function SponsorMarquee() {
                     variant="color"
                     width={300}
                     height={144}
-                    className="font-display h-12 w-auto text-2xl font-bold tracking-[0.02em]"
+                    className="font-display h-[60px] w-auto text-2xl font-bold tracking-[0.02em]"
                   />
                 </a>
               ) : (
