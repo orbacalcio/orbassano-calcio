@@ -56,25 +56,6 @@ export const allActiveSponsorsQuery = defineQuery(`
   }
 `);
 
-// Sponsor istituzionali per la FooterSponsorsBar (Main a sx, Official
-// a dx). I Corporate Partner restano confinati alla pagina dedicata
-// /sponsor/partner perche' sono accordi di benefit, non visibilita'.
-// Logo + logoMonochrome per il fallback CSS gestito da SponsorLogo.
-export const footerSponsorsQuery = defineQuery(`
-  {
-    "main": *[_type == "sponsor" && tier == "Main Sponsor" && isActive == true] | order(order asc){
-      _id, name, website,
-      "logo": logo.asset->url,
-      "logoMonochrome": logoMonochrome.asset->url
-    },
-    "official": *[_type == "sponsor" && tier == "Official Sponsor" && isActive == true] | order(order asc){
-      _id, name, website,
-      "logo": logo.asset->url,
-      "logoMonochrome": logoMonochrome.asset->url
-    }
-  }
-`);
-
 // Slide attive del carosello hero. Ogni slide porta il proprio set
 // testuale (eyebrow / headline / subhead / ctaLabel / ctaLink) per
 // il pattern editoriale juventus.com: l'overlay testuale cambia in

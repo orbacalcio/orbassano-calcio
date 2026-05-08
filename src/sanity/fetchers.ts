@@ -1,6 +1,5 @@
 import { sanityClient } from "./client";
 import {
-  footerSponsorsQuery,
   mainSponsorsQuery,
   playerBySlugQuery,
   teamBySlugQuery,
@@ -34,30 +33,6 @@ export async function fetchMainSponsors(): Promise<MainSponsor[]> {
     return (data ?? []) as MainSponsor[];
   } catch {
     return [];
-  }
-}
-
-export type FooterSponsors = {
-  main: MainSponsor[];
-  official: MainSponsor[];
-};
-
-export async function fetchFooterSponsors(): Promise<FooterSponsors> {
-  try {
-    const data = await sanityClient.fetch(
-      footerSponsorsQuery,
-      {},
-      { next: { tags: ["sponsor"] } },
-    );
-    if (!data) return { main: [], official: [] };
-    const result = data as { main?: MainSponsor[]; official?: MainSponsor[] };
-    return {
-      main: result.main ?? [],
-      official: result.official ?? [],
-    };
-  } catch (err) {
-    console.error("[fetchFooterSponsors]", err);
-    return { main: [], official: [] };
   }
 }
 

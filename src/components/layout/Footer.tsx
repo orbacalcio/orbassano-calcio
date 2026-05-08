@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
-import { FooterSponsorsBar } from "@/components/footer/FooterSponsorsBar";
 import {
   SocialIcons,
   type SocialLinks,
@@ -129,7 +128,6 @@ export async function Footer() {
 
   return (
     <footer className="bg-surface-1 border-border border-t" role="contentinfo">
-      <FooterSponsorsBar />
       <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_2fr_1.4fr]" size="wide">
         {/* Colonna sinistra: brand */}
         <div className="flex flex-col gap-5">

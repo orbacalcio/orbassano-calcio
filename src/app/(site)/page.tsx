@@ -22,7 +22,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
  * 6. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
  * 7. Banner 5×1000 con CF in mono
  * 8. Marquee sponsor scorrimento infinito
- * (9. Footer dark — viene da AppShell, ha la propria FooterSponsorsBar)
+ * (9. Footer dark — viene da AppShell)
  *
  * Ogni blocco sotto l'hero e' wrappato in <RevealOnScroll> per il
  * fade + translateY al primo ingresso nel viewport: la pagina
