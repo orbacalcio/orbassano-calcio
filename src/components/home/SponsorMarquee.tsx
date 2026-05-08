@@ -2,11 +2,14 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { allActiveSponsorsQuery } from "@/sanity/queries";
+import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Container } from "@/components/ui/Container";
 
 /**
- * Marquee sponsor: scorrimento infinito orizzontale dei loghi.
- * Default grayscale 70%, hover a colori 100%, animazione CSS pura.
+ * Marquee sponsor: scorrimento infinito orizzontale dei loghi a
+ * colori pieni, sempre. Nessun filtro CSS (no grayscale, no
+ * hover-effect, no opacity reduction): la richiesta editoriale e'
+ * mostrare gli sponsor "vivi" sul navy, non sbiaditi.
  *
  * Mostra TUTTI gli sponsor attivi (Main + Official, NON Corporate
  * Partner che vivono nella loro pagina dedicata) per dare visibilita'
@@ -17,6 +20,7 @@ type Sponsor = {
   name: string;
   website: string | null;
   logo: string | null;
+  logoMonochrome?: string | null;
 };
 
 type SponsorGroups = {
@@ -100,27 +104,32 @@ export async function SponsorMarquee() {
           {reel.map((s, i) => (
             <li
               key={`${s._id}-${i}`}
-              className="group flex h-16 shrink-0 items-center"
+              className="flex h-16 shrink-0 items-center"
             >
-              {s.logo && s.website ? (
+              {s.website ? (
                 <a
                   href={s.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.name}
-                  className="block opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+                  className="block"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={s.logo}
-                    alt={s.name}
-                    className="h-12 w-auto object-contain"
+                  <SponsorLogo
+                    sponsor={s}
+                    variant="color"
+                    width={300}
+                    height={144}
+                    className="font-display h-12 w-auto text-2xl font-bold tracking-[0.02em]"
                   />
                 </a>
               ) : (
-                <span className="text-ink-mid font-display text-2xl font-bold tracking-[0.02em] uppercase opacity-50">
-                  {s.name}
-                </span>
+                <SponsorLogo
+                  sponsor={s}
+                  variant="color"
+                  width={300}
+                  height={144}
+                  className="font-display h-12 w-auto text-2xl font-bold tracking-[0.02em]"
+                />
               )}
             </li>
           ))}
