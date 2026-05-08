@@ -53,6 +53,10 @@ html {
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Smooth scroll universale per anchor link e scroll programmati.
+     Il blocco prefers-reduced-motion in fondo lo riporta a 'auto'
+     per chi richiede meno movimento. */
+  scroll-behavior: smooth;
 }
 
 body {

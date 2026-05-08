@@ -28,6 +28,7 @@ type RawSlide = {
   title: string;
   alt: string;
   image: string;
+  imageLqip?: string | null;
   credits?: string | null;
   eyebrow?: string | null;
   headline?: string | null;
@@ -96,6 +97,7 @@ function resolveSlides(slides: RawSlide[]): HeroSlide[] {
         _id: s._id,
         alt: s.alt,
         image: s.image,
+        imageLqip: s.imageLqip ?? null,
         credits: s.credits ?? null,
         eyebrow: s.eyebrow?.trim() || null,
         headline: s.headline!.trim(),

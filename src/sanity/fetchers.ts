@@ -78,6 +78,8 @@ export type TeamSummary = {
   league: string | null;
   group: string | null;
   heroImage: string | null;
+  /** LQIP base64 (data:image/jpeg;base64,...) per blur placeholder. */
+  heroImageLqip: string | null;
   playerCount: number;
 };
 
@@ -85,6 +87,7 @@ export type StaffMember = {
   role: string;
   name: string;
   photo: string | null;
+  photoLqip: string | null;
 };
 
 export type PlayerSummary = {
@@ -99,6 +102,7 @@ export type PlayerSummary = {
   nationality: string | null;
   isCaptain: boolean | null;
   photo: string | null;
+  photoLqip: string | null;
 };
 
 export type TeamDetail = {
@@ -112,6 +116,7 @@ export type TeamDetail = {
   group: string | null;
   description: PortableTextBlock[] | null;
   heroImage: string | null;
+  heroImageLqip: string | null;
   staff: StaffMember[] | null;
   players: PlayerSummary[];
 };
@@ -184,7 +189,9 @@ export type PlayerDetail = {
   nationality: string | null;
   isCaptain: boolean | null;
   photo: string | null;
+  photoLqip: string | null;
   photoAction: string | null;
+  photoActionLqip: string | null;
   bio: PortableTextBlock[] | null;
   stats: PlayerStats | null;
   team: {

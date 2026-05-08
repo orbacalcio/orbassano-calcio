@@ -50,6 +50,7 @@ export type HeroSlide = {
   _id: string;
   alt: string;
   image: string;
+  imageLqip: string | null;
   credits: string | null;
   eyebrow: string | null;
   headline: string;
@@ -233,6 +234,8 @@ export function HeroCarousel({
               fill
               sizes="100vw"
               priority={index === 0}
+              placeholder={current.imageLqip ? "blur" : "empty"}
+              blurDataURL={current.imageLqip ?? undefined}
               className="object-cover"
             />
           </motion.div>

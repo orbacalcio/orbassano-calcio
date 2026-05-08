@@ -56,6 +56,9 @@ export default async function PlayerPage({
 function PlayerView({ player }: { player: PlayerDetail }) {
   const fullName = `${player.firstName} ${player.lastName}`;
   const heroPhoto = player.photoAction ?? player.photo;
+  const heroPhotoLqip = player.photoAction
+    ? player.photoActionLqip
+    : player.photoLqip;
   const team = player.team!;
   const age =
     player.birthYear !== null && player.birthYear !== undefined
@@ -92,6 +95,8 @@ function PlayerView({ player }: { player: PlayerDetail }) {
                 priority
                 className="aspect-[4/5] w-full object-cover"
                 sizes="(max-width: 1024px) 100vw, 40vw"
+                placeholder={heroPhotoLqip ? "blur" : "empty"}
+                blurDataURL={heroPhotoLqip ?? undefined}
               />
             ) : (
               <PlayerPlaceholder

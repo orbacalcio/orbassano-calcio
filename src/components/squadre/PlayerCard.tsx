@@ -31,6 +31,8 @@ export function PlayerCard({ player, teamSlug, className }: Props) {
             width={400}
             height={500}
             className="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            placeholder={player.photoLqip ? "blur" : "empty"}
+            blurDataURL={player.photoLqip ?? undefined}
           />
         ) : (
           <PlayerPlaceholder
