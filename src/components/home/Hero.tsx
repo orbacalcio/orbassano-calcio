@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { sanityClient } from "@/sanity/client";
 import { heroSlidesQuery, settingsQuery } from "@/sanity/queries";
-import { HeroCarousel, type HeroSlide } from "./HeroCarousel";
+import {
+  HeroCarousel,
+  type HeroCarouselConfig,
+  type HeroSlide,
+} from "./HeroCarousel";
 import { HeroOverlay } from "./HeroOverlay";
 
 /**
@@ -9,13 +13,14 @@ import { HeroOverlay } from "./HeroOverlay";
  *
  * Pattern editoriale: ogni slide del carosello porta il proprio set
  * testuale (eyebrow / headline / subhead / cta). HeroCarousel
- * sincronizza foto e testi nella stessa transizione (cross-fade
- * 300ms + stagger 100ms tra elementi testuali).
+ * sincronizza foto e testi nella stessa transizione e legge il
+ * timing (autoplay/durata/transizione) da settings — l'admin puo'
+ * regolare il ritmo del carosello dallo Studio senza toccare il
+ * codice. Per slide piu' "discorsive" (testo lungo) si puo'
+ * sovrascrivere la durata via heroSlide.customDuration.
  *
  * Se nessuna slide e' pubblicata (caso edge), fallback a un
- * placeholder testuale statico (gradient brand + logo watermark +
- * HeroOverlay con testi derivati da settings + copy fisso) per non
- * lasciare uno schermo bianco.
+ * placeholder testuale statico.
  */
 
 type RawSlide = {
@@ -29,12 +34,16 @@ type RawSlide = {
   subhead?: string | null;
   ctaLabel?: string | null;
   ctaLink?: string | null;
+  customDuration?: number | null;
 };
 
 type Settings = {
   currentSeason: string | null;
   currentLeague: string | null;
   currentGroup: string | null;
+  heroSlideDuration?: number | null;
+  heroTransitionDuration?: number | null;
+  heroAutoplayEnabled?: boolean | null;
 };
 
 const FALLBACK_SETTINGS: Settings = {
@@ -42,6 +51,12 @@ const FALLBACK_SETTINGS: Settings = {
   currentLeague: "Prima Categoria Piemonte VdA",
   currentGroup: "",
 };
+
+const CONFIG_DEFAULTS = {
+  slideDurationS: 5,
+  transitionMs: 300,
+  autoplayEnabled: true,
+} as const;
 
 async function fetchHeroData() {
   try {
@@ -67,19 +82,16 @@ async function fetchHeroData() {
   }
 }
 
-/**
- * Normalizza le slide in HeroSlide: filtra fuori quelle senza
- * headline (campo required dello schema, ma slide create prima
- * dell'estensione potrebbero non averlo). I sotto-campi opzionali
- * (eyebrow, subhead, ctaLabel, ctaLink) restano null se vuoti — il
- * componente HeroCarousel li nasconde con rendering condizionale.
- */
 function resolveSlides(slides: RawSlide[]): HeroSlide[] {
   return slides
     .filter((s) => s.headline && s.headline.trim().length > 0)
     .map((s) => {
       const ctaLabel = s.ctaLabel?.trim() ?? "";
       const ctaLink = s.ctaLink?.trim() ?? "";
+      const custom =
+        typeof s.customDuration === "number" && s.customDuration > 0
+          ? s.customDuration
+          : null;
       return {
         _id: s._id,
         alt: s.alt,
@@ -90,17 +102,35 @@ function resolveSlides(slides: RawSlide[]): HeroSlide[] {
         subhead: s.subhead?.trim() || null,
         ctaLabel: ctaLabel || null,
         ctaLink: ctaLink || null,
+        customDurationS: custom,
       };
     });
+}
+
+function resolveCarouselConfig(settings: Settings): HeroCarouselConfig {
+  const slideDurationS =
+    typeof settings.heroSlideDuration === "number" &&
+    settings.heroSlideDuration > 0
+      ? settings.heroSlideDuration
+      : CONFIG_DEFAULTS.slideDurationS;
+  const transitionMs =
+    typeof settings.heroTransitionDuration === "number" &&
+    settings.heroTransitionDuration > 0
+      ? settings.heroTransitionDuration
+      : CONFIG_DEFAULTS.transitionMs;
+  const autoplayEnabled =
+    typeof settings.heroAutoplayEnabled === "boolean"
+      ? settings.heroAutoplayEnabled
+      : CONFIG_DEFAULTS.autoplayEnabled;
+  return { slideDurationS, transitionMs, autoplayEnabled };
 }
 
 export async function Hero() {
   const { slides, settings } = await fetchHeroData();
   const resolvedSlides = resolveSlides(slides);
+  const config = resolveCarouselConfig(settings);
   const hasSlides = resolvedSlides.length > 0;
 
-  // Settings normalizzati per il fallback HeroOverlay (eyebrow
-  // derivato da currentSeason + currentLeague + currentGroup).
   const season =
     settings.currentSeason ?? FALLBACK_SETTINGS.currentSeason ?? "";
   const league =
@@ -114,7 +144,7 @@ export async function Hero() {
       className="relative flex min-h-[calc(100vh-44px)] flex-col justify-end overflow-hidden"
     >
       {hasSlides ? (
-        <HeroCarousel slides={resolvedSlides} />
+        <HeroCarousel slides={resolvedSlides} config={config} />
       ) : (
         <>
           <div aria-hidden className="absolute inset-0 overflow-hidden">

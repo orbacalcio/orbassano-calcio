@@ -6,6 +6,15 @@ export const settings = defineType({
   title: "Impostazioni globali",
   type: "document",
   icon: Cog,
+  fieldsets: [
+    {
+      name: "heroCarousel",
+      title: "Carosello hero",
+      description:
+        "Tempistiche di autoplay e transizione del carosello in homepage. Le singole slide possono sovrascrivere la durata via 'Durata custom' nello schema 'Slide hero homepage'.",
+      options: { collapsible: true, collapsed: false },
+    },
+  ],
   fields: [
     defineField({
       name: "siteTitle",
@@ -25,6 +34,35 @@ export const settings = defineType({
       title: "Immagine OG di default",
       type: "image",
       options: { hotspot: true },
+    }),
+    defineField({
+      name: "heroSlideDuration",
+      title: "Durata di ogni slide (secondi)",
+      description:
+        "Tempo per cui ciascuna slide resta visibile prima di passare alla successiva. Default 5s.",
+      type: "number",
+      initialValue: 5,
+      validation: (r) => r.min(2).max(30),
+      fieldset: "heroCarousel",
+    }),
+    defineField({
+      name: "heroTransitionDuration",
+      title: "Durata transizione (ms)",
+      description:
+        "Tempo del cross-fade tra una slide e la successiva. Default 300ms (cinematografico). Sotto i 200ms scattante, sopra gli 800ms lento.",
+      type: "number",
+      initialValue: 300,
+      validation: (r) => r.min(100).max(1500),
+      fieldset: "heroCarousel",
+    }),
+    defineField({
+      name: "heroAutoplayEnabled",
+      title: "Autoplay attivo",
+      description:
+        "Se disattivato, le slide non avanzano automaticamente: viene mostrata staticamente solo la prima slide attiva.",
+      type: "boolean",
+      initialValue: true,
+      fieldset: "heroCarousel",
     }),
     defineField({
       name: "currentSeason",

@@ -99,6 +99,14 @@ export const heroSlide = defineType({
       title: "Ordine",
       type: "number",
     }),
+    defineField({
+      name: "customDuration",
+      title: "Durata custom per questa slide (opzionale)",
+      description:
+        "Sovrascrive la durata globale solo per questa slide. Lascia vuoto per usare la durata di default. Utile se una slide ha più testo da leggere.",
+      type: "number",
+      validation: (r) => r.min(2).max(30),
+    }),
   ],
   preview: {
     select: {

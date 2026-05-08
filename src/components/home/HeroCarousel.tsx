@@ -16,17 +16,26 @@ import { useEffect, useState } from "react";
  *
  * Ogni slide porta il proprio set testuale (eyebrow / headline /
  * subhead / ctaLabel + ctaLink) sincronizzato con la foto: quando
- * l'autoplay scatta (5s) sia la foto che i testi fanno il
- * cross-fade nello stesso istante (300ms). Lo stagger interno dei
- * testi (100ms tra elementi) parte all'inizio della transizione e
- * scorre eyebrow → headline → subhead → cta.
+ * l'autoplay scatta sia la foto che i testi fanno il cross-fade
+ * nello stesso istante. Lo stagger interno dei testi (100ms tra
+ * elementi) parte all'inizio della transizione e scorre eyebrow →
+ * headline → subhead → cta.
  *
- * Rendering condizionale: i sotto-elementi (eyebrow, subhead, cta)
- * non vengono renderizzati se i campi della slide sono vuoti.
- * Headline e' obbligatoria a livello schema, quindi sempre presente.
+ * Timing controllato dallo Studio Sanity (settings.heroX): durata
+ * slide, durata transizione, autoplay on/off. La singola slide puo'
+ * sovrascrivere la durata via heroSlide.customDuration (utile per
+ * slide con piu' testo da leggere).
  *
- * Solo headline e immagine sono garantiti dalla validazione Sanity;
- * gli altri campi sono opzionali per slide.
+ * Edge cases gestiti runtime:
+ * - <=1 slide attive: autoplay disattivato (niente senso ruotare su
+ *   una sola slide).
+ * - settings.heroAutoplayEnabled === false: nessun timer, viene
+ *   mostrata staticamente solo la prima slide.
+ * - slideDuration < transitionMs: la slide cambierebbe prima che la
+ *   transizione finisca. Forziamo runtime un minimum di
+ *   transitionMs + 500ms.
+ * - prefers-reduced-motion: niente autoplay, niente cross-fade
+ *   animato (rimane solo la prima slide statica).
  */
 
 export type HeroSlide = {
@@ -39,10 +48,17 @@ export type HeroSlide = {
   subhead: string | null;
   ctaLabel: string | null;
   ctaLink: string | null;
+  customDurationS: number | null;
 };
 
-const INTERVAL_MS = 5000;
-const PHOTO_FADE_S = 0.3;
+export type HeroCarouselConfig = {
+  /** Durata di default di ogni slide in secondi (override per-slide via customDurationS). */
+  slideDurationS: number;
+  /** Durata del cross-fade in millisecondi. */
+  transitionMs: number;
+  /** Se false, niente autoplay: viene mostrata solo la prima slide. */
+  autoplayEnabled: boolean;
+};
 
 const textWrapper: Variants = {
   hidden: { opacity: 0 },
@@ -50,9 +66,8 @@ const textWrapper: Variants = {
     opacity: 1,
     transition: {
       // 100ms di ritardo tra ogni figlio: eyebrow t=0, headline t=0.1,
-      // subhead t=0.2, cta t=0.3 (relativo all'inizio dell'enter dello
-      // wrapper). Se uno dei figli condizionali e' assente, lo stagger
-      // si applica solo a quelli effettivamente renderizzati.
+      // subhead t=0.2, cta t=0.3. Se uno e' nascosto, lo stagger si
+      // applica solo agli elementi effettivamente renderizzati.
       staggerChildren: 0.1,
       delayChildren: 0,
     },
@@ -69,19 +84,53 @@ const textItem: Variants = {
   exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
-export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
+export function HeroCarousel({
+  slides,
+  config,
+}: {
+  slides: HeroSlide[];
+  config: HeroCarouselConfig;
+}) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const reduced = useReducedMotion();
+  const transitionS = config.transitionMs / 1000;
 
+  // Autoplay: setTimeout per slide perche' la durata puo' variare
+  // (customDurationS per slide). Quando index cambia, il useEffect
+  // ri-runa e schedula il prossimo step usando la durata della
+  // slide corrente.
   useEffect(() => {
-    if (reduced || paused || slides.length <= 1) return;
-    const id = setInterval(
+    const autoplayActive =
+      config.autoplayEnabled &&
+      !reduced &&
+      !paused &&
+      slides.length > 1;
+    if (!autoplayActive) return;
+
+    const current = slides[index];
+    if (!current) return;
+
+    const baseDurationS = current.customDurationS ?? config.slideDurationS;
+    // Edge case: durata troppo corta vs transizione → clamp a
+    // transition + 500ms in modo che il fade abbia tempo di completarsi.
+    const minDurationS = transitionS + 0.5;
+    const safeDurationS = Math.max(baseDurationS, minDurationS);
+
+    const id = setTimeout(
       () => setIndex((i) => (i + 1) % slides.length),
-      INTERVAL_MS,
+      safeDurationS * 1000,
     );
-    return () => clearInterval(id);
-  }, [reduced, paused, slides.length]);
+    return () => clearTimeout(id);
+  }, [
+    index,
+    slides,
+    paused,
+    reduced,
+    config.autoplayEnabled,
+    config.slideDurationS,
+    transitionS,
+  ]);
 
   if (slides.length === 0) return null;
   const current = slides[index];
@@ -97,14 +146,14 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       onMouseLeave={() => setPaused(false)}
       aria-live="off"
     >
-      {/* Layer 1: foto carosello con cross-fade 300ms */}
+      {/* Layer 1: foto carosello con cross-fade dinamico */}
       <AnimatePresence>
         <motion.div
           key={`img-${current._id}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: PHOTO_FADE_S }}
+          transition={{ duration: transitionS }}
           className="absolute inset-0"
         >
           <Image

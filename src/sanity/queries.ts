@@ -17,6 +17,9 @@ export const settingsQuery = defineQuery(`
     currentSeason,
     currentLeague,
     currentGroup,
+    heroSlideDuration,
+    heroTransitionDuration,
+    heroAutoplayEnabled,
     social,
     sprintsportLinks,
     contactInfo,
@@ -69,7 +72,8 @@ export const heroSlidesQuery = defineQuery(`
     headline,
     subhead,
     ctaLabel,
-    ctaLink
+    ctaLink,
+    customDuration
   }
 `);
 
