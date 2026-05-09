@@ -3,7 +3,32 @@ import { Mail, Phone } from "lucide-react";
 import { OfficialCard } from "@/components/societa/OfficialCard";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
-import { fetchClubOfficials } from "@/sanity/fetchers";
+import { fetchClubOfficials, type ClubOfficial } from "@/sanity/fetchers";
+
+/**
+ * Raggruppa i dirigenti per il campo `group`. L'ordine dei gruppi
+ * segue la prima occorrenza nella lista (gia' ordinata per `order`).
+ * Dirigenti senza group finiscono in un gruppo "default" senza titolo.
+ */
+function groupOfficials(
+  officials: ClubOfficial[],
+): Array<{ key: string; title: string | null; items: ClubOfficial[] }> {
+  const groups = new Map<string, ClubOfficial[]>();
+  for (const o of officials) {
+    const key = o.group?.trim() ?? "";
+    const existing = groups.get(key);
+    if (existing) {
+      existing.push(o);
+    } else {
+      groups.set(key, [o]);
+    }
+  }
+  return Array.from(groups, ([key, items]) => ({
+    key: key || "_default",
+    title: key || null,
+    items,
+  }));
+}
 
 export const metadata: Metadata = {
   title: "Organigramma",
@@ -42,9 +67,20 @@ export default async function OrganigrammaPage() {
       <Container className="py-16 lg:py-24" size="wide">
         <RevealOnScroll>
           {officials.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {officials.map((o) => (
-                <OfficialCard key={o._id} official={o} />
+            <div className="flex flex-col gap-12">
+              {groupOfficials(officials).map((group) => (
+                <section key={group.key} className="flex flex-col gap-5">
+                  {group.title && (
+                    <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                      {group.title}
+                    </span>
+                  )}
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {group.items.map((o) => (
+                      <OfficialCard key={o._id} official={o} />
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           ) : (

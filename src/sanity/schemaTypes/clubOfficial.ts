@@ -26,8 +26,17 @@ export const clubOfficial = defineType({
       type: "string",
     }),
     defineField({
+      name: "group",
+      title: "Riga (raggruppamento)",
+      description:
+        "Etichetta del raggruppamento sulla pagina /societa/organigramma. Dirigenti con la stessa etichetta vanno nella stessa riga; cambiare etichetta = nuova riga con spazio sopra. Es. 'Presidenza', 'Direzione finanziaria', 'Consiglio direttivo'. Vuoto = riga unica con tutti gli altri senza etichetta.",
+      type: "string",
+    }),
+    defineField({
       name: "order",
       title: "Ordine",
+      description:
+        "Ordine all'interno della riga (e ordine delle righe stesse, basato sul primo dirigente di ogni gruppo).",
       type: "number",
     }),
   ],

@@ -224,13 +224,16 @@ const firstTeamRoster: PlayerSeed[] = [
 ];
 
 // ---------- ORGANIGRAMMA SOCIETARIO --------------------------------------------------
+// `group` raggruppa i dirigenti in righe separate sulla pagina
+// /societa/organigramma. Lo stesso gruppo va in stessa riga; cambio
+// di gruppo = nuova riga con titolino come eyebrow.
 const officials = [
-  { role: "Presidente", fullName: "Michele Marano", title: undefined, order: 0 },
-  { role: "Vice Presidente", fullName: "Mario Solej", title: "Dott.", order: 1 },
-  { role: "Direttore Generale", fullName: "Dino Cambareri", title: "Geom.", order: 2 },
-  { role: "Tesoriere", fullName: "Manuele Gallo", title: "Dott.", order: 3 },
-  { role: "Consigliere", fullName: "Claudia Maria Sodero", title: "Avv.", order: 4 },
-  { role: "Responsabile Safeguarding", fullName: "Anita Treglia", title: undefined, order: 5 },
+  { role: "Presidente", fullName: "Michele Marano", title: undefined, group: "Presidenza", order: 0 },
+  { role: "Vice Presidente", fullName: "Mario Solej", title: "Dott.", group: "Presidenza", order: 1 },
+  { role: "Direttore Generale", fullName: "Dino Cambareri", title: "Geom.", group: "Presidenza", order: 2 },
+  { role: "Tesoriere", fullName: "Manuele Gallo", title: "Dott.", group: "Direzione finanziaria", order: 3 },
+  { role: "Consigliere", fullName: "Claudia Maria Sodero", title: "Avv.", group: "Consiglio direttivo", order: 4 },
+  { role: "Responsabile Safeguarding", fullName: "Anita Treglia", title: undefined, group: "Consiglio direttivo", order: 5 },
 ];
 
 // ---------- SPONSOR & PARTNER 2025/26 -------------------------------------------------
@@ -426,6 +429,7 @@ async function main() {
       role: o.role,
       fullName: o.fullName,
       title: o.title,
+      group: o.group,
       order: i,
     });
   });
