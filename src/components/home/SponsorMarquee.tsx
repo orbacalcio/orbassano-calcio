@@ -6,15 +6,17 @@ import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Container } from "@/components/ui/Container";
 
 /**
- * Marquee sponsor: scorrimento infinito orizzontale dei loghi a
- * colori pieni su sfondo BIANCO. I loghi degli sponsor sono
- * progettati per stampe su materiale chiaro (maglia, banner stadio):
- * sfondo bianco massimizza la leggibilita' rispetto al navy del resto
- * della home, identico approccio dei tile in topbar.
+ * Marquee sponsor: scorrimento infinito orizzontale dei loghi.
+ *
+ * Layout: la sezione resta sul navy del sito (titolo eyebrow gold +
+ * headline ink-hi + CTA in gold, coerenti col resto). Solo la STRIP
+ * orizzontale che contiene i loghi in scorrimento ha sfondo bianco
+ * #FFFFFF, perche' i loghi sponsor sono progettati per stampe su
+ * materiale chiaro: bianco massimizza la leggibilita' a colori
+ * pieni, niente filtri grayscale ne opacity reduction.
  *
  * Mostra TUTTI gli sponsor attivi (Main + Official, NON Corporate
- * Partner che vivono nella loro pagina dedicata) per dare visibilita'
- * massima nel marquee homepage.
+ * Partner che vivono nella loro pagina dedicata).
  */
 type Sponsor = {
   _id: string;
@@ -50,22 +52,22 @@ export async function SponsorMarquee() {
     return (
       <section
         aria-label="Sponsor del club"
-        className="bg-white py-12"
+        className="border-border/50 border-y py-12"
       >
         <Container
           className="flex flex-col items-center gap-3 text-center"
           size="default"
         >
-          <span className="text-brand-blue font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             Sponsor & Partner
           </span>
-          <p className="text-surface-0/70 text-sm">
+          <p className="text-ink-mid text-sm">
             La parete sponsor verrà popolata appena lo Studio Sanity sarà
             collegato e i loghi caricati.
           </p>
           <Link
             href="/sponsor/opportunita"
-            className="text-brand-red hover:text-brand-blue inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+            className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold transition-colors"
           >
             Diventa sponsor
             <ArrowUpRight size={14} />
@@ -81,21 +83,22 @@ export async function SponsorMarquee() {
   return (
     <section
       aria-label="Sponsor del club"
-      className="bg-white relative overflow-hidden py-16"
+      className="border-border/50 relative overflow-hidden border-y py-16"
     >
       <Container
         className="flex flex-col items-center gap-3 text-center"
         size="default"
       >
-        <span className="text-brand-red font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+        <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
           Sponsor & Partner 2026/27
         </span>
-        <h2 className="font-display text-surface-0 max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+        <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
           Insieme rendiamo possibile ogni partita
         </h2>
       </Container>
 
-      <div className="relative mt-12 overflow-hidden">
+      {/* Strip BIANCA che contiene SOLO i loghi in scorrimento */}
+      <div className="relative mt-12 overflow-hidden bg-white py-8">
         <div
           aria-hidden
           className="absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-white to-transparent"
@@ -153,7 +156,7 @@ export async function SponsorMarquee() {
       <div className="mt-10 flex justify-center">
         <Link
           href="/sponsor"
-          className="text-brand-red hover:text-brand-blue inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold transition-colors"
         >
           Tutti gli sponsor del club
           <ArrowUpRight size={14} />
