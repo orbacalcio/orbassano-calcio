@@ -242,11 +242,6 @@ export async function Footer() {
                   <span className="text-ink-hi">{legal.vatNumber}</span>
                 </li>
               )}
-              {legal.iban && (
-                <li className="break-all">
-                  IBAN <span className="text-ink-hi">{legal.iban}</span>
-                </li>
-              )}
               {legal.figcMatricola && (
                 <li>
                   Matricola FIGC{" "}
