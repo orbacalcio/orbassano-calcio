@@ -156,8 +156,9 @@ export async function Footer() {
 
         <div aria-hidden className="border-border/40 my-10 border-t lg:my-12" />
 
-        {/* CATEGORIE: 6 colonne lg / 3 md / 2 sm */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
+        {/* CATEGORIE: 6 colonne lg (4 strette + 2 larghe per Contatti/Legali
+            che hanno testi più lunghi tipo IBAN/email/PEC) / 3 col md / 2 sm */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-[1fr_1fr_1fr_1fr_2fr_2fr] lg:gap-x-8">
           {sections.map((section) => (
             <nav
               key={section.title}
