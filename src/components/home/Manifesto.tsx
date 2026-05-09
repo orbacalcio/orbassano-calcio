@@ -50,7 +50,7 @@ export function Manifesto() {
 
         <Link
           href="/societa/storia"
-          className="border-surface-0 text-surface-0 hover:bg-surface-0 hover:text-brand-white focus-visible:outline-brand-red inline-flex items-center gap-2.5 rounded-full border-2 px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="bg-brand-gold text-brand-white hover:bg-brand-white hover:text-brand-blue focus-visible:outline-brand-red inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           Storia del club
           <ArrowRight size={14} aria-hidden />
