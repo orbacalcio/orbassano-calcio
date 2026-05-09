@@ -318,6 +318,15 @@ export type NewsSummary = {
   author?: string | null;
 };
 
+export type NewsGalleryImage = {
+  url: string | null;
+  lqip: string | null;
+  width: number | null;
+  height: number | null;
+  alt: string | null;
+  caption: string | null;
+};
+
 export type NewsDetail = {
   _id: string;
   title: string;
@@ -328,6 +337,7 @@ export type NewsDetail = {
   cover: string | null;
   coverLqip: string | null;
   body: PortableTextBlock[] | null;
+  gallery: NewsGalleryImage[] | null;
   author: string | null;
   isPinned: boolean | null;
 };

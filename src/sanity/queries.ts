@@ -120,8 +120,8 @@ export const allNewsQuery = defineQuery(`
   }
 `);
 
-// Dettaglio articolo. Body PortableText con eventuali immagini inline.
-// `next.tsx` link alle 3 news successive (related).
+// Dettaglio articolo. Body PortableText con eventuali immagini inline +
+// gallery dedicata (max 3 foto extra) renderizzata col lightbox client.
 export const newsBySlugQuery = defineQuery(`
   *[_type == "news" && slug.current == $slug][0]{
     _id,
@@ -133,6 +133,14 @@ export const newsBySlugQuery = defineQuery(`
     "cover": cover.asset->url,
     "coverLqip": cover.asset->metadata.lqip,
     body,
+    "gallery": gallery[]{
+      "url": asset->url,
+      "lqip": asset->metadata.lqip,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      alt,
+      caption
+    },
     author,
     isPinned
   }

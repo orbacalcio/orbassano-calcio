@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import { NewsGallery } from "@/components/news/NewsGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import { Container } from "@/components/ui/Container";
@@ -140,6 +141,20 @@ export default async function NewsDetailPage(props: {
           </p>
         )}
       </Container>
+
+      {news.gallery && news.gallery.length > 0 && (
+        <Container className="border-border/40 border-t py-16" size="wide">
+          <div className="mb-8 flex flex-col gap-2">
+            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+              Galleria foto
+            </span>
+            <p className="text-ink-mid text-sm">
+              Click su una foto per ingrandire.
+            </p>
+          </div>
+          <NewsGallery images={news.gallery} />
+        </Container>
+      )}
 
       <Container className="border-border/40 border-t py-10" size="wide">
         <Link
