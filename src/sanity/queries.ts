@@ -194,6 +194,55 @@ export const teamBySlugQuery = defineQuery(`
   }
 `);
 
+// Eventi storici per la timeline /societa/storia. Ordinati per anno
+// crescente (1930 → oggi). La descrizione e' PortableText opzionale,
+// la categoria pilota i filtri client. `_id` serve come key React.
+export const timelineEventsQuery = defineQuery(`
+  *[_type == "timelineEvent"] | order(year asc, _createdAt asc){
+    _id,
+    year,
+    season,
+    title,
+    category,
+    isHighlight,
+    description,
+    "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip
+  }
+`);
+
+// Organigramma societario — ordinati per il campo `order`. Foto
+// opzionali (per ora non caricate, fallback iniziali sulla card).
+export const clubOfficialsQuery = defineQuery(`
+  *[_type == "clubOfficial"] | order(coalesce(order, 99) asc){
+    _id,
+    role,
+    fullName,
+    title,
+    "photo": photo.asset->url,
+    "photoLqip": photo.asset->metadata.lqip
+  }
+`);
+
+// Impianti del club — ordinati per il campo `order`. Gallery opzionale
+// risolta come array di url + alt-text + lqip, pronta per <Image>.
+export const facilitiesQuery = defineQuery(`
+  *[_type == "facility"] | order(coalesce(order, 99) asc){
+    _id,
+    name,
+    "slug": slug.current,
+    address,
+    mapsUrl,
+    description,
+    fields,
+    "gallery": gallery[]{
+      "url": asset->url,
+      "lqip": asset->metadata.lqip,
+      alt
+    }
+  }
+`);
+
 // Scheda giocatore + riferimento alla squadra (per breadcrumb e link).
 export const playerBySlugQuery = defineQuery(`
   *[_type == "player" && slug.current == $slug][0]{

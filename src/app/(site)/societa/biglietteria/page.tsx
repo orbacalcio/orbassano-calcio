@@ -1,0 +1,238 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Calendar,
+  HandCoins,
+  Heart,
+  MapPin,
+  Mail,
+  Phone,
+  Ticket,
+} from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+
+export const metadata: Metadata = {
+  title: "Biglietteria",
+  description:
+    "Come accedere alle partite casalinghe di ASD Orbassano Calcio: ingresso al Centro Sportivo Aldo Porta, condizioni, abbonamenti, contatti.",
+};
+
+const ACCESS_INFO = [
+  {
+    icon: Ticket,
+    title: "Ingresso libero",
+    body: "Le partite casalinghe della Prima Squadra al Centro Sportivo Aldo Porta sono ad accesso libero. Una piccola offerta volontaria a sostegno del club è sempre apprezzata: trovi la cassetta donazioni all'ingresso del campo.",
+  },
+  {
+    icon: HandCoins,
+    title: "Sostieni il club",
+    body: "Se vuoi contribuire in modo strutturale puoi destinare il 5×1000 ad ASD Orbassano Calcio (CF 95634370019), oppure entrare nel programma sponsor/partner. Bastano pochi minuti.",
+  },
+  {
+    icon: Calendar,
+    title: "Calendario casalingo",
+    body: "Il calendario completo delle partite di Prima Categoria 2026/2027 sarà disponibile dopo la pubblicazione LND di agosto. Ti consigliamo di seguirci sui social per gli aggiornamenti settimanali.",
+  },
+];
+
+export default function BiglietteriaPage() {
+  return (
+    <>
+      <header className="border-border/50 relative overflow-hidden border-b">
+        <div
+          aria-hidden
+          className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
+        />
+        <Container className="relative py-16 lg:py-24" size="wide">
+          <div className="flex max-w-3xl flex-col gap-4">
+            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+              Biglietteria
+            </span>
+            <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
+              Vieni a tifare con noi
+            </h1>
+            <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
+              Le partite casalinghe della Prima Squadra si giocano al
+              Centro Sportivo &laquo;Aldo Porta&raquo; di Orbassano. L&apos;accesso &egrave;
+              libero per tutti i tifosi e le famiglie che vogliono
+              sostenere i rossoblù in campo.
+            </p>
+          </div>
+        </Container>
+      </header>
+
+      <Container className="py-16 lg:py-24" size="wide">
+        <RevealOnScroll>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {ACCESS_INFO.map((info) => (
+              <article
+                key={info.title}
+                className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
+              >
+                <info.icon
+                  size={28}
+                  className="text-brand-gold"
+                  aria-hidden
+                />
+                <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em] uppercase">
+                  {info.title}
+                </h3>
+                <p className="text-ink-mid text-sm leading-relaxed">
+                  {info.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </RevealOnScroll>
+      </Container>
+
+      <section
+        aria-labelledby="venue-title"
+        className="bg-surface-1 border-border/50 border-y"
+      >
+        <Container className="grid items-start gap-12 py-16 lg:grid-cols-[1fr_1.4fr] lg:py-20" size="wide">
+          <div className="flex flex-col gap-3">
+            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+              Dove si gioca
+            </span>
+            <h2
+              id="venue-title"
+              className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl"
+            >
+              Centro Sportivo Aldo Porta
+            </h2>
+          </div>
+          <div className="flex flex-col gap-6">
+            <ul className="text-ink-mid grid gap-5 sm:grid-cols-2">
+              <li className="flex flex-col gap-2">
+                <span className="text-ink-low font-mono text-xs tracking-[0.15em] uppercase">
+                  Indirizzo
+                </span>
+                <span className="text-ink-hi flex items-start gap-2 text-base leading-relaxed">
+                  <MapPin
+                    size={14}
+                    className="mt-1.5 shrink-0"
+                    aria-hidden
+                  />
+                  <span>
+                    Via Ignazio Silone, 4
+                    <br />
+                    10043 Orbassano (TO)
+                  </span>
+                </span>
+              </li>
+              <li className="flex flex-col gap-2">
+                <span className="text-ink-low font-mono text-xs tracking-[0.15em] uppercase">
+                  Caratteristiche
+                </span>
+                <span className="text-ink-hi text-base leading-relaxed">
+                  Campo a 11 omologato Serie D
+                  <br />
+                  Tribuna, area parcheggio, spogliatoi
+                </span>
+              </li>
+              <li className="flex flex-col gap-2">
+                <span className="text-ink-low font-mono text-xs tracking-[0.15em] uppercase">
+                  Email segreteria
+                </span>
+                <a
+                  href="mailto:info@orbassanocalcio.com"
+                  className="text-ink-hi hover:text-brand-gold flex items-center gap-2 text-base transition-colors"
+                >
+                  <Mail size={14} aria-hidden />
+                  info@orbassanocalcio.com
+                </a>
+              </li>
+              <li className="flex flex-col gap-2">
+                <span className="text-ink-low font-mono text-xs tracking-[0.15em] uppercase">
+                  Telefono
+                </span>
+                <a
+                  href="tel:+393277793326"
+                  className="text-ink-hi hover:text-brand-gold flex items-center gap-2 text-base transition-colors"
+                >
+                  <Phone size={14} aria-hidden />
+                  +39 327 779 3326
+                </a>
+              </li>
+            </ul>
+            <a
+              href="https://goo.gl/maps/aangwwU2QR5ninCDA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              <MapPin size={14} aria-hidden />
+              Apri su Google Maps
+            </a>
+          </div>
+        </Container>
+      </section>
+
+      <section
+        aria-labelledby="groups-title"
+        className="bg-surface-2 relative overflow-hidden"
+      >
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="bg-brand-red/25 absolute -top-40 -left-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
+          <div className="bg-brand-blue/40 absolute -right-40 -bottom-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
+        </div>
+
+        <Container className="relative grid items-center gap-12 py-20 lg:grid-cols-2 lg:py-24" size="wide">
+          <div className="flex flex-col gap-5">
+            <span className="text-brand-gold font-display flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+              <Heart size={16} aria-hidden />
+              Gruppi e abbonamenti
+            </span>
+            <h2
+              id="groups-title"
+              className="font-display text-ink-hi text-4xl leading-[0.95] font-black tracking-[0.005em] uppercase sm:text-5xl"
+            >
+              Vieni con la tua scuola, la tua azienda, la tua squadra
+            </h2>
+            <p className="text-ink-mid max-w-xl text-base leading-relaxed">
+              Organizziamo accoglienza dedicata per gruppi di tifosi,
+              scuole calcio ospiti, aziende sponsor e associazioni locali.
+              Per richieste di gruppi o abbonamenti stagionali ad hoc,
+              scrivi alla segreteria: troviamo insieme la formula giusta.
+            </p>
+          </div>
+
+          <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-5 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
+            <div className="flex flex-col gap-2">
+              <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
+                Sostieni il club
+              </span>
+              <span className="text-ink-hi text-base leading-relaxed">
+                Donare il 5×1000 non costa nulla: una firma nella
+                dichiarazione dei redditi diventa nuovi materiali per il
+                settore giovanile.
+              </span>
+              <span className="text-brand-gold font-mono mt-1 text-3xl font-medium tracking-[0.05em] sm:text-4xl">
+                95634370019
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/5x1000"
+                className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                <Heart size={16} />
+                Come donare
+              </Link>
+              <Link
+                href="/contatti"
+                className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi inline-flex items-center gap-2.5 rounded-full border px-6 py-3 text-sm font-semibold transition-colors"
+              >
+                Contattaci
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

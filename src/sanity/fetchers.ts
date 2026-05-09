@@ -1,10 +1,13 @@
 import { sanityClient } from "./client";
 import {
+  clubOfficialsQuery,
+  facilitiesQuery,
   mainSponsorsQuery,
   playerBySlugQuery,
   teamBySlugQuery,
   teamsByCategoryQuery,
   teamsListQuery,
+  timelineEventsQuery,
 } from "./queries";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -194,5 +197,95 @@ export async function fetchPlayerBySlug(
   } catch (err) {
     console.error("[fetchPlayerBySlug]", { slug }, err);
     return null;
+  }
+}
+
+// ---------- Societa: timeline, organigramma, impianti -------------------------------
+
+export type TimelineCategory =
+  | "Fondazione"
+  | "Promozione"
+  | "Trofeo"
+  | "Fusione"
+  | "Rifondazione"
+  | "Storico";
+
+export type TimelineEvent = {
+  _id: string;
+  year: number;
+  season: string | null;
+  title: string;
+  category: TimelineCategory | null;
+  isHighlight: boolean | null;
+  description: PortableTextBlock[] | null;
+  image: string | null;
+  imageLqip: string | null;
+};
+
+export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
+  try {
+    const data = await sanityClient.fetch(
+      timelineEventsQuery,
+      {},
+      { next: { tags: ["timelineEvent"] } },
+    );
+    return (data ?? []) as TimelineEvent[];
+  } catch (err) {
+    console.error("[fetchTimelineEvents]", err);
+    return [];
+  }
+}
+
+export type ClubOfficial = {
+  _id: string;
+  role: string;
+  fullName: string;
+  title: string | null;
+  photo: string | null;
+  photoLqip: string | null;
+};
+
+export async function fetchClubOfficials(): Promise<ClubOfficial[]> {
+  try {
+    const data = await sanityClient.fetch(
+      clubOfficialsQuery,
+      {},
+      { next: { tags: ["clubOfficial"] } },
+    );
+    return (data ?? []) as ClubOfficial[];
+  } catch (err) {
+    console.error("[fetchClubOfficials]", err);
+    return [];
+  }
+}
+
+export type FacilityImage = {
+  url: string | null;
+  lqip: string | null;
+  alt: string | null;
+};
+
+export type Facility = {
+  _id: string;
+  name: string;
+  slug: string | null;
+  address: string | null;
+  mapsUrl: string | null;
+  description: PortableTextBlock[] | null;
+  fields: string[] | null;
+  gallery: FacilityImage[] | null;
+};
+
+export async function fetchFacilities(): Promise<Facility[]> {
+  try {
+    const data = await sanityClient.fetch(
+      facilitiesQuery,
+      {},
+      { next: { tags: ["facility"] } },
+    );
+    return (data ?? []) as Facility[];
+  } catch (err) {
+    console.error("[fetchFacilities]", err);
+    return [];
   }
 }
