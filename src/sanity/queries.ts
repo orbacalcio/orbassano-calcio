@@ -97,8 +97,50 @@ export const latestNewsQuery = defineQuery(`
     publishedAt,
     excerpt,
     "cover": cover.asset->url,
+    "coverLqip": cover.asset->metadata.lqip,
     isPinned
   }
+`);
+
+// Archivio /news — tutte le news pubblicate (no paginazione: con
+// volumi di un club di Promozione bastano <100 articoli/anno).
+// Le pinned salgono in cima.
+export const allNewsQuery = defineQuery(`
+  *[_type == "news"] | order(isPinned desc, publishedAt desc){
+    _id,
+    title,
+    slug,
+    category,
+    publishedAt,
+    excerpt,
+    "cover": cover.asset->url,
+    "coverLqip": cover.asset->metadata.lqip,
+    isPinned,
+    author
+  }
+`);
+
+// Dettaglio articolo. Body PortableText con eventuali immagini inline.
+// `next.tsx` link alle 3 news successive (related).
+export const newsBySlugQuery = defineQuery(`
+  *[_type == "news" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    category,
+    publishedAt,
+    excerpt,
+    "cover": cover.asset->url,
+    "coverLqip": cover.asset->metadata.lqip,
+    body,
+    author,
+    isPinned
+  }
+`);
+
+// Slugs per generateStaticParams.
+export const allNewsSlugsQuery = defineQuery(`
+  *[_type == "news" && defined(slug.current)]{ "slug": slug.current }
 `);
 
 // Rosa prima squadra

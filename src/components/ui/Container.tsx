@@ -10,11 +10,13 @@ export function Container({
   className,
   as: Tag = "div",
   size = "default",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
   as?: keyof React.JSX.IntrinsicElements;
   size?: "narrow" | "default" | "wide";
+  id?: string;
 }) {
   const max =
     size === "narrow"
@@ -23,7 +25,7 @@ export function Container({
         ? "max-w-screen-2xl"
         : "max-w-7xl";
   return (
-    <Tag className={cn("mx-auto w-full px-6 lg:px-10", max, className)}>
+    <Tag id={id} className={cn("mx-auto w-full px-6 lg:px-10", max, className)}>
       {children}
     </Tag>
   );

@@ -1,8 +1,12 @@
 import { sanityClient } from "./client";
 import {
+  allActiveSponsorsQuery,
+  allNewsQuery,
+  allNewsSlugsQuery,
   clubOfficialsQuery,
   facilitiesQuery,
   mainSponsorsQuery,
+  newsBySlugQuery,
   playerBySlugQuery,
   teamBySlugQuery,
   teamsByCategoryQuery,
@@ -287,5 +291,129 @@ export async function fetchFacilities(): Promise<Facility[]> {
   } catch (err) {
     console.error("[fetchFacilities]", err);
     return [];
+  }
+}
+
+// ---------- News --------------------------------------------------------------------
+
+export type NewsCategory =
+  | "Prima Squadra"
+  | "Settore Giovanile"
+  | "Scuola Calcio"
+  | "Società"
+  | "Sponsor";
+
+export type NewsSummary = {
+  _id: string;
+  title: string;
+  slug: { current: string } | null;
+  category: NewsCategory | null;
+  publishedAt: string | null;
+  excerpt: string | null;
+  cover: string | null;
+  coverLqip: string | null;
+  isPinned: boolean | null;
+  author?: string | null;
+};
+
+export type NewsDetail = {
+  _id: string;
+  title: string;
+  slug: string;
+  category: NewsCategory | null;
+  publishedAt: string | null;
+  excerpt: string | null;
+  cover: string | null;
+  coverLqip: string | null;
+  body: PortableTextBlock[] | null;
+  author: string | null;
+  isPinned: boolean | null;
+};
+
+export async function fetchAllNews(): Promise<NewsSummary[]> {
+  try {
+    const data = await sanityClient.fetch(
+      allNewsQuery,
+      {},
+      { next: { tags: ["news"] } },
+    );
+    return (data ?? []) as NewsSummary[];
+  } catch (err) {
+    console.error("[fetchAllNews]", err);
+    return [];
+  }
+}
+
+export async function fetchNewsBySlug(
+  slug: string,
+): Promise<NewsDetail | null> {
+  try {
+    const data = await sanityClient.fetch(
+      newsBySlugQuery,
+      { slug },
+      { next: { tags: ["news"] } },
+    );
+    return (data ?? null) as NewsDetail | null;
+  } catch (err) {
+    console.error("[fetchNewsBySlug]", { slug }, err);
+    return null;
+  }
+}
+
+export async function fetchAllNewsSlugs(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      allNewsSlugsQuery,
+      {},
+      { next: { tags: ["news"] } },
+    );
+    return ((data ?? []) as Array<{ slug: string }>)
+      .map((s) => s.slug)
+      .filter(Boolean);
+  } catch (err) {
+    console.error("[fetchAllNewsSlugs]", err);
+    return [];
+  }
+}
+
+// ---------- Sponsor (hub /sponsor + /sponsor/partner) -------------------------------
+
+export type SponsorTier = "Main Sponsor" | "Official Sponsor" | "Corporate Partner";
+
+export type SponsorSummary = {
+  _id: string;
+  name: string;
+  website: string | null;
+  logo: string | null;
+  description: string | null;
+};
+
+export type PartnerSummary = SponsorSummary & {
+  partnerBenefit: string | null;
+  partnerBrochure: string | null;
+};
+
+export type ActiveSponsorsBundle = {
+  main: SponsorSummary[];
+  official: SponsorSummary[];
+  partners: PartnerSummary[];
+};
+
+export async function fetchActiveSponsors(): Promise<ActiveSponsorsBundle> {
+  try {
+    const data = await sanityClient.fetch(
+      allActiveSponsorsQuery,
+      {},
+      { next: { tags: ["sponsor"] } },
+    );
+    const result = (data ?? {}) as Partial<ActiveSponsorsBundle>;
+    return {
+      main: result.main ?? [],
+      official: result.official ?? [],
+      partners: result.partners ?? [],
+    };
+  } catch (err) {
+    console.error("[fetchActiveSponsors]", err);
+    return { main: [], official: [], partners: [] };
   }
 }
