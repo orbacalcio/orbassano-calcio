@@ -1,0 +1,88 @@
+{
+  "source": "Logo_Orbassano_2K.png",
+  "brand": {
+    "blue": "#213F8C",
+    "red": "#E61517",
+    "gold": "#DFB16C",
+    "white": "#FFFFFF"
+  },
+  "surfaces": {
+    "surface-0": "#030616",
+    "surface-1": "#050B21",
+    "surface-2": "#09112F",
+    "surface-3": "#0D1940",
+    "border": "#070D26"
+  },
+  "raw_dominant": [
+    {
+      "hex": "#213F8C",
+      "share": 20.65,
+      "label": "blu"
+    },
+    {
+      "hex": "#DFB16C",
+      "share": 17.06,
+      "label": "oro"
+    },
+    {
+      "hex": "#E91F22",
+      "share": 10.16,
+      "label": "rosso"
+    },
+    {
+      "hex": "#E8D8C0",
+      "share": 7.12,
+      "label": "altro"
+    },
+    {
+      "hex": "#E91E22",
+      "share": 6.91,
+      "label": "rosso"
+    },
+    {
+      "hex": "#E61517",
+      "share": 6.69,
+      "label": "rosso"
+    },
+    {
+      "hex": "#E2B56F",
+      "share": 6.46,
+      "label": "oro"
+    },
+    {
+      "hex": "#1F5854",
+      "share": 5.14,
+      "label": "altro"
+    },
+    {
+      "hex": "#E92223",
+      "share": 4.6,
+      "label": "rosso"
+    },
+    {
+      "hex": "#8C6341",
+      "share": 4.28,
+      "label": "altro"
+    },
+    {
+      "hex": "#782741",
+      "share": 3.38,
+      "label": "altro"
+    },
+    {
+      "hex": "#1D3982",
+      "share": 3.17,
+      "label": "blu"
+    },
+    {
+      "hex": "#D0A571",
+      "share": 2.61,
+      "label": "oro"
+    },
+    {
+      "hex": "#DCB16C",
+      "share": 1.77,
+      "label": "oro"
+    }
+  ]
+}

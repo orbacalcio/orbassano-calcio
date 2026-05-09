@@ -117,13 +117,13 @@ function PartnerRow({
         index % 2 === 0 ? "" : "lg:[&>div:first-child]:order-2"
       }`}
     >
-      <div className="flex h-32 items-center justify-center">
+      <div className="flex h-40 items-center justify-center rounded-2xl bg-white p-6">
         <SponsorLogo
           sponsor={partner}
           variant="color"
           width={280}
           height={120}
-          className="max-h-32 max-w-[280px]"
+          className="text-surface-0 max-h-28 max-w-[280px] object-contain"
         />
       </div>
       <div className="flex flex-col gap-4">

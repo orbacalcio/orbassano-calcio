@@ -113,6 +113,7 @@ const sections = [
       { href: "/legal/privacy", label: "Privacy" },
       { href: "/legal/cookie", label: "Cookie policy" },
       { href: "/legal/termini", label: "Termini" },
+      { href: "/mappa-del-sito", label: "Mappa del sito" },
       { href: "/contatti", label: "Contatti" },
     ],
   },

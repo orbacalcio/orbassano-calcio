@@ -1,6 +1,5 @@
 "use client";
 
-import { Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
@@ -22,9 +21,10 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * mostra TopbarScrolled al suo posto.
  *
  * Pattern: trasparente con backdrop-blur + tile main sponsor a destra
- * (sfondo bianco, proporzioni fisse via MainSponsorTile) + divisore +
- * icona search. I loghi sono renderizzati a colori sul tile bianco —
- * niente mono filter, look brand-coerent.
+ * (sfondo bianco, proporzioni fisse via MainSponsorTile). I loghi sono
+ * renderizzati a colori sul tile bianco — niente mono filter,
+ * look brand-coerent. La search e' stata rimossa: feature non
+ * implementata, tornera' post-launch (M9) con dialog + indice GROQ.
  */
 const FALLBACK_MAIN_SPONSORS = [
   { name: "Studio Cambareri" },
@@ -63,16 +63,6 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
             ))}
           </ul>
         )}
-
-        <div aria-hidden className="bg-border h-5 w-px" />
-
-        <button
-          type="button"
-          aria-label="Cerca nel sito"
-          className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-8 w-8 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          <Search size={18} />
-        </button>
       </div>
     </header>
   );

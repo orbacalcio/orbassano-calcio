@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
-import { cn } from "@/lib/cn";
 import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
 import type { MainSponsor } from "@/sanity/fetchers";
@@ -87,7 +86,7 @@ export function TopbarScrolled({
           />
         </Link>
 
-        {/* Dx: sponsor + divider + search */}
+        {/* Dx: sponsor */}
         <div className="ml-auto flex items-center gap-4">
           {usingFallback ? (
             <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
@@ -107,14 +106,6 @@ export function TopbarScrolled({
               ))}
             </ul>
           )}
-          <div aria-hidden className={cn("bg-border hidden h-5 w-px xl:block")} />
-          <button
-            type="button"
-            aria-label="Cerca nel sito"
-            className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            <Search size={20} />
-          </button>
         </div>
       </div>
     </header>

@@ -157,8 +157,8 @@ function SponsorTile({
       }`}
     >
       <div
-        className={`flex items-center justify-center ${
-          isFeatured ? "h-20 lg:h-24" : "h-14"
+        className={`flex items-center justify-center rounded-xl bg-white p-4 ${
+          isFeatured ? "h-28 lg:h-32" : "h-20"
         }`}
       >
         <SponsorLogo
@@ -166,7 +166,7 @@ function SponsorTile({
           variant="color"
           width={isFeatured ? 220 : 140}
           height={isFeatured ? 80 : 50}
-          className={`max-h-full ${isFeatured ? "max-w-[220px]" : "max-w-[140px]"}`}
+          className={`text-surface-0 max-h-full object-contain ${isFeatured ? "max-w-[220px]" : "max-w-[140px]"}`}
         />
       </div>
       <h3 className="font-display text-ink-hi text-base leading-tight font-bold tracking-[0.005em] uppercase">
