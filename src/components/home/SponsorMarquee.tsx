@@ -90,7 +90,7 @@ export async function SponsorMarquee() {
         size="default"
       >
         <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-          Sponsor & Partner 2026/27
+          Sponsor & Partner
         </span>
         <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
           Insieme rendiamo possibile ogni partita
