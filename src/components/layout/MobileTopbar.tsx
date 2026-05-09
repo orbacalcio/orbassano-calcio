@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { Z } from "@/lib/z-indexes";
 
 /**
@@ -18,6 +19,7 @@ import { Z } from "@/lib/z-indexes";
  * solo dentro al drawer aperto.
  */
 export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
+  const onLogoClick = useHomeLogoClick();
   return (
     <header
       className="border-border/50 bg-surface-0/80 fixed inset-x-0 top-0 flex h-11 items-center justify-between border-b px-3 backdrop-blur-md lg:hidden"
@@ -35,6 +37,7 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
       </button>
       <Link
         href="/"
+        onClick={onLogoClick}
         aria-label="ASD Orbassano Calcio - Home"
         className="flex items-center"
       >

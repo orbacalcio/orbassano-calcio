@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
+import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { Z } from "@/lib/z-indexes";
 import {
   sidebarMainItems,
@@ -33,9 +34,11 @@ function SidebarItemLink({
   active: boolean;
 }) {
   const Icon = item.icon;
+  const onLogoClick = useHomeLogoClick();
   return (
     <Link
       href={item.href}
+      onClick={item.isLogoItem ? onLogoClick : undefined}
       aria-label={item.label}
       aria-current={active ? "page" : undefined}
       className={cn(

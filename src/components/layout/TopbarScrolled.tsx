@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
+import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
 import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
@@ -35,6 +36,7 @@ export function TopbarScrolled({
 }) {
   const navItems = sidebarMainItems.filter((i) => !i.isLogoItem);
   const usingFallback = sponsors.length === 0;
+  const onLogoClick = useHomeLogoClick();
 
   return (
     <header
@@ -72,6 +74,7 @@ export function TopbarScrolled({
         {/* Center (absolute): logo */}
         <Link
           href="/"
+          onClick={onLogoClick}
           aria-label="ASD Orbassano Calcio - Home"
           className="absolute left-1/2 -translate-x-1/2"
         >
