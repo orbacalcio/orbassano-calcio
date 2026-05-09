@@ -26,12 +26,6 @@ export const clubOfficial = defineType({
       type: "string",
     }),
     defineField({
-      name: "photo",
-      title: "Foto",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
       name: "order",
       title: "Ordine",
       type: "number",
@@ -41,7 +35,6 @@ export const clubOfficial = defineType({
     select: {
       title: "fullName",
       subtitle: "role",
-      media: "photo",
     },
   },
   orderings: [

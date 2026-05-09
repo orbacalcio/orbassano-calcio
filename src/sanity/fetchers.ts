@@ -248,8 +248,6 @@ export type ClubOfficial = {
   role: string;
   fullName: string;
   title: string | null;
-  photo: string | null;
-  photoLqip: string | null;
 };
 
 export async function fetchClubOfficials(): Promise<ClubOfficial[]> {
