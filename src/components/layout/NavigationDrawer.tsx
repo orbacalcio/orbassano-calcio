@@ -3,14 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Search, X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SocialIcons, type SocialLinks } from "@/components/social/SocialIcons";
 import { cn } from "@/lib/cn";
 import { Z } from "@/lib/z-indexes";
-import {
-  sidebarMainItems,
-  sidebarOverflowItems,
-} from "./SidebarLeft.items";
+import { sidebarOverflowItems } from "./SidebarLeft.items";
 
 /**
  * Drawer di navigazione full-screen aperto via hamburger.
@@ -21,7 +18,64 @@ import {
  *
  * Pattern: slide da sinistra 250ms, focus trap, ESC dismiss,
  * click-outside dismiss, body scroll lock mentre aperto.
+ *
+ * Le 4 voci principali sono accordion: click toggle expand/collapse
+ * delle sottosezioni. Solo una sezione aperta per volta. Per
+ * navigare al INDEX della sezione, l'utente clicca il primo figlio
+ * (es. "Panoramica" → /societa) o il link parent quando ha solo 1
+ * figlio (caso "News").
  */
+
+type DrawerSection = {
+  href: string;
+  label: string;
+  children: Array<{ href: string; label: string }>;
+};
+
+function buildSections(opts: { hasPartners: boolean }): DrawerSection[] {
+  return [
+    {
+      href: "/news",
+      label: "News",
+      children: [
+        // Solo 1 child = parent → mostrato come link semplice (no accordion)
+        { href: "/news", label: "Archivio completo" },
+      ],
+    },
+    {
+      href: "/squadre",
+      label: "Squadre",
+      children: [
+        { href: "/squadre", label: "Tutte le squadre" },
+        { href: "/squadre/prima-squadra", label: "Prima Squadra" },
+        { href: "/squadre/settore-giovanile", label: "Settore Giovanile" },
+        { href: "/squadre/scuola-calcio", label: "Scuola Calcio" },
+      ],
+    },
+    {
+      href: "/societa",
+      label: "Società",
+      children: [
+        { href: "/societa", label: "Panoramica" },
+        { href: "/societa/storia", label: "Storia" },
+        { href: "/societa/organigramma", label: "Organigramma" },
+        { href: "/societa/impianti", label: "Impianti sportivi" },
+        { href: "/societa/biglietteria", label: "Biglietteria" },
+      ],
+    },
+    {
+      href: "/sponsor",
+      label: "Sponsor",
+      children: [
+        { href: "/sponsor", label: "I nostri sponsor" },
+        ...(opts.hasPartners
+          ? [{ href: "/sponsor/partner", label: "Corporate Partner" }]
+          : []),
+        { href: "/sponsor/opportunita", label: "Diventa sponsor" },
+      ],
+    },
+  ];
+}
 const FALLBACK_LINKS: SocialLinks = {
   instagram: "https://www.instagram.com/asdorbassanocalcio/",
   facebook: "https://facebook.com/asdorbassanocalcio",
@@ -35,15 +89,19 @@ export function NavigationDrawer({
   open,
   onClose,
   onSearchClick,
+  hasPartners,
   socialLinks = FALLBACK_LINKS,
 }: {
   open: boolean;
   onClose: () => void;
   onSearchClick: () => void;
+  hasPartners: boolean;
   socialLinks?: SocialLinks;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+  const sections = buildSections({ hasPartners });
 
   useEffect(() => {
     if (!open) return;
@@ -77,6 +135,17 @@ export function NavigationDrawer({
       previousFocus?.focus();
     };
   }, [open, onClose]);
+
+  // Reset accordion alla chiusura, cosi' la prossima apertura parte
+  // pulita (nessuna sezione gia' espansa). Il componente NON si
+  // smonta su close (rende null ma resta nel tree), quindi serve
+  // l'effect per resettare lo state.
+  useEffect(() => {
+    if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setOpenSection(null);
+    }
+  }, [open]);
 
   if (!open) return null;
 
@@ -125,22 +194,73 @@ export function NavigationDrawer({
         </div>
 
         <nav
-          className="flex flex-col gap-4 px-4 py-8"
+          className="flex flex-col gap-3 px-4 py-8"
           aria-label="Sezioni principali"
         >
-          {sidebarMainItems
-            .filter((item) => !item.isLogoItem)
-            .map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className="font-display text-ink-hi hover:text-brand-gold flex items-center justify-between text-5xl leading-none font-black tracking-[0.005em] uppercase transition-colors"
-              >
-                <span>{item.label}</span>
-                <ChevronRight size={28} className="text-ink-low" />
-              </Link>
-            ))}
+          {sections.map((section) => {
+            const isAccordion = section.children.length > 1;
+            const isOpen = openSection === section.href;
+            const rowClass =
+              "font-display text-ink-hi hover:text-brand-gold flex w-full items-center justify-between text-5xl leading-none font-black tracking-[0.005em] uppercase transition-colors";
+
+            return (
+              <div key={section.href} className="flex flex-col">
+                {isAccordion ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOpenSection(isOpen ? null : section.href)
+                    }
+                    aria-expanded={isOpen}
+                    aria-controls={`drawer-section-${section.href.replace(/\//g, "-")}`}
+                    className={cn(rowClass, "py-1 text-left")}
+                  >
+                    <span>{section.label}</span>
+                    <ChevronRight
+                      size={28}
+                      className={cn(
+                        "text-ink-low shrink-0 transition-transform",
+                        isOpen && "rotate-90",
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    href={section.href}
+                    onClick={onClose}
+                    className={cn(rowClass, "py-1")}
+                  >
+                    <span>{section.label}</span>
+                    <ChevronRight
+                      size={28}
+                      className="text-ink-low shrink-0"
+                      aria-hidden
+                    />
+                  </Link>
+                )}
+
+                {isAccordion && isOpen && (
+                  <ul
+                    id={`drawer-section-${section.href.replace(/\//g, "-")}`}
+                    className="flex flex-col gap-1 pt-3 pl-1"
+                  >
+                    {section.children.map((child) => (
+                      <li key={child.href}>
+                        <Link
+                          href={child.href}
+                          onClick={onClose}
+                          className="text-ink-mid hover:text-ink-hi block py-1.5 text-base transition-colors"
+                        >
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         <div className="border-border/50 mx-4 border-t" aria-hidden />

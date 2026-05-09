@@ -29,7 +29,13 @@ import { TopbarScrolled } from "./TopbarScrolled";
  *    (!heroVisible) con fade-only via Framer Motion, durata 250ms.
  *    Mantiene SEMPRE entrambi montati per evitare flash al cambio.
  */
-export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
+export function ClientShell({
+  sponsors,
+  hasPartners,
+}: {
+  sponsors: MainSponsor[];
+  hasPartners: boolean;
+}) {
   const [heroVisible, setHeroVisible] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -112,6 +118,7 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
         open={drawerOpen}
         onClose={closeDrawer}
         onSearchClick={openSearch}
+        hasPartners={hasPartners}
       />
 
       {/* Dialog di ricerca site-wide */}
