@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import type { MainSponsor } from "@/sanity/fetchers";
 import { MobileTopbar } from "./MobileTopbar";
@@ -31,7 +32,16 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
   const [heroVisible, setHeroVisible] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const reduced = useReducedMotion();
+  const pathname = usePathname();
 
+  // Re-osserva il sentinel hero ad ogni cambio rotta. ClientShell vive
+  // nel SiteLayout quindi NON si rimonta tra pagine: senza `pathname`
+  // nelle deps il primo IntersectionObserver creato (es. su /squadre,
+  // dove il sentinel non esiste) restava attivo anche dopo navigazione
+  // a `/`, lasciando heroVisible=false e quindi mostrando TopbarScrolled
+  // invece di Topbar+SidebarLeft. Re-runnando l'effect ad ogni route
+  // change risolviamo: cleanup vecchio observer, nuovo lookup nel DOM
+  // appena renderizzato.
   useEffect(() => {
     const sentinel = document.querySelector("[data-hero-sentinel]");
     if (!sentinel) {
@@ -47,7 +57,7 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);

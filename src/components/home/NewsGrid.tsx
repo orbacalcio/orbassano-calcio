@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Newspaper } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Newspaper } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { latestNewsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
@@ -102,6 +102,17 @@ function NewsCard({
             {news.excerpt}
           </p>
         )}
+        {/* Pseudo-bottone (e' uno <span>, non un altro <a>: evita anchor
+            nesting illegale dentro la card-Link). Il click sull'intera
+            card naviga gia' all'articolo, lo span aggiunge solo l'affordance
+            visiva richiesta. */}
+        <span
+          aria-hidden
+          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-red/90 mt-2 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors"
+        >
+          Leggi l&apos;articolo
+          <ArrowRight size={12} aria-hidden />
+        </span>
       </div>
     </Link>
   );

@@ -180,6 +180,21 @@ export const news = defineType({
       type: "boolean",
       initialValue: false,
     }),
+    defineField({
+      name: "sendToNewsletter",
+      title: "Invia alla newsletter",
+      description:
+        "Quando pubblichi questo articolo, viene inviato via email agli iscritti newsletter (Brevo). Disattiva per articoli marginali (es. errata corrige, post tecnici).",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
+      name: "dispatchedAt",
+      title: "Inviato alla newsletter il",
+      description:
+        "Si valorizza in automatico dopo l'invio Brevo, evita doppi invii. Cancellalo se vuoi rinviare manualmente l'articolo.",
+      type: "datetime",
+    }),
   ],
   preview: {
     select: {
