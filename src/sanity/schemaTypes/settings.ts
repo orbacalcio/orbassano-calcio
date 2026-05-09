@@ -1,5 +1,5 @@
 import { Cog } from "lucide-react";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const settings = defineType({
   name: "settings",
@@ -13,6 +13,13 @@ export const settings = defineType({
       description:
         "Tempistiche di autoplay e transizione del carosello in homepage. Le singole slide possono sovrascrivere la durata via 'Durata custom' nello schema 'Slide hero homepage'.",
       options: { collapsible: true, collapsed: false },
+    },
+    {
+      name: "storyNumbers",
+      title: 'Box "Storia in numeri" (homepage)',
+      description:
+        "Eyebrow, titolo e statistiche del box mostrato in homepage tra «Le squadre» e il Manifesto. Consigliate 4 voci, ma il numero è libero.",
+      options: { collapsible: true, collapsed: true },
     },
   ],
   fields: [
@@ -63,6 +70,84 @@ export const settings = defineType({
       type: "boolean",
       initialValue: true,
       fieldset: "heroCarousel",
+    }),
+    defineField({
+      name: "storyNumbersEyebrow",
+      title: "Eyebrow",
+      description: 'Testo piccolo sopra il titolo (es. "Storia in numeri").',
+      type: "string",
+      fieldset: "storyNumbers",
+    }),
+    defineField({
+      name: "storyNumbersTitle",
+      title: "Titolo del box",
+      description:
+        'Es. "Oltre novanta anni di rossoblù raccontati in quattro numeri".',
+      type: "string",
+      fieldset: "storyNumbers",
+    }),
+    defineField({
+      name: "storyNumbersItems",
+      title: "Statistiche",
+      description:
+        "Ogni voce mostra un numero animato + etichetta + descrizione. Riordinabili con drag-and-drop.",
+      type: "array",
+      fieldset: "storyNumbers",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "storyNumberItem",
+          title: "Statistica",
+          fields: [
+            defineField({
+              name: "value",
+              title: "Valore numerico",
+              description: "Solo il numero, senza prefissi/suffissi.",
+              type: "number",
+              validation: (r) => r.required().min(0),
+            }),
+            defineField({
+              name: "prefix",
+              title: "Prefisso",
+              description: 'Es. "+". Vuoto se non serve.',
+              type: "string",
+            }),
+            defineField({
+              name: "suffix",
+              title: "Suffisso",
+              description: 'Es. "+". Vuoto se non serve.',
+              type: "string",
+            }),
+            defineField({
+              name: "label",
+              title: "Etichetta breve",
+              description: 'Es. "Anni di rossoblù".',
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "caption",
+              title: "Descrizione",
+              description: "1-2 righe sotto l'etichetta.",
+              type: "text",
+              rows: 2,
+            }),
+          ],
+          preview: {
+            select: {
+              value: "value",
+              prefix: "prefix",
+              suffix: "suffix",
+              label: "label",
+              caption: "caption",
+            },
+            prepare: ({ value, prefix, suffix, label, caption }) => ({
+              title: `${prefix ?? ""}${value ?? "?"}${suffix ?? ""} · ${label ?? "(senza etichetta)"}`,
+              subtitle: caption ?? "",
+            }),
+          },
+        }),
+      ],
     }),
     defineField({
       name: "currentSeason",

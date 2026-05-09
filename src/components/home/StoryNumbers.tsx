@@ -1,131 +1,60 @@
-"use client";
-
-import { motion, useReducedMotion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Container } from "@/components/ui/Container";
+import { StoryNumbersGrid } from "@/components/home/StoryNumbersGrid";
+import {
+  fetchStoryNumbers,
+  type StoryNumberItem,
+} from "@/sanity/fetchers";
 
 /**
- * Storia in numeri — quattro contatori animati al primo ingresso
- * nel viewport. Rimpiazza la ChampionsMarquee come blocco identitario.
+ * "Storia in numeri" — server async che fetcha eyebrow, titolo e items
+ * dal singleton settings di Sanity. Se il CMS non ha ancora popolato
+ * il box (caso tipico dopo il deploy iniziale, prima del seed) usa i
+ * fallback editoriali sotto.
  *
- * Numeri (DATA_ORBASSANO §1, §2, §3, §5):
- * - +90 anni di rossoblù (dal 1930)  -> "+" prefisso evita la
- *   manutenzione annuale del numero esatto
- * - 23 atleti in prima squadra
- * - 120+ giovani nel SGS
- * - 9 partecipazioni in Serie D
+ * Counter animation + layout vivono in `StoryNumbersGrid` (client).
+ * Questa separazione mantiene il fetch sul server (zero JS speso per
+ * recuperare i dati) e isola lo "use client" alla sola animazione.
  */
-type Stat = {
-  end: number;
-  prefix?: string;
-  suffix?: string;
-  label: string;
-  caption: string;
-};
+const FALLBACK_EYEBROW = "Storia in numeri";
+const FALLBACK_TITLE =
+  "Oltre novanta anni di rossoblù raccontati in quattro numeri";
 
-const STATS: Stat[] = [
+const FALLBACK_ITEMS: StoryNumberItem[] = [
   {
-    end: 90,
+    value: 90,
     prefix: "+",
+    suffix: null,
     label: "Anni di rossoblù",
     caption: "Dal 1930 al campo, senza fermarsi davvero mai.",
   },
   {
-    end: 23,
+    value: 23,
+    prefix: null,
+    suffix: null,
     label: "Atleti prima squadra",
     caption:
       "La rosa di riferimento dell'ultima stagione completa, in attesa dei nuovi tesseramenti 2026/27.",
   },
   {
-    end: 120,
+    value: 120,
+    prefix: null,
     suffix: "+",
     label: "Giovani nel settore",
     caption: "Quattro categorie U14-U17 più la Scuola Calcio.",
   },
   {
-    end: 9,
+    value: 9,
+    prefix: null,
+    suffix: null,
     label: "Partecipazioni Serie D",
     caption: "Dagli anni '80 fino alle semifinali playoff 2005-07.",
   },
 ];
 
-function Counter({ end }: { end: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduced = useReducedMotion();
-  const [value, setValue] = useState(reduced ? end : 0);
+export async function StoryNumbers() {
+  const data = await fetchStoryNumbers();
+  const eyebrow = data.eyebrow ?? FALLBACK_EYEBROW;
+  const title = data.title ?? FALLBACK_TITLE;
+  const items = data.items.length > 0 ? data.items : FALLBACK_ITEMS;
 
-  useEffect(() => {
-    if (!inView || reduced) return;
-    const duration = 1400;
-    const start = performance.now();
-    let raf = 0;
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const t = Math.min(1, elapsed / duration);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(eased * end));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, reduced, end]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {value}
-    </span>
-  );
-}
-
-export function StoryNumbers() {
-  return (
-    <section
-      aria-label="Storia del club in numeri"
-      className="bg-surface-1 border-border/50 relative overflow-hidden border-y py-20"
-    >
-      <div
-        aria-hidden
-        className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
-      />
-      <Container className="relative" size="wide">
-        <header className="flex flex-col items-center gap-3 text-center">
-          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-            Storia in numeri
-          </span>
-          <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-            Oltre novanta anni di rossoblù raccontati in quattro numeri
-          </h2>
-        </header>
-
-        <ul className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <motion.li
-              key={s.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="bg-surface-2/70 flex flex-col items-start gap-3 p-8 lg:p-10"
-            >
-              <span className="font-display text-brand-gold flex items-baseline gap-1 text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
-                {s.prefix && (
-                  <span className="text-4xl sm:text-5xl">{s.prefix}</span>
-                )}
-                <Counter end={s.end} />
-                {s.suffix}
-              </span>
-              <span className="font-display text-ink-hi text-lg font-bold tracking-[0.01em] uppercase">
-                {s.label}
-              </span>
-              <span className="text-ink-mid text-sm leading-relaxed">
-                {s.caption}
-              </span>
-            </motion.li>
-          ))}
-        </ul>
-      </Container>
-    </section>
-  );
+  return <StoryNumbersGrid eyebrow={eyebrow} title={title} items={items} />;
 }

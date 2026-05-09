@@ -1,13 +1,16 @@
 import { Newspaper } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { AutoSlugInput } from "@/sanity/components/AutoSlugInput";
+import { slugifyTitle } from "@/sanity/lib/slugify";
 
 /**
  * Schema News.
  *
  * Punti notevoli:
- * - `slug` con `source: "title"` + `slugify` custom: pulsante "Genera"
- *   nello Studio crea uno slug pulito (lowercase, accenti normalizzati,
- *   trattini, cap 96 char). L'utente puo' sempre sovrascrivere a mano.
+ * - `slug` con custom input `AutoSlugInput`: auto-popola dal titolo
+ *   in real-time mentre l'utente scrive, senza bisogno di premere
+ *   "Genera". Resta sempre il bottone manuale come fallback. Il
+ *   slugify e' centralizzato in `sanity/lib/slugify.ts`.
  * - `author` initialValue "Orbassano Calcio": ogni nuova news parte
  *   con questo valore, l'admin puo' cambiarlo per pezzi firmati.
  * - `body` con annotation `link` esplicita: gli hyperlink inseriti
@@ -33,18 +36,14 @@ export const news = defineType({
       title: "Slug",
       type: "slug",
       description:
-        "URL della news. Premi «Genera» per crearlo automaticamente dal titolo, oppure scrivilo a mano.",
+        "URL della news: si compila da solo mentre scrivi il titolo. Sovrascrivibile a mano.",
       options: {
         source: "title",
         maxLength: 96,
-        slugify: (input) =>
-          input
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[̀-ͯ]/g, "")
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "")
-            .slice(0, 96),
+        slugify: slugifyTitle,
+      },
+      components: {
+        input: AutoSlugInput,
       },
       validation: (r) => r.required(),
     }),

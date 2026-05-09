@@ -10,6 +10,7 @@ import {
   mainSponsorsQuery,
   newsBySlugQuery,
   playerBySlugQuery,
+  settingsQuery,
   teamBySlugQuery,
   teamsByCategoryQuery,
   teamsListQuery,
@@ -465,5 +466,44 @@ export async function fetchActiveSponsors(): Promise<ActiveSponsorsBundle> {
   } catch (err) {
     console.error("[fetchActiveSponsors]", err);
     return { main: [], official: [], partners: [] };
+  }
+}
+
+// ---------- Settings: storyNumbers (homepage) ---------------------------------------
+
+export type StoryNumberItem = {
+  value: number;
+  prefix: string | null;
+  suffix: string | null;
+  label: string;
+  caption: string | null;
+};
+
+export type StoryNumbersContent = {
+  eyebrow: string | null;
+  title: string | null;
+  items: StoryNumberItem[];
+};
+
+export async function fetchStoryNumbers(): Promise<StoryNumbersContent> {
+  try {
+    const data = await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    const settings = (data ?? {}) as {
+      storyNumbersEyebrow?: string | null;
+      storyNumbersTitle?: string | null;
+      storyNumbersItems?: StoryNumberItem[] | null;
+    };
+    return {
+      eyebrow: settings.storyNumbersEyebrow ?? null,
+      title: settings.storyNumbersTitle ?? null,
+      items: settings.storyNumbersItems ?? [],
+    };
+  } catch (err) {
+    console.error("[fetchStoryNumbers]", err);
+    return { eyebrow: null, title: null, items: [] };
   }
 }

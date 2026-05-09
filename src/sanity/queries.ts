@@ -24,6 +24,11 @@ export const settingsQuery = defineQuery(`
     sprintsportLinks,
     contactInfo,
     legalInfo,
+    storyNumbersEyebrow,
+    storyNumbersTitle,
+    "storyNumbersItems": storyNumbersItems[]{
+      value, prefix, suffix, label, caption
+    },
     "defaultOgImage": defaultOgImage.asset->url
   }
 `);
