@@ -1,5 +1,6 @@
 import { Banner5x1000 } from "@/components/home/Banner5x1000";
 import { Hero } from "@/components/home/Hero";
+import { Manifesto } from "@/components/home/Manifesto";
 import { MatchStrip } from "@/components/home/MatchStrip";
 import { NewsGrid } from "@/components/home/NewsGrid";
 import { SponsorMarquee } from "@/components/home/SponsorMarquee";
@@ -49,6 +50,9 @@ export default function Home() {
       </RevealOnScroll>
       <RevealOnScroll>
         <TeamsCards />
+      </RevealOnScroll>
+      <RevealOnScroll>
+        <Manifesto />
       </RevealOnScroll>
       <RevealOnScroll>
         <StoryNumbers />
