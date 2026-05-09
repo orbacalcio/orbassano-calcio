@@ -123,7 +123,6 @@ const COLUMN_TITLE =
 
 export async function Footer() {
   const data = await fetchSettings();
-  const tagline = data.tagline ?? FALLBACK.tagline;
   const social = (data.social && Object.keys(data.social).length > 0
     ? data.social
     : FALLBACK.social) as SocialLinks;
@@ -150,9 +149,6 @@ export async function Footer() {
               <span className="text-ink-mid font-mono text-[11px] tracking-widest uppercase">
                 A.S.D. · dal 1930
               </span>
-              <p className="text-ink-mid mt-1 max-w-md text-sm leading-relaxed">
-                {tagline}
-              </p>
             </div>
           </div>
           <SocialIcons links={social} />
