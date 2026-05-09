@@ -3,11 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ChevronRight } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { PlayerCard } from "@/components/squadre/PlayerCard";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import { Section } from "@/components/ui/Section";
+import {
+  buildBreadcrumbLd,
+  buildSportsTeamLd,
+} from "@/lib/json-ld";
 import {
   fetchTeamBySlug,
   fetchTeamsByCategory,
@@ -80,6 +85,13 @@ function CategoryView({
 }) {
   return (
     <>
+      <JsonLd
+        data={buildBreadcrumbLd([
+          { name: "Home", url: "/" },
+          { name: "Squadre", url: "/squadre" },
+          { name: category, url: `/squadre/${category === "Settore Giovanile" ? "settore-giovanile" : ""}` },
+        ])}
+      />
       <Breadcrumb items={[{ label: "Squadre", href: "/squadre" }]} current={category} />
 
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -129,8 +141,20 @@ function TeamView({ team }: { team: TeamDetail }) {
       href: "/squadre/settore-giovanile",
     });
   }
+  const breadcrumbItemsLd = [
+    { name: "Home", url: "/" },
+    ...breadcrumbItems.map((b) => ({ name: b.label, url: b.href })),
+    { name: team.name, url: `/squadre/${team.slug}` },
+  ];
   return (
     <>
+      <JsonLd
+        data={buildSportsTeamLd({
+          season: team.season,
+          league: team.league,
+        })}
+      />
+      <JsonLd data={buildBreadcrumbLd(breadcrumbItemsLd)} />
       <Breadcrumb items={breadcrumbItems} current={team.name} />
 
       {/* HERO */}

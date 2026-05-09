@@ -3,6 +3,8 @@ import {
   allActiveSponsorsQuery,
   allNewsQuery,
   allNewsSlugsQuery,
+  allPlayersForSitemapQuery,
+  allTeamSlugsQuery,
   clubOfficialsQuery,
   facilitiesQuery,
   mainSponsorsQuery,
@@ -372,6 +374,44 @@ export async function fetchAllNewsSlugs(): Promise<string[]> {
       .filter(Boolean);
   } catch (err) {
     console.error("[fetchAllNewsSlugs]", err);
+    return [];
+  }
+}
+
+export async function fetchAllTeamSlugs(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      allTeamSlugsQuery,
+      {},
+      { next: { tags: ["team"] } },
+    );
+    return ((data ?? []) as Array<{ slug: string }>)
+      .map((s) => s.slug)
+      .filter(Boolean);
+  } catch (err) {
+    console.error("[fetchAllTeamSlugs]", err);
+    return [];
+  }
+}
+
+export type PlayerSitemapEntry = {
+  slug: string;
+  teamSlug: string;
+  _updatedAt: string;
+};
+
+export async function fetchAllPlayersForSitemap(): Promise<
+  PlayerSitemapEntry[]
+> {
+  try {
+    const data = await sanityClient.fetch(
+      allPlayersForSitemapQuery,
+      {},
+      { next: { tags: ["player", "team"] } },
+    );
+    return (data ?? []) as PlayerSitemapEntry[];
+  } catch (err) {
+    console.error("[fetchAllPlayersForSitemap]", err);
     return [];
   }
 }

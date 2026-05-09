@@ -143,6 +143,22 @@ export const allNewsSlugsQuery = defineQuery(`
   *[_type == "news" && defined(slug.current)]{ "slug": slug.current }
 `);
 
+// Slug delle squadre (per sitemap).
+export const allTeamSlugsQuery = defineQuery(`
+  *[_type == "team" && defined(slug.current)]{ "slug": slug.current }
+`);
+
+// Tutti i giocatori con riferimento alla loro squadra (per sitemap
+// /squadre/[teamSlug]/[playerSlug]). Filtra fuori i record privi di
+// slug o di reference team.
+export const allPlayersForSitemapQuery = defineQuery(`
+  *[_type == "player" && defined(slug.current) && defined(team->slug.current)]{
+    "slug": slug.current,
+    "teamSlug": team->slug.current,
+    _updatedAt
+  }
+`);
+
 // Rosa prima squadra
 export const firstTeamSquadQuery = defineQuery(`
   *[_type == "player" && team->slug.current == "prima-squadra"]

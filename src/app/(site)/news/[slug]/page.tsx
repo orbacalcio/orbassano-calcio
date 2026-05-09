@@ -3,9 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import { Container } from "@/components/ui/Container";
 import { formatItalianDate } from "@/lib/date";
+import {
+  buildBreadcrumbLd,
+  buildNewsArticleLd,
+} from "@/lib/json-ld";
 import { fetchAllNewsSlugs, fetchNewsBySlug } from "@/sanity/fetchers";
 
 type Params = { slug: string };
@@ -39,6 +44,24 @@ export default async function NewsDetailPage(props: {
 
   return (
     <article>
+      <JsonLd
+        data={buildNewsArticleLd({
+          title: news.title,
+          slug: news.slug,
+          excerpt: news.excerpt,
+          image: news.cover,
+          publishedAt: news.publishedAt,
+          author: news.author,
+          category: news.category,
+        })}
+      />
+      <JsonLd
+        data={buildBreadcrumbLd([
+          { name: "Home", url: "/" },
+          { name: "News", url: "/news" },
+          { name: news.title, url: `/news/${news.slug}` },
+        ])}
+      />
       <header className="border-border/50 relative overflow-hidden border-b">
         <div
           aria-hidden

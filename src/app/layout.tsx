@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Big_Shoulders, Geist_Mono, Inter } from "next/font/google";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildOrganizationLd, buildWebsiteLd } from "@/lib/json-ld";
 import "./globals.css";
 
 /**
@@ -56,6 +58,44 @@ export const metadata: Metadata = {
     "Centro Sportivo Aldo Porta",
     "Stadio Mazzola Orbassano",
   ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "it_IT",
+    url: "https://www.orbassanocalcio.com",
+    siteName: "ASD Orbassano Calcio",
+    title: "ASD Orbassano Calcio — Dal 1930 il calcio di Orbassano",
+    description:
+      "Sito ufficiale del club rossoblù: Prima Squadra, Settore Giovanile e Scuola Calcio. News, calendario, sponsor.",
+    images: [
+      {
+        url: "/Logo_Orbassano_2K.png",
+        width: 1024,
+        height: 1440,
+        alt: "Logo ASD Orbassano Calcio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@orbassanocalcio",
+    creator: "@orbassanocalcio",
+    title: "ASD Orbassano Calcio",
+    description:
+      "Sito ufficiale del club rossoblù di Orbassano. Dal 1930 il calcio di Orbassano.",
+    images: ["/Logo_Orbassano_2K.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -75,6 +115,8 @@ export default function RootLayout({
     >
       <body className="bg-surface-0 text-ink-hi font-body flex min-h-full flex-col">
         {children}
+        <JsonLd data={buildOrganizationLd()} />
+        <JsonLd data={buildWebsiteLd()} />
       </body>
     </html>
   );

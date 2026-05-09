@@ -6,7 +6,9 @@ import { SponsorMarquee } from "@/components/home/SponsorMarquee";
 import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { TeamsCards } from "@/components/home/TeamsCards";
 import { VivLOrba } from "@/components/home/VivLOrba";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { buildSportsTeamLd } from "@/lib/json-ld";
 
 /**
  * Homepage cinematografica (M3).
@@ -32,6 +34,12 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 export default function Home() {
   return (
     <>
+      <JsonLd
+        data={buildSportsTeamLd({
+          season: "2026/2027",
+          league: "Prima Categoria Piemonte VdA",
+        })}
+      />
       <Hero />
       <RevealOnScroll>
         <MatchStrip />

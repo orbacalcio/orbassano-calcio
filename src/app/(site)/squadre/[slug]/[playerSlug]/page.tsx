@@ -3,10 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ChevronRight, Star } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { PlayerPlaceholder } from "@/components/squadre/PlayerPlaceholder";
 import { Container } from "@/components/ui/Container";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import { Section } from "@/components/ui/Section";
+import {
+  buildBreadcrumbLd,
+  buildPersonLd,
+} from "@/lib/json-ld";
 import {
   fetchPlayerBySlug,
   type PlayerDetail,
@@ -69,6 +74,26 @@ function PlayerView({ player }: { player: PlayerDetail }) {
 
   return (
     <>
+      <JsonLd
+        data={buildPersonLd({
+          firstName: player.firstName,
+          lastName: player.lastName,
+          slug: player.slug,
+          teamSlug: team.slug,
+          birthYear: player.birthYear,
+          role: player.role,
+          nationality: player.nationality,
+          photo: player.photo,
+        })}
+      />
+      <JsonLd
+        data={buildBreadcrumbLd([
+          { name: "Home", url: "/" },
+          { name: "Squadre", url: "/squadre" },
+          { name: team.name, url: `/squadre/${team.slug}` },
+          { name: fullName, url: `/squadre/${team.slug}/${player.slug}` },
+        ])}
+      />
       <Breadcrumb
         items={[
           { label: "Squadre", href: "/squadre" },
