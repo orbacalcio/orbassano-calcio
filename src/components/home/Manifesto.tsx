@@ -3,23 +3,23 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
 /**
- * Sezione manifesto stile juventus.com "WE ARE YOUTH SINCE 1897": testo
- * gigante con effetto scan-lines orizzontali, leggera shear (skewX),
- * sfondo bianco come interrupt visivo nel flusso navy della homepage.
+ * Sezione manifesto: testo gigante con strisce verticali rossoblu' che
+ * richiamano la maglia da gioco del 1930. Stesso pattern juventus.com
+ * (impatto editoriale, sfondo chiaro, scan-effect) ma riadattato col
+ * cromatismo del club: vertical stripes red+blue invece di linee
+ * orizzontali nere.
  *
- * Tecnica scan-lines: `repeating-linear-gradient` come background del
- * <h2>, poi `background-clip: text` + `text-transparent` per ritagliare
- * il pattern dentro le glifi. Il gradient alterna 5px di colore solido
- * + 4px di trasparenza (periodo 9px) — ad alta dimensione tipografica
- * questo crea ~17 strisce per altezza-glifi, l'effetto "speed" perfetto.
+ * Tecnica:
+ * - `repeating-linear-gradient(to right, ...)` come background del <h2>
+ *   alterna brand-red e brand-blue a strisce di 22px (totale 44px =
+ *   ~3 strisce per larghezza-glifo a text-[10rem], proporzioni jersey)
+ * - `background-clip: text` + `WebkitTextFillColor: transparent`
+ *   ritaglia il pattern dentro le glifi
+ * - Niente skew: con strisce verticali le strisce stesse danno
+ *   impatto, lo skew le inclinerebbe rendendole confuse
  *
- * skewX(-8deg) sul wrapper della headline aggiunge il senso di moto
- * orizzontale. Su prefers-reduced-motion il global stylesheet riporta
- * gia' transition/animation a 0; il transform statico resta visibile
- * ma e' un effetto puramente di forma, non di movimento (accettabile).
- *
- * Posizionata in homepage tra TeamsCards e StoryNumbers come pausa
- * editoriale: rompe il navy-su-navy, ricorda l'identita' del club.
+ * Sfondo brand-white per massimizzare il contrasto con red/blue (il
+ * rossoblu' nasce per maglia bianca/chiara, non navy).
  */
 export function Manifesto() {
   return (
@@ -33,11 +33,10 @@ export function Manifesto() {
       >
         <h2
           id="manifesto-title"
-          className="font-display text-surface-0 text-6xl leading-[0.9] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
+          className="font-display text-6xl leading-[0.9] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
           style={{
-            transform: "skewX(-8deg)",
             backgroundImage:
-              "repeating-linear-gradient(to bottom, #0A1428 0, #0A1428 5px, transparent 5px, transparent 9px)",
+              "repeating-linear-gradient(to right, #e91f22 0, #e91f22 22px, #213f8c 22px, #213f8c 44px)",
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
             color: "transparent",
