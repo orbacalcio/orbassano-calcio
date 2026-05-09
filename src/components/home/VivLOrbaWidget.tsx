@@ -18,7 +18,7 @@ export function VivLOrbaWidget({ feedId }: { feedId: string }) {
         strategy="lazyOnload"
         type="module"
       />
-      <beholdjs-widget feed-id={feedId} />
+      <behold-widget feed-id={feedId} />
     </>
   );
 }
