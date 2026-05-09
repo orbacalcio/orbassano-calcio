@@ -3,7 +3,7 @@
 import { Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
-import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
+import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
 import type { MainSponsor } from "@/sanity/fetchers";
 
 /**
@@ -15,16 +15,16 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * MobileTopbar lg:hidden nel range 768-1023, dove entrambe finivano
  * fissate a top-0 sovrapposte. Ora il gating e' netto:
  *  - 0-1023:  MobileTopbar + MobileSponsorStrip
- *  - 1024+:   Topbar (h-16, loghi sponsor h-9 = 36px)
+ *  - 1024+:   Topbar (h-16, tile main sponsor 120×48 su bianco)
  *
  * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
  * mostra TopbarScrolled al suo posto.
  *
- * Pattern: trasparente con backdrop-blur + box main sponsor a destra
- * + divisore + icona search. Loghi sponsor mono via <SponsorLogo
- * variant="mono"> — strict, niente filtro CSS: se logoMonochrome
- * manca compare il fallback color o testuale.
+ * Pattern: trasparente con backdrop-blur + tile main sponsor a destra
+ * (sfondo bianco, proporzioni fisse via MainSponsorTile) + divisore +
+ * icona search. I loghi sono renderizzati a colori sul tile bianco —
+ * niente mono filter, look brand-coerent.
  */
 const FALLBACK_MAIN_SPONSORS = [
   { name: "Studio Cambareri" },
@@ -57,32 +57,10 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
             ))}
           </ul>
         ) : (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
-            {sponsors.map((s) => {
-              if (!s.website) return null;
-              return (
-                <li
-                  key={s._id}
-                  className="flex h-full items-center px-5"
-                >
-                  <a
-                    href={s.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${s.name} (sponsor principale)`}
-                    className="opacity-70 transition-opacity hover:opacity-100"
-                  >
-                    <SponsorLogo
-                      sponsor={s}
-                      variant="mono"
-                      width={180}
-                      height={36}
-                      className="h-9 w-auto"
-                    />
-                  </a>
-                </li>
-              );
-            })}
+          <ul className="border-border/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
+            {sponsors.map((s) => (
+              <MainSponsorTile key={s._id} sponsor={s} />
+            ))}
           </ul>
         )}
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
-import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
+import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
 import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
 
@@ -98,29 +98,10 @@ export function TopbarScrolled({
               ))}
             </ul>
           ) : (
-            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
-              {sponsors.map((s) => {
-                if (!s.website) return null;
-                return (
-                  <li key={s._id} className="flex h-full items-center px-5">
-                    <a
-                      href={s.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${s.name} (sponsor principale)`}
-                      className="opacity-70 transition-opacity hover:opacity-100"
-                    >
-                      <SponsorLogo
-                        sponsor={s}
-                        variant="mono"
-                        width={180}
-                        height={36}
-                        className="h-9 w-auto"
-                      />
-                    </a>
-                  </li>
-                );
-              })}
+            <ul className="border-border/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
+              {sponsors.map((s) => (
+                <MainSponsorTile key={s._id} sponsor={s} />
+              ))}
             </ul>
           )}
           <div aria-hidden className={cn("bg-border hidden h-5 w-px xl:block")} />
