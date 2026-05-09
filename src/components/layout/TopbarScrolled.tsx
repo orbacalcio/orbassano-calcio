@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
@@ -29,9 +29,11 @@ const FALLBACK_MAIN_SPONSORS = [
 export function TopbarScrolled({
   sponsors,
   onMenuClick,
+  onSearchClick,
 }: {
   sponsors: MainSponsor[];
   onMenuClick: () => void;
+  onSearchClick: () => void;
 }) {
   const navItems = sidebarMainItems.filter((i) => !i.isLogoItem);
   const usingFallback = sponsors.length === 0;
@@ -86,7 +88,7 @@ export function TopbarScrolled({
           />
         </Link>
 
-        {/* Dx: sponsor */}
+        {/* Dx: sponsor + search */}
         <div className="ml-auto flex items-center gap-4">
           {usingFallback ? (
             <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
@@ -106,6 +108,14 @@ export function TopbarScrolled({
               ))}
             </ul>
           )}
+          <button
+            type="button"
+            onClick={onSearchClick}
+            aria-label="Cerca nel sito"
+            className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            <Search size={20} />
+          </button>
         </div>
       </div>
     </header>

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { SearchDialog } from "@/components/search/SearchDialog";
 import type { MainSponsor } from "@/sanity/fetchers";
 import { MobileTopbar } from "./MobileTopbar";
 import { NavigationDrawer } from "./NavigationDrawer";
@@ -31,6 +32,7 @@ import { TopbarScrolled } from "./TopbarScrolled";
 export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
   const [heroVisible, setHeroVisible] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const reduced = useReducedMotion();
   const pathname = usePathname();
 
@@ -61,6 +63,11 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
 
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const openSearch = useCallback(() => {
+    setDrawerOpen(false);
+    setSearchOpen(true);
+  }, []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
   const transition = reduced
     ? { duration: 0 }
     : { duration: 0.25, ease: "easeOut" as const };
@@ -79,7 +86,7 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
         }}
         transition={transition}
       >
-        <Topbar sponsors={sponsors} />
+        <Topbar sponsors={sponsors} onSearchClick={openSearch} />
         <SidebarLeft />
         <SidebarRight />
       </motion.div>
@@ -93,11 +100,22 @@ export function ClientShell({ sponsors }: { sponsors: MainSponsor[] }) {
         }}
         transition={transition}
       >
-        <TopbarScrolled sponsors={sponsors} onMenuClick={openDrawer} />
+        <TopbarScrolled
+          sponsors={sponsors}
+          onMenuClick={openDrawer}
+          onSearchClick={openSearch}
+        />
       </motion.div>
 
       {/* Drawer condiviso (mobile + desktop scrolled) */}
-      <NavigationDrawer open={drawerOpen} onClose={closeDrawer} />
+      <NavigationDrawer
+        open={drawerOpen}
+        onClose={closeDrawer}
+        onSearchClick={openSearch}
+      />
+
+      {/* Dialog di ricerca site-wide */}
+      <SearchDialog open={searchOpen} onClose={closeSearch} />
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { SocialIcons, type SocialLinks } from "@/components/social/SocialIcons";
 import { cn } from "@/lib/cn";
@@ -34,10 +34,12 @@ const FALLBACK_LINKS: SocialLinks = {
 export function NavigationDrawer({
   open,
   onClose,
+  onSearchClick,
   socialLinks = FALLBACK_LINKS,
 }: {
   open: boolean;
   onClose: () => void;
+  onSearchClick: () => void;
   socialLinks?: SocialLinks;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -109,7 +111,17 @@ export function NavigationDrawer({
             <X size={22} />
           </button>
           <Image src="/Logo_Orbassano_2K.png" alt="" width={36} height={51} />
-          <span aria-hidden className="h-9 w-9" />
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onSearchClick();
+            }}
+            aria-label="Cerca"
+            className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md focus-visible:outline-2"
+          >
+            <Search size={20} />
+          </button>
         </div>
 
         <nav

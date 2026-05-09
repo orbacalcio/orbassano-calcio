@@ -1,5 +1,6 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
@@ -20,11 +21,9 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
  * mostra TopbarScrolled al suo posto.
  *
- * Pattern: trasparente con backdrop-blur + tile main sponsor a destra
- * (sfondo bianco, proporzioni fisse via MainSponsorTile). I loghi sono
- * renderizzati a colori sul tile bianco — niente mono filter,
- * look brand-coerent. La search e' stata rimossa: feature non
- * implementata, tornera' post-launch (M9) con dialog + indice GROQ.
+ * Pattern: trasparente con backdrop-blur + tile main sponsor + divider
+ * + icona search che apre la SearchDialog full-screen (gestita da
+ * ClientShell via onSearchClick prop).
  */
 const FALLBACK_MAIN_SPONSORS = [
   { name: "Studio Cambareri" },
@@ -32,7 +31,13 @@ const FALLBACK_MAIN_SPONSORS = [
   { name: "Ocert" },
 ];
 
-export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
+export function Topbar({
+  sponsors,
+  onSearchClick,
+}: {
+  sponsors: MainSponsor[];
+  onSearchClick: () => void;
+}) {
   const usingFallback = sponsors.length === 0;
 
   return (
@@ -63,6 +68,17 @@ export function Topbar({ sponsors }: { sponsors: MainSponsor[] }) {
             ))}
           </ul>
         )}
+
+        <div aria-hidden className="bg-border h-5 w-px" />
+
+        <button
+          type="button"
+          onClick={onSearchClick}
+          aria-label="Cerca nel sito"
+          className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-8 w-8 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <Search size={18} />
+        </button>
       </div>
     </header>
   );
