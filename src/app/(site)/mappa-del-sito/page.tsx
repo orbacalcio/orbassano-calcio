@@ -7,6 +7,7 @@ import {
   fetchAllNewsSlugs,
   fetchAllPlayersForSitemap,
   fetchAllTeamSlugs,
+  fetchHasActivePartners,
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
@@ -30,10 +31,11 @@ type Section = {
 };
 
 export default async function MappaDelSitoPage() {
-  const [newsSlugs, teamSlugs, players] = await Promise.all([
+  const [newsSlugs, teamSlugs, players, hasPartners] = await Promise.all([
     fetchAllNewsSlugs(),
     fetchAllTeamSlugs(),
     fetchAllPlayersForSitemap(),
+    fetchHasActivePartners(),
   ]);
 
   const playersByTeam = new Map<string, typeof players>();
@@ -79,7 +81,9 @@ export default async function MappaDelSitoPage() {
       title: "Sponsor & partner",
       links: [
         { href: "/sponsor", label: "I nostri sponsor" },
-        { href: "/sponsor/partner", label: "Corporate partner" },
+        ...(hasPartners
+          ? [{ href: "/sponsor/partner", label: "Corporate partner" }]
+          : []),
         { href: "/sponsor/opportunita", label: "Diventa sponsor" },
       ],
     },

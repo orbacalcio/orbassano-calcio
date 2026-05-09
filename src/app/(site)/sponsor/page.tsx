@@ -36,13 +36,15 @@ export default async function SponsorPage() {
               dilettantistico e nella crescita dei nostri ragazzi.
             </p>
             <div className="mt-2 flex flex-wrap gap-3">
-              <Link
-                href="/sponsor/partner"
-                className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors"
-              >
-                <Handshake size={14} aria-hidden />
-                Vedi i Corporate Partner
-              </Link>
+              {partners.length > 0 && (
+                <Link
+                  href="/sponsor/partner"
+                  className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors"
+                >
+                  <Handshake size={14} aria-hidden />
+                  Vedi i Corporate Partner
+                </Link>
+              )}
               <Link
                 href="/sponsor/opportunita"
                 className="bg-brand-red text-brand-white hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"

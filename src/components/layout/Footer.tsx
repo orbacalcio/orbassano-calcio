@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
+import { fetchHasActivePartners } from "@/sanity/fetchers";
 import {
   SocialIcons,
   type SocialLinks,
@@ -77,59 +78,67 @@ async function fetchSettings(): Promise<Settings> {
   }
 }
 
-const sections = [
-  {
-    title: "Sezioni",
-    items: [
-      { href: "/news", label: "News" },
-      { href: "/societa", label: "Società" },
-      { href: "/societa/storia", label: "Storia" },
-      { href: "/societa/organigramma", label: "Organigramma" },
-      { href: "/societa/impianti", label: "Impianti sportivi" },
-      { href: "/societa/biglietteria", label: "Biglietteria" },
-    ],
-  },
-  {
-    title: "Squadre",
-    items: [
-      { href: "/squadre/prima-squadra", label: "Prima Squadra" },
-      { href: "/squadre/settore-giovanile", label: "Settore Giovanile" },
-      { href: "/squadre/scuola-calcio", label: "Scuola Calcio" },
-    ],
-  },
-  {
-    title: "Sostieni",
-    items: [
-      { href: "/sponsor", label: "Sponsor" },
-      { href: "/sponsor/partner", label: "Partner" },
-      { href: "/sponsor/opportunita", label: "Diventa sponsor" },
-      { href: "/5x1000", label: "5×1000" },
-      { href: "/newsletter", label: "Newsletter" },
-    ],
-  },
-  {
-    title: "Legale",
-    items: [
-      { href: "/legal/privacy", label: "Privacy" },
-      { href: "/legal/cookie", label: "Cookie policy" },
-      { href: "/legal/termini", label: "Termini" },
-      { href: "/mappa-del-sito", label: "Mappa del sito" },
-      { href: "/contatti", label: "Contatti" },
-    ],
-  },
-] as const;
+function buildSections(opts: { hasPartners: boolean }) {
+  return [
+    {
+      title: "Sezioni",
+      items: [
+        { href: "/news", label: "News" },
+        { href: "/societa", label: "Società" },
+        { href: "/societa/storia", label: "Storia" },
+        { href: "/societa/organigramma", label: "Organigramma" },
+        { href: "/societa/impianti", label: "Impianti sportivi" },
+        { href: "/societa/biglietteria", label: "Biglietteria" },
+      ],
+    },
+    {
+      title: "Squadre",
+      items: [
+        { href: "/squadre/prima-squadra", label: "Prima Squadra" },
+        { href: "/squadre/settore-giovanile", label: "Settore Giovanile" },
+        { href: "/squadre/scuola-calcio", label: "Scuola Calcio" },
+      ],
+    },
+    {
+      title: "Sostieni",
+      items: [
+        { href: "/sponsor", label: "Sponsor" },
+        ...(opts.hasPartners
+          ? [{ href: "/sponsor/partner", label: "Partner" }]
+          : []),
+        { href: "/sponsor/opportunita", label: "Diventa sponsor" },
+        { href: "/5x1000", label: "5×1000" },
+        { href: "/newsletter", label: "Newsletter" },
+      ],
+    },
+    {
+      title: "Legale",
+      items: [
+        { href: "/legal/privacy", label: "Privacy" },
+        { href: "/legal/cookie", label: "Cookie policy" },
+        { href: "/legal/termini", label: "Termini" },
+        { href: "/mappa-del-sito", label: "Mappa del sito" },
+        { href: "/contatti", label: "Contatti" },
+      ],
+    },
+  ];
+}
 
 const COLUMN_TITLE =
   "font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase";
 
 export async function Footer() {
-  const data = await fetchSettings();
+  const [data, hasPartners] = await Promise.all([
+    fetchSettings(),
+    fetchHasActivePartners(),
+  ]);
   const social = (data.social && Object.keys(data.social).length > 0
     ? data.social
     : FALLBACK.social) as SocialLinks;
   const contact = { ...FALLBACK.contactInfo, ...(data.contactInfo ?? {}) };
   const legal = { ...FALLBACK.legalInfo, ...(data.legalInfo ?? {}) };
   const year = new Date().getFullYear();
+  const sections = buildSections({ hasPartners });
 
   return (
     <footer className="bg-surface-1 border-border border-t" role="contentinfo">

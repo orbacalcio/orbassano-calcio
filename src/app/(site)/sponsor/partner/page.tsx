@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, ExternalLink, Handshake } from "lucide-react";
 import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Container } from "@/components/ui/Container";
@@ -14,6 +15,12 @@ export const metadata: Metadata = {
 
 export default async function PartnerPage() {
   const { partners } = await fetchActiveSponsors();
+
+  // Niente partner attivi → la pagina non esiste (404). Niente shell
+  // editoriale vuota: meglio non promettere contenuto che non c'è.
+  if (partners.length === 0) {
+    notFound();
+  }
 
   return (
     <>
@@ -50,17 +57,11 @@ export default async function PartnerPage() {
 
       <Container className="py-16 lg:py-24" size="wide">
         <RevealOnScroll>
-          {partners.length > 0 ? (
-            <ul className="flex flex-col gap-8">
-              {partners.map((p, i) => (
-                <PartnerRow key={p._id} partner={p} index={i} />
-              ))}
-            </ul>
-          ) : (
-            <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
-              I Corporate Partner non sono ancora pubblicati nel CMS.
-            </p>
-          )}
+          <ul className="flex flex-col gap-8">
+            {partners.map((p, i) => (
+              <PartnerRow key={p._id} partner={p} index={i} />
+            ))}
+          </ul>
         </RevealOnScroll>
       </Container>
 

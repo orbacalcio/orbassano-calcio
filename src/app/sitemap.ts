@@ -3,6 +3,7 @@ import {
   fetchAllNewsSlugs,
   fetchAllPlayersForSitemap,
   fetchAllTeamSlugs,
+  fetchHasActivePartners,
 } from "@/sanity/fetchers";
 
 /**
@@ -40,7 +41,6 @@ const STATIC_ROUTES: Array<{
   { path: "/societa/impianti", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa/biglietteria", changeFrequency: "monthly", priority: 0.6 },
   { path: "/sponsor", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/sponsor/partner", changeFrequency: "monthly", priority: 0.6 },
   { path: "/sponsor/opportunita", changeFrequency: "monthly", priority: 0.7 },
   { path: "/5x1000", changeFrequency: "monthly", priority: 0.6 },
   { path: "/newsletter", changeFrequency: "yearly", priority: 0.5 },
@@ -55,10 +55,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch dinamico in parallelo. Errori → array vuoti, non bloccano la
   // generazione del sitemap statico (i fetcher gia' loggano e ritornano [])
-  const [newsSlugs, teamSlugs, players] = await Promise.all([
+  const [newsSlugs, teamSlugs, players, hasPartners] = await Promise.all([
     fetchAllNewsSlugs(),
     fetchAllTeamSlugs(),
     fetchAllPlayersForSitemap(),
+    fetchHasActivePartners(),
   ]);
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((r) => ({
@@ -89,5 +90,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.4,
   }));
 
-  return [...staticEntries, ...newsEntries, ...teamEntries, ...playerEntries];
+  // /sponsor/partner solo se esistono Corporate Partner attivi (la
+  // pagina ritorna 404 altrimenti, includerla nel sitemap manderebbe
+  // crawler verso un dead-end).
+  const partnerEntry: MetadataRoute.Sitemap = hasPartners
+    ? [
+        {
+          url: `${SITE_URL}/sponsor/partner`,
+          lastModified: now,
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        },
+      ]
+    : [];
+
+  return [
+    ...staticEntries,
+    ...partnerEntry,
+    ...newsEntries,
+    ...teamEntries,
+    ...playerEntries,
+  ];
 }

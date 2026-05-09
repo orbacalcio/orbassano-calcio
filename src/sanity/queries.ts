@@ -45,6 +45,14 @@ export const mainSponsorsQuery = defineQuery(`
   }
 `);
 
+// Conteggio rapido dei Corporate Partner attivi: usato da footer,
+// sitemap, mappa-del-sito e dalla page /sponsor/partner per
+// nascondere il link/sezione/pagina quando non ci sono partner.
+// Ritorna direttamente un numero (count) — payload minimo.
+export const activePartnersCountQuery = defineQuery(`
+  count(*[_type == "sponsor" && tier == "Corporate Partner" && isActive == true])
+`);
+
 // Tutti gli sponsor attivi raggruppati per tier
 export const allActiveSponsorsQuery = defineQuery(`
   {

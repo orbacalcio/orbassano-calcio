@@ -1,5 +1,6 @@
 import { sanityClient } from "./client";
 import {
+  activePartnersCountQuery,
   allActiveSponsorsQuery,
   allNewsQuery,
   allNewsSlugsQuery,
@@ -466,6 +467,26 @@ export async function fetchActiveSponsors(): Promise<ActiveSponsorsBundle> {
   } catch (err) {
     console.error("[fetchActiveSponsors]", err);
     return { main: [], official: [], partners: [] };
+  }
+}
+
+/**
+ * Helper leggero: ritorna true se esistono Corporate Partner attivi.
+ * Usato da footer / sitemap / mappa-del-sito / pagina partner per
+ * nascondere link e sezioni quando non c'è nulla da mostrare. Cache
+ * tag "sponsor" in modo che il webhook revalidate aggiorni anche
+ * questa info.
+ */
+export async function fetchHasActivePartners(): Promise<boolean> {
+  try {
+    const count = await sanityClient.fetch(
+      activePartnersCountQuery,
+      {},
+      { next: { tags: ["sponsor"] } },
+    );
+    return typeof count === "number" && count > 0;
+  } catch {
+    return false;
   }
 }
 
