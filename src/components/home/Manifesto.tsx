@@ -33,8 +33,16 @@ export function Manifesto() {
       >
         <h2
           id="manifesto-title"
-          className="font-display text-6xl leading-[0.9] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
+          className="font-display leading-[0.9] font-black tracking-[0.005em] uppercase"
           style={{
+            // Dimensione fluida +30% rispetto alla precedente: cresce con la
+            // viewport invece di saltare a tre breakpoint discreti. A 320px
+            // (iPhone SE) la clamp tiene 3rem; a 1280px (desktop tipico)
+            // ~11rem; a >=1486px max 13rem (= 10rem precedente +30%).
+            // Il clamp evita l'overflow orizzontale su mobile che avrebbe
+            // dato il +30% statico (text-6xl -> 4.875rem = 78px troppo
+            // largo per la stringa "Never give up" a 320-375px).
+            fontSize: "clamp(3rem, 14vw, 13rem)",
             backgroundImage:
               "repeating-linear-gradient(to right, #e91f22 0, #e91f22 22px, #213f8c 22px, #213f8c 44px)",
             backgroundClip: "text",
@@ -50,7 +58,7 @@ export function Manifesto() {
 
         <Link
           href="/societa/storia"
-          className="bg-brand-gold text-brand-white hover:bg-brand-white hover:text-brand-blue focus-visible:outline-brand-red inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="bg-brand-gold text-brand-white hover:bg-brand-blue hover:text-brand-white focus-visible:outline-brand-red inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           Storia del club
           <ArrowRight size={14} aria-hidden />
