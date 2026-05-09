@@ -37,7 +37,7 @@ const HUB_CARDS = [
     number: "03",
     title: "Impianti",
     description:
-      "Centro Sportivo Aldo Porta e Sporting Orbassano (stadio Mazzola): dove si allena e gioca tutta la famiglia rossoblù.",
+      "Centro Sportivo Aldo Porta: la sede ufficiale dove si allena e gioca la famiglia rossoblù.",
     href: "/societa/impianti",
     icon: MapPin,
   },

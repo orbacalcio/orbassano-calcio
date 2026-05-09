@@ -1,6 +1,8 @@
 import { sanityClient } from "./client";
 import {
+  activeFacilitySlugsQuery,
   activePartnersCountQuery,
+  activeTeamSlugsQuery,
   allActiveSponsorsQuery,
   allNewsQuery,
   allNewsSlugsQuery,
@@ -467,6 +469,43 @@ export async function fetchActiveSponsors(): Promise<ActiveSponsorsBundle> {
   } catch (err) {
     console.error("[fetchActiveSponsors]", err);
     return { main: [], official: [], partners: [] };
+  }
+}
+
+/**
+ * Slug delle squadre attive. Usato da drawer / footer / mappa per
+ * nascondere link verso squadre disattivate (es. Scuola Calcio in
+ * stand-by). Array invece di Set perche' va serializzato come prop
+ * server → client (Set non e' serializzabile da Next).
+ */
+export async function fetchActiveTeamSlugs(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      activeTeamSlugsQuery,
+      {},
+      { next: { tags: ["team"] } },
+    );
+    return (data ?? []) as string[];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Slug degli impianti attivi. Usato da impianti page per decidere
+ * visibilita' di sezioni editorial (es. "Il Mazzola e i campioni"
+ * CTA dipende dal Mazzola facility attivo).
+ */
+export async function fetchActiveFacilitySlugs(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      activeFacilitySlugsQuery,
+      {},
+      { next: { tags: ["facility"] } },
+    );
+    return (data ?? []) as string[];
+  } catch {
+    return [];
   }
 }
 

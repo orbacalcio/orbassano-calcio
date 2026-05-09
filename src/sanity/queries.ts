@@ -164,9 +164,25 @@ export const allNewsSlugsQuery = defineQuery(`
   *[_type == "news" && defined(slug.current)]{ "slug": slug.current }
 `);
 
-// Slug delle squadre (per sitemap).
+// Slug delle squadre (per sitemap). Filtro isActive: niente squadre
+// disattivate (la pagina dedicata ritornerebbe 404 → dead-end crawler).
 export const allTeamSlugsQuery = defineQuery(`
-  *[_type == "team" && defined(slug.current)]{ "slug": slug.current }
+  *[_type == "team" && defined(slug.current) && isActive != false]{
+    "slug": slug.current
+  }
+`);
+
+// Set di slug delle squadre attive — usato da drawer/footer/mappa
+// per nascondere link di squadre disattivate. Payload minimo (solo
+// slug), tag "team" per cache.
+export const activeTeamSlugsQuery = defineQuery(`
+  *[_type == "team" && defined(slug.current) && isActive != false].slug.current
+`);
+
+// Slug degli impianti attivi (sezione /societa/impianti + decisione
+// hide della sezione "Il Mazzola e i campioni" sull'impianti page).
+export const activeFacilitySlugsQuery = defineQuery(`
+  *[_type == "facility" && defined(slug.current) && isActive != false].slug.current
 `);
 
 // Tutti i giocatori con riferimento alla loro squadra (per sitemap
@@ -200,8 +216,10 @@ export const firstTeamSquadQuery = defineQuery(`
 // Tutte le squadre per /squadre (indice). playerCount usato per
 // l'etichetta sulla card; lo Scuola Calcio ne avra' 0 finche' non
 // vengono tesserati i piccoli (gestiti da Sporting Orbassano).
+// Filtro `isActive != false`: documenti senza il campo (legacy) o
+// con true sono visibili; solo `false` esplicito li nasconde.
 export const teamsListQuery = defineQuery(`
-  *[_type == "team"] | order(coalesce(order, 99) asc){
+  *[_type == "team" && isActive != false] | order(coalesce(order, 99) asc){
     _id,
     name,
     "slug": slug.current,
@@ -218,7 +236,7 @@ export const teamsListQuery = defineQuery(`
 
 // Squadre filtrate per categoria (slug speciale /squadre/settore-giovanile).
 export const teamsByCategoryQuery = defineQuery(`
-  *[_type == "team" && category == $category]
+  *[_type == "team" && category == $category && isActive != false]
   | order(coalesce(order, 99) asc){
     _id,
     name,
@@ -237,7 +255,7 @@ export const teamsByCategoryQuery = defineQuery(`
 // rosa: numero di maglia crescente (con coalesce 99 per chi non ne ha
 // ancora uno assegnato), poi cognome A→Z come fallback stabile.
 export const teamBySlugQuery = defineQuery(`
-  *[_type == "team" && slug.current == $slug][0]{
+  *[_type == "team" && slug.current == $slug && isActive != false][0]{
     _id,
     name,
     "slug": slug.current,
@@ -306,8 +324,10 @@ export const clubOfficialsQuery = defineQuery(`
 
 // Impianti del club — ordinati per il campo `order`. Gallery opzionale
 // risolta come array di url + alt-text + lqip, pronta per <Image>.
+// Filtro isActive: impianti disattivati (es. Mazzola in stand-by) sono
+// nascosti dalla pagina /societa/impianti.
 export const facilitiesQuery = defineQuery(`
-  *[_type == "facility"] | order(coalesce(order, 99) asc){
+  *[_type == "facility" && isActive != false] | order(coalesce(order, 99) asc){
     _id,
     name,
     "slug": slug.current,

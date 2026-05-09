@@ -62,12 +62,26 @@ export const facility = defineType({
       title: "Ordine",
       type: "number",
     }),
+    defineField({
+      name: "isActive",
+      title: "Attivo",
+      description:
+        "Disattiva per nascondere l'impianto dalla pagina /societa/impianti senza cancellarlo. Riattivabile in qualsiasi momento.",
+      type: "boolean",
+      initialValue: true,
+    }),
   ],
   preview: {
     select: {
       title: "name",
       subtitle: "address",
       media: "gallery.0",
+      isActive: "isActive",
     },
+    prepare: ({ title, subtitle, media, isActive }) => ({
+      title: isActive === false ? `${title} (disattivato)` : title,
+      subtitle,
+      media,
+    }),
   },
 });

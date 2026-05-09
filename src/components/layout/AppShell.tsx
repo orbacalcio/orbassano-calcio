@@ -1,4 +1,5 @@
 import {
+  fetchActiveTeamSlugs,
   fetchHasActivePartners,
   fetchMainSponsors,
 } from "@/sanity/fetchers";
@@ -28,15 +29,20 @@ import { SkipLink } from "./SkipLink";
  * - NavigationDrawer condiviso (apre da hamburger mobile o TopbarScrolled)
  */
 export async function AppShell({ children }: { children: React.ReactNode }) {
-  const [sponsors, hasPartners] = await Promise.all([
+  const [sponsors, hasPartners, activeTeamSlugs] = await Promise.all([
     fetchMainSponsors(),
     fetchHasActivePartners(),
+    fetchActiveTeamSlugs(),
   ]);
 
   return (
     <>
       <SkipLink />
-      <ClientShell sponsors={sponsors} hasPartners={hasPartners} />
+      <ClientShell
+        sponsors={sponsors}
+        hasPartners={hasPartners}
+        activeTeamSlugs={activeTeamSlugs}
+      />
       <MobileSponsorStrip />
       <main
         id="main-content"

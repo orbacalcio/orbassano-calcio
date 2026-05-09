@@ -7,7 +7,7 @@ import { fetchAllNews } from "@/sanity/fetchers";
 export const metadata: Metadata = {
   title: "News",
   description:
-    "Risultati, dietro le quinte e comunicati ufficiali di ASD Orbassano Calcio. Filtra l'archivio per categoria: Prima Squadra, Settore Giovanile, Scuola Calcio, Società, Sponsor.",
+    "Risultati, dietro le quinte e comunicati ufficiali di ASD Orbassano Calcio. Filtra l'archivio per categoria: Prima Squadra, Settore Giovanile, Società, Sponsor.",
 };
 
 export default async function NewsPage() {

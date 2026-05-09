@@ -3,7 +3,10 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
-import { fetchHasActivePartners } from "@/sanity/fetchers";
+import {
+  fetchActiveTeamSlugs,
+  fetchHasActivePartners,
+} from "@/sanity/fetchers";
 import {
   SocialIcons,
   type SocialLinks,
@@ -78,7 +81,22 @@ async function fetchSettings(): Promise<Settings> {
   }
 }
 
-function buildSections(opts: { hasPartners: boolean }) {
+function buildSections(opts: {
+  hasPartners: boolean;
+  activeTeamSlugs: string[];
+}) {
+  const teamSlugs = new Set(opts.activeTeamSlugs);
+  const squadreItems: Array<{ href: string; label: string }> = [];
+  if (teamSlugs.has("prima-squadra")) {
+    squadreItems.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
+  }
+  squadreItems.push({
+    href: "/squadre/settore-giovanile",
+    label: "Settore Giovanile",
+  });
+  if (teamSlugs.has("scuola-calcio")) {
+    squadreItems.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
+  }
   return [
     {
       title: "Sezioni",
@@ -93,11 +111,7 @@ function buildSections(opts: { hasPartners: boolean }) {
     },
     {
       title: "Squadre",
-      items: [
-        { href: "/squadre/prima-squadra", label: "Prima Squadra" },
-        { href: "/squadre/settore-giovanile", label: "Settore Giovanile" },
-        { href: "/squadre/scuola-calcio", label: "Scuola Calcio" },
-      ],
+      items: squadreItems,
     },
     {
       title: "Sostieni",
@@ -128,9 +142,10 @@ const COLUMN_TITLE =
   "font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase";
 
 export async function Footer() {
-  const [data, hasPartners] = await Promise.all([
+  const [data, hasPartners, activeTeamSlugs] = await Promise.all([
     fetchSettings(),
     fetchHasActivePartners(),
+    fetchActiveTeamSlugs(),
   ]);
   const social = (data.social && Object.keys(data.social).length > 0
     ? data.social
@@ -138,7 +153,7 @@ export async function Footer() {
   const contact = { ...FALLBACK.contactInfo, ...(data.contactInfo ?? {}) };
   const legal = { ...FALLBACK.legalInfo, ...(data.legalInfo ?? {}) };
   const year = new Date().getFullYear();
-  const sections = buildSections({ hasPartners });
+  const sections = buildSections({ hasPartners, activeTeamSlugs });
 
   return (
     <footer className="bg-surface-1 border-border border-t" role="contentinfo">

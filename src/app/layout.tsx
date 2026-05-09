@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: "%s · ASD Orbassano Calcio",
   },
   description:
-    "Sito ufficiale dell'A.S.D. Orbassano Calcio. Prima Categoria Piemonte VdA, Settore Giovanile e Scuola Calcio. Dal 1930 il rossoblù di Orbassano.",
+    "Sito ufficiale dell'A.S.D. Orbassano Calcio. Prima Categoria Piemonte VdA e Settore Giovanile. Dal 1930 il rossoblù di Orbassano.",
   applicationName: "ASD Orbassano Calcio",
   authors: [{ name: "ASD Orbassano Calcio" }],
   category: "sports",
@@ -54,9 +54,7 @@ export const metadata: Metadata = {
     "Promozione Piemonte",
     "Serie D Piemonte",
     "Settore Giovanile Orbassano",
-    "Scuola Calcio Orbassano",
     "Centro Sportivo Aldo Porta",
-    "Stadio Mazzola Orbassano",
   ],
   alternates: { canonical: "/" },
   openGraph: {

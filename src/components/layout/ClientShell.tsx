@@ -32,9 +32,11 @@ import { TopbarScrolled } from "./TopbarScrolled";
 export function ClientShell({
   sponsors,
   hasPartners,
+  activeTeamSlugs,
 }: {
   sponsors: MainSponsor[];
   hasPartners: boolean;
+  activeTeamSlugs: string[];
 }) {
   const [heroVisible, setHeroVisible] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -119,6 +121,7 @@ export function ClientShell({
         onClose={closeDrawer}
         onSearchClick={openSearch}
         hasPartners={hasPartners}
+        activeTeamSlugs={activeTeamSlugs}
       />
 
       {/* Dialog di ricerca site-wide */}

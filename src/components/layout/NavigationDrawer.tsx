@@ -32,7 +32,31 @@ type DrawerSection = {
   children: Array<{ href: string; label: string }>;
 };
 
-function buildSections(opts: { hasPartners: boolean }): DrawerSection[] {
+function buildSections(opts: {
+  hasPartners: boolean;
+  activeTeamSlugs: string[];
+}): DrawerSection[] {
+  const teamSlugs = new Set(opts.activeTeamSlugs);
+  // /squadre/settore-giovanile è una vista categoria, non una squadra
+  // singola: mostrato sempre se almeno una squadra del settore è attiva.
+  const teamsChildren: DrawerSection["children"] = [
+    { href: "/squadre", label: "Tutte le squadre" },
+  ];
+  if (teamSlugs.has("prima-squadra")) {
+    teamsChildren.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
+  }
+  // Settore Giovanile è una categoria: mostrata se ci sono squadre con
+  // quello slug pattern (under-14/15/16/17). Per semplicita' la mostriamo
+  // sempre — se nessuna è attiva la pagina filtra a vuoto e mostra il
+  // fallback "le squadre non sono ancora pubblicate".
+  teamsChildren.push({
+    href: "/squadre/settore-giovanile",
+    label: "Settore Giovanile",
+  });
+  if (teamSlugs.has("scuola-calcio")) {
+    teamsChildren.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
+  }
+
   return [
     {
       href: "/news",
@@ -45,12 +69,7 @@ function buildSections(opts: { hasPartners: boolean }): DrawerSection[] {
     {
       href: "/squadre",
       label: "Squadre",
-      children: [
-        { href: "/squadre", label: "Tutte le squadre" },
-        { href: "/squadre/prima-squadra", label: "Prima Squadra" },
-        { href: "/squadre/settore-giovanile", label: "Settore Giovanile" },
-        { href: "/squadre/scuola-calcio", label: "Scuola Calcio" },
-      ],
+      children: teamsChildren,
     },
     {
       href: "/societa",
@@ -90,18 +109,20 @@ export function NavigationDrawer({
   onClose,
   onSearchClick,
   hasPartners,
+  activeTeamSlugs,
   socialLinks = FALLBACK_LINKS,
 }: {
   open: boolean;
   onClose: () => void;
   onSearchClick: () => void;
   hasPartners: boolean;
+  activeTeamSlugs: string[];
   socialLinks?: SocialLinks;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const sections = buildSections({ hasPartners });
+  const sections = buildSections({ hasPartners, activeTeamSlugs });
 
   useEffect(() => {
     if (!open) return;

@@ -60,12 +60,12 @@ const QUERY = `{
     | order(publishedAt desc)[0...8]{
       _id, title, "slug": slug.current, category, excerpt, publishedAt
     },
-  "players": *[_type == "player" && (firstName match $expr || lastName match $expr)]
+  "players": *[_type == "player" && (firstName match $expr || lastName match $expr) && team->isActive != false]
     | order(lastName asc)[0...8]{
       _id, firstName, lastName, "slug": slug.current,
       "teamSlug": team->slug.current, role
     },
-  "teams": *[_type == "team" && name match $expr]
+  "teams": *[_type == "team" && name match $expr && isActive != false]
     | order(coalesce(order, 99) asc)[0...8]{
       _id, name, "slug": slug.current, category
     },

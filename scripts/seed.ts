@@ -106,6 +106,8 @@ type TeamSeed = {
   group?: string;
   staff: StaffMember[];
   order: number;
+  /** Default true. Disattivare per nascondere la squadra dal sito. */
+  isActive?: boolean;
 };
 
 const teams: TeamSeed[] = [
@@ -191,6 +193,7 @@ const teams: TeamSeed[] = [
     season: "2026/2027",
     order: 5,
     staff: [],
+    isActive: false, // Scuola Calcio temporaneamente non attiva nel sito
   },
 ];
 
@@ -364,6 +367,7 @@ const facilities = [
       "Sede della Scuola Calcio",
     ],
     order: 1,
+    isActive: false, // Mazzola temporaneamente non attivo nel sito
   },
 ];
 
@@ -393,6 +397,7 @@ async function main() {
       league: t.league,
       group: t.group,
       order: t.order,
+      isActive: t.isActive ?? true,
       staff: t.staff.map((s, i) => ({
         _key: `staff-${i}`,
         _type: "staffMember",
@@ -498,6 +503,7 @@ async function main() {
       mapsUrl: f.mapsUrl,
       fields: f.fields,
       order: f.order,
+      isActive: (f as { isActive?: boolean }).isActive ?? true,
     });
   }
   console.log(`• ${facilities.length} impianti preparati`);

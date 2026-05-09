@@ -7,9 +7,14 @@ import { fetchTeamsList, type TeamSummary } from "@/sanity/fetchers";
 export const metadata: Metadata = {
   title: "Squadre",
   description:
-    "Le squadre di ASD Orbassano Calcio: Prima Squadra, Settore Giovanile (U17, U16, U15, U14) e Scuola Calcio.",
+    "Le squadre di ASD Orbassano Calcio: Prima Squadra e Settore Giovanile (U17, U16, U15, U14).",
 };
 
+// Le sezioni iterate dinamicamente: la query teamsListQuery filtra
+// `isActive != false`, quindi le categorie senza squadre attive
+// vengono saltate dal `if (items.length === 0) return null` sotto.
+// Le tre categorie restano elencate qui per supporto futuro (basta
+// riattivare le squadre dello Studio).
 const SECTIONS: Array<{
   category: TeamSummary["category"];
   number: string;
@@ -55,9 +60,9 @@ export default async function SquadrePage() {
               Sei squadre, una sola maglia
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Dalla Prima Squadra ai Pulcini della Scuola Calcio, ogni rossoblù
-              di Orbassano gioca con la stessa identità. Qui sotto trovi rosa,
-              staff e info di ogni gruppo.
+              Dalla Prima Squadra al Settore Giovanile, ogni rossobl&ugrave;
+              di Orbassano gioca con la stessa identit&agrave;. Qui sotto trovi
+              rosa, staff e info di ogni gruppo.
             </p>
           </div>
         </Container>

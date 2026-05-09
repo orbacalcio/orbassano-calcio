@@ -4,16 +4,28 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { FacilityCard } from "@/components/societa/FacilityCard";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
-import { fetchFacilities } from "@/sanity/fetchers";
+import {
+  fetchActiveFacilitySlugs,
+  fetchFacilities,
+} from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
   title: "Impianti sportivi",
   description:
-    "Centro Sportivo Aldo Porta e Sporting Orbassano (stadio Mazzola): gli impianti dove si allenano e giocano la Prima Squadra, il Settore Giovanile e la Scuola Calcio.",
+    "Gli impianti sportivi di ASD Orbassano Calcio: dove si allenano e giocano la Prima Squadra e il Settore Giovanile.",
 };
 
 export default async function ImpiantiPage() {
-  const facilities = await fetchFacilities();
+  const [facilities, activeFacilitySlugs] = await Promise.all([
+    fetchFacilities(),
+    fetchActiveFacilitySlugs(),
+  ]);
+  // "Il Mazzola e i campioni" è la sezione editorial sotto le card:
+  // ha senso solo se l'impianto Mazzola è effettivamente attivo,
+  // altrimenti diventa un riferimento orfano.
+  const showMazzolaEditorial = activeFacilitySlugs.includes(
+    "sporting-orbassano-stadio-mazzola",
+  );
 
   return (
     <>
@@ -31,12 +43,10 @@ export default async function ImpiantiPage() {
               Dove si gioca, dove si cresce
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Il club si articola su due poli sportivi: il Centro
-              &laquo;Aldo Porta&raquo; &mdash; sede ufficiale e casa della Prima Squadra
-              e del Settore Giovanile — e lo Sporting Orbassano (stadio
-              Valentino Mazzola, ex Sisport Fiat), che ospita la
-              Scuola Calcio e ha visto allenarsi le grandi del calcio
-              italiano.
+              Il Centro Sportivo &laquo;Aldo Porta&raquo; &egrave; la sede
+              ufficiale del club: ospita la Prima Squadra e il Settore
+              Giovanile, con campi a 11 omologati e tutti gli spazi per
+              allenamenti e partite ufficiali.
             </p>
           </div>
         </Container>
@@ -58,43 +68,45 @@ export default async function ImpiantiPage() {
         </RevealOnScroll>
       </Container>
 
-      <section
-        aria-labelledby="mazzola-cta"
-        className="bg-surface-2 border-border/40 relative overflow-hidden border-y"
-      >
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="bg-brand-gold/15 absolute -top-40 -right-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
-          <div className="bg-brand-blue/30 absolute -left-40 -bottom-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
-        </div>
-
-        <Container className="relative grid items-center gap-10 py-20 lg:grid-cols-[1.4fr_1fr] lg:py-24" size="wide">
-          <div className="flex flex-col gap-5">
-            <span className="text-brand-gold font-display flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              <Sparkles size={16} aria-hidden />
-              Il Mazzola e i campioni
-            </span>
-            <h2
-              id="mazzola-cta"
-              className="font-display text-ink-hi text-3xl leading-[0.95] font-black tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl"
-            >
-              Lo stadio dove si sono allenati Baggio, Vialli e Del Piero
-            </h2>
-            <p className="text-ink-mid max-w-xl text-base leading-relaxed">
-              Tra il 1979 e i primi anni 2000 lo Sporting Orbassano (allora
-              Sisport Fiat) ha ospitato gli allenamenti di Torino e Juventus.
-              Generazioni di campioni hanno tagliato il prato dello stadio
-              Valentino Mazzola — la storia completa nella sezione Storia.
-            </p>
+      {showMazzolaEditorial && (
+        <section
+          aria-labelledby="mazzola-cta"
+          className="bg-surface-2 border-border/40 relative overflow-hidden border-y"
+        >
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="bg-brand-gold/15 absolute -top-40 -right-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
+            <div className="bg-brand-blue/30 absolute -left-40 -bottom-32 h-[36rem] w-[36rem] rounded-full blur-[140px]" />
           </div>
-          <Link
-            href="/societa/storia#mazzola-title"
-            className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-surface-0 focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2.5 rounded-full border px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
-          >
-            Vai alla sezione &laquo;Il Mazzola&raquo;
-            <ArrowRight size={14} aria-hidden />
-          </Link>
-        </Container>
-      </section>
+
+          <Container className="relative grid items-center gap-10 py-20 lg:grid-cols-[1.4fr_1fr] lg:py-24" size="wide">
+            <div className="flex flex-col gap-5">
+              <span className="text-brand-gold font-display flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                <Sparkles size={16} aria-hidden />
+                Il Mazzola e i campioni
+              </span>
+              <h2
+                id="mazzola-cta"
+                className="font-display text-ink-hi text-3xl leading-[0.95] font-black tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl"
+              >
+                Lo stadio dove si sono allenati Baggio, Vialli e Del Piero
+              </h2>
+              <p className="text-ink-mid max-w-xl text-base leading-relaxed">
+                Tra il 1979 e i primi anni 2000 lo Sporting Orbassano (allora
+                Sisport Fiat) ha ospitato gli allenamenti di Torino e Juventus.
+                Generazioni di campioni hanno tagliato il prato dello stadio
+                Valentino Mazzola — la storia completa nella sezione Storia.
+              </p>
+            </div>
+            <Link
+              href="/societa/storia#mazzola-title"
+              className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-surface-0 focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2.5 rounded-full border px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              Vai alla sezione &laquo;Il Mazzola&raquo;
+              <ArrowRight size={14} aria-hidden />
+            </Link>
+          </Container>
+        </section>
+      )}
     </>
   );
 }

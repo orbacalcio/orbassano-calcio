@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "disable-features": "tsx --env-file=.env.local scripts/disable-features.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

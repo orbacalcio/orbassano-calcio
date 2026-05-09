@@ -108,13 +108,27 @@ export const team = defineType({
       title: "Ordine",
       type: "number",
     }),
+    defineField({
+      name: "isActive",
+      title: "Attiva",
+      description:
+        "Disattiva per nascondere la squadra dal sito senza cancellarla. La pagina dedicata risponde con 404, link nel menu/footer/mappa scompaiono. Riattivabile in qualsiasi momento.",
+      type: "boolean",
+      initialValue: true,
+    }),
   ],
   preview: {
     select: {
       title: "name",
       subtitle: "subcategory",
       media: "heroImage",
+      isActive: "isActive",
     },
+    prepare: ({ title, subtitle, media, isActive }) => ({
+      title: isActive === false ? `${title} (disattivata)` : title,
+      subtitle,
+      media,
+    }),
   },
   orderings: [
     {
