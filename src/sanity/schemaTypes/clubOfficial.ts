@@ -33,10 +33,17 @@ export const clubOfficial = defineType({
       type: "string",
     }),
     defineField({
-      name: "order",
-      title: "Ordine",
+      name: "groupOrder",
+      title: "Ordine della riga",
       description:
-        "Ordine all'interno della riga (e ordine delle righe stesse, basato sul primo dirigente di ogni gruppo).",
+        "Numero che decide la posizione verticale della riga sulla pagina (più basso = più in alto). Es. 0 per 'Presidenza' in cima, 1 per la riga successiva, 2 per quella sotto. Basta valorizzarlo su UN dirigente del gruppo: gli altri ereditano. Vuoto = ordine automatico basato sul campo Ordine del primo dirigente.",
+      type: "number",
+    }),
+    defineField({
+      name: "order",
+      title: "Ordine nella riga",
+      description:
+        "Posizione orizzontale del dirigente DENTRO la sua riga (più basso = più a sinistra).",
       type: "number",
     }),
   ],

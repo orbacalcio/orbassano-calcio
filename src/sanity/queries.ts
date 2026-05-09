@@ -282,17 +282,17 @@ export const timelineEventsQuery = defineQuery(`
   }
 `);
 
-// Organigramma societario — ordinati per il campo `order`. Niente
-// foto: la pagina /societa/organigramma e' text-only by design. Il
-// campo `group` permette di spezzare la lista in righe separate con
-// titolo opzionale.
+// Organigramma societario — ordinati per `order` (posizione DENTRO la
+// riga). L'ordine VERTICALE delle righe e' deciso dal campo
+// `groupOrder` lato page (groupOfficials), che fa min() per gruppo.
 export const clubOfficialsQuery = defineQuery(`
   *[_type == "clubOfficial"] | order(coalesce(order, 99) asc){
     _id,
     role,
     fullName,
     title,
-    group
+    group,
+    groupOrder
   }
 `);
 

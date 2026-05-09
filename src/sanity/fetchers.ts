@@ -249,6 +249,7 @@ export type ClubOfficial = {
   fullName: string;
   title: string | null;
   group: string | null;
+  groupOrder: number | null;
 };
 
 export async function fetchClubOfficials(): Promise<ClubOfficial[]> {

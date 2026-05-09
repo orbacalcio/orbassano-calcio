@@ -6,13 +6,18 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchClubOfficials, type ClubOfficial } from "@/sanity/fetchers";
 
 /**
- * Raggruppa i dirigenti per il campo `group`. L'ordine dei gruppi
- * segue la prima occorrenza nella lista (gia' ordinata per `order`).
- * Dirigenti senza group finiscono in un gruppo "default" senza titolo.
+ * Raggruppa i dirigenti per il campo `group` e ordina le righe per
+ * `groupOrder` (min del gruppo). Dirigenti senza group finiscono in
+ * un gruppo "default" senza titolo. Tie-break: ordine di prima
+ * occorrenza nella lista (gia' ordinata per `order`).
  */
 function groupOfficials(
   officials: ClubOfficial[],
-): Array<{ key: string; title: string | null; items: ClubOfficial[] }> {
+): Array<{
+  key: string;
+  title: string | null;
+  items: ClubOfficial[];
+}> {
   const groups = new Map<string, ClubOfficial[]>();
   for (const o of officials) {
     const key = o.group?.trim() ?? "";
@@ -23,11 +28,33 @@ function groupOfficials(
       groups.set(key, [o]);
     }
   }
-  return Array.from(groups, ([key, items]) => ({
-    key: key || "_default",
-    title: key || null,
-    items,
-  }));
+  // Calcolo della chiave di ordinamento per ogni gruppo: min del
+  // groupOrder esplicito; se nessun membro ce l'ha, fallback a +Infinity
+  // (cioe' ordine di prima occorrenza preservato dal Map insertion order).
+  const insertionIndex = new Map<string, number>();
+  let i = 0;
+  for (const key of groups.keys()) {
+    insertionIndex.set(key, i++);
+  }
+  return Array.from(groups, ([key, items]) => {
+    const explicitOrders = items
+      .map((o) => o.groupOrder)
+      .filter((v): v is number => typeof v === "number");
+    const rowOrder =
+      explicitOrders.length > 0 ? Math.min(...explicitOrders) : Infinity;
+    return {
+      key: key || "_default",
+      title: key || null,
+      items,
+      rowOrder,
+      insertion: insertionIndex.get(key) ?? 0,
+    };
+  })
+    .sort((a, b) => {
+      if (a.rowOrder !== b.rowOrder) return a.rowOrder - b.rowOrder;
+      return a.insertion - b.insertion;
+    })
+    .map(({ key, title, items }) => ({ key, title, items }));
 }
 
 export const metadata: Metadata = {
