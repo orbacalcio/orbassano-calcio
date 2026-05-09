@@ -7,9 +7,10 @@ import { Container } from "@/components/ui/Container";
 
 /**
  * Marquee sponsor: scorrimento infinito orizzontale dei loghi a
- * colori pieni, sempre. Nessun filtro CSS (no grayscale, no
- * hover-effect, no opacity reduction): la richiesta editoriale e'
- * mostrare gli sponsor "vivi" sul navy, non sbiaditi.
+ * colori pieni su sfondo BIANCO. I loghi degli sponsor sono
+ * progettati per stampe su materiale chiaro (maglia, banner stadio):
+ * sfondo bianco massimizza la leggibilita' rispetto al navy del resto
+ * della home, identico approccio dei tile in topbar.
  *
  * Mostra TUTTI gli sponsor attivi (Main + Official, NON Corporate
  * Partner che vivono nella loro pagina dedicata) per dare visibilita'
@@ -49,19 +50,22 @@ export async function SponsorMarquee() {
     return (
       <section
         aria-label="Sponsor del club"
-        className="border-border/50 border-y py-12"
+        className="bg-white py-12"
       >
-        <Container className="flex flex-col items-center gap-3 text-center" size="default">
-          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+        <Container
+          className="flex flex-col items-center gap-3 text-center"
+          size="default"
+        >
+          <span className="text-brand-blue font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             Sponsor & Partner
           </span>
-          <p className="text-ink-mid text-sm">
+          <p className="text-surface-0/70 text-sm">
             La parete sponsor verrà popolata appena lo Studio Sanity sarà
             collegato e i loghi caricati.
           </p>
           <Link
             href="/sponsor/opportunita"
-            className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+            className="text-brand-red hover:text-brand-blue inline-flex items-center gap-2 text-sm font-semibold transition-colors"
           >
             Diventa sponsor
             <ArrowUpRight size={14} />
@@ -77,13 +81,16 @@ export async function SponsorMarquee() {
   return (
     <section
       aria-label="Sponsor del club"
-      className="border-border/50 relative overflow-hidden border-y py-16"
+      className="bg-white relative overflow-hidden py-16"
     >
-      <Container className="flex flex-col items-center gap-3 text-center" size="default">
-        <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+      <Container
+        className="flex flex-col items-center gap-3 text-center"
+        size="default"
+      >
+        <span className="text-brand-red font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
           Sponsor & Partner 2026/27
         </span>
-        <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+        <h2 className="font-display text-surface-0 max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
           Insieme rendiamo possibile ogni partita
         </h2>
       </Container>
@@ -91,11 +98,11 @@ export async function SponsorMarquee() {
       <div className="relative mt-12 overflow-hidden">
         <div
           aria-hidden
-          className="from-surface-0 absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r to-transparent"
+          className="absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-white to-transparent"
         />
         <div
           aria-hidden
-          className="from-surface-0 absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l to-transparent"
+          className="absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-white to-transparent"
         />
         <ul
           className="flex w-max items-center gap-16 motion-safe:animate-[marquee-sponsor_50s_linear_infinite]"
@@ -119,7 +126,7 @@ export async function SponsorMarquee() {
                     variant="color"
                     width={300}
                     height={144}
-                    className="font-display h-[60px] w-auto text-2xl font-bold tracking-[0.02em]"
+                    className="font-display text-surface-0 h-[60px] w-auto text-2xl font-bold tracking-[0.02em]"
                   />
                 </a>
               ) : (
@@ -128,7 +135,7 @@ export async function SponsorMarquee() {
                   variant="color"
                   width={300}
                   height={144}
-                  className="font-display h-12 w-auto text-2xl font-bold tracking-[0.02em]"
+                  className="font-display text-surface-0 h-12 w-auto text-2xl font-bold tracking-[0.02em]"
                 />
               )}
             </li>
@@ -146,7 +153,7 @@ export async function SponsorMarquee() {
       <div className="mt-10 flex justify-center">
         <Link
           href="/sponsor"
-          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+          className="text-brand-red hover:text-brand-blue inline-flex items-center gap-2 text-sm font-semibold transition-colors"
         >
           Tutti gli sponsor del club
           <ArrowUpRight size={14} />

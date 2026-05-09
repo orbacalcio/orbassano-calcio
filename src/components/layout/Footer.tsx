@@ -10,13 +10,15 @@ import {
 import { Container } from "@/components/ui/Container";
 
 /**
- * Footer dark del sito pubblico. Contiene:
- * - Logo + tagline
- * - Navigazione per area (Sezioni, Squadre, Sostieni, Legale)
- * - Contatti (email, PEC, telefono, sede)
- * - Dati legali (P.IVA, CF, IBAN, matricola FIGC)
- * - Social icons
- * - Copyright + link "Made with Next.js"
+ * Footer dark del sito pubblico — pattern juventus.com:
+ *
+ * 1. Top row a tutta larghezza: brand block (logo + nome + meta)
+ *    a sinistra, social icons a destra. Su mobile si stacca verticale.
+ * 2. Divider sottile.
+ * 3. Riga categorie: 6 colonne (Sezioni, Squadre, Sostieni, Legale,
+ *    Contatti, Dati legali) spread a tutta larghezza. Si compatta a
+ *    3 col su md, 2 col su sm.
+ * 4. Strip in fondo: copyright + claim.
  *
  * Tutti i contenuti dinamici arrivano dal singleton settings di Sanity,
  * con fallback statici a DATA_ORBASSANO §1 se Sanity non e' configurato.
@@ -116,6 +118,9 @@ const sections = [
   },
 ] as const;
 
+const COLUMN_TITLE =
+  "font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase";
+
 export async function Footer() {
   const data = await fetchSettings();
   const tagline = data.tagline ?? FALLBACK.tagline;
@@ -128,9 +133,9 @@ export async function Footer() {
 
   return (
     <footer className="bg-surface-1 border-border border-t" role="contentinfo">
-      <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_2fr_1.4fr]" size="wide">
-        {/* Colonna sinistra: brand */}
-        <div className="flex flex-col gap-5">
+      <Container size="wide" className="py-12 lg:py-14">
+        {/* TOP ROW: brand block (sx) + social (dx) */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
             <Image
               src="/Logo_Orbassano_2K.png"
@@ -138,58 +143,66 @@ export async function Footer() {
               width={56}
               height={79}
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="font-display text-ink-hi text-xl leading-none font-extrabold tracking-[0.01em] uppercase">
                 Orbassano Calcio
               </span>
-              <span className="text-ink-mid font-mono text-xs tracking-widest uppercase">
+              <span className="text-ink-mid font-mono text-[11px] tracking-widest uppercase">
                 A.S.D. · dal 1930
               </span>
+              <p className="text-ink-mid mt-1 max-w-md text-sm leading-relaxed">
+                {tagline}
+              </p>
             </div>
           </div>
-          <p className="text-ink-mid text-sm leading-relaxed">{tagline}</p>
           <SocialIcons links={social} />
         </div>
 
-        {/* Colonna centrale: nav per area */}
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4" aria-label="Indice del sito">
+        <div aria-hidden className="border-border/40 my-10 border-t lg:my-12" />
+
+        {/* CATEGORIE: 6 colonne lg / 3 md / 2 sm */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
           {sections.map((section) => (
-            <div key={section.title} className="flex flex-col gap-3">
-              <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
-                {section.title}
-              </span>
+            <nav
+              key={section.title}
+              aria-label={section.title}
+              className="flex flex-col gap-3"
+            >
+              <span className={COLUMN_TITLE}>{section.title}</span>
               <ul className="flex flex-col gap-2">
                 {section.items.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-ink-mid hover:text-ink-hi text-base transition-colors"
+                      className="text-ink-mid hover:text-ink-hi text-sm transition-colors"
                     >
                       {item.label}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ))}
-        </nav>
 
-        {/* Colonna destra: contatti + dati legali */}
-        <div className="flex flex-col gap-6">
+          {/* Contatti */}
           <div className="flex flex-col gap-3">
-            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
-              Contatti
-            </span>
+            <span className={COLUMN_TITLE}>Contatti</span>
             <ul className="text-ink-mid flex flex-col gap-2 text-sm">
               {contact.address && (
                 <li className="flex items-start gap-2">
-                  <MapPin size={14} className="mt-1 shrink-0" aria-hidden />
-                  <span className="whitespace-pre-line">{contact.address}</span>
+                  <MapPin
+                    size={14}
+                    className="mt-1 shrink-0"
+                    aria-hidden
+                  />
+                  <span className="whitespace-pre-line">
+                    {contact.address}
+                  </span>
                 </li>
               )}
               {contact.phone && (
                 <li className="flex items-center gap-2">
-                  <Phone size={14} aria-hidden />
+                  <Phone size={14} className="shrink-0" aria-hidden />
                   <a
                     href={`tel:${contact.phone.replace(/\s/g, "")}`}
                     className="hover:text-ink-hi transition-colors"
@@ -200,26 +213,27 @@ export async function Footer() {
               )}
               {contact.email && (
                 <li className="flex items-center gap-2">
-                  <Mail size={14} aria-hidden />
+                  <Mail size={14} className="shrink-0" aria-hidden />
                   <a
                     href={`mailto:${contact.email}`}
-                    className="hover:text-ink-hi transition-colors"
+                    className="hover:text-ink-hi truncate transition-colors"
                   >
                     {contact.email}
                   </a>
                 </li>
               )}
               {contact.pec && (
-                <li className="text-ink-mid pl-6 text-xs">PEC: {contact.pec}</li>
+                <li className="text-ink-low pl-6 text-xs leading-relaxed break-all">
+                  PEC: {contact.pec}
+                </li>
               )}
             </ul>
           </div>
 
+          {/* Dati legali */}
           <div className="flex flex-col gap-3">
-            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.15em] uppercase">
-              Dati legali
-            </span>
-            <ul className="font-mono text-ink-mid flex flex-col gap-1.5 text-sm">
+            <span className={COLUMN_TITLE}>Dati legali</span>
+            <ul className="font-mono text-ink-mid flex flex-col gap-1.5 text-xs">
               {legal.fiscalCode && (
                 <li>
                   CF <span className="text-ink-hi">{legal.fiscalCode}</span>
@@ -227,11 +241,12 @@ export async function Footer() {
               )}
               {legal.vatNumber && (
                 <li>
-                  P.IVA <span className="text-ink-hi">{legal.vatNumber}</span>
+                  P.IVA{" "}
+                  <span className="text-ink-hi">{legal.vatNumber}</span>
                 </li>
               )}
               {legal.iban && (
-                <li>
+                <li className="break-all">
                   IBAN <span className="text-ink-hi">{legal.iban}</span>
                 </li>
               )}
