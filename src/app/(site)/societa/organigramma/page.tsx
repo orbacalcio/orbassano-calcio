@@ -96,11 +96,11 @@ export default async function OrganigrammaPage() {
           {officials.length > 0 ? (
             <div className="flex flex-col gap-12">
               {groupOfficials(officials).map((group) => (
-                <section key={group.key} className="flex flex-col gap-5">
+                <section key={group.key} className="flex flex-col gap-6">
                   {group.title && (
-                    <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                    <h2 className="text-brand-gold font-display text-4xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
                       {group.title}
-                    </span>
+                    </h2>
                   )}
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {group.items.map((o) => (
