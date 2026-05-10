@@ -5,6 +5,7 @@ import { settingsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { VivLOrbaWidget } from "./VivLOrbaWidget";
+import { VivLOrbaWidgetBoundary } from "./VivLOrbaWidgetBoundary";
 
 /**
  * Sezione "Vivi l'Orba" della homepage: feed Instagram embed via
@@ -61,7 +62,9 @@ export async function VivLOrba() {
         >
           <div className="mt-4">
             {feedId ? (
-              <VivLOrbaWidget feedId={feedId} />
+              <VivLOrbaWidgetBoundary fallback={<BeholdPlaceholder />}>
+                <VivLOrbaWidget feedId={feedId} />
+              </VivLOrbaWidgetBoundary>
             ) : (
               <BeholdPlaceholder />
             )}
