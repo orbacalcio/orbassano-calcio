@@ -11,6 +11,7 @@ import {
   clubOfficialsQuery,
   facilitiesQuery,
   mainSponsorsQuery,
+  matchesByTeamSlugQuery,
   newsBySlugQuery,
   playerBySlugQuery,
   settingsQuery,
@@ -566,5 +567,88 @@ export async function fetchStoryNumbers(): Promise<StoryNumbersContent> {
   } catch (err) {
     console.error("[fetchStoryNumbers]", err);
     return { eyebrow: null, title: null, items: [] };
+  }
+}
+
+// ---------- Calendario / risultati partite (m5b) -----------------------------
+
+export type MatchStatus =
+  | "scheduled"
+  | "live"
+  | "finished"
+  | "postponed"
+  | "cancelled";
+
+export type MatchCompetitionCategory =
+  | "championship"
+  | "cup"
+  | "tournament"
+  | "playoff"
+  | "friendly";
+
+export type MatchCompetition = {
+  slug: string | null;
+  shortName: string | null;
+  name: string | null;
+  season: string | null;
+  group: string | null;
+  category: MatchCompetitionCategory | null;
+  defaultReportLink: string | null;
+  logo: string | null;
+};
+
+export type MatchOpponentClub = {
+  _id: string;
+  name: string | null;
+  shortName: string | null;
+  slug: string | null;
+  logo: string | null;
+  websiteUrl: string | null;
+  tuttocampoUrl: string | null;
+  primaryColor: string | null;
+};
+
+export type MatchSummary = {
+  _id: string;
+  date: string;
+  matchday: number | null;
+  home: boolean;
+  venue: string | null;
+  status: MatchStatus | null;
+  scoreHome: number | null;
+  scoreAway: number | null;
+  reportLink: string | null;
+  highlightsUrl: string | null;
+  isOpponentTbd: boolean | null;
+  isClosedDoors: boolean | null;
+  isDateTbd: boolean | null;
+  notes: string | null;
+  competition: MatchCompetition | null;
+  opponent: { club: MatchOpponentClub | null } | null;
+};
+
+/**
+ * Tutte le partite di una squadra in una stagione, ordinate per data
+ * ascendente. La pagina /squadre/[slug]/calendario filtra poi
+ * client-side per tab (Prossime / Risultati / Tutte) + competition.
+ *
+ * @param slug    slug della squadra Orbassano (es. "prima-squadra")
+ * @param season  stringa stagione (es. "2026/2027"). Da team.season
+ *                con fallback a settings.currentSeason.
+ */
+export async function fetchMatchesByTeam(
+  slug: string,
+  season: string,
+): Promise<MatchSummary[]> {
+  try {
+    const data = await sanityClient.fetch(
+      matchesByTeamSlugQuery,
+      { slug, season },
+      { next: { tags: ["match"] } },
+    );
+    return (data ?? []) as MatchSummary[];
+  } catch (err) {
+    console.error("[fetchMatchesByTeam]", { slug, season }, err);
+    return [];
   }
 }

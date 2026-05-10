@@ -91,6 +91,58 @@ export const heroSlidesQuery = defineQuery(`
   }
 `);
 
+// Tutte le partite di una squadra in una stagione, ordinate cronologicamente.
+// Filtro `competition->season` (post-refactor m5a la stagione vive su
+// competition, non sul match). Cache tag "match": webhook revalidate
+// ricarica al cambio di un match nello Studio.
+//
+// Payload completo per MatchCard: data/status/score/flag + dereferenza
+// competition (per badge tab + categoria + defaultReportLink fallback) +
+// dereferenza opponent.club (logo, sito ufficiale, hyperlink card).
+export const matchesByTeamSlugQuery = defineQuery(`
+  *[_type == "match"
+    && team->slug.current == $slug
+    && competition->season == $season]
+  | order(date asc){
+    _id,
+    date,
+    matchday,
+    home,
+    venue,
+    status,
+    scoreHome,
+    scoreAway,
+    reportLink,
+    highlightsUrl,
+    isOpponentTbd,
+    isClosedDoors,
+    isDateTbd,
+    notes,
+    "competition": competition->{
+      "slug": slug.current,
+      shortName,
+      name,
+      season,
+      group,
+      category,
+      defaultReportLink,
+      "logo": logo.asset->url
+    },
+    "opponent": opponent->{
+      "club": club->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current,
+        "logo": logo.asset->url,
+        websiteUrl,
+        tuttocampoUrl,
+        primaryColor
+      }
+    }
+  }
+`);
+
 // Prossima partita per il ticker. Aggiornata al nuovo shape post-refactor
 // match: opponent e competition sono ora reference. Cache tag "match".
 export const nextMatchQuery = defineQuery(`
