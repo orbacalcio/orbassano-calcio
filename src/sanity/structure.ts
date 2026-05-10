@@ -60,6 +60,14 @@ function buildMatchesByTeam(S: StructureBuilder) {
               .filter('_type == "match" && team->slug.current == $slug')
               .params({ slug: t.slug })
               .defaultOrdering([{ field: "date", direction: "desc" }])
+              // "+ Create" da questa vista crea un match con team gia'
+              // pre-compilato. Il filter del campo competition (lato schema)
+              // gli si appoggia immediatamente.
+              .initialValueTemplates([
+                S.initialValueTemplateItem("match-by-team", {
+                  teamId: `team.${t.slug}`,
+                }),
+              ])
               .canHandleIntent(
                 (intentName, params) =>
                   intentName === "edit" && params.type === "match",
