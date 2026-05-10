@@ -16,6 +16,15 @@
  * Nota: questo script NON carica asset (immagini/PDF). Quelli vanno
  * caricati manualmente dallo Studio dall'admin del club perche' richiedono
  * scelte editoriali (hotspot, alt-text, scelta della foto principale).
+ *
+ * ATTENZIONE — `createOrReplace` SOSTITUISCE TUTTO IL DOCUMENTO. Per i
+ * document type che ricevono upload di asset manuali (sponsor.logo,
+ * riferimentiOperativi.codiceEticoPdfUrl, player.photo, heroSlide.image,
+ * news.coverImage, ecc.), USARE `createIfNotExists` + `patch.set(fields)`
+ * per preservare i campi asset caricati dall'admin. Gia' applicato a
+ * sponsor + riferimentiOperativi dopo l'incidente del 10/05/2026 in cui
+ * un seed ha cancellato i loghi sponsor: per altri tipi documento e' un
+ * upgrade da fare prima di rilanci futuri se hanno ricevuto upload.
  */
 import "dotenv/config";
 
@@ -553,9 +562,15 @@ async function main() {
   tx.createOrReplace(settings);
   console.log("• Settings preparato");
 
-  // Riferimenti operativi (singleton, Allegato B Codice Etico)
-  tx.createOrReplace(riferimentiOperativi);
-  console.log("• Riferimenti operativi preparato");
+  // Riferimenti operativi (singleton, Allegato B Codice Etico).
+  // Pattern createIfNotExists + patch.set per preservare i campi asset
+  // caricati manualmente dallo Studio: codiceEticoPdfUrl + ogni
+  // codiceEticoArchivio[].pdf. Stesso motivo degli sponsor (vedi commit
+  // sponsor logo restore 10/05/2026).
+  const { _id: rifId, _type: rifType, ...rifFields } = riferimentiOperativi;
+  tx.createIfNotExists({ _id: rifId, _type: rifType, ...rifFields });
+  tx.patch(rifId, (p) => p.set(rifFields));
+  console.log("• Riferimenti operativi preparato (PDF preservato)");
 
   // Teams (creiamo prima — i player + competition ci fanno reference).
   // `currentMainCompetition` punta a competition.{slug} che e' creata
@@ -681,12 +696,17 @@ async function main() {
   });
   console.log(`• ${officials.length} dirigenti preparati`);
 
-  // Sponsor
+  // Sponsor — createIfNotExists + patch SET. NON usiamo createOrReplace
+  // perche' il campo `logo` (asset image) viene caricato manualmente
+  // dall'admin via Studio: con replace lo perderemmo a ogni rilancio del
+  // seed (incidente del 10/05/2026 — fix in commit successivo). Il
+  // pattern qui: crea il documento se non esiste, altrimenti applica
+  // set() solo sui campi anagrafici, preservando logo + eventuali altri
+  // campi aggiunti manualmente.
   for (const s of sponsors) {
     const slug = slugify(s.name);
-    tx.createOrReplace({
-      _id: `sponsor.${slug}`,
-      _type: "sponsor",
+    const _id = `sponsor.${slug}`;
+    const fields = {
       name: s.name,
       tier: s.tier,
       website: s.website,
@@ -694,11 +714,13 @@ async function main() {
       order: s.order,
       partnerBenefit: s.partnerBenefit,
       description: s.description,
-    });
+    };
+    tx.createIfNotExists({ _id, _type: "sponsor", ...fields });
+    tx.patch(_id, (p) => p.set(fields));
   }
   const active = sponsors.filter((s) => s.isActive).length;
   const archived = sponsors.length - active;
-  console.log(`• ${sponsors.length} sponsor preparati (${active} attivi, ${archived} archiviati)`);
+  console.log(`• ${sponsors.length} sponsor preparati (${active} attivi, ${archived} archiviati) — logo preservato`);
 
   // Timeline
   timeline.forEach((t, i) => {
