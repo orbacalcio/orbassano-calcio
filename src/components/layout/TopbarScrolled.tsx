@@ -10,14 +10,21 @@ import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
 
 /**
- * Topbar orizzontale "scrolled" (90px, lg+ only).
+ * Topbar orizzontale "scrolled" (64px, lg+ only).
  *
  * Si attiva quando l'utente scrolla oltre l'hero (heroVisible == false
  * controllato da ClientShell). Layout completo: hamburger + 4 voci nav
  * principali + spacer + logo centrato (absolute) + box sponsor + divider
- * + search. Sostituisce sidebar verticali + Topbar minimale. Stessa
- * altezza della Topbar hero per coerenza durante la transizione e per
- * ospitare i tile main sponsor 196×78 (logo +20% vs marquee in basso).
+ * + search. Sostituisce sidebar verticali + Topbar minimale.
+ *
+ * Altezza fissa h-16: la Topbar HERO si riduce in modo continuo
+ * dall'altezza iniziale h-[90px] a h-16 nei primi 80px di scroll, e a
+ * quel punto la transizione a TopbarScrolled (anch'essa h-16) e' un
+ * fade tra elementi della stessa altezza — niente salto visivo.
+ *
+ * Tile main sponsor compatti (168×48, logo max-h-8) per ridurre
+ * l'ingombro rispetto alla Topbar HERO; il main sponsor "vero" e'
+ * gia' stato visto prominente in cima alla pagina.
  *
  * Mobile (<lg): nascosta. Su mobile la topbar mobile (44px) resta
  * sempre la stessa, con o senza hero in viewport.
@@ -43,7 +50,7 @@ export function TopbarScrolled({
 
   return (
     <header
-      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-[90px] items-center border-b lg:flex"
+      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-16 items-center border-b lg:flex"
       style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra di navigazione"
@@ -93,20 +100,25 @@ export function TopbarScrolled({
         {/* Dx: sponsor + search */}
         <div className="ml-auto flex items-center gap-4">
           {usingFallback ? (
-            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-[78px] items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {FALLBACK_MAIN_SPONSORS.map((s) => (
                 <li
                   key={s.name}
-                  className="font-display text-ink-mid flex h-full items-center px-5 text-[12px] font-semibold tracking-[0.15em] uppercase"
+                  className="font-display text-ink-mid flex h-full items-center px-3 text-[11px] font-semibold tracking-[0.15em] uppercase"
                 >
                   {s.name}
                 </li>
               ))}
             </ul>
           ) : (
-            <ul className="border-border/60 divide-border/60 hidden h-[78px] items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {sponsors.map((s) => (
-                <MainSponsorTile key={s._id} sponsor={s} />
+                <MainSponsorTile
+                  key={s._id}
+                  sponsor={s}
+                  width={168}
+                  logoMaxHeight={32}
+                />
               ))}
             </ul>
           )}

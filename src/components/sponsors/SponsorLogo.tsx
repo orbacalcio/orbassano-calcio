@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/cn";
 
@@ -48,6 +49,8 @@ type Props = {
   height?: number;
   /** Classi sul rendering finale (immagine o span fallback). */
   className?: string;
+  /** Stile inline (utile per altezze dinamiche pilotate da scroll progress). */
+  style?: CSSProperties;
 };
 
 export function SponsorLogo({
@@ -56,6 +59,7 @@ export function SponsorLogo({
   width = 100,
   height = 20,
   className,
+  style,
 }: Props) {
   const src = pickSrc(sponsor, variant);
 
@@ -66,6 +70,7 @@ export function SponsorLogo({
   if (!src) {
     return (
       <span
+        style={style}
         className={cn(
           "font-display text-ink-hi inline-flex items-center text-[11px] font-semibold tracking-[0.15em] uppercase",
           className,
@@ -82,6 +87,7 @@ export function SponsorLogo({
       alt={sponsor.name}
       width={width}
       height={height}
+      style={style}
       className={cn("h-auto w-auto object-contain", className)}
     />
   );

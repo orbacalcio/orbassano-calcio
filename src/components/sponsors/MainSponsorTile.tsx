@@ -5,9 +5,9 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * Singola "tile" sponsor principale per la topbar (hero + scrolled).
  *
  * Razionale:
- * - **Proporzioni fisse**: ogni tile ha lo stesso bounding box
- *   (`w-[168px] h-12`), indipendentemente dalla forma del logo.
- *   Cosi' la barra resta visivamente bilanciata anche se uno
+ * - **Proporzioni fisse**: ogni tile ha lo stesso bounding box (per
+ *   default 196×78 hero, 168×48 scrolled), indipendentemente dalla
+ *   forma del logo. La barra resta visivamente bilanciata anche se uno
  *   sponsor ha logo wide e un altro quadrato.
  * - **Sfondo bianco di default**: i loghi sponsor sono pensati per
  *   stampe su materiale chiaro (maglia, banner stadio). Su navy del
@@ -17,20 +17,26 @@ import type { MainSponsor } from "@/sanity/fetchers";
  *   coerente con il brand kit del singolo sponsor. Il fallback
  *   testuale usa `text-surface-0` per restare leggibile sul bianco.
  *
- * Dimensioni: tile 196×78 (w×h), logo max-h-[72px] (≈ +20% vs i
- * loghi del marquee in homepage che sono 60px). Scelta richiesta dal
- * Direttivo: il main sponsor in alto deve essere visivamente piu'
- * prominente del ticker scorrevole in basso, perche' rappresenta i
- * partner di primo livello (top tier) — ma senza occupare un terzo
- * di viewport in altezza (proporzioni del 10/05/2026 ridotte del 30%).
+ * Hero default: tile 196×78, logo max-h 72px (≈ +20% vs marquee 60px).
+ * Scrolled / shrink-end: tile 168×48, logo max-h 32px (compatto).
  *
- * Larghezza scala linearmente col numero di sponsor (3 = 588px,
- * 4 = 784px). A lg+ ci sta con 3-4 sponsor, a xl+ anche 5, lasciando
- * spazio a divider + search + sidebar 88px.
+ * I valori `width` e `logoMaxHeight` sono passati dal genitore per
+ * permettere lo shrink-on-scroll della Topbar HERO (vedi Topbar.tsx,
+ * useScrollShrink). Default scelti per matchare i valori HERO.
  */
-type Props = { sponsor: MainSponsor };
+type Props = {
+  sponsor: MainSponsor;
+  /** Larghezza tile in px. Default 196 (hero). 168 = compatto/scrolled. */
+  width?: number;
+  /** Altezza max logo in px. Default 72 (hero). 32 = compatto/scrolled. */
+  logoMaxHeight?: number;
+};
 
-export function MainSponsorTile({ sponsor }: Props) {
+export function MainSponsorTile({
+  sponsor,
+  width = 196,
+  logoMaxHeight = 72,
+}: Props) {
   if (!sponsor.website) return null;
   return (
     <li className="flex h-full">
@@ -39,14 +45,16 @@ export function MainSponsorTile({ sponsor }: Props) {
         target="_blank"
         rel="noopener noreferrer sponsored"
         aria-label={`${sponsor.name} (sponsor principale)`}
-        className="flex h-full w-[196px] items-center justify-center bg-white px-5 transition-opacity hover:opacity-90"
+        style={{ width: `${width}px` }}
+        className="flex h-full items-center justify-center bg-white px-5 transition-opacity hover:opacity-90"
       >
         <SponsorLogo
           sponsor={sponsor}
           variant="color"
           width={300}
-          height={72}
-          className="text-surface-0 max-h-[72px] max-w-full object-contain"
+          height={Math.round(logoMaxHeight)}
+          style={{ maxHeight: `${logoMaxHeight}px` }}
+          className="text-surface-0 max-w-full object-contain"
         />
       </a>
     </li>
