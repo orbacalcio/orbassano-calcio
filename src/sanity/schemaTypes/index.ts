@@ -1,9 +1,12 @@
+import { club } from "./club";
 import { clubOfficial } from "./clubOfficial";
+import { competition } from "./competition";
 import { consentLog } from "./consentLog";
 import { facility } from "./facility";
 import { heroSlide } from "./heroSlide";
 import { match } from "./match";
 import { news } from "./news";
+import { opponent } from "./opponent";
 import { player } from "./player";
 import { settings } from "./settings";
 import { sponsor } from "./sponsor";
@@ -20,6 +23,10 @@ export const schemaTypes = [
   player,
   clubOfficial,
   news,
+  // Calendario / risultati: club anagrafica → competition → opponent (join) → match
+  club,
+  competition,
+  opponent,
   match,
   sponsor,
   timelineEvent,
