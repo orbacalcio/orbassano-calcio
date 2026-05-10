@@ -94,6 +94,57 @@ const settings = {
   },
 };
 
+// ---------- RIFERIMENTI OPERATIVI (singleton, Allegato B Codice Etico) ---------------
+// Direttivo a 4 ruoli soli (Presidente, Vice, Segretario, Tesoriere). I
+// `_key` sui membri sono richiesti dagli array Sanity. responsabileSafeguarding
+// e' OGGI vacante (inCarica:false): la pagina /societa/codice-etico mostra
+// il messaggio di transizione e indirizza al Direttivo (art. 3.7 del
+// Codice). Quando il Direttivo nominera' il Responsabile, basta un
+// editing dallo Studio — niente revisione del Codice (art. 12.8).
+const riferimentiOperativi = {
+  _id: "riferimentiOperativi",
+  _type: "riferimentiOperativi",
+  sedeLegale: "Via Ignazio Silone, 4 — 10043 Orbassano (TO)",
+  codiceFiscale: "95634370019",
+  partitaIva: "12100640015",
+  affiliazioneFigc: "710204",
+  emailSegreteria: "info@orbassanocalcio.com",
+  direttivo: [
+    {
+      _key: "direttivo-presidente",
+      _type: "membroDirettivo",
+      ruolo: "Presidente",
+      nome: "Michele Marano",
+    },
+    {
+      _key: "direttivo-vice",
+      _type: "membroDirettivo",
+      ruolo: "Vice-Presidente",
+      nome: "Mario Solej",
+    },
+    {
+      _key: "direttivo-segretario",
+      _type: "membroDirettivo",
+      ruolo: "Segretario",
+      nome: "Dino Cambareri",
+    },
+    {
+      _key: "direttivo-tesoriere",
+      _type: "membroDirettivo",
+      ruolo: "Tesoriere",
+      nome: "Manuele Gallo",
+    },
+  ],
+  responsabileSafeguarding: {
+    inCarica: false,
+  },
+  emailSegnalazioni: "segnalazioni@orbassanocalcio.com",
+  codiceEticoVersione: "1.0",
+  codiceEticoApprovatoIl: "2026-05-10",
+  codiceEticoInVigoreDal: "2026-05-10",
+  ultimoAggiornamento: "2026-05-10T00:00:00Z",
+};
+
 // ---------- TEAMS --------------------------------------------------------------------
 type StaffMember = { role: string; name: string };
 type TeamSeed = {
@@ -501,6 +552,10 @@ async function main() {
   // Settings (singleton)
   tx.createOrReplace(settings);
   console.log("• Settings preparato");
+
+  // Riferimenti operativi (singleton, Allegato B Codice Etico)
+  tx.createOrReplace(riferimentiOperativi);
+  console.log("• Riferimenti operativi preparato");
 
   // Teams (creiamo prima — i player + competition ci fanno reference).
   // `currentMainCompetition` punta a competition.{slug} che e' creata

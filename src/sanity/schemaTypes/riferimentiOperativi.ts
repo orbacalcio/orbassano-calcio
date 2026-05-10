@@ -100,7 +100,7 @@ export const riferimentiOperativi = defineType({
       name: "direttivo",
       title: "Membri del Direttivo",
       description:
-        "Organo statutario (Presidente, Vice, Segretario, Tesoriere, Consiglieri). I dati sono separati dall'organigramma operativo /societa/organigramma per scelta architetturale (vedi spec governance).",
+        "Organo statutario a 4 ruoli: Presidente, Vice-Presidente, Segretario, Tesoriere. I dati sono separati dall'organigramma operativo /societa/organigramma per scelta architetturale (vedi spec governance).",
       type: "array",
       fieldset: "direttivoFs",
       of: [
@@ -119,7 +119,6 @@ export const riferimentiOperativi = defineType({
                   { title: "Vice-Presidente", value: "Vice-Presidente" },
                   { title: "Segretario", value: "Segretario" },
                   { title: "Tesoriere", value: "Tesoriere" },
-                  { title: "Consigliere", value: "Consigliere" },
                 ],
                 layout: "dropdown",
               },
