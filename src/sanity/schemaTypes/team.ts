@@ -52,10 +52,13 @@ export const team = defineType({
     defineField({
       name: "category",
       title: "Categoria",
+      description:
+        "Macro-categoria federale: Prima Squadra (Prima Categoria LND), Juniores (Campionato Juniores LND, U19), Settore Giovanile (SGS, U14-U17), Scuola Calcio (sotto i 12 anni).",
       type: "string",
       options: {
         list: [
           { title: "Prima Squadra", value: "Prima Squadra" },
+          { title: "Juniores", value: "Juniores" },
           { title: "Settore Giovanile", value: "Settore Giovanile" },
           { title: "Scuola Calcio", value: "Scuola Calcio" },
         ],

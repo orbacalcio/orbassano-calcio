@@ -99,7 +99,7 @@ type StaffMember = { role: string; name: string };
 type TeamSeed = {
   slugSrc: string;
   name: string;
-  category: "Prima Squadra" | "Settore Giovanile" | "Scuola Calcio";
+  category: "Prima Squadra" | "Juniores" | "Settore Giovanile" | "Scuola Calcio";
   subcategory?: string;
   season: string;
   league?: string;
@@ -133,12 +133,23 @@ const teams: TeamSeed[] = [
     ],
   },
   {
+    slugSrc: "under-19",
+    name: "Under 19",
+    category: "Juniores",
+    subcategory: "Juniores Under 19",
+    season: "2026/2027",
+    league: "Campionato Juniores",
+    group: "",
+    order: 1,
+    staff: [],
+  },
+  {
     slugSrc: "under-17",
     name: "Under 17",
     category: "Settore Giovanile",
     subcategory: "Allievi U17",
     season: "2026/2027",
-    order: 1,
+    order: 2,
     staff: [
       { role: "Mister", name: "Emanuele Strazzo" },
       { role: "Dirigente accompagnatore", name: "Lino Decorato" },
@@ -152,7 +163,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Allievi U16",
     season: "2026/2027",
-    order: 2,
+    order: 3,
     staff: [
       { role: "Mister", name: "Giuseppe Bove" },
       { role: "Dirigente accompagnatore", name: "Sonia Orecchio" },
@@ -165,7 +176,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U15",
     season: "2026/2027",
-    order: 3,
+    order: 4,
     staff: [
       { role: "Mister", name: "Fabio Tessarin" },
       { role: "Dirigente allenatore", name: "Luca Sciarra" },
@@ -180,7 +191,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U14",
     season: "2026/2027",
-    order: 4,
+    order: 5,
     staff: [
       { role: "Mister", name: "Fabio Clames" },
       { role: "Dirigente allenatore", name: "Michele Viotti" },
@@ -194,7 +205,7 @@ const teams: TeamSeed[] = [
     category: "Scuola Calcio",
     subcategory: "Piccoli Amici / Primi Calci / Pulcini / Esordienti",
     season: "2026/2027",
-    order: 5,
+    order: 6,
     staff: [],
     isActive: false, // Scuola Calcio temporaneamente non attiva nel sito
   },

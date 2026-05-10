@@ -53,6 +53,7 @@ export async function fetchMainSponsors(): Promise<MainSponsor[]> {
 
 export type TeamCategory =
   | "Prima Squadra"
+  | "Juniores"
   | "Settore Giovanile"
   | "Scuola Calcio";
 
