@@ -124,9 +124,8 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .title("Squadre")
                 .icon(Users)
                 .child(
-                  S.documentList()
+                  S.documentTypeList("team")
                     .title("Squadre")
-                    .schemaType("team")
                     .defaultOrdering([{ field: "order", direction: "asc" }]),
                 ),
               S.listItem()
@@ -163,9 +162,8 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         .title("Club avversari")
         .icon(Shield)
         .child(
-          S.documentList()
+          S.documentTypeList("club")
             .title("Club avversari (anagrafica)")
-            .schemaType("club")
             .defaultOrdering([{ field: "name", direction: "asc" }]),
         ),
 
