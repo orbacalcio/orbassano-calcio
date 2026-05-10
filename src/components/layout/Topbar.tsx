@@ -44,13 +44,17 @@ export function Topbar({
   return (
     <header
       className={cn(
-        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-[90px] border-b backdrop-blur-md lg:flex",
+        // In modalita' hero le sidebar verticali (SidebarLeft 88px,
+        // SidebarRight 80px) sono visibili e statiche. La topbar non
+        // deve sovrapporvisi: parte da left-[88px] e finisce a
+        // right-[80px], non e' piu' inset-x-0 a tutto schermo.
+        "border-border/50 bg-surface-0/70 fixed top-0 hidden h-[90px] border-b backdrop-blur-md lg:left-[88px] lg:right-[80px] lg:flex",
       )}
       style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra superiore con sponsor principali"
     >
-      <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
+      <div className="flex w-full items-center justify-end gap-4 px-4">
         {usingFallback ? (
           <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-[78px] items-center divide-x overflow-hidden rounded-md border">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
