@@ -27,10 +27,14 @@ import { TopbarScrolled } from "./TopbarScrolled";
  *    hamburger TopbarScrolled).
  * 3. Switch animato sidebar verticali (heroVisible) <-> TopbarScrolled
  *    (!heroVisible) via Framer Motion, 450ms con curva cubic-bezier
- *    "standard" Material (0.4, 0, 0.2, 1). Crossfade su opacity +
- *    micro-slide verticale (-8px) sulla TopbarScrolled per dare il
- *    senso di "discesa" naturale invece di un fade piatto. Le due
- *    barre restano SEMPRE montate per evitare flash al cambio.
+ *    "standard" Material (0.4, 0, 0.2, 1). Crossfade SOLO opacity:
+ *    Topbar HERO e TopbarScrolled hanno geometria identica (h-[90px]
+ *    + lg:left-[88px] lg:right-[80px]), quindi il fade tra le due
+ *    barre e' percettivamente perfetto, niente translate o
+ *    "saltino" laterale. Le sidebar verticali svaniscono insieme
+ *    alla Topbar HERO; i loro 88+80px laterali vuoti restano
+ *    coperti dal bg-surface-0 navy continuo del body. Le due barre
+ *    restano SEMPRE montate per evitare flash al cambio.
  */
 export function ClientShell({
   sponsors,
@@ -105,15 +109,14 @@ export function ClientShell({
         <SidebarRight />
       </motion.div>
 
-      {/* Scrolled state (oltre hero): topbar orizzontale full.
-          Micro-slide verticale (-8px → 0) per dare profondita' al
-          crossfade: la barra "scende" sull'utente invece di apparire
-          dal nulla. Reduced motion -> niente translate. */}
+      {/* Scrolled state (oltre hero): topbar orizzontale.
+          Stessa geometria della HERO (h-[90px] + lg:left-[88px]
+          lg:right-[80px]), quindi il crossfade e' solo opacity —
+          niente translate, niente "saltino" durante il fade. */}
       <motion.div
         initial={false}
         animate={{
           opacity: heroVisible ? 0 : 1,
-          y: reduced ? 0 : heroVisible ? -8 : 0,
           pointerEvents: heroVisible ? "none" : "auto",
         }}
         transition={transition}

@@ -17,10 +17,13 @@ import { sidebarMainItems } from "./SidebarLeft.items";
  * principali + spacer + logo centrato (absolute) + box sponsor + divider
  * + search. Sostituisce sidebar verticali + Topbar minimale.
  *
- * Altezza h-[90px] uguale alla Topbar HERO: il crossfade e' solo
- * opacity tra elementi geometricamente identici, niente salto visivo
- * durante lo scroll (lesson learned dallo shrink animato precedente,
- * che faceva uno scatto sgradevole nei primi 80px).
+ * Geometria identica alla Topbar HERO: h-[90px], lg:left-[88px],
+ * lg:right-[80px]. Il crossfade e' solo opacity tra elementi
+ * sovrapposti perfettamente — niente salto visivo durante lo scroll
+ * (lesson learned: con `inset-x-0` la barra sembrava "allargarsi"
+ * lateralmente al fade in, lo shrink animato faceva uno scatto in
+ * altezza; entrambe rotte). I 88+80px ai lati rimangono coperti
+ * dal bg-surface-0 navy del body, niente vuoto visibile.
  *
  * Tile main sponsor compatti (168×48, logo max-h-8) per ridurre
  * l'ingombro rispetto alla Topbar HERO che mostra i tile pieni
@@ -50,7 +53,7 @@ export function TopbarScrolled({
 
   return (
     <header
-      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-[90px] items-center border-b lg:flex"
+      className="bg-surface-0 border-border/50 fixed top-0 hidden h-[90px] items-center border-b lg:left-[88px] lg:right-[80px] lg:flex"
       style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra di navigazione"
