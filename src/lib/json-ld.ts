@@ -48,16 +48,20 @@ export function buildOrganizationLd() {
 }
 
 export function buildSportsTeamLd(opts?: {
+  slug?: string;
+  name?: string;
   season?: string | null;
   league?: string | null;
 }) {
+  const slug = opts?.slug ?? "prima-squadra";
+  const name = opts?.name ?? "Prima Squadra A.S.D. Orbassano Calcio";
   return {
     "@context": "https://schema.org",
     "@type": "SportsTeam",
-    "@id": `${SITE_URL}/squadre/prima-squadra#team`,
-    name: "Prima Squadra A.S.D. Orbassano Calcio",
+    "@id": `${SITE_URL}/squadre/${slug}#team`,
+    name,
     sport: "Calcio",
-    url: `${SITE_URL}/squadre/prima-squadra`,
+    url: `${SITE_URL}/squadre/${slug}`,
     logo: `${SITE_URL}/Logo_Orbassano_2K.png`,
     parentOrganization: { "@id": `${SITE_URL}#org` },
     location: {
@@ -81,6 +85,159 @@ export function buildSportsTeamLd(opts?: {
       : {}),
     ...(opts?.season ? { description: `Stagione ${opts.season}` } : {}),
   };
+}
+
+/**
+ * SportsEvent schema.org per una singola partita.
+ *
+ * - Per lo status finished aggiunge un block `result` con il punteggio
+ * - Per postponed/cancelled valorizza `eventStatus` corrispondente
+ * - awayTeam ha `@id` solo se opponentClub.websiteUrl valorizzato
+ *   (no @id fake — vedi spec governance/calendar)
+ *
+ * Output unita' single. La pagina calendario chiama buildSportsEventListLd
+ * per costruire l'array di tutti i match della stagione.
+ */
+type SportsEventOpts = {
+  match: {
+    _id: string;
+    date: string;
+    matchday: number | null;
+    home: boolean;
+    venue: string | null;
+    status:
+      | "scheduled"
+      | "live"
+      | "finished"
+      | "postponed"
+      | "cancelled"
+      | null;
+    scoreHome: number | null;
+    scoreAway: number | null;
+    isOpponentTbd: boolean | null;
+    isDateTbd: boolean | null;
+  };
+  ourTeamSlug: string;
+  ourTeamName: string;
+  competition: {
+    shortName: string | null;
+    season: string | null;
+    group: string | null;
+  } | null;
+  opponentName: string | null;
+  opponentWebsite: string | null;
+  venueAddress?: string | null;
+};
+
+const STATUS_TO_LD: Record<
+  NonNullable<SportsEventOpts["match"]["status"]>,
+  string
+> = {
+  scheduled: "https://schema.org/EventScheduled",
+  live: "https://schema.org/EventScheduled",
+  finished: "https://schema.org/EventScheduled",
+  postponed: "https://schema.org/EventPostponed",
+  cancelled: "https://schema.org/EventCancelled",
+};
+
+export function buildSportsEventLd(opts: SportsEventOpts) {
+  const { match, ourTeamSlug, ourTeamName, competition, opponentName, opponentWebsite } = opts;
+  const opp = match.isOpponentTbd ? "Avversario da definire" : (opponentName ?? "Avversario");
+  const homeTeamName = match.home ? ourTeamName : opp;
+  const awayTeamName = match.home ? opp : ourTeamName;
+
+  const result =
+    match.status === "finished" &&
+    typeof match.scoreHome === "number" &&
+    typeof match.scoreAway === "number"
+      ? {
+          result: {
+            "@type": "PropertyValue",
+            name: "Risultato finale",
+            value: `${match.scoreHome}-${match.scoreAway}`,
+          },
+        }
+      : {};
+
+  const description = [
+    competition?.shortName,
+    competition?.group ? `Girone ${competition.group}` : null,
+    match.matchday ? `Giornata ${match.matchday}` : null,
+    competition?.season,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    "@id": `${SITE_URL}/squadre/${ourTeamSlug}/calendario#match-${match._id}`,
+    name: `${homeTeamName} vs ${awayTeamName}`,
+    description: description || undefined,
+    startDate: match.date,
+    eventStatus: STATUS_TO_LD[match.status ?? "scheduled"],
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    sport: "Calcio",
+    location: {
+      "@type": "Place",
+      name: match.venue ?? (match.home ? "Centro Sportivo Aldo Porta" : opp),
+      ...(opts.venueAddress
+        ? {
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: opts.venueAddress,
+              addressCountry: "IT",
+            },
+          }
+        : match.home
+          ? {
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Via Ignazio Silone, 4",
+                addressLocality: "Orbassano",
+                postalCode: "10043",
+                addressCountry: "IT",
+              },
+            }
+          : {}),
+    },
+    homeTeam: {
+      "@type": "SportsTeam",
+      ...(match.home
+        ? { "@id": `${SITE_URL}/squadre/${ourTeamSlug}#team`, name: ourTeamName }
+        : {
+            name: opp,
+            ...(opponentWebsite ? { "@id": `${opponentWebsite}#team` } : {}),
+          }),
+    },
+    awayTeam: {
+      "@type": "SportsTeam",
+      ...(match.home
+        ? {
+            name: opp,
+            ...(opponentWebsite ? { "@id": `${opponentWebsite}#team` } : {}),
+          }
+        : { "@id": `${SITE_URL}/squadre/${ourTeamSlug}#team`, name: ourTeamName }),
+    },
+    ...(competition?.shortName
+      ? {
+          organizer: {
+            "@type": "SportsOrganization",
+            name: competition.shortName,
+          },
+        }
+      : {}),
+    ...result,
+  };
+}
+
+/**
+ * Wrapper per renderizzare un array di SportsEvent in una sola
+ * <JsonLd /> invece di N script separati. Usato dalla pagina
+ * /squadre/[slug]/calendario.
+ */
+export function buildSportsEventListLd(events: SportsEventOpts[]) {
+  return events.map(buildSportsEventLd);
 }
 
 export function buildWebsiteLd() {
