@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import type { MainSponsor } from "@/sanity/fetchers";
 
@@ -30,12 +31,16 @@ type Props = {
   width?: number;
   /** Altezza max logo in px. Default 72 (hero). 32 = compatto/scrolled. */
   logoMaxHeight?: number;
+  /** Stile transition aggiuntivo (es. "width 450ms cubic-bezier..."),
+   *  passato dalla Topbar per animare width/maxHeight tra HERO e SCROLLED. */
+  transitionStyle?: CSSProperties;
 };
 
 export function MainSponsorTile({
   sponsor,
   width = 196,
   logoMaxHeight = 72,
+  transitionStyle,
 }: Props) {
   if (!sponsor.website) return null;
   return (
@@ -45,15 +50,15 @@ export function MainSponsorTile({
         target="_blank"
         rel="noopener noreferrer sponsored"
         aria-label={`${sponsor.name} (sponsor principale)`}
-        style={{ width: `${width}px` }}
-        className="flex h-full items-center justify-center bg-white px-5 transition-opacity hover:opacity-90"
+        style={{ width: `${width}px`, ...transitionStyle }}
+        className="flex h-full items-center justify-center bg-white px-5 hover:opacity-90"
       >
         <SponsorLogo
           sponsor={sponsor}
           variant="color"
           width={300}
           height={Math.round(logoMaxHeight)}
-          style={{ maxHeight: `${logoMaxHeight}px` }}
+          style={{ maxHeight: `${logoMaxHeight}px`, ...transitionStyle }}
           className="text-surface-0 max-w-full object-contain"
         />
       </a>
