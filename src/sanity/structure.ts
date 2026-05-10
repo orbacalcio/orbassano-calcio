@@ -11,6 +11,7 @@ import {
   Milestone,
   Newspaper,
   Shield,
+  ShieldAlert,
   ShieldCheck,
   Swords,
   Trophy,
@@ -224,6 +225,9 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("trasparenza5x1000")
                 .title("Rendicontazione 5×1000")
                 .icon(Coins),
+              S.documentTypeListItem("segnalazione")
+                .title("Segnalazioni (RISERVATE)")
+                .icon(ShieldAlert),
             ]),
         ),
       S.documentTypeListItem("news").title("News").icon(Newspaper),

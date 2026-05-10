@@ -9,6 +9,7 @@ import { news } from "./news";
 import { opponent } from "./opponent";
 import { player } from "./player";
 import { riferimentiOperativi } from "./riferimentiOperativi";
+import { segnalazione } from "./segnalazione";
 import { settings } from "./settings";
 import { sponsor } from "./sponsor";
 import { staffMember, team } from "./team";
@@ -38,4 +39,7 @@ export const schemaTypes = [
   consentLog,
   // Governance & trasparenza (Codice Etico Allegati B/C)
   trasparenza5x1000,
+  // Segnalazioni: schema RISERVATO. Nessuna query GROQ pubblica.
+  // Vedi commento dettagliato in segnalazione.ts.
+  segnalazione,
 ];
