@@ -91,12 +91,27 @@ export const heroSlidesQuery = defineQuery(`
   }
 `);
 
-// Prossima partita per il ticker
+// Prossima partita per il ticker. Aggiornata al nuovo shape post-refactor
+// match: opponent e competition sono ora reference. Cache tag "match".
 export const nextMatchQuery = defineQuery(`
   *[_type == "match" && status == "scheduled" && date > now()]
   | order(date asc)[0]{
-    _id, date, opponent, home, venue,
-    "opponentLogo": opponentLogo.asset->url
+    _id, date, home, venue, status,
+    isOpponentTbd, isClosedDoors, isDateTbd,
+    "competition": competition->{
+      "slug": slug.current,
+      shortName,
+      season,
+      group
+    },
+    "opponent": opponent->{
+      "club": club->{
+        name,
+        shortName,
+        "logo": logo.asset->url,
+        websiteUrl
+      }
+    }
   }
 `);
 

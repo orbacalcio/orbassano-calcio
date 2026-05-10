@@ -4,8 +4,13 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 
 /**
- * 3 card numerate (01/02/03) per le aree calcistiche del club.
- * Hover: la freccia si rivela e l'etichetta numerica diventa oro.
+ * 3 card numerate (01/02/03) per le macro-categorie federali del club:
+ * Prima Categoria → Prima Squadra · Campionato Juniores → Under 19 ·
+ * Settore Giovanile Scolastico → U17/U16/U15/U14.
+ *
+ * La Scuola Calcio (sotto i 12 anni) e' al momento gestita da Sporting
+ * Orbassano e non figura in homepage finche' non rientrera' nel
+ * tesseramento del club.
  */
 const teams = [
   {
@@ -17,17 +22,17 @@ const teams = [
   },
   {
     number: "02",
+    title: "Juniores",
+    description:
+      "Campionato Juniores. Under 19 rossoblù, ultimo gradino prima del salto in Prima Squadra.",
+    href: "/squadre/juniores",
+  },
+  {
+    number: "03",
     title: "Settore Giovanile",
     description:
       "Quattro categorie, dall'Under 14 all'Under 17. Mister, dirigenti, accompagnatori. Da qui passa il futuro del club.",
     href: "/squadre/settore-giovanile",
-  },
-  {
-    number: "03",
-    title: "Scuola Calcio",
-    description:
-      "Dai 5 anni in su, gestita da Sporting Orbassano. Piccoli Amici, Primi Calci, Pulcini, Esordienti. La famiglia che si allarga.",
-    href: "/squadre/scuola-calcio",
   },
 ] as const;
 
@@ -37,7 +42,7 @@ export function TeamsCards() {
       <Section
         eyebrow="Le squadre"
         title="Tre realtà, una sola identità"
-        subtitle="Dalla Prima Squadra ai Piccoli Amici, passando per il Settore Giovanile: il rossoblù è uguale per tutti."
+        subtitle="Dalla Prima Squadra al Settore Giovanile, passando per la Juniores Under 19: il rossoblù è uguale per tutti."
       >
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
           {teams.map((t) => (

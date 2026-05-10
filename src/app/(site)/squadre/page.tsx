@@ -7,14 +7,15 @@ import { fetchTeamsList, type TeamSummary } from "@/sanity/fetchers";
 export const metadata: Metadata = {
   title: "Squadre",
   description:
-    "Le squadre di ASD Orbassano Calcio: Prima Squadra e Settore Giovanile (U17, U16, U15, U14).",
+    "Le squadre di ASD Orbassano Calcio: Prima Squadra (Prima Categoria), Juniores Under 19 e Settore Giovanile (U17, U16, U15, U14).",
 };
 
-// Le sezioni iterate dinamicamente: la query teamsListQuery filtra
-// `isActive != false`, quindi le categorie senza squadre attive
+// Le 3 macro-categorie federali del club. La query teamsListQuery
+// filtra `isActive != false`, quindi le sezioni senza squadre attive
 // vengono saltate dal `if (items.length === 0) return null` sotto.
-// Le tre categorie restano elencate qui per supporto futuro (basta
-// riattivare le squadre dello Studio).
+// La Scuola Calcio non e' in elenco: oggi e' gestita da Sporting
+// Orbassano e fuori dal tesseramento del club. Quando rientrera',
+// basta aggiungere la sezione qui (e riattivare la squadra in Studio).
 const SECTIONS: Array<{
   category: TeamSummary["category"];
   number: string;
@@ -28,16 +29,16 @@ const SECTIONS: Array<{
     cols: "lg:grid-cols-3",
   },
   {
-    category: "Settore Giovanile",
+    category: "Juniores",
     number: "02",
-    eyebrow: "02 — Da qui passa il futuro",
-    cols: "sm:grid-cols-2 lg:grid-cols-4",
+    eyebrow: "02 — Il ponte verso il senior",
+    cols: "lg:grid-cols-3",
   },
   {
-    category: "Scuola Calcio",
+    category: "Settore Giovanile",
     number: "03",
-    eyebrow: "03 — Si comincia da qui",
-    cols: "lg:grid-cols-3",
+    eyebrow: "03 — Da qui passa il futuro",
+    cols: "sm:grid-cols-2 lg:grid-cols-4",
   },
 ];
 

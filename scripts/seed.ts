@@ -99,7 +99,7 @@ type StaffMember = { role: string; name: string };
 type TeamSeed = {
   slugSrc: string;
   name: string;
-  category: "Prima Squadra" | "Settore Giovanile" | "Scuola Calcio";
+  category: "Prima Squadra" | "Juniores" | "Settore Giovanile" | "Scuola Calcio";
   subcategory?: string;
   season: string;
   league?: string;
@@ -108,6 +108,8 @@ type TeamSeed = {
   order: number;
   /** Default true. Disattivare per nascondere la squadra dal sito. */
   isActive?: boolean;
+  /** Slug della competition principale (collegamento bidirezionale). */
+  currentMainCompetitionSlug?: string;
 };
 
 const teams: TeamSeed[] = [
@@ -119,6 +121,7 @@ const teams: TeamSeed[] = [
     league: "Prima Categoria Piemonte VdA",
     group: "",
     order: 0,
+    currentMainCompetitionSlug: "prima-categoria-piemonte-2026-27",
     staff: [
       { role: "Direttore Sportivo", name: "Marco Gnan" },
       { role: "Direttore Tecnico", name: "Riccardo Maino" },
@@ -130,12 +133,23 @@ const teams: TeamSeed[] = [
     ],
   },
   {
+    slugSrc: "juniores",
+    name: "Juniores",
+    category: "Juniores",
+    subcategory: "Under 19",
+    season: "2026/2027",
+    league: "Campionato Juniores",
+    group: "",
+    order: 1,
+    staff: [],
+  },
+  {
     slugSrc: "under-17",
     name: "Under 17",
     category: "Settore Giovanile",
     subcategory: "Allievi U17",
     season: "2026/2027",
-    order: 1,
+    order: 2,
     staff: [
       { role: "Mister", name: "Emanuele Strazzo" },
       { role: "Dirigente accompagnatore", name: "Lino Decorato" },
@@ -149,7 +163,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Allievi U16",
     season: "2026/2027",
-    order: 2,
+    order: 3,
     staff: [
       { role: "Mister", name: "Giuseppe Bove" },
       { role: "Dirigente accompagnatore", name: "Sonia Orecchio" },
@@ -162,7 +176,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U15",
     season: "2026/2027",
-    order: 3,
+    order: 4,
     staff: [
       { role: "Mister", name: "Fabio Tessarin" },
       { role: "Dirigente allenatore", name: "Luca Sciarra" },
@@ -177,7 +191,7 @@ const teams: TeamSeed[] = [
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U14",
     season: "2026/2027",
-    order: 4,
+    order: 5,
     staff: [
       { role: "Mister", name: "Fabio Clames" },
       { role: "Dirigente allenatore", name: "Michele Viotti" },
@@ -191,7 +205,7 @@ const teams: TeamSeed[] = [
     category: "Scuola Calcio",
     subcategory: "Piccoli Amici / Primi Calci / Pulcini / Esordienti",
     season: "2026/2027",
-    order: 5,
+    order: 6,
     staff: [],
     isActive: false, // Scuola Calcio temporaneamente non attiva nel sito
   },
@@ -341,6 +355,87 @@ const timeline: TimelineSeed[] = [
   { year: 2022, title: "Rifondazione: torna A.S.D. Orbassano Calcio", category: "Rifondazione", isHighlight: true, description: "Una nuova cordata rifonda il club riavvicinandolo alla denominazione storica." },
 ];
 
+// ---------- CLUB AVVERSARI (anagrafica) ---------------------------------------------
+// Esempio template: l'admin sostituira' con i club reali del girone
+// quando la LND comunichera' gli accoppiamenti (tipicamente fine agosto).
+type ClubSeed = {
+  slugSrc: string;
+  name: string;
+  shortName: string;
+  isActive: boolean;
+};
+
+const clubs: ClubSeed[] = [
+  {
+    slugSrc: "esempio-calcio-1965",
+    name: "A.S.D. Esempio Calcio 1965",
+    shortName: "Esempio",
+    isActive: true,
+  },
+];
+
+// ---------- COMPETIZIONI 2026/27 -----------------------------------------------------
+// Una competition per la Prima Squadra (Prima Categoria). Quando la
+// federazione assegnera' il girone, l'admin aggiornera' il campo `group`
+// dallo Studio. Coppe/amichevoli vanno aggiunte come competition
+// separate (category: cup / friendly).
+type CompetitionSeed = {
+  slugSrc: string;
+  name: string;
+  shortName: string;
+  season: string;
+  category: "championship" | "cup" | "tournament" | "playoff" | "friendly";
+  targetTeamSlug: string;
+  federation: "figc-lnd" | "figc-sgs" | "private";
+  group?: string;
+  externalRankingUrl?: string;
+  externalCalendarUrl?: string;
+  defaultReportLink?: string;
+  order: number;
+  isActive: boolean;
+};
+
+const competitions: CompetitionSeed[] = [
+  {
+    slugSrc: "prima-categoria-piemonte-2026-27",
+    name: "Prima Categoria Piemonte VdA 2026/27",
+    shortName: "Prima Categoria",
+    season: "2026/2027",
+    category: "championship",
+    targetTeamSlug: "prima-squadra",
+    federation: "figc-lnd",
+    group: "", // TBD fino a comunicazione LND
+    externalRankingUrl: "https://www.sprintesport.it/sezioni/119/classifiche",
+    externalCalendarUrl: "https://www.sprintesport.it/sezioni/121/calendario",
+    // Lasciato vuoto per ora: l'admin lo valorizza con la pagina
+    // Tuttocampo del girone quando la LND ufficializza gli accoppiamenti
+    // (es. https://www.tuttocampo.it/Piemonte/PrimaCategoria/GironeX).
+    // Diventa il default delle MatchCard quando match.reportLink e' vuoto.
+    defaultReportLink: undefined,
+    order: 0,
+    isActive: true,
+  },
+];
+
+// ---------- AVVERSARI (join club ↔ competition) -------------------------------------
+type OpponentSeed = {
+  slugSrc: string;
+  clubSlug: string;
+  competitionSlug: string;
+  notes?: string;
+  isActive: boolean;
+};
+
+const opponents: OpponentSeed[] = [
+  {
+    slugSrc: "esempio-prima-categoria-2026-27",
+    clubSlug: "esempio-calcio-1965",
+    competitionSlug: "prima-categoria-piemonte-2026-27",
+    notes: "Esempio template: sostituire con i club reali del girone.",
+    isActive: true,
+  },
+];
+
 // ---------- IMPIANTI -----------------------------------------------------------------
 const facilities = [
   {
@@ -373,9 +468,33 @@ const facilities = [
 
 // ---------- ESECUZIONE ---------------------------------------------------------------
 async function main() {
+  const resetMatches = process.argv.includes("--reset-matches");
+
   console.log(
     `Seed Sanity → projectId=${projectId} dataset=${dataset}\n`,
   );
+
+  // --reset-matches: cancella tutti i match esistenti prima del re-seed.
+  // Utile dopo refactor schema match (M5a) per eliminare doc che usano
+  // i vecchi campi opponent stringa + opponentLogo image. Esegue prima
+  // del transaction commit cosi' un eventuale fallimento non lascia
+  // stati ibridi.
+  if (resetMatches) {
+    const existingMatchIds = await client.fetch<string[]>(
+      '*[_type == "match"]._id',
+    );
+    if (existingMatchIds.length > 0) {
+      console.log(
+        `Reset match attivo → cancellazione di ${existingMatchIds.length} match esistenti…`,
+      );
+      const deleteTx = client.transaction();
+      for (const id of existingMatchIds) deleteTx.delete(id);
+      await deleteTx.commit();
+      console.log(`✓ ${existingMatchIds.length} match cancellati.\n`);
+    } else {
+      console.log("Reset match attivo, ma nessun match esistente da cancellare.\n");
+    }
+  }
 
   const tx = client.transaction();
 
@@ -383,7 +502,10 @@ async function main() {
   tx.createOrReplace(settings);
   console.log("• Settings preparato");
 
-  // Teams (creiamo prima — i player ci fanno reference)
+  // Teams (creiamo prima — i player + competition ci fanno reference).
+  // `currentMainCompetition` punta a competition.{slug} che e' creata
+  // piu' avanti nella stessa transaction: Sanity gestisce il riferimento
+  // intra-transaction senza bisogno di ordinamento esplicito.
   for (const t of teams) {
     const _id = `team.${t.slugSrc}`;
     tx.createOrReplace({
@@ -404,9 +526,71 @@ async function main() {
         role: s.role,
         name: s.name,
       })),
+      ...(t.currentMainCompetitionSlug
+        ? {
+            currentMainCompetition: {
+              _type: "reference",
+              _ref: `competition.${t.currentMainCompetitionSlug}`,
+            },
+          }
+        : {}),
     });
   }
   console.log(`• ${teams.length} squadre preparate`);
+
+  // Club avversari (anagrafica)
+  for (const c of clubs) {
+    tx.createOrReplace({
+      _id: `club.${c.slugSrc}`,
+      _type: "club",
+      name: c.name,
+      shortName: c.shortName,
+      slug: { _type: "slug", current: c.slugSrc },
+      isActive: c.isActive,
+    });
+  }
+  console.log(`• ${clubs.length} club avversari preparati (template di esempio)`);
+
+  // Competizioni (referenziano team gia' nella transaction)
+  for (const c of competitions) {
+    tx.createOrReplace({
+      _id: `competition.${c.slugSrc}`,
+      _type: "competition",
+      name: c.name,
+      shortName: c.shortName,
+      slug: { _type: "slug", current: c.slugSrc },
+      season: c.season,
+      category: c.category,
+      targetTeam: {
+        _type: "reference",
+        _ref: `team.${c.targetTeamSlug}`,
+      },
+      federation: c.federation,
+      group: c.group,
+      externalRankingUrl: c.externalRankingUrl,
+      externalCalendarUrl: c.externalCalendarUrl,
+      defaultReportLink: c.defaultReportLink,
+      order: c.order,
+      isActive: c.isActive,
+    });
+  }
+  console.log(`• ${competitions.length} competizioni preparate`);
+
+  // Avversari (join club ↔ competition)
+  for (const o of opponents) {
+    tx.createOrReplace({
+      _id: `opponent.${o.slugSrc}`,
+      _type: "opponent",
+      club: { _type: "reference", _ref: `club.${o.clubSlug}` },
+      competition: {
+        _type: "reference",
+        _ref: `competition.${o.competitionSlug}`,
+      },
+      notes: o.notes,
+      isActive: o.isActive,
+    });
+  }
+  console.log(`• ${opponents.length} avversari preparati`);
 
   // Players (rosa prima squadra)
   for (const p of firstTeamRoster) {

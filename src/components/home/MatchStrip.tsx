@@ -14,10 +14,26 @@ import { Container } from "@/components/ui/Container";
 type NextMatch = {
   _id: string;
   date: string;
-  opponent: string;
   home: boolean;
   venue: string | null;
-  opponentLogo: string | null;
+  status: "scheduled" | "live" | "finished" | "postponed" | "cancelled" | null;
+  isOpponentTbd: boolean | null;
+  isClosedDoors: boolean | null;
+  isDateTbd: boolean | null;
+  competition: {
+    slug: string | null;
+    shortName: string | null;
+    season: string | null;
+    group: string | null;
+  } | null;
+  opponent: {
+    club: {
+      name: string | null;
+      shortName: string | null;
+      logo: string | null;
+      websiteUrl: string | null;
+    } | null;
+  } | null;
 };
 
 type Settings = {
@@ -65,13 +81,26 @@ function formatDate(iso: string): { day: string; time: string } {
 
 export async function MatchStrip() {
   const { nextMatch, settings } = await fetchData();
-  const league = settings?.currentLeague ?? "Prima Categoria Piemonte VdA";
-  const group = settings?.currentGroup ?? "";
-  const season = "2026/27";
+  // Sorgente di verita': competition.shortName/group/season se presente,
+  // fallback a settings (legacy) finche' l'admin non popola la
+  // currentMainCompetition. La compatibilita' garantisce che il sito
+  // non si rompa anche se il CMS non e' ancora stato aggiornato.
+  const league =
+    nextMatch?.competition?.shortName ??
+    settings?.currentLeague ??
+    "Prima Categoria Piemonte VdA";
+  const group = nextMatch?.competition?.group ?? settings?.currentGroup ?? "";
+  const season = nextMatch?.competition?.season ?? "2026/27";
   const classificaUrl = settings?.sprintsportLinks?.classifica;
   const subtitleParts = [group ? `Girone ${group}` : null, season].filter(
     Boolean,
   );
+
+  const opponentLabel = nextMatch?.isOpponentTbd
+    ? "Da definire"
+    : (nextMatch?.opponent?.club?.shortName ??
+      nextMatch?.opponent?.club?.name ??
+      null);
 
   return (
     <section
@@ -98,16 +127,20 @@ export async function MatchStrip() {
             <CalendarDays size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
             Prossima partita
           </span>
-          {nextMatch ? (
+          {nextMatch && opponentLabel ? (
             <>
               <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-                {nextMatch.home ? "Orbassano" : nextMatch.opponent}
+                {nextMatch.home ? "Orbassano" : opponentLabel}
                 <span className="text-ink-low mx-2">vs</span>
-                {nextMatch.home ? nextMatch.opponent : "Orbassano"}
+                {nextMatch.home ? opponentLabel : "Orbassano"}
               </span>
               <div className="text-ink-mid flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
                 <span className="font-mono">
-                  {formatDate(nextMatch.date).day} · {formatDate(nextMatch.date).time}
+                  {formatDate(nextMatch.date).day}
+                  {" · "}
+                  {nextMatch.isDateTbd
+                    ? "Ora da definire"
+                    : formatDate(nextMatch.date).time}
                 </span>
                 {nextMatch.venue && (
                   <span className="inline-flex items-center gap-1.5">
