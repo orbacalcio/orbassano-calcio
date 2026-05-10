@@ -9,6 +9,55 @@ import { defineQuery } from "next-sanity";
  * /api/revalidate) che corrisponde al `_type` del document principale.
  */
 
+// Riferimenti operativi (Codice Etico Allegato B) - singleton.
+// NB: NON include alcun campo del singleton "segnalazione" (privato,
+// mai esposto pubblicamente). Vedi commento in segnalazione.ts.
+export const riferimentiOperativiQuery = defineQuery(`
+  *[_type == "riferimentiOperativi"][0]{
+    sedeLegale,
+    codiceFiscale,
+    partitaIva,
+    affiliazioneFigc,
+    emailSegreteria,
+    "direttivo": direttivo[]{
+      ruolo,
+      nome,
+      email,
+      delega
+    },
+    responsabileSafeguarding,
+    referenteData,
+    responsabileGiovanile,
+    responsabilePrimaSquadra,
+    emailSegnalazioni,
+    codiceEticoVersione,
+    codiceEticoApprovatoIl,
+    codiceEticoInVigoreDal,
+    "codiceEticoPdfUrl": codiceEticoPdfUrl.asset->url,
+    "codiceEticoArchivio": codiceEticoArchivio[]{
+      versione,
+      approvatoIl,
+      sostituitoIl,
+      "pdf": pdf.asset->url,
+      note
+    },
+    ultimoAggiornamento
+  }
+`);
+
+// Rendicontazione 5x1000 - tutti gli anni, ordinati discendenti.
+export const trasparenza5x1000Query = defineQuery(`
+  *[_type == "trasparenza5x1000"] | order(anno desc){
+    _id,
+    anno,
+    importoRicevuto,
+    numeroFirme,
+    "destinazione": destinazione[]{ voce, importo, descrizione },
+    "documentazione": documentazione[]{ "url": asset->url },
+    note
+  }
+`);
+
 // Settings globali (singleton)
 export const settingsQuery = defineQuery(`
   *[_type == "settings"][0]{

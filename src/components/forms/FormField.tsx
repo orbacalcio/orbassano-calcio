@@ -100,6 +100,116 @@ export function TextareaField({
   );
 }
 
+/**
+ * Singola scelta da una lista (radio group). Tutti i radio condividono
+ * lo stesso `name`, quindi `formData.get(name)` ritorna il valore selezionato.
+ * Usato per ruolo segnalante / giaSegnalato yes-no nel WhistleblowingForm.
+ */
+export function RadioField({
+  id,
+  label,
+  required,
+  helperText,
+  error,
+  className,
+  options,
+  defaultValue,
+}: BaseProps & {
+  options: ReadonlyArray<{ value: string; label: string }>;
+  defaultValue?: string;
+}) {
+  return (
+    <fieldset
+      className={cn("flex flex-col gap-2", className)}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error ? `${id}-error` : undefined}
+    >
+      <legend className={labelClass}>
+        {label}
+        {required && <span className="text-brand-red ml-1">*</span>}
+      </legend>
+      <div className="flex flex-col gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className="text-ink-mid hover:text-ink-hi flex items-start gap-3 text-sm leading-relaxed transition-colors"
+          >
+            <input
+              type="radio"
+              name={id}
+              value={opt.value}
+              required={required}
+              defaultChecked={defaultValue === opt.value}
+              className="border-border bg-surface-2 accent-brand-gold mt-1 h-4 w-4 shrink-0 border"
+            />
+            <span>{opt.label}</span>
+          </label>
+        ))}
+      </div>
+      {error ? (
+        <span id={`${id}-error`} className="text-brand-red text-xs">
+          {error}
+        </span>
+      ) : helperText ? (
+        <span className="text-ink-low text-xs">{helperText}</span>
+      ) : null}
+    </fieldset>
+  );
+}
+
+/**
+ * Lista di checkbox a multipla scelta. Output via FormData: piu' valori
+ * con la stessa name `${id}` (e.g. "tipologie") - leggibili lato server
+ * con `formData.getAll(id)`.
+ */
+export function MultiCheckboxField({
+  id,
+  label,
+  required,
+  helperText,
+  error,
+  className,
+  options,
+}: BaseProps & {
+  options: ReadonlyArray<{ value: string; label: string }>;
+}) {
+  return (
+    <fieldset
+      className={cn("flex flex-col gap-2", className)}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error ? `${id}-error` : undefined}
+    >
+      <legend className={labelClass}>
+        {label}
+        {required && <span className="text-brand-red ml-1">*</span>}
+      </legend>
+      <div className="flex flex-col gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className="text-ink-mid hover:text-ink-hi flex items-start gap-3 text-sm leading-relaxed transition-colors"
+          >
+            <input
+              type="checkbox"
+              name={id}
+              value={opt.value}
+              className="border-border bg-surface-2 accent-brand-gold mt-1 h-4 w-4 shrink-0 rounded border"
+            />
+            <span>{opt.label}</span>
+          </label>
+        ))}
+      </div>
+      {error ? (
+        <span id={`${id}-error`} className="text-brand-red text-xs">
+          {error}
+        </span>
+      ) : helperText ? (
+        <span className="text-ink-low text-xs">{helperText}</span>
+      ) : null}
+    </fieldset>
+  );
+}
+
 export function CheckboxField({
   id,
   label,

@@ -4,6 +4,7 @@
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export function isEmail(v: string): boolean {
   return EMAIL_RE.test(v.trim());
@@ -15,6 +16,24 @@ export function trimToMax(v: string, max: number): string {
 
 export function nonEmpty(v: string): boolean {
   return v.trim().length > 0;
+}
+
+export function minLength(v: string, n: number): boolean {
+  return v.trim().length >= n;
+}
+
+export function isInList<T extends string>(v: string, list: readonly T[]): v is T {
+  return (list as readonly string[]).includes(v);
+}
+
+/**
+ * Verifica formato ISO date "YYYY-MM-DD" + valida che sia una data
+ * reale (es. 2026-13-40 fallisce).
+ */
+export function isIsoDate(v: string): boolean {
+  if (!ISO_DATE_RE.test(v)) return false;
+  const d = new Date(v);
+  return !Number.isNaN(d.getTime()) && d.toISOString().startsWith(v);
 }
 
 /**

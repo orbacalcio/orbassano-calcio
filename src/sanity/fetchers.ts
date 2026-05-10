@@ -13,11 +13,13 @@ import {
   mainSponsorsQuery,
   newsBySlugQuery,
   playerBySlugQuery,
+  riferimentiOperativiQuery,
   settingsQuery,
   teamBySlugQuery,
   teamsByCategoryQuery,
   teamsListQuery,
   timelineEventsQuery,
+  trasparenza5x1000Query,
 } from "./queries";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -566,5 +568,104 @@ export async function fetchStoryNumbers(): Promise<StoryNumbersContent> {
   } catch (err) {
     console.error("[fetchStoryNumbers]", err);
     return { eyebrow: null, title: null, items: [] };
+  }
+}
+
+// ---------- Governance: Riferimenti operativi (Codice Etico All. B) ----------
+
+export type DirettivoMember = {
+  ruolo:
+    | "Presidente"
+    | "Vice-Presidente"
+    | "Segretario"
+    | "Tesoriere"
+    | "Consigliere"
+    | null;
+  nome: string | null;
+  email: string | null;
+  delega: string | null;
+};
+
+export type RuoloOperativo = {
+  nome: string | null;
+  email: string | null;
+};
+
+export type SafeguardingResponsabile = RuoloOperativo & {
+  inCarica: boolean | null;
+  telefono: string | null;
+};
+
+export type CodiceEticoArchivioEntry = {
+  versione: string | null;
+  approvatoIl: string | null;
+  sostituitoIl: string | null;
+  pdf: string | null;
+  note: string | null;
+};
+
+export type RiferimentiOperativi = {
+  sedeLegale: string | null;
+  codiceFiscale: string | null;
+  partitaIva: string | null;
+  affiliazioneFigc: string | null;
+  emailSegreteria: string | null;
+  direttivo: DirettivoMember[] | null;
+  responsabileSafeguarding: SafeguardingResponsabile | null;
+  referenteData: RuoloOperativo | null;
+  responsabileGiovanile: RuoloOperativo | null;
+  responsabilePrimaSquadra: RuoloOperativo | null;
+  emailSegnalazioni: string | null;
+  codiceEticoVersione: string | null;
+  codiceEticoApprovatoIl: string | null;
+  codiceEticoInVigoreDal: string | null;
+  codiceEticoPdfUrl: string | null;
+  codiceEticoArchivio: CodiceEticoArchivioEntry[] | null;
+  ultimoAggiornamento: string | null;
+};
+
+export async function fetchRiferimentiOperativi(): Promise<RiferimentiOperativi | null> {
+  try {
+    const data = await sanityClient.fetch(
+      riferimentiOperativiQuery,
+      {},
+      { next: { tags: ["riferimentiOperativi"] } },
+    );
+    return (data ?? null) as RiferimentiOperativi | null;
+  } catch (err) {
+    console.error("[fetchRiferimentiOperativi]", err);
+    return null;
+  }
+}
+
+// ---------- Governance: Rendicontazione 5x1000 -------------------------------
+
+export type DestinazioneVoce = {
+  voce: string | null;
+  importo: number | null;
+  descrizione: string | null;
+};
+
+export type Trasparenza5x1000Year = {
+  _id: string;
+  anno: number;
+  importoRicevuto: number | null;
+  numeroFirme: number | null;
+  destinazione: DestinazioneVoce[] | null;
+  documentazione: Array<{ url: string | null }> | null;
+  note: string | null;
+};
+
+export async function fetchTrasparenza5x1000(): Promise<Trasparenza5x1000Year[]> {
+  try {
+    const data = await sanityClient.fetch(
+      trasparenza5x1000Query,
+      {},
+      { next: { tags: ["trasparenza5x1000"] } },
+    );
+    return (data ?? []) as Trasparenza5x1000Year[];
+  } catch (err) {
+    console.error("[fetchTrasparenza5x1000]", err);
+    return [];
   }
 }
