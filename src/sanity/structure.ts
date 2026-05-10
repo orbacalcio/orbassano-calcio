@@ -1,7 +1,9 @@
 import {
   Archive,
+  Briefcase,
   Building2,
   CalendarDays,
+  Coins,
   Cog,
   Handshake,
   Image as ImageIcon,
@@ -27,6 +29,14 @@ import type { StructureBuilder, StructureResolver } from "sanity/structure";
  * Lista squadre hardcoded per slug stabili. Quando le squadre cambiano,
  * basta aggiornare TEAM_ITEMS qui sotto. Quando cambia la stagione,
  * basta aggiornare CURRENT_SEASON.
+ *
+ * Singletons:
+ * - 'settings': impostazioni globali del sito
+ * - 'riferimentiOperativi': Allegato B Codice Etico (Direttivo, ruoli,
+ *   email segnalazioni, versioning Codice)
+ *
+ * Sezione "Governance" raccoglie tutto quello che pertiene al Codice
+ * Etico e alla trasparenza statutaria (Allegati B/C).
  */
 
 // Stagione di riferimento per il filtro "stagione corrente vs archivio".
@@ -193,6 +203,27 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("timelineEvent")
                 .title("Eventi storici (timeline)")
                 .icon(Milestone),
+            ]),
+        ),
+      S.listItem()
+        .title("Governance & trasparenza")
+        .icon(Briefcase)
+        .child(
+          S.list()
+            .title("Governance & trasparenza")
+            .items([
+              S.listItem()
+                .title("Riferimenti operativi (Codice Etico)")
+                .icon(Briefcase)
+                .child(
+                  S.editor()
+                    .id("riferimentiOperativi")
+                    .schemaType("riferimentiOperativi")
+                    .documentId("riferimentiOperativi"),
+                ),
+              S.documentTypeListItem("trasparenza5x1000")
+                .title("Rendicontazione 5×1000")
+                .icon(Coins),
             ]),
         ),
       S.documentTypeListItem("news").title("News").icon(Newspaper),
