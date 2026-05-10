@@ -10,21 +10,21 @@ import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
 
 /**
- * Topbar orizzontale "scrolled" (64px, lg+ only).
+ * Topbar orizzontale "scrolled" (90px, lg+ only).
  *
  * Si attiva quando l'utente scrolla oltre l'hero (heroVisible == false
  * controllato da ClientShell). Layout completo: hamburger + 4 voci nav
  * principali + spacer + logo centrato (absolute) + box sponsor + divider
  * + search. Sostituisce sidebar verticali + Topbar minimale.
  *
- * Altezza fissa h-16: la Topbar HERO si riduce in modo continuo
- * dall'altezza iniziale h-[90px] a h-16 nei primi 80px di scroll, e a
- * quel punto la transizione a TopbarScrolled (anch'essa h-16) e' un
- * fade tra elementi della stessa altezza — niente salto visivo.
+ * Altezza h-[90px] uguale alla Topbar HERO: il crossfade e' solo
+ * opacity tra elementi geometricamente identici, niente salto visivo
+ * durante lo scroll (lesson learned dallo shrink animato precedente,
+ * che faceva uno scatto sgradevole nei primi 80px).
  *
  * Tile main sponsor compatti (168×48, logo max-h-8) per ridurre
- * l'ingombro rispetto alla Topbar HERO; il main sponsor "vero" e'
- * gia' stato visto prominente in cima alla pagina.
+ * l'ingombro rispetto alla Topbar HERO che mostra i tile pieni
+ * 196×78 (main sponsor in evidenza nella prima impressione).
  *
  * Mobile (<lg): nascosta. Su mobile la topbar mobile (44px) resta
  * sempre la stessa, con o senza hero in viewport.
@@ -50,7 +50,7 @@ export function TopbarScrolled({
 
   return (
     <header
-      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-16 items-center border-b lg:flex"
+      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-[90px] items-center border-b lg:flex"
       style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra di navigazione"

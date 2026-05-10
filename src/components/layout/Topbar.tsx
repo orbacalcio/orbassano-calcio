@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
@@ -14,15 +13,16 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * tablet eredita il pattern mobile (MobileTopbar + MobileSponsorStrip).
  * Gating netto:
  *  - 0-1023:  MobileTopbar + MobileSponsorStrip
- *  - 1024+:   Topbar (hero) shrinka da h-[90px] a h-16 con scroll
- *             0..80px, loghi main sponsor da 72px a 32px, tile da
- *             196 a 168 px. Background gia' opaco (bg-surface-0)
- *             senza fade trasparenza per evitare il "vuoto scuro"
- *             durante il primo scroll.
+ *  - 1024+:   Topbar (hero) h-[90px] statica con bg opaco e tile
+ *             main sponsor 196×78 (logo +20% vs marquee in basso).
  *
  * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
- * mostra TopbarScrolled al suo posto.
+ * mostra TopbarScrolled al suo posto. La TopbarScrolled e' alla
+ * stessa altezza (h-[90px]): il crossfade e' solo opacity tra
+ * elementi geometricamente identici, niente salto visivo (lesson
+ * learned dallo shrink animato precedente che faceva uno scatto
+ * sgradevole tra HERO e SCROLLED).
  *
  * Bordi orizzontali (left-[88px], right-[80px]) per non sovrapporsi
  * alle sidebar verticali, che sono visibili in modalita' hero.
@@ -33,46 +33,6 @@ const FALLBACK_MAIN_SPONSORS = [
   { name: "Ocert" },
 ];
 
-const SHRINK_END_PX = 80;
-
-const HERO_HEADER_H = 90;
-const SCROLLED_HEADER_H = 64;
-const HERO_UL_H = 78;
-const SCROLLED_UL_H = 48;
-const HERO_TILE_W = 196;
-const SCROLLED_TILE_W = 168;
-const HERO_LOGO_MAX_H = 72;
-const SCROLLED_LOGO_MAX_H = 32;
-
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-/**
- * Hook minimale: ritorna un float 0..1 che cresce linearmente con
- * window.scrollY nei primi SHRINK_END_PX, poi resta a 1. requestAnimation
- * Frame per evitare layout thrashing su scroll fast.
- */
-function useScrollShrink(): number {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      const y = Math.max(0, Math.min(SHRINK_END_PX, window.scrollY));
-      setProgress(y / SHRINK_END_PX);
-    };
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-  return progress;
-}
-
 export function Topbar({
   sponsors,
   onSearchClick,
@@ -81,31 +41,19 @@ export function Topbar({
   onSearchClick: () => void;
 }) {
   const usingFallback = sponsors.length === 0;
-  const p = useScrollShrink();
-
-  const headerH = lerp(HERO_HEADER_H, SCROLLED_HEADER_H, p);
-  const ulH = lerp(HERO_UL_H, SCROLLED_UL_H, p);
-  const tileW = lerp(HERO_TILE_W, SCROLLED_TILE_W, p);
-  const logoMaxH = lerp(HERO_LOGO_MAX_H, SCROLLED_LOGO_MAX_H, p);
 
   return (
     <header
       className={cn(
-        "border-border/50 bg-surface-0 fixed top-0 hidden border-b lg:left-[88px] lg:right-[80px] lg:flex",
+        "border-border/50 bg-surface-0 fixed top-0 hidden h-[90px] border-b lg:left-[88px] lg:right-[80px] lg:flex",
       )}
-      style={{
-        zIndex: Z.topbar,
-        height: `${headerH}px`,
-      }}
+      style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra superiore con sponsor principali"
     >
       <div className="flex w-full items-center justify-end gap-4 px-4">
         {usingFallback ? (
-          <ul
-            className="border-border/60 bg-surface-1/60 divide-border/60 flex items-center divide-x overflow-hidden rounded-md border"
-            style={{ height: `${ulH}px` }}
-          >
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-[78px] items-center divide-x overflow-hidden rounded-md border">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
               <li
                 key={s.name}
@@ -116,17 +64,9 @@ export function Topbar({
             ))}
           </ul>
         ) : (
-          <ul
-            className="border-border/60 divide-border/60 flex items-center divide-x overflow-hidden rounded-md border"
-            style={{ height: `${ulH}px` }}
-          >
+          <ul className="border-border/60 divide-border/60 flex h-[78px] items-center divide-x overflow-hidden rounded-md border">
             {sponsors.map((s) => (
-              <MainSponsorTile
-                key={s._id}
-                sponsor={s}
-                width={tileW}
-                logoMaxHeight={logoMaxH}
-              />
+              <MainSponsorTile key={s._id} sponsor={s} />
             ))}
           </ul>
         )}
