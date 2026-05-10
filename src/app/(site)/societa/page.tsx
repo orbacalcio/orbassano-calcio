@@ -54,11 +54,18 @@ const BASE_HUB_CARDS = [
   },
 ];
 
-// Aggiunte governance (vivibili solo a feature flag attivo). I numeri
-// 05/06 (e 07 quando arriverà il Codice Etico) si appendono in coda.
+// Aggiunte governance (vivibili solo a feature flag attivo).
 const GOVERNANCE_HUB_CARDS = [
   {
     number: "05",
+    title: "Codice Etico",
+    description:
+      "Principi, valori e regole di condotta del club. Documento giuridicamente vincolante per tesserati, tecnici, sponsor e fornitori.",
+    href: "/societa/codice-etico",
+    icon: ScrollText,
+  },
+  {
+    number: "06",
     title: "Trasparenza",
     description:
       "Rendicontazione 5×1000 e dati di governance: importi ricevuti, destinazioni, organi sociali del club.",
@@ -66,7 +73,7 @@ const GOVERNANCE_HUB_CARDS = [
     icon: ScrollText,
   },
   {
-    number: "06",
+    number: "07",
     title: "Segnalazioni",
     description:
       "Canale ufficiale per segnalare violazioni del Codice Etico. Riservatezza garantita, nessuna ritorsione.",

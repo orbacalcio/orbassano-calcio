@@ -147,6 +147,47 @@ export function buildNewsArticleLd(opts: {
   };
 }
 
+/**
+ * Article generico (non NewsArticle) per pagine editoriali statiche
+ * istituzionali. Usato dalla pagina /societa/codice-etico.
+ */
+export function buildArticleLd(opts: {
+  title: string;
+  url: string;
+  description: string;
+  datePublished: string | null;
+  dateModified: string | null;
+  version: string | null;
+}) {
+  const fullUrl = opts.url.startsWith("http") ? opts.url : `${SITE_URL}${opts.url}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${fullUrl}#article`,
+    headline: opts.title,
+    description: opts.description,
+    url: fullUrl,
+    datePublished: opts.datePublished ?? undefined,
+    dateModified: opts.dateModified ?? opts.datePublished ?? undefined,
+    author: {
+      "@type": "Organization",
+      "@id": `${SITE_URL}#org`,
+      name: "A.S.D. Orbassano Calcio",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "A.S.D. Orbassano Calcio",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/Logo_Orbassano_2K.png`,
+      },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": fullUrl },
+    inLanguage: "it-IT",
+    ...(opts.version ? { version: opts.version } : {}),
+  };
+}
+
 export function buildPersonLd(opts: {
   firstName: string;
   lastName: string;

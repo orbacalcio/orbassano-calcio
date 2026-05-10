@@ -111,6 +111,7 @@ function buildSections(opts: {
   ];
   if (FEATURES.governanceSection) {
     sezioniItems.push(
+      { href: "/societa/codice-etico", label: "Codice Etico" },
       { href: "/societa/trasparenza", label: "Trasparenza" },
       { href: "/societa/segnalazioni", label: "Segnalazioni" },
     );

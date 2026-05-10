@@ -114,6 +114,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const governanceEntries: MetadataRoute.Sitemap = FEATURES.governanceSection
     ? [
         {
+          url: `${SITE_URL}/societa/codice-etico`,
+          lastModified: now,
+          changeFrequency: "yearly" as const,
+          priority: 0.6,
+        },
+        {
           url: `${SITE_URL}/societa/trasparenza`,
           lastModified: now,
           changeFrequency: "monthly" as const,
