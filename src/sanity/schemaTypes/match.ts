@@ -202,7 +202,8 @@ export const match = defineType({
     defineField({
       name: "reportLink",
       title: "Tabellino esterno",
-      description: "URL Tuttocampo / Sprintsport con tabellino completo.",
+      description:
+        "URL Tuttocampo / Sprintsport con tabellino specifico di questa partita. Se vuoto, la MatchCard usa competition.defaultReportLink come fallback (cascata: match.reportLink batte competition.defaultReportLink).",
       type: "url",
       fieldset: "extras",
     }),

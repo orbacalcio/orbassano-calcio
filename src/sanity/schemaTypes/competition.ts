@@ -131,6 +131,13 @@ export const competition = defineType({
       type: "url",
     }),
     defineField({
+      name: "defaultReportLink",
+      title: "Link Tuttocampo (default match)",
+      description:
+        "URL Tuttocampo della squadra/girone (mostra risultati + classifica in un'unica pagina). Usato come fallback sulle MatchCard quando il match non ha un tabellino specifico (match.reportLink). Cascata: match.reportLink batte questo default.",
+      type: "url",
+    }),
+    defineField({
       name: "startDate",
       title: "Inizio competizione",
       type: "date",

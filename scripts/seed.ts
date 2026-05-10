@@ -379,6 +379,7 @@ type CompetitionSeed = {
   group?: string;
   externalRankingUrl?: string;
   externalCalendarUrl?: string;
+  defaultReportLink?: string;
   order: number;
   isActive: boolean;
 };
@@ -395,6 +396,11 @@ const competitions: CompetitionSeed[] = [
     group: "", // TBD fino a comunicazione LND
     externalRankingUrl: "https://www.sprintesport.it/sezioni/119/classifiche",
     externalCalendarUrl: "https://www.sprintesport.it/sezioni/121/calendario",
+    // Lasciato vuoto per ora: l'admin lo valorizza con la pagina
+    // Tuttocampo del girone quando la LND ufficializza gli accoppiamenti
+    // (es. https://www.tuttocampo.it/Piemonte/PrimaCategoria/GironeX).
+    // Diventa il default delle MatchCard quando match.reportLink e' vuoto.
+    defaultReportLink: undefined,
     order: 0,
     isActive: true,
   },
@@ -552,6 +558,7 @@ async function main() {
       group: c.group,
       externalRankingUrl: c.externalRankingUrl,
       externalCalendarUrl: c.externalCalendarUrl,
+      defaultReportLink: c.defaultReportLink,
       order: c.order,
       isActive: c.isActive,
     });
