@@ -15,7 +15,8 @@ import type { MainSponsor } from "@/sanity/fetchers";
  * MobileTopbar lg:hidden nel range 768-1023, dove entrambe finivano
  * fissate a top-0 sovrapposte. Ora il gating e' netto:
  *  - 0-1023:  MobileTopbar + MobileSponsorStrip
- *  - 1024+:   Topbar (h-16, tile main sponsor 120×48 su bianco)
+ *  - 1024+:   Topbar (h-32, tile main sponsor 280×112 su bianco —
+ *             logo +70% vs marquee in basso, scelta del Direttivo)
  *
  * Mostrata quando l'utente e' in cima alla pagina (hero visibile).
  * Quando si scrolla oltre, ClientShell la nasconde via opacity e
@@ -43,7 +44,7 @@ export function Topbar({
   return (
     <header
       className={cn(
-        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-16 border-b backdrop-blur-md lg:flex",
+        "border-border/50 bg-surface-0/70 fixed inset-x-0 top-0 hidden h-32 border-b backdrop-blur-md lg:flex",
       )}
       style={{ zIndex: Z.topbar }}
       role="banner"
@@ -51,18 +52,18 @@ export function Topbar({
     >
       <div className="flex w-full items-center justify-end gap-4 pr-[88px] pl-[calc(88px+1rem)]">
         {usingFallback ? (
-          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
+          <ul className="border-border/60 bg-surface-1/60 divide-border/60 flex h-28 items-center divide-x overflow-hidden rounded-md border">
             {FALLBACK_MAIN_SPONSORS.map((s) => (
               <li
                 key={s.name}
-                className="font-display text-ink-mid flex h-full items-center px-3 text-[11px] font-semibold tracking-[0.15em] uppercase"
+                className="font-display text-ink-mid flex h-full items-center px-6 text-[13px] font-semibold tracking-[0.15em] uppercase"
               >
                 {s.name}
               </li>
             ))}
           </ul>
         ) : (
-          <ul className="border-border/60 divide-border/60 flex h-12 items-center divide-x overflow-hidden rounded-md border">
+          <ul className="border-border/60 divide-border/60 flex h-28 items-center divide-x overflow-hidden rounded-md border">
             {sponsors.map((s) => (
               <MainSponsorTile key={s._id} sponsor={s} />
             ))}

@@ -10,12 +10,14 @@ import type { MainSponsor } from "@/sanity/fetchers";
 import { sidebarMainItems } from "./SidebarLeft.items";
 
 /**
- * Topbar orizzontale "scrolled" (64px, lg+ only).
+ * Topbar orizzontale "scrolled" (128px, lg+ only).
  *
  * Si attiva quando l'utente scrolla oltre l'hero (heroVisible == false
  * controllato da ClientShell). Layout completo: hamburger + 4 voci nav
  * principali + spacer + logo centrato (absolute) + box sponsor + divider
- * + search. Sostituisce sidebar verticali + Topbar minimale.
+ * + search. Sostituisce sidebar verticali + Topbar minimale. Stessa
+ * altezza della Topbar hero per coerenza durante la transizione e per
+ * ospitare i tile main sponsor 280×112 (logo +70% vs marquee in basso).
  *
  * Mobile (<lg): nascosta. Su mobile la topbar mobile (44px) resta
  * sempre la stessa, con o senza hero in viewport.
@@ -41,7 +43,7 @@ export function TopbarScrolled({
 
   return (
     <header
-      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-16 items-center border-b lg:flex"
+      className="bg-surface-0 border-border/60 fixed inset-x-0 top-0 hidden h-32 items-center border-b lg:flex"
       style={{ zIndex: Z.topbar }}
       role="banner"
       aria-label="Barra di navigazione"
@@ -91,18 +93,18 @@ export function TopbarScrolled({
         {/* Dx: sponsor + search */}
         <div className="ml-auto flex items-center gap-4">
           {usingFallback ? (
-            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 bg-surface-1/60 divide-border/60 hidden h-28 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {FALLBACK_MAIN_SPONSORS.map((s) => (
                 <li
                   key={s.name}
-                  className="font-display text-ink-mid flex h-full items-center px-3 text-[11px] font-semibold tracking-[0.15em] uppercase"
+                  className="font-display text-ink-mid flex h-full items-center px-6 text-[13px] font-semibold tracking-[0.15em] uppercase"
                 >
                   {s.name}
                 </li>
               ))}
             </ul>
           ) : (
-            <ul className="border-border/60 divide-border/60 hidden h-12 items-center divide-x overflow-hidden rounded-md border xl:flex">
+            <ul className="border-border/60 divide-border/60 hidden h-28 items-center divide-x overflow-hidden rounded-md border xl:flex">
               {sponsors.map((s) => (
                 <MainSponsorTile key={s._id} sponsor={s} />
               ))}

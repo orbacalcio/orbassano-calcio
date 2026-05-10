@@ -17,9 +17,15 @@ import type { MainSponsor } from "@/sanity/fetchers";
  *   coerente con il brand kit del singolo sponsor. Il fallback
  *   testuale usa `text-surface-0` per restare leggibile sul bianco.
  *
- * Larghezza scala linearmente col numero di sponsor (3 = 504px,
- * 4 = 672px, 5 = 840px). A lg+ ci sta con 3-4 sponsor, a xl+ anche 5,
- * lasciando spazio a divider + search + sidebar 88px.
+ * Dimensioni: tile 280×112 (w×h), logo max-h-[102px] (≈ +70% vs i
+ * loghi del marquee in homepage che sono 60px). Scelta richiesta dal
+ * Direttivo: il main sponsor in alto deve essere visivamente piu'
+ * prominente del ticker scorrevole in basso, perche' rappresenta i
+ * partner di primo livello (top tier) — non solo "uno della folla".
+ *
+ * Larghezza scala linearmente col numero di sponsor (3 = 840px,
+ * 4 = 1120px). A lg+ ci sta con 3 sponsor, a xl+ anche 4, lasciando
+ * spazio a divider + search + sidebar 88px.
  */
 type Props = { sponsor: MainSponsor };
 
@@ -32,14 +38,14 @@ export function MainSponsorTile({ sponsor }: Props) {
         target="_blank"
         rel="noopener noreferrer sponsored"
         aria-label={`${sponsor.name} (sponsor principale)`}
-        className="flex h-full w-[168px] items-center justify-center bg-white px-4 transition-opacity hover:opacity-90"
+        className="flex h-full w-[280px] items-center justify-center bg-white px-6 transition-opacity hover:opacity-90"
       >
         <SponsorLogo
           sponsor={sponsor}
           variant="color"
-          width={200}
-          height={32}
-          className="text-surface-0 max-h-8 max-w-full object-contain"
+          width={400}
+          height={102}
+          className="text-surface-0 max-h-[102px] max-w-full object-contain"
         />
       </a>
     </li>
