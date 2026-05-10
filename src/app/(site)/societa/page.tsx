@@ -3,12 +3,15 @@ import {
   Building2,
   Landmark,
   MapPin,
+  ScrollText,
+  ShieldAlert,
   Ticket,
 } from "lucide-react";
 import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { SocietaHubCard } from "@/components/societa/SocietaHubCard";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { FEATURES } from "@/lib/features";
 
 export const metadata: Metadata = {
   title: "Società",
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
     "ASD Orbassano Calcio dal 1930: storia, organigramma, impianti sportivi e informazioni di biglietteria.",
 };
 
-const HUB_CARDS = [
+const BASE_HUB_CARDS = [
   {
     number: "01",
     title: "Storia",
@@ -50,6 +53,31 @@ const HUB_CARDS = [
     icon: Ticket,
   },
 ];
+
+// Aggiunte governance (vivibili solo a feature flag attivo). I numeri
+// 05/06 (e 07 quando arriverà il Codice Etico) si appendono in coda.
+const GOVERNANCE_HUB_CARDS = [
+  {
+    number: "05",
+    title: "Trasparenza",
+    description:
+      "Rendicontazione 5×1000 e dati di governance: importi ricevuti, destinazioni, organi sociali del club.",
+    href: "/societa/trasparenza",
+    icon: ScrollText,
+  },
+  {
+    number: "06",
+    title: "Segnalazioni",
+    description:
+      "Canale ufficiale per segnalare violazioni del Codice Etico. Riservatezza garantita, nessuna ritorsione.",
+    href: "/societa/segnalazioni",
+    icon: ShieldAlert,
+  },
+];
+
+const HUB_CARDS = FEATURES.governanceSection
+  ? [...BASE_HUB_CARDS, ...GOVERNANCE_HUB_CARDS]
+  : BASE_HUB_CARDS;
 
 export default function SocietaPage() {
   return (

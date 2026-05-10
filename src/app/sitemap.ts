@@ -5,6 +5,7 @@ import {
   fetchAllTeamSlugs,
   fetchHasActivePartners,
 } from "@/sanity/fetchers";
+import { FEATURES } from "@/lib/features";
 
 /**
  * Sitemap dinamico in formato Next 16 (object-based, niente XML
@@ -104,9 +105,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ]
     : [];
 
+  // Pagine governance solo se feature flag attivo (delibera Direttivo
+  // del Codice Etico). Se off, le pagine ritornano 404 e il sitemap
+  // non le include — niente esposizione SEO prematura.
+  // /societa/codice-etico verra' aggiunto quando la pagina sarà
+  // implementata (Step 2 del task governance — attesa del file HTML
+  // sorgente).
+  const governanceEntries: MetadataRoute.Sitemap = FEATURES.governanceSection
+    ? [
+        {
+          url: `${SITE_URL}/societa/trasparenza`,
+          lastModified: now,
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        },
+        {
+          url: `${SITE_URL}/societa/segnalazioni`,
+          lastModified: now,
+          changeFrequency: "yearly" as const,
+          priority: 0.5,
+        },
+      ]
+    : [];
+
   return [
     ...staticEntries,
     ...partnerEntry,
+    ...governanceEntries,
     ...newsEntries,
     ...teamEntries,
     ...playerEntries,

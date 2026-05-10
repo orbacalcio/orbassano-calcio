@@ -12,6 +12,7 @@ import {
   type SocialLinks,
 } from "@/components/social/SocialIcons";
 import { Container } from "@/components/ui/Container";
+import { FEATURES } from "@/lib/features";
 
 /**
  * Footer dark del sito pubblico — pattern juventus.com:
@@ -100,17 +101,25 @@ function buildSections(opts: {
   if (teamSlugs.has("scuola-calcio")) {
     squadreItems.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
   }
+  const sezioniItems: Array<{ href: string; label: string }> = [
+    { href: "/news", label: "News" },
+    { href: "/societa", label: "Società" },
+    { href: "/societa/storia", label: "Storia" },
+    { href: "/societa/organigramma", label: "Organigramma" },
+    { href: "/societa/impianti", label: "Impianti sportivi" },
+    { href: "/societa/biglietteria", label: "Biglietteria" },
+  ];
+  if (FEATURES.governanceSection) {
+    sezioniItems.push(
+      { href: "/societa/trasparenza", label: "Trasparenza" },
+      { href: "/societa/segnalazioni", label: "Segnalazioni" },
+    );
+  }
+
   return [
     {
       title: "Sezioni",
-      items: [
-        { href: "/news", label: "News" },
-        { href: "/societa", label: "Società" },
-        { href: "/societa/storia", label: "Storia" },
-        { href: "/societa/organigramma", label: "Organigramma" },
-        { href: "/societa/impianti", label: "Impianti sportivi" },
-        { href: "/societa/biglietteria", label: "Biglietteria" },
-      ],
+      items: sezioniItems,
     },
     {
       title: "Squadre",
