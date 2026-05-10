@@ -26,8 +26,11 @@ import { TopbarScrolled } from "./TopbarScrolled";
  * 2. Stato open/close del NavigationDrawer condiviso (hamburger mobile +
  *    hamburger TopbarScrolled).
  * 3. Switch animato sidebar verticali (heroVisible) <-> TopbarScrolled
- *    (!heroVisible) con fade-only via Framer Motion, durata 250ms.
- *    Mantiene SEMPRE entrambi montati per evitare flash al cambio.
+ *    (!heroVisible) via Framer Motion, 450ms con curva cubic-bezier
+ *    "standard" Material (0.4, 0, 0.2, 1). Crossfade su opacity +
+ *    micro-slide verticale (-8px) sulla TopbarScrolled per dare il
+ *    senso di "discesa" naturale invece di un fade piatto. Le due
+ *    barre restano SEMPRE montate per evitare flash al cambio.
  */
 export function ClientShell({
   sponsors,
@@ -76,9 +79,12 @@ export function ClientShell({
     setSearchOpen(true);
   }, []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
+  // Curva Material "standard" (0.4, 0, 0.2, 1): partenza decisa,
+  // arrivo morbido. 450ms e' il sweet spot per un crossfade UI che
+  // si percepisce intenzionale ma non lento.
   const transition = reduced
     ? { duration: 0 }
-    : { duration: 0.25, ease: "easeOut" as const };
+    : { duration: 0.45, ease: [0.4, 0, 0.2, 1] as const };
 
   return (
     <>
@@ -99,11 +105,15 @@ export function ClientShell({
         <SidebarRight />
       </motion.div>
 
-      {/* Scrolled state (oltre hero): topbar orizzontale full */}
+      {/* Scrolled state (oltre hero): topbar orizzontale full.
+          Micro-slide verticale (-8px → 0) per dare profondita' al
+          crossfade: la barra "scende" sull'utente invece di apparire
+          dal nulla. Reduced motion -> niente translate. */}
       <motion.div
         initial={false}
         animate={{
           opacity: heroVisible ? 0 : 1,
+          y: reduced ? 0 : heroVisible ? -8 : 0,
           pointerEvents: heroVisible ? "none" : "auto",
         }}
         transition={transition}
