@@ -12,6 +12,8 @@ import { DownloadCTA } from "./components/DownloadCTA";
 import { Premessa } from "./content/premessa";
 import { Capitolo01 } from "./content/capitolo-01";
 import { Capitolo02 } from "./content/capitolo-02";
+import { Capitolo03 } from "./content/capitolo-03";
+import { Capitolo04 } from "./content/capitolo-04";
 
 /**
  * Pagina /societa/codice-etico — Codice Etico A.S.D. Orbassano Calcio.
@@ -25,9 +27,9 @@ import { Capitolo02 } from "./content/capitolo-02";
  * 12.5 del Codice).
  *
  * TODO trascrizione (Step 2 governance, in corso):
- *   - Premessa, Cap 01, Cap 02 — completati
- *   - Cap 03-12 — da trascrivere dal sorgente
- *     `docs/source/codice-etico-source.html` (linee 1107-fine)
+ *   - Premessa, Cap 01, Cap 02, Cap 03, Cap 04 — completati
+ *   - Cap 05-12 — da trascrivere dal sorgente
+ *     `docs/source/codice-etico-source.html` (linee 1507-fine)
  *
  * Riferimenti operativi (Allegato B): in fondo alla pagina, dati
  * dinamici dal singleton Sanity riferimentiOperativi (Direttivo,
@@ -119,10 +121,12 @@ export default async function CodiceEticoPage() {
             <Premessa />
             <Capitolo01 />
             <Capitolo02 />
+            <Capitolo03 />
+            <Capitolo04 />
 
-            {/* TODO: importare Capitolo03..12 quando trascritti.
+            {/* TODO: importare Capitolo05..12 quando trascritti.
                 Sorgente: docs/source/codice-etico-source.html linee
-                1107-fine. */}
+                1507-fine. */}
 
             {/* RIFERIMENTI OPERATIVI (Allegato B) */}
             {riferimenti && (
