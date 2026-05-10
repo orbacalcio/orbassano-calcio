@@ -10,11 +10,12 @@ export const metadata: Metadata = {
     "Le squadre di ASD Orbassano Calcio: Prima Squadra (Prima Categoria), Juniores Under 19 e Settore Giovanile (U17, U16, U15, U14).",
 };
 
-// Le sezioni iterate dinamicamente: la query teamsListQuery filtra
-// `isActive != false`, quindi le categorie senza squadre attive
+// Le 3 macro-categorie federali del club. La query teamsListQuery
+// filtra `isActive != false`, quindi le sezioni senza squadre attive
 // vengono saltate dal `if (items.length === 0) return null` sotto.
-// Le tre categorie restano elencate qui per supporto futuro (basta
-// riattivare le squadre dello Studio).
+// La Scuola Calcio non e' in elenco: oggi e' gestita da Sporting
+// Orbassano e fuori dal tesseramento del club. Quando rientrera',
+// basta aggiungere la sezione qui (e riattivare la squadra in Studio).
 const SECTIONS: Array<{
   category: TeamSummary["category"];
   number: string;
@@ -39,12 +40,6 @@ const SECTIONS: Array<{
     eyebrow: "03 — Da qui passa il futuro",
     cols: "sm:grid-cols-2 lg:grid-cols-4",
   },
-  {
-    category: "Scuola Calcio",
-    number: "04",
-    eyebrow: "04 — Si comincia da qui",
-    cols: "lg:grid-cols-3",
-  },
 ];
 
 export default async function SquadrePage() {
@@ -63,7 +58,7 @@ export default async function SquadrePage() {
               Le squadre
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-              Sette squadre, una sola maglia
+              Sei squadre, una sola maglia
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Dalla Prima Squadra al Settore Giovanile, ogni rossobl&ugrave;
