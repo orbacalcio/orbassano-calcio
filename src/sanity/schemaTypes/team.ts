@@ -73,16 +73,62 @@ export const team = defineType({
       name: "season",
       title: "Stagione",
       type: "string",
-      description: "Es. '2025/2026'",
+      description:
+        "Default fallback per UI. La verita' vive su Competition.season. Es. '2026/2027'.",
+    }),
+    defineField({
+      name: "currentMainCompetition",
+      title: "Competizione principale (stagione corrente)",
+      description:
+        "Tipicamente il campionato di categoria. Alimenta la pagina /squadre/[slug]/calendario e l'info strip della pagina squadra.",
+      type: "reference",
+      to: [{ type: "competition" }],
+      options: {
+        filter: ({ document }) => {
+          const id = document?._id?.replace(/^drafts\./, "");
+          if (!id) return { filter: "isActive == true" };
+          return {
+            filter: "isActive == true && targetTeam._ref == $teamId",
+            params: { teamId: id },
+          };
+        },
+      },
+    }),
+    defineField({
+      name: "currentSecondaryCompetitions",
+      title: "Competizioni secondarie (stagione corrente)",
+      description:
+        "Coppe, tornei, amichevoli pre-stagione. Vengono mostrate come tab aggiuntivi nel calendario.",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "competition" }],
+          options: {
+            filter: ({ document }) => {
+              const id = document?._id?.replace(/^drafts\./, "");
+              if (!id) return { filter: "isActive == true" };
+              return {
+                filter: "isActive == true && targetTeam._ref == $teamId",
+                params: { teamId: id },
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "league",
-      title: "Categoria/campionato",
+      title: "Categoria/campionato (legacy)",
+      description:
+        "[Deprecato — usa Competition principale.shortName]. Mantenuto per fallback finche' non popoli currentMainCompetition.",
       type: "string",
     }),
     defineField({
       name: "group",
-      title: "Girone",
+      title: "Girone (legacy)",
+      description:
+        "[Deprecato — vive su Competition.group]. Mantenuto per fallback.",
       type: "string",
     }),
     defineField({
