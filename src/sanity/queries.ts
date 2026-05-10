@@ -143,25 +143,48 @@ export const matchesByTeamSlugQuery = defineQuery(`
   }
 `);
 
-// Prossima partita per il ticker. Aggiornata al nuovo shape post-refactor
-// match: opponent e competition sono ora reference. Cache tag "match".
+// Prossima partita Prima Squadra per il MatchStrip homepage. Stesso
+// payload di matchesByTeamSlugQuery (per riusare MatchCard compact).
 export const nextMatchQuery = defineQuery(`
-  *[_type == "match" && status == "scheduled" && date > now()]
+  *[_type == "match"
+    && team->slug.current == "prima-squadra"
+    && status == "scheduled"
+    && date > now()]
   | order(date asc)[0]{
-    _id, date, home, venue, status,
-    isOpponentTbd, isClosedDoors, isDateTbd,
+    _id,
+    date,
+    matchday,
+    home,
+    venue,
+    status,
+    scoreHome,
+    scoreAway,
+    reportLink,
+    highlightsUrl,
+    isOpponentTbd,
+    isClosedDoors,
+    isDateTbd,
+    notes,
     "competition": competition->{
       "slug": slug.current,
       shortName,
+      name,
       season,
-      group
+      group,
+      category,
+      defaultReportLink,
+      "logo": logo.asset->url
     },
     "opponent": opponent->{
       "club": club->{
+        _id,
         name,
         shortName,
+        "slug": slug.current,
         "logo": logo.asset->url,
-        websiteUrl
+        websiteUrl,
+        tuttocampoUrl,
+        primaryColor
       }
     }
   }
