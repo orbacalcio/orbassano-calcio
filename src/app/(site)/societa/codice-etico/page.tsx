@@ -14,6 +14,14 @@ import { Capitolo01 } from "./content/capitolo-01";
 import { Capitolo02 } from "./content/capitolo-02";
 import { Capitolo03 } from "./content/capitolo-03";
 import { Capitolo04 } from "./content/capitolo-04";
+import { Capitolo05 } from "./content/capitolo-05";
+import { Capitolo06 } from "./content/capitolo-06";
+import { Capitolo07 } from "./content/capitolo-07";
+import { Capitolo08 } from "./content/capitolo-08";
+import { Capitolo09 } from "./content/capitolo-09";
+import { Capitolo10 } from "./content/capitolo-10";
+import { Capitolo11 } from "./content/capitolo-11";
+import { Capitolo12 } from "./content/capitolo-12";
 
 /**
  * Pagina /societa/codice-etico — Codice Etico A.S.D. Orbassano Calcio.
@@ -26,10 +34,11 @@ import { Capitolo04 } from "./content/capitolo-04";
  * Modifiche al testo richiedono PR mirata + delibera Direttivo (art.
  * 12.5 del Codice).
  *
- * TODO trascrizione (Step 2 governance, in corso):
- *   - Premessa, Cap 01, Cap 02, Cap 03, Cap 04 — completati
- *   - Cap 05-12 — da trascrivere dal sorgente
- *     `docs/source/codice-etico-source.html` (linee 1507-fine)
+ * Trascrizione completa (Step 2 governance):
+ *   - Premessa + Cap 01-12 (corpo del Codice Etico)
+ *   - Sorgente HTML: `docs/source/codice-etico-source.html`
+ *     Modifiche al testo richiedono PR mirata + delibera Direttivo
+ *     (art. 12.5 del Codice).
  *
  * Riferimenti operativi (Allegato B): in fondo alla pagina, dati
  * dinamici dal singleton Sanity riferimentiOperativi (Direttivo,
@@ -123,10 +132,14 @@ export default async function CodiceEticoPage() {
             <Capitolo02 />
             <Capitolo03 />
             <Capitolo04 />
-
-            {/* TODO: importare Capitolo05..12 quando trascritti.
-                Sorgente: docs/source/codice-etico-source.html linee
-                1507-fine. */}
+            <Capitolo05 />
+            <Capitolo06 />
+            <Capitolo07 />
+            <Capitolo08 />
+            <Capitolo09 />
+            <Capitolo10 />
+            <Capitolo11 />
+            <Capitolo12 />
 
             {/* RIFERIMENTI OPERATIVI (Allegato B) */}
             {riferimenti && (
