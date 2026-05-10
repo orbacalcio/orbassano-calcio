@@ -25,7 +25,7 @@ const teams = [
     title: "Juniores",
     description:
       "Campionato Juniores. Under 19 rossoblù, ultimo gradino prima del salto in Prima Squadra.",
-    href: "/squadre/under-19",
+    href: "/squadre/juniores",
   },
   {
     number: "03",

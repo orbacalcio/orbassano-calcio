@@ -133,10 +133,10 @@ const teams: TeamSeed[] = [
     ],
   },
   {
-    slugSrc: "under-19",
-    name: "Under 19",
+    slugSrc: "juniores",
+    name: "Juniores",
     category: "Juniores",
-    subcategory: "Juniores Under 19",
+    subcategory: "Under 19",
     season: "2026/2027",
     league: "Campionato Juniores",
     group: "",

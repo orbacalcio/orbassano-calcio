@@ -45,10 +45,10 @@ function buildSections(opts: {
   if (teamSlugs.has("prima-squadra")) {
     teamsChildren.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
   }
-  // Juniores: link diretto alla squadra Under 19 (categoria "Juniores"
+  // Juniores: link diretto alla squadra Juniores (categoria "Juniores"
   // del Campionato Juniores LND, gradino tra Prima Squadra e SGS).
-  if (teamSlugs.has("under-19")) {
-    teamsChildren.push({ href: "/squadre/under-19", label: "Juniores Under 19" });
+  if (teamSlugs.has("juniores")) {
+    teamsChildren.push({ href: "/squadre/juniores", label: "Juniores Under 19" });
   }
   // Settore Giovanile è una categoria: mostrata se ci sono squadre con
   // quello slug pattern (under-14/15/16/17). Per semplicita' la mostriamo

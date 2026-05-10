@@ -90,8 +90,8 @@ function buildSections(opts: {
   if (teamSlugs.has("prima-squadra")) {
     squadreItems.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
   }
-  if (teamSlugs.has("under-19")) {
-    squadreItems.push({ href: "/squadre/under-19", label: "Juniores Under 19" });
+  if (teamSlugs.has("juniores")) {
+    squadreItems.push({ href: "/squadre/juniores", label: "Juniores Under 19" });
   }
   squadreItems.push({
     href: "/squadre/settore-giovanile",
