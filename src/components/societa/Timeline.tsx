@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Filter } from "lucide-react";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
@@ -197,6 +198,23 @@ export function Timeline({ events }: Props) {
                   <span className="text-ink-low font-mono text-xs tracking-wide">
                     Stagione {event.season}
                   </span>
+                )}
+                {event.image && (
+                  // Thumbnail evento: aspect 16:9 fissato per uniformare le
+                  // card della timeline (foto storiche con proporzioni
+                  // variabili). object-cover centra; il LQIP fa da
+                  // placeholder durante il fetch.
+                  <div className="border-border/40 relative aspect-[16/9] w-full overflow-hidden rounded-lg border bg-surface-2">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
+                      className="object-cover"
+                      placeholder={event.imageLqip ? "blur" : "empty"}
+                      blurDataURL={event.imageLqip ?? undefined}
+                    />
+                  </div>
                 )}
                 <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em]">
                   {event.title}
