@@ -35,14 +35,10 @@ export default async function StoriaPage() {
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Fondato come Gruppo Sportivo Orbassano nel 1930, il club ha
               attraversato oltre 90 anni di calcio piemontese tra fasti,
-              cinque fusioni, ricominciamenti e rinascite. Nove
-              partecipazioni alla Serie D, due semifinali di play-off
-              promozione tra i professionisti negli anni 2000, e un legame
-              profondo con la grande Torino calcistica: lo stadio Valentino
-              Mazzola, all&apos;interno dello Sporting Orbassano (ex Sisport
-              Fiat), ha ospitato a periodi alterni gli allenamenti del Torino
-              dal 1979 alla met&agrave; degli anni 2000 e della Juventus tra
-              il 1990 e il 1994.
+              fusioni e rinascite. Nove partecipazioni alla Serie D, due
+              semifinali di play-off promozione tra i professionisti negli
+              anni 2000, e un legame profondo con la grande Torino
+              calcistica.
             </p>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Negli anni &rsquo;80 l&apos;Orbassano sfior&ograve; la Serie C2
