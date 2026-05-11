@@ -39,7 +39,7 @@ const FALLBACK_ITEMS: StoryNumberItem[] = [
     prefix: null,
     suffix: "+",
     label: "Giovani nel settore",
-    caption: "Quattro categorie U14-U17 più la Scuola Calcio.",
+    caption: "Quattro categorie dall'Under 14 all'Under 17.",
   },
   {
     value: 9,

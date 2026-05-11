@@ -22,6 +22,7 @@ import {
   riferimentiOperativiQuery,
   settingsQuery,
   teamBySlugQuery,
+  teamSeasonsListQuery,
   teamsByCategoryQuery,
   teamsListQuery,
   timelineEventsQuery,
@@ -824,6 +825,25 @@ export type MatchSummary = {
  * @param season  stringa stagione (es. "2026/2027"). Da team.season
  *                con fallback a settings.currentSeason.
  */
+/**
+ * Lista stagioni disponibili per una squadra (distinct su
+ * competition.season). Ordinate desc — la prima e' la piu' recente.
+ * Vuoto se la squadra non ha competition.
+ */
+export async function fetchTeamSeasons(slug: string): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      teamSeasonsListQuery,
+      { slug },
+      { next: { tags: ["competition"] } },
+    );
+    return Array.isArray(data) ? (data as string[]) : [];
+  } catch (err) {
+    console.error("[fetchTeamSeasons]", { slug }, err);
+    return [];
+  }
+}
+
 export async function fetchMatchesByTeam(
   slug: string,
   season: string,

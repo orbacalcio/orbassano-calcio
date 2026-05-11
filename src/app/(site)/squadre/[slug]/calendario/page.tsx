@@ -5,12 +5,18 @@ import { ArrowLeft } from "lucide-react";
 import { CalendarioClient } from "@/components/calendario/CalendarioClient";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/cn";
 import { buildSportsEventListLd } from "@/lib/json-ld";
-import { fetchMatchesByTeam, fetchTeamBySlug } from "@/sanity/fetchers";
+import {
+  fetchMatchesByTeam,
+  fetchTeamBySlug,
+  fetchTeamSeasons,
+} from "@/sanity/fetchers";
 
 const FALLBACK_SEASON = "2026/2027";
 
 type Params = { slug: string };
+type Search = { season?: string };
 
 export async function generateMetadata({
   params,
@@ -28,14 +34,26 @@ export async function generateMetadata({
 
 export default async function CalendarioPage({
   params,
+  searchParams,
 }: {
   params: Promise<Params>;
+  searchParams: Promise<Search>;
 }) {
   const { slug } = await params;
+  const { season: querySeason } = await searchParams;
   const team = await fetchTeamBySlug(slug);
   if (!team) notFound();
 
-  const season = team.season ?? FALLBACK_SEASON;
+  // Lista stagioni disponibili per questa squadra (distinct su
+  // competition.season). Se la query string `?season=` e' valorizzata
+  // e presente in lista, la usa; altrimenti default = team.season
+  // (stagione corrente del documento Team) o fallback hardcoded.
+  const seasons = await fetchTeamSeasons(slug);
+  const teamCurrentSeason = team.season ?? FALLBACK_SEASON;
+  const season =
+    querySeason && seasons.includes(querySeason)
+      ? querySeason
+      : teamCurrentSeason;
   const matches = await fetchMatchesByTeam(slug, season);
 
   // Header competition-led: prendiamo il nome del campionato dalla
@@ -119,6 +137,46 @@ export default async function CalendarioPage({
       </header>
 
       <Container className="py-12 lg:py-16" size="wide">
+        {/* Tab switcher stagioni: visibile solo se la squadra ha piu' di
+            una stagione in archivio. Selezione tramite query string
+            ?season=, niente client state — funziona anche con JS off. */}
+        {seasons.length > 1 && (
+          <nav
+            aria-label="Scegli stagione"
+            className="border-border/40 mb-8 flex flex-wrap items-center gap-2 border-b pb-4"
+          >
+            <span className="font-mono text-ink-mid mr-2 text-[11px] tracking-[0.15em] uppercase">
+              Stagione:
+            </span>
+            {seasons.map((s) => {
+              const isCurrent = s === season;
+              const isOriginal = s === teamCurrentSeason;
+              return (
+                <Link
+                  key={s}
+                  href={
+                    isOriginal
+                      ? `/squadre/${slug}/calendario`
+                      : `/squadre/${slug}/calendario?season=${encodeURIComponent(s)}`
+                  }
+                  aria-current={isCurrent ? "page" : undefined}
+                  className={cn(
+                    "rounded-full border px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors",
+                    isCurrent
+                      ? "border-brand-gold bg-brand-gold text-surface-0"
+                      : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
+                  )}
+                >
+                  {s}
+                  {isOriginal && !isCurrent && (
+                    <span className="ml-1.5 opacity-60">· in corso</span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        )}
+
         <CalendarioClient
           matches={matches}
           ourTeamSlug={slug}

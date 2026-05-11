@@ -36,6 +36,9 @@ function monogramma(name: string): string {
 type Props = {
   src: string | null;
   name: string;
+  /** Altezza del box in px (default 32). Larghezza ricavata
+   *  dall'aspect ratio 3:4 (loghi calcistici sono sempre stemmi
+   *  verticali, mai quadrati). */
   size?: number;
   interactive?: boolean;
   href?: string | null;
@@ -43,6 +46,12 @@ type Props = {
   className?: string;
   ariaLabel?: string;
 };
+
+// Stemmi di calcio sono praticamente sempre PORTRAIT (3:4 o 4:5).
+// Usare box quadrato sprecava ~25% di larghezza con padding bianco
+// inutile e schiacciava i loghi alti. Box 3:4 (width = altezza * 0.75)
+// inscrive lo stemma naturalmente.
+const ASPECT_WIDTH_RATIO = 0.75; // 3:4 portrait
 
 export function TeamLogo({
   src,
@@ -55,23 +64,25 @@ export function TeamLogo({
   ariaLabel,
 }: Props) {
   const isClickable = interactive && href !== null && href.length > 0;
+  const boxHeight = size;
+  const boxWidth = Math.round(size * ASPECT_WIDTH_RATIO);
 
   const inner = src ? (
     <Image
       src={src}
       alt={ariaLabel ?? name}
-      width={size}
-      height={size}
+      width={boxWidth}
+      height={boxHeight}
       className="rounded-sm bg-white p-0.5 object-contain"
-      style={{ width: size, height: size }}
+      style={{ width: boxWidth, height: boxHeight }}
     />
   ) : (
     <span
       aria-hidden
       className="border-border/40 text-ink-mid font-display flex items-center justify-center rounded-sm border font-bold uppercase"
       style={{
-        width: size,
-        height: size,
+        width: boxWidth,
+        height: boxHeight,
         fontSize: Math.max(10, Math.floor(size * 0.4)),
         backgroundColor: primaryColor ?? undefined,
         color: primaryColor ? "#fff" : undefined,

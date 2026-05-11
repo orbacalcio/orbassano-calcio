@@ -204,6 +204,17 @@ export const heroSlidesQuery = defineQuery(`
   }
 `);
 
+// Elenco stagioni disponibili per una squadra Orbassano (distinct su
+// competition.season dove targetTeam = team). Ordinate desc (recente
+// prima). Usato dalla pagina calendario per costruire il tab switcher
+// "Stagione corrente / Archivio".
+export const teamSeasonsListQuery = defineQuery(`
+  array::unique(
+    *[_type == "competition" && targetTeam->slug.current == $slug && defined(season)]
+    | order(season desc).season
+  )
+`);
+
 // Tutte le partite di una squadra in una stagione, ordinate cronologicamente.
 // Filtro `competition->season` (post-refactor m5a la stagione vive su
 // competition, non sul match). Cache tag "match": webhook revalidate
