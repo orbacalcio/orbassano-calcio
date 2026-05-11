@@ -257,17 +257,15 @@ export function NavigationDrawer({
                     />
                   </button>
                 ) : (
+                  // Voce senza sotto-pagine: link diretto, niente chevron
+                  // (la freccia ha senso solo quando indica un accordion
+                  // espandibile, non una destinazione finale).
                   <Link
                     href={section.href}
                     onClick={onClose}
                     className={cn(rowClass, "py-1")}
                   >
                     <span>{section.label}</span>
-                    <ChevronRight
-                      size={28}
-                      className="text-ink-low shrink-0"
-                      aria-hidden
-                    />
                   </Link>
                 )}
 
@@ -305,14 +303,9 @@ export function NavigationDrawer({
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="font-display text-ink-hi hover:text-brand-gold flex w-full items-center justify-between py-1 text-4xl leading-none font-black tracking-[0.005em] uppercase transition-colors"
+              className="font-display text-ink-hi hover:text-brand-gold block w-full py-1 text-4xl leading-none font-black tracking-[0.005em] uppercase transition-colors"
             >
               <span>{item.label}</span>
-              <ChevronRight
-                size={28}
-                className="text-ink-low shrink-0"
-                aria-hidden
-              />
             </Link>
           ))}
         </nav>
