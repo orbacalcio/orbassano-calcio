@@ -241,6 +241,33 @@ export type TimelineEvent = {
   imageLqip: string | null;
 };
 
+/**
+ * Anno effettivo per l'ordinamento timeline.
+ *
+ * Regola (richiesta utente): se il campo `season` e' popolato, ha
+ * priorita' sull'ordinamento rispetto a `year`. Altrimenti si usa
+ * solo `year`.
+ *
+ * Caso d'uso: un evento con season "1929-1930" deve posizionarsi
+ * cronologicamente come 1929 (anno di inizio stagione) anche se
+ * `year` e' stato inserito come 1930 per altri motivi. La stagione
+ * sportiva e' l'unita' di misura piu' precisa per i club calcistici
+ * (la storia segue le stagioni, non gli anni solari).
+ *
+ * Parsing: si prende il primo blocco di 4 cifre dalla stringa
+ * (regex `^(\d{4})`). Quindi "1929-1930", "1929/1930", "Stagione
+ * 1929-1930" funzionano tutti. Se il parsing fallisce, fallback su
+ * `year` numerico.
+ */
+function effectiveTimelineYear(event: TimelineEvent): number {
+  if (event.season) {
+    const match = event.season.match(/^\D*(\d{4})/);
+    const parsed = match?.[1] ? parseInt(match[1], 10) : Number.NaN;
+    if (!Number.isNaN(parsed)) return parsed;
+  }
+  return event.year;
+}
+
 export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
   try {
     const data = await sanityClient.fetch(
@@ -248,7 +275,28 @@ export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
       {},
       { next: { tags: ["timelineEvent"] } },
     );
-    return (data ?? []) as TimelineEvent[];
+    const items = (data ?? []) as TimelineEvent[];
+    // Re-sort lato server applicando la regola "season ha priorita'
+    // su year". La query GROQ ordina per `year asc` come base, qui
+    // sovrascriviamo con l'anno effettivo. Sort stabile via index
+    // tie-breaker (JS Array.sort e' stabile dal 2019, ma esplicitarlo
+    // protegge da edge case di runtime esotici).
+    return [...items]
+      .map((event, originalIndex) => ({ event, originalIndex }))
+      .sort((a, b) => {
+        const ay = effectiveTimelineYear(a.event);
+        const by = effectiveTimelineYear(b.event);
+        if (ay !== by) return ay - by;
+        // A parita' di anno effettivo: chi ha season popolata viene
+        // DOPO chi non la ha (la stagione e' un intervallo che si
+        // estende oltre l'anno secco). Es. "1979" punta prima di
+        // "1979-1980".
+        const aHas = a.event.season ? 1 : 0;
+        const bHas = b.event.season ? 1 : 0;
+        if (aHas !== bHas) return aHas - bHas;
+        return a.originalIndex - b.originalIndex;
+      })
+      .map(({ event }) => event);
   } catch (err) {
     console.error("[fetchTimelineEvents]", err);
     return [];
