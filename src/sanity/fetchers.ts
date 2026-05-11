@@ -246,31 +246,58 @@ export type TimelineEvent = {
 };
 
 /**
- * Anno effettivo per l'ordinamento timeline.
+ * Anno effettivo per l'ordinamento timeline. Tre casi:
  *
- * Convenzione (vedi schema timelineEvent.year): il campo `year`
- * rappresenta l'ANNO DI FINE. Per eventi puri = anno solare; per
- * eventi legati a stagione = secondo anno della stagione (es. season
- * "2005-2006" -> year=2006). Lo schema ha una validation custom che
- * costringe questa coerenza ('Anno' deve corrispondere al secondo
- * della stagione).
+ *  1) Evento con `yearEnd` (PERIODO pluri-annuale, es. 1985-1992):
+ *     effective year = yearEnd. Il periodo si chiude in quell'anno
+ *     e si posiziona vicino agli eventi che terminano lo stesso
+ *     anno (stagioni, eventi puri).
  *
- * Questa funzione resta come SAFETY NET per documenti legacy o
- * importati con year disallineato. Se la regola di schema viene
- * rispettata, `effectiveTimelineYear === event.year` sempre; ma se
- * per errore qualcuno bypassa la validation, proteggiamo
- * l'ordinamento del sito.
+ *  2) Evento con `season` (singola stagione, es. 2005-2006):
+ *     effective year = secondo anno della stagione (fine stagione,
+ *     es. 2006). Lo schema ha una validation che impone year ==
+ *     secondo anno; questa funzione lo deriva comunque dalla
+ *     stringa season come safety net.
+ *
+ *  3) Evento PURO (no yearEnd, no season): effective year = year.
+ *
+ * Esempio ordinamento richiesto utente:
+ *   - Stagione 1984/1985        -> effective 1985 (priority stagione)
+ *   - Periodo 1985-1992         -> effective 1992 (priority periodo)
+ *   - Evento puro 1992          -> effective 1992 (priority puro)
+ *   - Evento puro 1993          -> effective 1993
+ *
+ * Tie-breaker a parita' di effective year applicato in fetchTimelineEvents
+ * (stagione > periodo > puro).
  */
 function effectiveTimelineYear(event: TimelineEvent): number {
+  if (typeof event.yearEnd === "number") return event.yearEnd;
   if (event.season) {
-    // Anno di FINE: secondo blocco di 4 cifre. Fallback sul primo
-    // se la stagione contiene solo un anno (es. season="2010" raro).
     const matches = Array.from(event.season.matchAll(/(\d{4})/g));
     const endStr = matches[1]?.[1] ?? matches[0]?.[1];
     const parsed = endStr ? parseInt(endStr, 10) : Number.NaN;
     if (!Number.isNaN(parsed)) return parsed;
   }
   return event.year;
+}
+
+/**
+ * Priorita' tie-breaker a parita' di effective year. Valore piu' BASSO
+ * = posizione piu' alta nella lista. Logica cronologica:
+ *
+ *  0 = stagione (finisce a maggio/giugno dell'anno X)
+ *  1 = periodo  (finisce piu' avanti nell'anno X, es. fine stagione del
+ *                periodo + transizione estiva)
+ *  2 = evento puro (luglio/agosto/oltre dell'anno X)
+ *
+ * Es. year=1992 con: stagione 1991-1992, periodo 1985-1992, evento puro
+ * "Cambio denominazione 1992" -> ordine 1) stagione, 2) periodo,
+ * 3) evento puro.
+ */
+function tieBreakerPriority(event: TimelineEvent): number {
+  if (event.season) return 0;
+  if (typeof event.yearEnd === "number") return 1;
+  return 2;
 }
 
 export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
@@ -291,16 +318,11 @@ export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
         const ay = effectiveTimelineYear(a.event);
         const by = effectiveTimelineYear(b.event);
         if (ay !== by) return ay - by;
-        // A parita' di anno effettivo: eventi CON season PRIMA di
-        // eventi senza season. La stagione "apre" semanticamente
-        // l'anno-blocco, gli eventi puntuali (fusioni, cambi
-        // denominazione) vengono DOPO le vicende della stagione.
-        // Es. effective year 2006:
-        //   1. "4° in Serie D semifinale" (season 2006-2007)
-        //   2. "Fusione con Cirie" (luglio 2006, no season)
-        const aHas = a.event.season ? 1 : 0;
-        const bHas = b.event.season ? 1 : 0;
-        if (aHas !== bHas) return bHas - aHas;
+        // Tie-breaker 3 livelli: stagione (0) < periodo (1) < puro (2).
+        // Vedi commento su tieBreakerPriority per la logica cronologica.
+        const ap = tieBreakerPriority(a.event);
+        const bp = tieBreakerPriority(b.event);
+        if (ap !== bp) return ap - bp;
         return a.originalIndex - b.originalIndex;
       })
       .map(({ event }) => event);
