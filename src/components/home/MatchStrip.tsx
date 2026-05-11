@@ -1,41 +1,23 @@
-import { ArrowUpRight, CalendarDays, MapPin, Trophy } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, CalendarDays, Trophy } from "lucide-react";
+import { MatchCard } from "@/components/calendario/MatchCard";
 import { sanityClient } from "@/sanity/client";
 import { nextMatchQuery, settingsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
+import type { MatchSummary } from "@/sanity/fetchers";
 
 /**
- * Strip "info dense" sotto l'hero, stile Juventus:
- * [ULTIMO RISULTATO]  [PROSSIMA PARTITA + countdown]  [CLASSIFICA]
+ * Strip "info dense" sotto l'hero, stile Juventus, 3 slot:
+ *  [Campionato]  [Prossima partita Prima Squadra]  [Classifica esterna]
  *
- * In M3 mostriamo SOLO la prossima partita reale (se Sanity la espone)
- * + i link sprintesport per classifica/calendario. L'ultimo risultato
- * arrivera' quando avremo il workflow completo "match finished".
+ * Slot 2 usa MatchCard variant=compact per coerenza visiva con la
+ * pagina /squadre/prima-squadra/calendario. Il link sotto la card
+ * porta al calendario completo.
+ *
+ * Hardcoded sulla Prima Squadra: la home rappresenta la Prima Squadra
+ * di default (vedi spec 5b). Per Juniores/SGS l'utente naviga alle
+ * pagine squadra e da lì al calendario dedicato (m5c CTA + mini-strip).
  */
-type NextMatch = {
-  _id: string;
-  date: string;
-  home: boolean;
-  venue: string | null;
-  status: "scheduled" | "live" | "finished" | "postponed" | "cancelled" | null;
-  isOpponentTbd: boolean | null;
-  isClosedDoors: boolean | null;
-  isDateTbd: boolean | null;
-  competition: {
-    slug: string | null;
-    shortName: string | null;
-    season: string | null;
-    group: string | null;
-  } | null;
-  opponent: {
-    club: {
-      name: string | null;
-      shortName: string | null;
-      logo: string | null;
-      websiteUrl: string | null;
-    } | null;
-  } | null;
-};
-
 type Settings = {
   currentLeague: string | null;
   currentGroup: string | null;
@@ -45,6 +27,9 @@ type Settings = {
     statistiche?: string | null;
   } | null;
 };
+
+const PRIMA_SQUADRA_NAME = "Prima Squadra";
+const PRIMA_SQUADRA_SLUG = "prima-squadra";
 
 async function fetchData() {
   try {
@@ -57,7 +42,7 @@ async function fetchData() {
       ),
     ]);
     return {
-      nextMatch: (nextMatch ?? null) as NextMatch | null,
+      nextMatch: (nextMatch ?? null) as MatchSummary | null,
       settings: (settings ?? null) as Settings | null,
     };
   } catch {
@@ -65,42 +50,21 @@ async function fetchData() {
   }
 }
 
-function formatDate(iso: string): { day: string; time: string } {
-  const d = new Date(iso);
-  const day = d.toLocaleDateString("it-IT", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
-  const time = d.toLocaleTimeString("it-IT", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return { day, time };
-}
-
 export async function MatchStrip() {
   const { nextMatch, settings } = await fetchData();
-  // Sorgente di verita': competition.shortName/group/season se presente,
-  // fallback a settings (legacy) finche' l'admin non popola la
-  // currentMainCompetition. La compatibilita' garantisce che il sito
-  // non si rompa anche se il CMS non e' ancora stato aggiornato.
   const league =
     nextMatch?.competition?.shortName ??
     settings?.currentLeague ??
     "Prima Categoria Piemonte VdA";
   const group = nextMatch?.competition?.group ?? settings?.currentGroup ?? "";
   const season = nextMatch?.competition?.season ?? "2026/27";
-  const classificaUrl = settings?.sprintsportLinks?.classifica;
+  const classificaUrl =
+    nextMatch?.competition?.defaultReportLink ??
+    settings?.sprintsportLinks?.classifica ??
+    null;
   const subtitleParts = [group ? `Girone ${group}` : null, season].filter(
     Boolean,
   );
-
-  const opponentLabel = nextMatch?.isOpponentTbd
-    ? "Da definire"
-    : (nextMatch?.opponent?.club?.shortName ??
-      nextMatch?.opponent?.club?.name ??
-      null);
 
   return (
     <section
@@ -121,34 +85,27 @@ export async function MatchStrip() {
           </span>
         </div>
 
-        {/* Slot 2 — prossima partita */}
+        {/* Slot 2 — prossima partita (MatchCard compact) */}
         <div className="bg-surface-2/60 flex flex-col gap-3 p-6 md:p-8">
           <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
             <CalendarDays size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
             Prossima partita
           </span>
-          {nextMatch && opponentLabel ? (
+          {nextMatch ? (
             <>
-              <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-                {nextMatch.home ? "Orbassano" : opponentLabel}
-                <span className="text-ink-low mx-2">vs</span>
-                {nextMatch.home ? opponentLabel : "Orbassano"}
-              </span>
-              <div className="text-ink-mid flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-                <span className="font-mono">
-                  {formatDate(nextMatch.date).day}
-                  {" · "}
-                  {nextMatch.isDateTbd
-                    ? "Ora da definire"
-                    : formatDate(nextMatch.date).time}
-                </span>
-                {nextMatch.venue && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin size={14} aria-hidden />
-                    {nextMatch.venue}
-                  </span>
-                )}
-              </div>
+              <MatchCard
+                match={nextMatch}
+                ourTeamSlug={PRIMA_SQUADRA_SLUG}
+                ourTeamName={PRIMA_SQUADRA_NAME}
+                variant="compact"
+              />
+              <Link
+                href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+                className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
+              >
+                Calendario completo
+                <ArrowUpRight size={14} />
+              </Link>
             </>
           ) : (
             <>
@@ -159,6 +116,13 @@ export async function MatchStrip() {
                 Le prossime giornate saranno pubblicate appena la federazione
                 comunica gli accoppiamenti del girone.
               </span>
+              <Link
+                href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+                className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
+              >
+                Apri calendario
+                <ArrowUpRight size={14} />
+              </Link>
             </>
           )}
         </div>

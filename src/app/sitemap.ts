@@ -84,6 +84,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // /squadre/[slug]/calendario per ogni squadra attiva. Crawler-friendly:
+  // anche se la lista match e' vuota, la pagina renderizza l'empty state
+  // editoriale, niente 404.
+  const calendarEntries: MetadataRoute.Sitemap = teamSlugs.map((slug) => ({
+    url: `${SITE_URL}/squadre/${slug}/calendario`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }));
+
   const playerEntries: MetadataRoute.Sitemap = players.map((p) => ({
     url: `${SITE_URL}/squadre/${p.teamSlug}/${p.slug}`,
     lastModified: p._updatedAt ? new Date(p._updatedAt) : now,
@@ -140,6 +150,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...governanceEntries,
     ...newsEntries,
     ...teamEntries,
+    ...calendarEntries,
     ...playerEntries,
   ];
 }
