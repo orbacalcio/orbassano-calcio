@@ -2,10 +2,8 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
-import { useMemo, useState } from "react";
 import {
   BookOpen,
-  Filter,
   Handshake,
   RefreshCcw,
   Sparkles,
@@ -25,8 +23,9 @@ import { cn } from "@/lib/cn";
  * Timeline interattiva della storia del club. Layout verticale a "spina
  * dorsale" con eventi alternati left/right su desktop, stack su mobile.
  *
- * Filtri categoria (chip click): mostrano solo gli eventi che matchano
- * la categoria selezionata, manteniendo invariato l'ordine cronologico.
+ * Filtri categoria RIMOSSI su richiesta utente (poca utilita' su una
+ * timeline corta, aggiungeva rumore visivo). Le icone categoria
+ * restano sulle singole card.
  *
  * Animazione: fadeInUp staggered con `whileInView` sul singolo nodo
  * (il "puntino" oro che si attacca alla linea verticale anima per
@@ -37,16 +36,6 @@ import { cn } from "@/lib/cn";
 type Props = {
   events: TimelineEvent[];
 };
-
-const CATEGORIES: TimelineCategory[] = [
-  "Fondazione",
-  "Promozione",
-  "Retrocessione",
-  "Trofeo",
-  "Fusione",
-  "Rifondazione",
-  "Storico",
-];
 
 /**
  * Icona tematica per ogni categoria. Lucide React (gia' nel bundle del
@@ -80,32 +69,10 @@ const eventVariants: Variants = {
   },
 };
 
-// Trigger ad ingresso pagina (amount: 0.05 invece di 0.4): l'animazione
-// scatta non appena il 5% dell'elemento entra in viewport. Con amount
-// 0.4 + card alte come quelle della timeline, l'IntersectionObserver
-// non scattava mai sui contenuti "lunghi" e gli eventi restavano
-// opacity 0 — pagina vuota a video.
 const VIEWPORT_OPTIONS = { once: true, amount: 0.05 } as const;
 
 export function Timeline({ events }: Props) {
   const reduced = useReducedMotion();
-  const [activeCategory, setActiveCategory] = useState<
-    TimelineCategory | "all"
-  >("all");
-
-  const filtered = useMemo(() => {
-    if (activeCategory === "all") return events;
-    return events.filter((e) => e.category === activeCategory);
-  }, [activeCategory, events]);
-
-  const counts = useMemo(() => {
-    const map = new Map<TimelineCategory | "all", number>();
-    map.set("all", events.length);
-    for (const c of CATEGORIES) {
-      map.set(c, events.filter((e) => e.category === c).length);
-    }
-    return map;
-  }, [events]);
 
   if (events.length === 0) {
     return (
@@ -117,195 +84,105 @@ export function Timeline({ events }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-12">
-      {/* Filtri categoria */}
-      <div className="flex flex-col gap-3">
-        <div className="text-ink-mid flex items-center gap-2 text-xs">
-          <Filter size={14} aria-hidden />
-          <span className="font-mono tracking-[0.12em] uppercase">
-            Filtra per categoria
-          </span>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          <li>
-            <CategoryChip
-              active={activeCategory === "all"}
-              onClick={() => setActiveCategory("all")}
-              count={counts.get("all") ?? 0}
-            >
-              Tutto
-            </CategoryChip>
-          </li>
-          {CATEGORIES.map((c) => {
-            const count = counts.get(c) ?? 0;
-            if (count === 0) return null;
-            const Icon = CATEGORY_ICONS[c];
-            return (
-              <li key={c}>
-                <CategoryChip
-                  active={activeCategory === c}
-                  onClick={() => setActiveCategory(c)}
-                  count={count}
-                >
-                  {Icon && <Icon size={13} aria-hidden />}
-                  {c}
-                </CategoryChip>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+    <ol className="relative flex flex-col gap-10">
+      {/* Linea verticale: posizione mobile sinistra, desktop centrata */}
+      <div
+        aria-hidden
+        className="border-border/60 absolute top-0 bottom-0 left-3 border-l lg:left-1/2 lg:-translate-x-1/2"
+      />
 
-      {/* Spina + eventi */}
-      <ol className="relative flex flex-col gap-10">
-        {/* Linea verticale: posizione mobile sinistra, desktop centrata */}
-        <div
-          aria-hidden
-          className="border-border/60 absolute top-0 bottom-0 left-3 border-l lg:left-1/2 lg:-translate-x-1/2"
-        />
-
-        {filtered.map((event, i) => {
-          const side = i % 2 === 0 ? "left" : "right";
-          const variants = reduced ? undefined : eventVariants;
-          return (
-            <motion.li
-              key={event._id}
-              className={cn(
-                "relative flex items-start gap-6 lg:gap-12",
-                side === "left"
-                  ? "lg:flex-row"
-                  : "lg:flex-row-reverse",
-              )}
-              variants={variants}
-              initial={reduced ? false : "hidden"}
-              whileInView={reduced ? undefined : "show"}
-              viewport={VIEWPORT_OPTIONS}
+      {events.map((event, i) => {
+        const side = i % 2 === 0 ? "left" : "right";
+        const variants = reduced ? undefined : eventVariants;
+        const Icon = event.category ? CATEGORY_ICONS[event.category] : null;
+        return (
+          <motion.li
+            key={event._id}
+            className={cn(
+              "relative flex items-start gap-6 lg:gap-12",
+              side === "left" ? "lg:flex-row" : "lg:flex-row-reverse",
+            )}
+            variants={variants}
+            initial={reduced ? false : "hidden"}
+            whileInView={reduced ? undefined : "show"}
+            viewport={VIEWPORT_OPTIONS}
+          >
+            {/* Pallino sulla linea */}
+            <div
+              aria-hidden
+              className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2"
             >
-              {/* Pallino sulla linea */}
-              <div
-                aria-hidden
+              <span
                 className={cn(
-                  "relative z-10 flex h-6 w-6 shrink-0 items-center justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2",
-                  event.isHighlight ? "" : "",
+                  "block h-3 w-3 rounded-full",
+                  event.isHighlight
+                    ? "bg-brand-gold ring-brand-gold/30 ring-4"
+                    : "bg-brand-blue ring-surface-1 ring-4",
                 )}
-              >
+              />
+            </div>
+
+            {/* Card contenuto */}
+            <article
+              className={cn(
+                "border-border bg-surface-1 hover:border-brand-gold/30 flex w-full flex-col gap-3 rounded-2xl border p-6 transition-colors lg:w-[calc(50%-3rem)]",
+                event.isHighlight ? "border-brand-gold/30" : "",
+              )}
+            >
+              <div className="flex items-baseline justify-between gap-3">
                 <span
                   className={cn(
-                    "block h-3 w-3 rounded-full",
-                    event.isHighlight
-                      ? "bg-brand-gold ring-brand-gold/30 ring-4"
-                      : "bg-brand-blue ring-surface-1 ring-4",
+                    "font-display leading-none font-black tracking-[0.005em]",
+                    // Periodo (year - yearEnd) ha rendering piu' compatto
+                    // per accomodare la stringa estesa "1985 - 1992".
+                    event.yearEnd
+                      ? "text-2xl sm:text-3xl"
+                      : "text-3xl sm:text-4xl",
+                    event.isHighlight ? "text-brand-gold" : "text-ink-hi",
                   )}
-                />
+                >
+                  {event.yearEnd
+                    ? `${event.year} – ${event.yearEnd}`
+                    : event.year}
+                </span>
+                {event.category && (
+                  <span className="border-border/60 text-ink-mid font-mono inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
+                    {Icon && <Icon size={12} aria-hidden />}
+                    {event.category}
+                  </span>
+                )}
               </div>
-
-              {/* Card contenuto */}
-              <article
-                className={cn(
-                  "border-border bg-surface-1 hover:border-brand-gold/30 flex w-full flex-col gap-3 rounded-2xl border p-6 transition-colors lg:w-[calc(50%-3rem)]",
-                  event.isHighlight ? "border-brand-gold/30" : "",
-                )}
-              >
-                <div className="flex items-baseline justify-between gap-3">
-                  <span
-                    className={cn(
-                      "font-display leading-none font-black tracking-[0.005em]",
-                      // Periodo (year - yearEnd) ha rendering piu' compatto
-                      // per accomodare la stringa estesa "1985 - 1992".
-                      event.yearEnd
-                        ? "text-2xl sm:text-3xl"
-                        : "text-3xl sm:text-4xl",
-                      event.isHighlight
-                        ? "text-brand-gold"
-                        : "text-ink-hi",
-                    )}
-                  >
-                    {event.yearEnd
-                      ? `${event.year} – ${event.yearEnd}`
-                      : event.year}
-                  </span>
-                  {event.category && (
-                    <span className="border-border/60 text-ink-mid font-mono inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
-                      {(() => {
-                        const Icon = CATEGORY_ICONS[event.category];
-                        return Icon ? <Icon size={12} aria-hidden /> : null;
-                      })()}
-                      {event.category}
-                    </span>
-                  )}
-                </div>
-                {event.season && (
-                  <span className="text-ink-low font-mono text-xs tracking-wide">
-                    Stagione {event.season}
-                  </span>
-                )}
-                {event.image && (
-                  // Thumbnail evento: aspect 16:9 fissato per uniformare le
-                  // card della timeline (foto storiche con proporzioni
-                  // variabili). object-cover centra; il LQIP fa da
-                  // placeholder durante il fetch.
-                  <div className="border-border/40 relative aspect-[16/9] w-full overflow-hidden rounded-lg border bg-surface-2">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
-                      className="object-cover"
-                      placeholder={event.imageLqip ? "blur" : "empty"}
-                      blurDataURL={event.imageLqip ?? undefined}
-                    />
-                  </div>
-                )}
-                <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em]">
-                  {event.title}
-                </h3>
-                {event.description && (
-                  <PortableTextBody
-                    value={event.description}
-                    className="text-ink-mid text-sm"
+              {event.season && (
+                <span className="text-ink-low font-mono text-xs tracking-wide">
+                  Stagione {event.season}
+                </span>
+              )}
+              {event.image && (
+                <div className="border-border/40 relative aspect-[16/9] w-full overflow-hidden rounded-lg border bg-surface-2">
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    fill
+                    sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
+                    className="object-cover"
+                    placeholder={event.imageLqip ? "blur" : "empty"}
+                    blurDataURL={event.imageLqip ?? undefined}
                   />
-                )}
-              </article>
-            </motion.li>
-          );
-        })}
-      </ol>
-    </div>
-  );
-}
-
-function CategoryChip({
-  active,
-  onClick,
-  count,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  count: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        "border-border focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
-        active
-          ? "border-brand-gold bg-brand-gold text-surface-0"
-          : "text-ink-mid hover:border-brand-gold/50 hover:text-ink-hi",
-      )}
-    >
-      <span>{children}</span>
-      <span
-        className={cn(
-          "font-mono text-[10px]",
-          active ? "text-surface-0/70" : "text-ink-low",
-        )}
-      >
-        {count}
-      </span>
-    </button>
+                </div>
+              )}
+              <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em]">
+                {event.title}
+              </h3>
+              {event.description && (
+                <PortableTextBody
+                  value={event.description}
+                  className="text-ink-mid text-sm"
+                />
+              )}
+            </article>
+          </motion.li>
+        );
+      })}
+    </ol>
   );
 }

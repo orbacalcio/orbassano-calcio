@@ -67,8 +67,8 @@ export default async function StoriaPage() {
               Gli eventi che hanno fatto la storia del club
             </h2>
             <p className="text-ink-mid max-w-2xl text-sm leading-relaxed">
-              Filtra la timeline per tipologia: trofei vinti, promozioni
-              raggiunte, fusioni, rifondazioni ed eventi storici.
+              Trofei vinti, promozioni raggiunte, fusioni, rifondazioni
+              ed eventi storici della Società in ordine cronologico.
             </p>
           </div>
           <div className="mt-12">
