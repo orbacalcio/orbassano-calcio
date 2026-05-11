@@ -96,6 +96,7 @@ export const timelineEvent = defineType({
         list: [
           "Fondazione",
           "Promozione",
+          "Retrocessione",
           "Trofeo",
           "Fusione",
           "Rifondazione",

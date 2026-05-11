@@ -3,7 +3,17 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { Filter } from "lucide-react";
+import {
+  BookOpen,
+  Filter,
+  Handshake,
+  RefreshCcw,
+  Sparkles,
+  TrendingDown,
+  TrendingUp,
+  Trophy,
+  type LucideIcon,
+} from "lucide-react";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import type {
   TimelineCategory,
@@ -31,11 +41,35 @@ type Props = {
 const CATEGORIES: TimelineCategory[] = [
   "Fondazione",
   "Promozione",
+  "Retrocessione",
   "Trofeo",
   "Fusione",
   "Rifondazione",
   "Storico",
 ];
+
+/**
+ * Icona tematica per ogni categoria. Lucide React (gia' nel bundle del
+ * progetto) — niente SVG custom da mantenere. Tutte stessa dimensione +
+ * stroke uniforme per coerenza visiva.
+ *
+ *   Fondazione    → Sparkles    (inizio, scintilla)
+ *   Promozione    → TrendingUp  (salire di categoria)
+ *   Retrocessione → TrendingDown (scendere di categoria)
+ *   Trofeo        → Trophy
+ *   Fusione       → Handshake
+ *   Rifondazione  → RefreshCcw  (ripartenza, ciclo)
+ *   Storico       → BookOpen    (annale, cronaca)
+ */
+const CATEGORY_ICONS: Record<TimelineCategory, LucideIcon> = {
+  Fondazione: Sparkles,
+  Promozione: TrendingUp,
+  Retrocessione: TrendingDown,
+  Trofeo: Trophy,
+  Fusione: Handshake,
+  Rifondazione: RefreshCcw,
+  Storico: BookOpen,
+};
 
 const eventVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -105,6 +139,7 @@ export function Timeline({ events }: Props) {
           {CATEGORIES.map((c) => {
             const count = counts.get(c) ?? 0;
             if (count === 0) return null;
+            const Icon = CATEGORY_ICONS[c];
             return (
               <li key={c}>
                 <CategoryChip
@@ -112,6 +147,7 @@ export function Timeline({ events }: Props) {
                   onClick={() => setActiveCategory(c)}
                   count={count}
                 >
+                  {Icon && <Icon size={13} aria-hidden />}
                   {c}
                 </CategoryChip>
               </li>
@@ -189,7 +225,11 @@ export function Timeline({ events }: Props) {
                       : event.year}
                   </span>
                   {event.category && (
-                    <span className="border-border/60 text-ink-mid font-mono inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
+                    <span className="border-border/60 text-ink-mid font-mono inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
+                      {(() => {
+                        const Icon = CATEGORY_ICONS[event.category];
+                        return Icon ? <Icon size={12} aria-hidden /> : null;
+                      })()}
                       {event.category}
                     </span>
                   )}

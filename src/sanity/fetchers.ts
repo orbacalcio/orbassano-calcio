@@ -224,6 +224,7 @@ export async function fetchPlayerBySlug(
 export type TimelineCategory =
   | "Fondazione"
   | "Promozione"
+  | "Retrocessione"
   | "Trofeo"
   | "Fusione"
   | "Rifondazione"
