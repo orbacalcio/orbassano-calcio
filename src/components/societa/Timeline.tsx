@@ -45,6 +45,13 @@ const eventVariants: Variants = {
   },
 };
 
+// Trigger ad ingresso pagina (amount: 0.05 invece di 0.4): l'animazione
+// scatta non appena il 5% dell'elemento entra in viewport. Con amount
+// 0.4 + card alte come quelle della timeline, l'IntersectionObserver
+// non scattava mai sui contenuti "lunghi" e gli eventi restavano
+// opacity 0 — pagina vuota a video.
+const VIEWPORT_OPTIONS = { once: true, amount: 0.05 } as const;
+
 export function Timeline({ events }: Props) {
   const reduced = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState<
@@ -135,7 +142,7 @@ export function Timeline({ events }: Props) {
               variants={variants}
               initial={reduced ? false : "hidden"}
               whileInView={reduced ? undefined : "show"}
-              viewport={{ once: true, amount: 0.4 }}
+              viewport={VIEWPORT_OPTIONS}
             >
               {/* Pallino sulla linea */}
               <div

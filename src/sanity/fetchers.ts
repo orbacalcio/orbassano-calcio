@@ -285,14 +285,16 @@ export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
         const ay = effectiveTimelineYear(a.event);
         const by = effectiveTimelineYear(b.event);
         if (ay !== by) return ay - by;
-        // A parita' di anno effettivo, eventi senza season prima di
-        // eventi con season (puro evento < stagione). Es. fusione
-        // 1° luglio 2006 viene DOPO la stagione 2005-2006 ma viene
-        // PRIMA di "5° in Serie D, stagione 2006-2007" (entrambi
-        // anno effettivo 2006).
+        // A parita' di anno effettivo: eventi CON season PRIMA di
+        // eventi senza season. La stagione "apre" semanticamente
+        // l'anno-blocco, gli eventi puntuali (fusioni, cambi
+        // denominazione) vengono DOPO le vicende della stagione.
+        // Es. effective year 2006:
+        //   1. "4° in Serie D semifinale" (season 2006-2007)
+        //   2. "Fusione con Cirie" (luglio 2006, no season)
         const aHas = a.event.season ? 1 : 0;
         const bHas = b.event.season ? 1 : 0;
-        if (aHas !== bHas) return aHas - bHas;
+        if (aHas !== bHas) return bHas - aHas;
         return a.originalIndex - b.originalIndex;
       })
       .map(({ event }) => event);
