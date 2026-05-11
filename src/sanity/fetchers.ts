@@ -244,20 +244,19 @@ export type TimelineEvent = {
 /**
  * Anno effettivo per l'ordinamento timeline.
  *
- * Regola (richiesta utente): se il campo `season` e' popolato, ha
- * priorita' sull'ordinamento rispetto a `year`. Altrimenti si usa
- * solo `year`.
+ * Convenzione (vedi schema timelineEvent.year): il campo `year`
+ * rappresenta l'ANNO DI INIZIO. Per eventi puri = anno solare; per
+ * eventi legati a stagione = primo anno della stagione (es. season
+ * "2005-2006" -> year=2005). Lo schema ha una validation custom che
+ * costringe questa coerenza ('Anno' deve corrispondere al primo
+ * della stagione).
  *
- * Caso d'uso: un evento con season "1929-1930" deve posizionarsi
- * cronologicamente come 1929 (anno di inizio stagione) anche se
- * `year` e' stato inserito come 1930 per altri motivi. La stagione
- * sportiva e' l'unita' di misura piu' precisa per i club calcistici
- * (la storia segue le stagioni, non gli anni solari).
- *
- * Parsing: si prende il primo blocco di 4 cifre dalla stringa
- * (regex `^(\d{4})`). Quindi "1929-1930", "1929/1930", "Stagione
- * 1929-1930" funzionano tutti. Se il parsing fallisce, fallback su
- * `year` numerico.
+ * Questa funzione resta come SAFETY NET per documenti legacy o
+ * importati con year disallineato (l'admin ha 12 documenti corretti
+ * via migration `fix-timeline-years` il 2026-05-11). Se la regola
+ * di schema viene rispettata, `effectiveTimelineYear === event.year`
+ * sempre; ma se per errore qualcuno bypassa la validation,
+ * proteggiamo l'ordinamento del sito.
  */
 function effectiveTimelineYear(event: TimelineEvent): number {
   if (event.season) {
@@ -276,21 +275,21 @@ export async function fetchTimelineEvents(): Promise<TimelineEvent[]> {
       { next: { tags: ["timelineEvent"] } },
     );
     const items = (data ?? []) as TimelineEvent[];
-    // Re-sort lato server applicando la regola "season ha priorita'
-    // su year". La query GROQ ordina per `year asc` come base, qui
-    // sovrascriviamo con l'anno effettivo. Sort stabile via index
-    // tie-breaker (JS Array.sort e' stabile dal 2019, ma esplicitarlo
-    // protegge da edge case di runtime esotici).
+    // Re-sort lato server come safety net (vedi commento su
+    // effectiveTimelineYear). Con dati corretti dalla migration
+    // 11/05/2026 e validation di schema, questo passaggio e' un
+    // no-op rispetto al sort GROQ `order(year asc)`.
     return [...items]
       .map((event, originalIndex) => ({ event, originalIndex }))
       .sort((a, b) => {
         const ay = effectiveTimelineYear(a.event);
         const by = effectiveTimelineYear(b.event);
         if (ay !== by) return ay - by;
-        // A parita' di anno effettivo: chi ha season popolata viene
-        // DOPO chi non la ha (la stagione e' un intervallo che si
-        // estende oltre l'anno secco). Es. "1979" punta prima di
-        // "1979-1980".
+        // A parita' di anno effettivo, eventi senza season prima di
+        // eventi con season (puro evento < stagione). Es. fusione
+        // 1° luglio 2006 viene DOPO la stagione 2005-2006 ma viene
+        // PRIMA di "5° in Serie D, stagione 2006-2007" (entrambi
+        // anno effettivo 2006).
         const aHas = a.event.season ? 1 : 0;
         const bHas = b.event.season ? 1 : 0;
         if (aHas !== bHas) return aHas - bHas;
