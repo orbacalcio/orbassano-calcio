@@ -8,6 +8,14 @@ export const clubOfficial = defineType({
   icon: Building2,
   fields: [
     defineField({
+      name: "isActive",
+      title: "Visibile sull'organigramma",
+      description:
+        "Attiva/disattiva la card del dirigente senza cancellarla. Disattivato = nascosto da /societa/organigramma ma resta in archivio (utile per ex-presidenti, dimissioni in corso, transizioni). Default: attivo.",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
       name: "role",
       title: "Ruolo",
       type: "string",
@@ -51,6 +59,16 @@ export const clubOfficial = defineType({
     select: {
       title: "fullName",
       subtitle: "role",
+      isActive: "isActive",
+    },
+    prepare({ title, subtitle, isActive }) {
+      // Disattivato esplicito: prefisso visivo nella lista Studio cosi'
+      // l'admin distingue al volo le card live dalle archiviate.
+      const active = isActive !== false;
+      return {
+        title: active ? title : `(disattivato) ${title ?? ""}`,
+        subtitle,
+      };
     },
   },
   orderings: [

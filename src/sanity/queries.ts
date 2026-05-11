@@ -550,8 +550,11 @@ export const timelineEventsQuery = defineQuery(`
 // Organigramma societario — ordinati per `order` (posizione DENTRO la
 // riga). L'ordine VERTICALE delle righe e' deciso dal campo
 // `groupOrder` lato page (groupOfficials), che fa min() per gruppo.
+// Filtro `isActive != false`: include i documenti senza il campo
+// (legacy, pre-introduzione del toggle) come attivi; esclude solo
+// quelli esplicitamente disattivati dall'admin.
 export const clubOfficialsQuery = defineQuery(`
-  *[_type == "clubOfficial"] | order(coalesce(order, 99) asc){
+  *[_type == "clubOfficial" && isActive != false] | order(coalesce(order, 99) asc){
     _id,
     role,
     fullName,
