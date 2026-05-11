@@ -109,6 +109,14 @@ export const timelineEvent = defineType({
       type: "boolean",
       initialValue: false,
     }),
+    defineField({
+      name: "manualOrder",
+      title: "Ordine manuale (override)",
+      description:
+        "Numero che SOVRASCRIVE il calcolo automatico di posizione cronologica. Compilalo SOLO quando l'ordine auto basato su anno/stagione/periodo non da' il risultato desiderato. Esempi: per spingere un evento del 1992 prima della stagione 1991-1992 metti 1991; per inserirlo a meta' anno 1992 metti 1992 con valori decimali ammessi (es. 1992.5). Lascia vuoto per usare l'ordinamento automatico.",
+      type: "number",
+      validation: (r) => r.min(1800).max(2200),
+    }),
   ],
   preview: {
     select: {

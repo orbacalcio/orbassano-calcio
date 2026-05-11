@@ -539,6 +539,7 @@ export const timelineEventsQuery = defineQuery(`
     year,
     yearEnd,
     season,
+    manualOrder,
     title,
     category,
     isHighlight,

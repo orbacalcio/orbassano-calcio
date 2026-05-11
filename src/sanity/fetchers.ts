@@ -237,6 +237,10 @@ export type TimelineEvent = {
    *  range `year - yearEnd` invece del solo `year`. */
   yearEnd: number | null;
   season: string | null;
+  /** Override manuale dell'ordinamento. Quando valorizzato, sostituisce
+   *  l'effective year calcolato dalla logica automatica. Permette
+   *  posizionamento fine (decimale ammesso, es. 1991.5). */
+  manualOrder: number | null;
   title: string;
   category: TimelineCategory | null;
   isHighlight: boolean | null;
@@ -246,31 +250,27 @@ export type TimelineEvent = {
 };
 
 /**
- * Anno effettivo per l'ordinamento timeline. Tre casi:
+ * Anno effettivo per l'ordinamento timeline. Quattro casi (in ordine
+ * di priorita'):
+ *
+ *  0) Evento con `manualOrder` (OVERRIDE manuale dell'admin):
+ *     effective year = manualOrder. Decimali ammessi (es. 1991.5) per
+ *     forzare posizioni intermedie senza toccare gli altri eventi.
  *
  *  1) Evento con `yearEnd` (PERIODO pluri-annuale, es. 1985-1992):
- *     effective year = yearEnd. Il periodo si chiude in quell'anno
- *     e si posiziona vicino agli eventi che terminano lo stesso
- *     anno (stagioni, eventi puri).
+ *     effective year = yearEnd. Il periodo si chiude in quell'anno.
  *
  *  2) Evento con `season` (singola stagione, es. 2005-2006):
- *     effective year = secondo anno della stagione (fine stagione,
- *     es. 2006). Lo schema ha una validation che impone year ==
- *     secondo anno; questa funzione lo deriva comunque dalla
- *     stringa season come safety net.
+ *     effective year = secondo anno della stagione.
  *
- *  3) Evento PURO (no yearEnd, no season): effective year = year.
- *
- * Esempio ordinamento richiesto utente:
- *   - Stagione 1984/1985        -> effective 1985 (priority stagione)
- *   - Periodo 1985-1992         -> effective 1992 (priority periodo)
- *   - Evento puro 1992          -> effective 1992 (priority puro)
- *   - Evento puro 1993          -> effective 1993
+ *  3) Evento PURO: effective year = year.
  *
  * Tie-breaker a parita' di effective year applicato in fetchTimelineEvents
- * (stagione > periodo > puro).
+ * (stagione > periodo > puro). manualOrder bypassa anche il tie-breaker
+ * se due eventi hanno valori manualOrder diversi.
  */
 function effectiveTimelineYear(event: TimelineEvent): number {
+  if (typeof event.manualOrder === "number") return event.manualOrder;
   if (typeof event.yearEnd === "number") return event.yearEnd;
   if (event.season) {
     const matches = Array.from(event.season.matchAll(/(\d{4})/g));
