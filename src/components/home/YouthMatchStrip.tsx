@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, ChevronRight } from "lucide-react";
+import { ArrowUpRight, CalendarDays, ChevronRight, Trophy } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
 import {
@@ -92,11 +92,20 @@ export async function YouthMatchStrip() {
                 ? "Casa"
                 : "Trasferta"
               : null;
+            // Priorita' link classifica: externalRankingUrl (campo
+            // dedicato) batte defaultReportLink (Tuttocampo che mostra
+            // anche risultati). Modificabile dall'admin su ogni
+            // competition in Studio (cambia ogni stagione).
+            const classificaUrl =
+              match?.competition?.externalRankingUrl ??
+              match?.competition?.defaultReportLink ??
+              null;
             return (
-              <li key={slug}>
+              <li key={slug} className="flex items-stretch">
+                {/* Click area principale -> calendario squadra */}
                 <Link
                   href={`/squadre/${slug}/calendario`}
-                  className="group hover:bg-surface-2/40 focus-visible:outline-brand-gold flex items-center gap-3 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 md:gap-5 md:py-4"
+                  className="group hover:bg-surface-2/40 focus-visible:outline-brand-gold flex flex-1 items-center gap-3 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 md:gap-5 md:py-4"
                 >
                   <span className="font-display text-ink-hi w-28 shrink-0 text-sm font-extrabold tracking-[0.04em] uppercase md:w-36 md:text-base">
                     {label}
@@ -138,6 +147,23 @@ export async function YouthMatchStrip() {
                     aria-hidden
                   />
                 </Link>
+
+                {/* Tasto Classifica (esterno Sprintsport/Tuttocampo). Visibile
+                    solo se l'admin ha popolato il campo competition.
+                    externalRankingUrl (o defaultReportLink come fallback).
+                    Modificabile dal CMS senza toccare il codice. */}
+                {classificaUrl && (
+                  <a
+                    href={classificaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Classifica ${label}`}
+                    className="text-ink-mid hover:text-brand-gold focus-visible:outline-brand-gold ml-1 inline-flex items-center gap-1.5 self-center rounded-md px-2 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-2 md:gap-2 md:text-sm"
+                  >
+                    <Trophy size={14} aria-hidden />
+                    <span className="hidden md:inline">Classifica</span>
+                  </a>
+                )}
               </li>
             );
           })}

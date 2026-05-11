@@ -65,7 +65,15 @@ export async function MatchStrip() {
     "Prima Categoria Piemonte VdA";
   const group = nextMatch?.competition?.group ?? settings?.currentGroup ?? "";
   const season = nextMatch?.competition?.season ?? "2026/27";
+  // Priorita' link classifica:
+  //   1. competition.externalRankingUrl (campo dedicato classifica)
+  //   2. competition.defaultReportLink (Tuttocampo che include classifica)
+  //   3. settings.sprintsportLinks.classifica (fallback storico globale)
+  // Tutti modificabili dall'admin in Studio: il campo competition cambia
+  // ogni stagione, il fallback settings copre il caso 'nessuna competition
+  // ancora caricata'.
   const classificaUrl =
+    nextMatch?.competition?.externalRankingUrl ??
     nextMatch?.competition?.defaultReportLink ??
     settings?.sprintsportLinks?.classifica ??
     null;

@@ -132,6 +132,12 @@ export const settingsQuery = defineQuery(`
     "storyNumbersItems": storyNumbersItems[]{
       value, prefix, suffix, label, caption
     },
+    teamsCardsEyebrow,
+    teamsCardsTitle,
+    teamsCardsSubtitle,
+    "teamsCardsItems": teamsCardsItems[]{
+      title, description
+    },
     "defaultOgImage": defaultOgImage.asset->url
   }
 `);
@@ -229,6 +235,7 @@ export const matchesByTeamSlugQuery = defineQuery(`
       group,
       category,
       defaultReportLink,
+      externalRankingUrl,
       "logo": logo.asset->url
     },
     "opponent": opponent->{
@@ -268,7 +275,8 @@ export const nextMatchesByTeamSlugsQuery = defineQuery(`
       name,
       group,
       season,
-      defaultReportLink
+      defaultReportLink,
+      externalRankingUrl
     },
     "opponent": opponent->{
       "club": club->{
@@ -313,6 +321,7 @@ export const nextMatchQuery = defineQuery(`
       group,
       category,
       defaultReportLink,
+      externalRankingUrl,
       "logo": logo.asset->url
     },
     "opponent": opponent->{

@@ -21,6 +21,13 @@ export const settings = defineType({
         "Eyebrow, titolo e statistiche del box mostrato in homepage tra «Le squadre» e il Manifesto. Consigliate 4 voci, ma il numero è libero.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "teamsCards",
+      title: 'Box "Le squadre" (homepage)',
+      description:
+        "Eyebrow, titolo, sottotitolo e descrizioni delle 3 card numerate (Prima Squadra · Juniores · Settore Giovanile) della sezione TeamsCards in homepage.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -148,6 +155,71 @@ export const settings = defineType({
           },
         }),
       ],
+    }),
+    // --- Box "Le squadre" (TeamsCards homepage) -----------------------------
+    defineField({
+      name: "teamsCardsEyebrow",
+      title: "Eyebrow",
+      description: 'Testo piccolo sopra il titolo (es. "Le squadre").',
+      type: "string",
+      fieldset: "teamsCards",
+    }),
+    defineField({
+      name: "teamsCardsTitle",
+      title: "Titolo del box",
+      description: 'Es. "Tre realtà, una sola identità".',
+      type: "string",
+      fieldset: "teamsCards",
+    }),
+    defineField({
+      name: "teamsCardsSubtitle",
+      title: "Sottotitolo",
+      description:
+        '1-2 righe sotto il titolo. Es. "Dalla Prima Squadra al Settore Giovanile...".',
+      type: "text",
+      rows: 3,
+      fieldset: "teamsCards",
+    }),
+    defineField({
+      name: "teamsCardsItems",
+      title: "Card (3 voci: Prima Squadra · Juniores · Settore Giovanile)",
+      description:
+        "Ordine fisso: 01 Prima Squadra · 02 Juniores · 03 Settore Giovanile. I numeri e i link delle card restano hardcoded; titolo e descrizione di ogni card sono modificabili qui.",
+      type: "array",
+      fieldset: "teamsCards",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "teamsCardItem",
+          title: "Card",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Titolo card",
+              description: 'Es. "Prima Squadra" / "Juniores" / "Settore Giovanile".',
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "description",
+              title: "Descrizione",
+              description: "1-3 righe sotto il titolo della card.",
+              type: "text",
+              rows: 3,
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description" },
+          },
+        }),
+      ],
+      validation: (r) =>
+        r
+          .max(3)
+          .warning(
+            "Il layout TeamsCards e' progettato per 3 card. Aggiungerne di piu' rompe la grid.",
+          ),
     }),
     defineField({
       name: "currentSeason",
