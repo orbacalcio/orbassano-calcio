@@ -4,6 +4,7 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 import {
   BookOpen,
+  ExternalLink,
   Handshake,
   RefreshCcw,
   Sparkles,
@@ -178,6 +179,17 @@ export function Timeline({ events }: Props) {
                   value={event.description}
                   className="text-ink-mid text-sm"
                 />
+              )}
+              {event.externalLink && (
+                <a
+                  href={event.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-gold hover:text-brand-white focus-visible:outline-brand-gold mt-1 inline-flex items-center gap-1.5 self-start text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Approfondisci
+                  <ExternalLink size={12} aria-hidden />
+                </a>
               )}
             </article>
           </motion.li>

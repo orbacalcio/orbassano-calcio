@@ -5,8 +5,10 @@ import { Trophy } from "lucide-react";
  * non editoriali (DATA_ORBASSANO §2). I trofei vinti vivono in alto,
  * i piazzamenti notevoli in basso.
  *
- * Quando arrivera' un nuovo titolo, aggiornare questo array
- * direttamente (e' un evento ogni 20+ anni, non vale uno schema CMS).
+ * Allineato con gli eventi storici in CMS (timeline /societa/storia)
+ * — verificato il 2026-05-11. Quando arrivera' un nuovo titolo,
+ * aggiornare questo array direttamente (e' un evento ogni 20+ anni,
+ * non vale uno schema CMS).
  */
 type PalmaresEntry = {
   competition: string;
@@ -50,8 +52,12 @@ const PLACEMENTS: PalmaresEntry[] = [
     details: "2001-2002, girone B",
   },
   {
+    competition: "Seconda Divisione — finale playoff",
+    details: "1958-1959, persa ai rigori contro il Valperga",
+  },
+  {
     competition: "Prima Categoria — finale playoff",
-    details: "2018-2019",
+    details: "2018-2019 (come Aurora Sporting Orbassano)",
   },
 ];
 

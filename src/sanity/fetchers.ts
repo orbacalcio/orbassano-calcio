@@ -246,6 +246,9 @@ export type TimelineEvent = {
   category: TimelineCategory | null;
   isHighlight: boolean | null;
   description: PortableTextBlock[] | null;
+  /** URL esterno di approfondimento (Wikipedia, La Stampa, video).
+   *  Render in card come bottone "Approfondisci" target=_blank. */
+  externalLink: string | null;
   image: string | null;
   imageLqip: string | null;
 };

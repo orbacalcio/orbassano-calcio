@@ -548,6 +548,7 @@ export const timelineEventsQuery = defineQuery(`
     category,
     isHighlight,
     description,
+    externalLink,
     "image": image.asset->url,
     "imageLqip": image.asset->metadata.lqip
   }

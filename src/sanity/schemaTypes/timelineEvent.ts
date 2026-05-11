@@ -111,6 +111,13 @@ export const timelineEvent = defineType({
       initialValue: false,
     }),
     defineField({
+      name: "externalLink",
+      title: "Link esterno (opzionale)",
+      description:
+        "URL di approfondimento esterno (Wikipedia, La Stampa, archivio storico, video YouTube). Se popolato, la card timeline mostra un tasto 'Approfondisci' che apre il link in nuova tab.",
+      type: "url",
+    }),
+    defineField({
       name: "manualOrder",
       title: "Ordine manuale (override)",
       description:
