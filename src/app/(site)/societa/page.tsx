@@ -55,6 +55,11 @@ const BASE_HUB_CARDS = [
 ];
 
 // Aggiunte governance (vivibili solo a feature flag attivo).
+// NB: la card "Trasparenza" (rendicontazione 5x1000) e' stata RIMOSSA su
+// richiesta utente il 2026-05-11, in coerenza con la rimozione del link
+// dal footer. La pagina /societa/trasparenza esiste ancora dietro flag
+// governance ma non e' linkata. Reminder salvato in memoria — ricordare
+// di riaggiungere quando dati 5x1000 saranno definitivi.
 const GOVERNANCE_HUB_CARDS = [
   {
     number: "05",
@@ -66,14 +71,6 @@ const GOVERNANCE_HUB_CARDS = [
   },
   {
     number: "06",
-    title: "Trasparenza",
-    description:
-      "Rendicontazione 5×1000 e dati di governance: importi ricevuti, destinazioni, organi sociali del club.",
-    href: "/societa/trasparenza",
-    icon: ScrollText,
-  },
-  {
-    number: "07",
     title: "Segnalazioni",
     description:
       "Canale ufficiale per segnalare violazioni del Codice Etico. Riservatezza garantita, nessuna ritorsione.",
