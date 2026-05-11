@@ -42,7 +42,11 @@ export default async function ImpiantiPage() {
       <Container className="py-16 lg:py-24" size="wide">
         <RevealOnScroll>
           {facilities.length > 0 ? (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            // Le facility occupano la larghezza piena del Container: ogni
+            // card e' una "scheda impianto" che merita spazio per
+            // foto + indirizzo + dettagli. Se ce ne sono piu' di una
+            // attive, vanno una sotto l'altra (stack verticale).
+            <div className="flex flex-col gap-8">
               {facilities.map((f, i) => (
                 <FacilityCard key={f._id} facility={f} index={i} />
               ))}

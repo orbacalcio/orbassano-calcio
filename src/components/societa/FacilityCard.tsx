@@ -30,7 +30,7 @@ export function FacilityCard({ facility, index }: Props) {
             alt={main.alt ?? `Impianto ${facility.name}`}
             fill
             className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="100vw"
             placeholder={main.lqip ? "blur" : "empty"}
             blurDataURL={main.lqip ?? undefined}
           />
