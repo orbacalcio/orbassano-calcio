@@ -232,6 +232,10 @@ export type TimelineCategory =
 export type TimelineEvent = {
   _id: string;
   year: number;
+  /** Anno di fine periodo pluri-annuale (es. 1985-1992). Mutualmente
+   *  esclusivo con `season`. Quando popolato, il display mostra il
+   *  range `year - yearEnd` invece del solo `year`. */
+  yearEnd: number | null;
   season: string | null;
   title: string;
   category: TimelineCategory | null;

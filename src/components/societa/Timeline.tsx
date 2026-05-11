@@ -172,13 +172,20 @@ export function Timeline({ events }: Props) {
                 <div className="flex items-baseline justify-between gap-3">
                   <span
                     className={cn(
-                      "font-display text-3xl leading-none font-black tracking-[0.005em] sm:text-4xl",
+                      "font-display leading-none font-black tracking-[0.005em]",
+                      // Periodo (year - yearEnd) ha rendering piu' compatto
+                      // per accomodare la stringa estesa "1985 - 1992".
+                      event.yearEnd
+                        ? "text-2xl sm:text-3xl"
+                        : "text-3xl sm:text-4xl",
                       event.isHighlight
                         ? "text-brand-gold"
                         : "text-ink-hi",
                     )}
                   >
-                    {event.year}
+                    {event.yearEnd
+                      ? `${event.year} – ${event.yearEnd}`
+                      : event.year}
                   </span>
                   {event.category && (
                     <span className="border-border/60 text-ink-mid font-mono inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">

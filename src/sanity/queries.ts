@@ -537,6 +537,7 @@ export const timelineEventsQuery = defineQuery(`
   *[_type == "timelineEvent"] | order(year asc, _createdAt asc){
     _id,
     year,
+    yearEnd,
     season,
     title,
     category,
