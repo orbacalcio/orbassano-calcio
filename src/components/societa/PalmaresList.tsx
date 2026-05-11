@@ -18,19 +18,23 @@ type PalmaresEntry = {
 
 const TITLES: PalmaresEntry[] = [
   {
+    competition: "Prima Categoria Piemonte-VdA",
+    count: 1,
+    details: "2024-2025, girone E · promossa in Promozione",
+  },
+  {
     competition: "Eccellenza Piemonte-VdA",
     count: 1,
-    details: "2002-2003, girone B",
+    details: "2002-2003, girone B · promossa in Serie D",
   },
   {
     competition: "Promozione Piemonte-VdA",
-    count: 1,
-    details: "1979-1980, girone B",
+    count: 2,
+    details: "2000-2001 girone D · 1979-1980 girone B · promosse in Eccellenza e Serie D",
   },
   {
-    competition: "Seconda Categoria Piemonte-VdA",
-    count: 1,
-    details: "2015-2016, girone G (come Aurora Sporting)",
+    competition: "Promozione (promozione di girone)",
+    details: "1977-1978 · promossa in Promozione",
   },
 ];
 
@@ -49,15 +53,24 @@ const PLACEMENTS: PalmaresEntry[] = [
   },
   {
     competition: "Eccellenza — 2° posto",
-    details: "2001-2002, girone B",
+    details: "2001-2002, girone B (secondo turno playoff perso)",
   },
   {
-    competition: "Seconda Divisione — finale playoff",
-    details: "1958-1959, persa ai rigori contro il Valperga",
+    competition: "Promozione — due 2° posti consecutivi",
+    details:
+      "2009-2010 finale playoff persa · 2010-2011 quarti playoff persi, girone C",
+  },
+  {
+    competition: "Seconda Divisione — 1° girone + finale playoff",
+    details: "1958-1959, girone E · finale persa ai rigori contro il Valperga",
   },
   {
     competition: "Prima Categoria — finale playoff",
-    details: "2018-2019 (come Aurora Sporting Orbassano)",
+    details: "2018-2019, girone E (come Aurora Sporting Orbassano)",
+  },
+  {
+    competition: "Prima Categoria — 3° posto",
+    details: "2023-2024, girone E (primo turno playoff perso)",
   },
 ];
 
