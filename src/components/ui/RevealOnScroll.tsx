@@ -30,12 +30,18 @@ const variants: Variants = {
 export function RevealOnScroll({
   children,
   className,
-  amount = 0.2,
+  amount = 0.05,
   delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
-  /** Frazione del componente che deve essere visibile prima di animare (0-1). */
+  /**
+   * Frazione del componente che deve essere visibile prima di animare
+   * (0-1). Default 0.05 (5%): basta che il blocco inizi a entrare in
+   * viewport per partire l'animazione. Valori piu' alti (es. 0.2)
+   * non scattavano mai su blocchi alti come Timeline o NewsArchive,
+   * lasciando il contenuto opacity 0 a video (pagina visivamente vuota).
+   */
   amount?: number;
   /** Ritardo aggiuntivo in secondi. */
   delay?: number;
