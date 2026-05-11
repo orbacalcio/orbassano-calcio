@@ -138,6 +138,10 @@ export const settingsQuery = defineQuery(`
     "teamsCardsItems": teamsCardsItems[]{
       title, description
     },
+    mazzolaEyebrow,
+    mazzolaTitle,
+    mazzolaBody,
+    mazzolaPlayers,
     "defaultOgImage": defaultOgImage.asset->url
   }
 `);

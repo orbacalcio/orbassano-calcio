@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ExternalLink } from "lucide-react";
-import { MazzolaSection } from "@/components/societa/MazzolaSection";
 import { PalmaresList } from "@/components/societa/PalmaresList";
 import { Timeline } from "@/components/societa/Timeline";
 import { Container } from "@/components/ui/Container";
@@ -76,8 +75,6 @@ export default async function StoriaPage() {
           </div>
         </RevealOnScroll>
       </Container>
-
-      <MazzolaSection />
 
       <Container className="py-16 lg:py-24" size="wide">
         <RevealOnScroll>

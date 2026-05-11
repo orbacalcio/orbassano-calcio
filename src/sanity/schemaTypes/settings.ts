@@ -28,6 +28,13 @@ export const settings = defineType({
         "Eyebrow, titolo, sottotitolo e descrizioni delle 3 card numerate (Prima Squadra · Juniores · Settore Giovanile) della sezione TeamsCards in homepage.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "mazzolaBox",
+      title: 'Box "Il Mazzola" (pagina Impianti)',
+      description:
+        "Eyebrow, titolo, paragrafo descrittivo e lista dei campioni che si sono allenati al Mazzola. Mostrato sulla pagina /societa/impianti.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -220,6 +227,41 @@ export const settings = defineType({
           .warning(
             "Il layout TeamsCards e' progettato per 3 card. Aggiungerne di piu' rompe la grid.",
           ),
+    }),
+    // --- Box "Il Mazzola" (pagina Impianti) ---------------------------------
+    defineField({
+      name: "mazzolaEyebrow",
+      title: "Eyebrow",
+      description: 'Es. "Il Mazzola" (testo piccolo gold sopra il titolo).',
+      type: "string",
+      fieldset: "mazzolaBox",
+    }),
+    defineField({
+      name: "mazzolaTitle",
+      title: "Titolo del box",
+      description:
+        'Es. "Sul nostro stadio si sono allenati i campioni". Newline ammessi per andare a capo.',
+      type: "text",
+      rows: 3,
+      fieldset: "mazzolaBox",
+    }),
+    defineField({
+      name: "mazzolaBody",
+      title: "Paragrafo descrittivo",
+      description:
+        "Testo lungo che descrive il contesto storico del Mazzola, gli allenamenti di Torino/Juventus, ecc.",
+      type: "text",
+      rows: 8,
+      fieldset: "mazzolaBox",
+    }),
+    defineField({
+      name: "mazzolaPlayers",
+      title: "Campioni che si sono allenati",
+      description:
+        "Lista nomi mostrata in fondo al box come card senza numerazione. Riordinabili con drag-and-drop.",
+      type: "array",
+      fieldset: "mazzolaBox",
+      of: [{ type: "string" }],
     }),
     defineField({
       name: "currentSeason",
