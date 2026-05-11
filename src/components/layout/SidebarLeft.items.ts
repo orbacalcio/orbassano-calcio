@@ -3,11 +3,9 @@ import {
   Handshake,
   HeartHandshake,
   Mail,
-  MapPin,
   MoreHorizontal,
   Newspaper,
   Newspaper as NewsletterIcon,
-  ScrollText,
   Ticket,
   Users,
   type LucideIcon,
@@ -46,15 +44,18 @@ export const sidebarMainItems: SidebarItem[] = [
 ];
 
 /**
- * Voci che vivono nel popover "Altro" (icona MoreHorizontal in sidebar).
+ * Voci secondarie quick-link mostrate in fondo al NavigationDrawer
+ * (drawer hamburger aperto da SidebarLeft "ALTRO" o da MobileTopbar).
+ *
+ * Impianti sportivi NON e' qui: vive solo dentro l'accordion Societa'
+ * del drawer (e' un sotto-link logico della sezione).
+ * Privacy & Cookie NON e' qui: vive solo in footer.
  */
 export const sidebarOverflowItems: SidebarItem[] = [
   { href: "/societa/biglietteria", label: "Biglietteria", icon: Ticket },
   { href: "/newsletter", label: "Newsletter", icon: NewsletterIcon },
   { href: "/5x1000", label: "5×1000", icon: HeartHandshake },
   { href: "/contatti", label: "Contatti", icon: Mail },
-  { href: "/societa/impianti", label: "Impianti sportivi", icon: MapPin },
-  { href: "/legal/privacy", label: "Privacy & Cookie", icon: ScrollText },
 ];
 
 export const sidebarMoreIcon = MoreHorizontal;

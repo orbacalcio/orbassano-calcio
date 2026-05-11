@@ -100,7 +100,9 @@ export function ClientShell({
       />
 
       {/* Sidebar verticali: visibili in HERO, fadono in parallelo
-          all'allargamento della Topbar (stessa curva, stessa durata). */}
+          all'allargamento della Topbar (stessa curva, stessa durata).
+          Il bottone "Altro" della SidebarLeft apre il NavigationDrawer
+          (pattern juventus.com): pass-through del callback openDrawer. */}
       <motion.div
         initial={false}
         animate={{
@@ -109,7 +111,7 @@ export function ClientShell({
         }}
         transition={sidebarFade}
       >
-        <SidebarLeft />
+        <SidebarLeft onMoreClick={openDrawer} />
         <SidebarRight />
       </motion.div>
 

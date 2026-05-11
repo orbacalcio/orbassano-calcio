@@ -67,8 +67,8 @@ function buildSections(opts: {
       href: "/news",
       label: "News",
       children: [
-        // Solo 1 child = parent → mostrato come link semplice (no accordion)
         { href: "/news", label: "Archivio completo" },
+        { href: "/news/gallery", label: "Gallery" },
       ],
     },
     {

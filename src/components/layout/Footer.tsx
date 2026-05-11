@@ -87,6 +87,8 @@ function buildSections(opts: {
   activeTeamSlugs: string[];
 }) {
   const teamSlugs = new Set(opts.activeTeamSlugs);
+  // Squadre footer: solo 3 voci (Prima Squadra, Juniores, Settore
+  // Giovanile). La Scuola Calcio non esiste come categoria del club.
   const squadreItems: Array<{ href: string; label: string }> = [];
   if (teamSlugs.has("prima-squadra")) {
     squadreItems.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
@@ -98,9 +100,13 @@ function buildSections(opts: {
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile",
   });
-  if (teamSlugs.has("scuola-calcio")) {
-    squadreItems.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
-  }
+
+  // Sezioni: include Codice Etico + Segnalazioni quando il flag
+  // governance e' attivo. NB: Trasparenza temporaneamente NON
+  // mostrata in footer (richiesta utente 2026-05-11; ricordare di
+  // riabilitarla quando i dati 5x1000 saranno definitivi). La pagina
+  // /societa/trasparenza continua a esistere dietro flag, solo non e'
+  // linkata da qui.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
     { href: "/societa", label: "Società" },
@@ -112,7 +118,6 @@ function buildSections(opts: {
   if (FEATURES.governanceSection) {
     sezioniItems.push(
       { href: "/societa/codice-etico", label: "Codice Etico" },
-      { href: "/societa/trasparenza", label: "Trasparenza" },
       { href: "/societa/segnalazioni", label: "Segnalazioni" },
     );
   }
@@ -141,8 +146,8 @@ function buildSections(opts: {
     {
       title: "Legale",
       items: [
-        { href: "/legal/privacy", label: "Privacy" },
-        { href: "/legal/cookie", label: "Cookie policy" },
+        { href: "/legal/privacy", label: "Privacy Policy" },
+        { href: "/legal/cookie", label: "Cookie Policy" },
         { href: "/legal/termini", label: "Termini" },
         { href: "/mappa-del-sito", label: "Mappa del sito" },
         { href: "/contatti", label: "Contatti" },

@@ -3,14 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { Z } from "@/lib/z-indexes";
 import {
   sidebarMainItems,
   sidebarMoreIcon as MoreIcon,
-  sidebarOverflowItems,
   type SidebarItem,
 } from "./SidebarLeft.items";
 
@@ -19,11 +17,14 @@ import {
  *
  * Visibilita' gestita da ClientShell via opacity + pointer-events:
  * mostrata solo quando l'hero e' nel viewport. Quando si scrolla oltre,
- * la TopbarScrolled la sostituisce. Estetica sempre trasparente
- * (bg-surface-0/55 + backdrop-blur), tarata per stare sopra le foto
- * dell'hero.
+ * la Topbar in modalita' scrolled la sostituisce. Estetica sempre
+ * trasparente (bg-surface-0/55 + backdrop-blur), tarata per stare
+ * sopra le foto dell'hero.
  *
- * Voci: 6 (logo home + 4 sezioni + ALTRO popover).
+ * Voci: 6 (logo home + 4 sezioni + ALTRO). ALTRO non e' piu' un
+ * popover laterale: apre il NavigationDrawer hamburger full-screen
+ * (pattern juventus.com), che mostra le 4 sezioni accordion + i
+ * quick-link secondari (Biglietteria, Newsletter, 5×1000, Contatti).
  */
 
 function SidebarItemLink({
@@ -85,89 +86,28 @@ function SidebarItemLink({
   );
 }
 
-function MoreButton() {
-  const [open, setOpen] = useState(false);
-  const popoverRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    function onClick(e: MouseEvent) {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    }
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("mousedown", onClick);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("mousedown", onClick);
-    };
-  }, [open]);
-
+function MoreButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="relative" ref={popoverRef}>
-      <button
-        type="button"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-label="Altre sezioni"
-        onClick={() => setOpen((o) => !o)}
-        className="group focus-visible:outline-brand-gold flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4"
-      >
-        <MoreIcon
-          size={28}
-          className={cn(
-            "transition-colors",
-            open ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
-          )}
-          aria-hidden
-        />
-        <span
-          className={cn(
-            "font-display text-[11px] font-bold tracking-[0.12em] uppercase transition-colors",
-            open ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
-          )}
-        >
-          ALTRO
-        </span>
-      </button>
-      {open && (
-        <div
-          role="menu"
-          className="border-border bg-surface-1/95 absolute top-0 left-[88px] w-56 rounded-r-2xl border p-2 shadow-2xl backdrop-blur-md"
-          style={{ zIndex: Z.tooltipPopover }}
-        >
-          <ul className="flex flex-col">
-            {sidebarOverflowItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    role="menuitem"
-                    onClick={() => setOpen(false)}
-                    className="text-ink-mid hover:bg-surface-2 hover:text-ink-hi focus-visible:outline-brand-gold flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
-                  >
-                    {Icon && <Icon size={16} aria-hidden />}
-                    <span>{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-    </div>
+    <button
+      type="button"
+      aria-label="Apri menu completo"
+      aria-controls="navigation-drawer"
+      onClick={onClick}
+      className="group focus-visible:outline-brand-gold flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4"
+    >
+      <MoreIcon
+        size={28}
+        className="text-ink-mid group-hover:text-ink-hi transition-colors"
+        aria-hidden
+      />
+      <span className="font-display text-ink-mid group-hover:text-ink-hi text-[11px] font-bold tracking-[0.12em] uppercase transition-colors">
+        ALTRO
+      </span>
+    </button>
   );
 }
 
-export function SidebarLeft() {
+export function SidebarLeft({ onMoreClick }: { onMoreClick: () => void }) {
   const pathname = usePathname();
 
   return (
@@ -189,7 +129,7 @@ export function SidebarLeft() {
           );
         })}
         <li>
-          <MoreButton />
+          <MoreButton onClick={onMoreClick} />
         </li>
       </ul>
     </nav>
