@@ -9,9 +9,9 @@ export const timelineEvent = defineType({
   fields: [
     defineField({
       name: "year",
-      title: "Anno cronologico (anno di inizio)",
+      title: "Anno cronologico (anno di fine)",
       description:
-        "Per eventi PURI (fondazione, fusione, ecc.) usa l'anno solare in cui sono avvenuti. Per eventi LEGATI A UNA STAGIONE (promozione, retrocessione, posizioni di classifica) usa l'ANNO DI INIZIO della stagione (es. stagione 2005-2006 → 2005). Cosi' l'ordinamento cronologico colloca l'evento prima delle vicende dell'anno solare successivo. La stagione completa va nel campo 'Stagione' qui sotto.",
+        "Per eventi PURI (fondazione, fusione, ecc.) usa l'anno solare in cui sono avvenuti. Per eventi LEGATI A UNA STAGIONE (promozione, retrocessione, posizioni di classifica) usa l'ANNO DI FINE della stagione (es. stagione 2005-2006 → 2006). Cosi' la stagione si chiude entro l'anno solare e gli eventi puri estivi/autunnali (fusioni di luglio, cessioni di agosto) seguono cronologicamente nella linea del tempo. La stagione completa va nel campo 'Stagione' qui sotto.",
       type: "number",
       validation: (r) => r.required().min(1900).max(2100),
     }),
@@ -19,21 +19,22 @@ export const timelineEvent = defineType({
       name: "season",
       title: "Stagione",
       description:
-        "Es. '2005-2006'. Lascia vuoto per eventi non legati a una stagione (fondazione, fusione, eventi sociali). Quando popolato, l'anno DEVE corrispondere al primo della stagione (vedi campo Anno).",
+        "Es. '2005-2006'. Lascia vuoto per eventi non legati a una stagione (fondazione, fusione, eventi sociali). Quando popolato, l'anno DEVE corrispondere al secondo della stagione (anno di fine — vedi campo Anno).",
       type: "string",
       validation: (r) =>
         r.custom((season, context) => {
           if (!season) return true;
-          // Estrae il primo blocco di 4 cifre dalla stagione.
-          const match = season.match(/^\D*(\d{4})/);
-          const seasonStartYear = match?.[1]
-            ? parseInt(match[1], 10)
-            : Number.NaN;
-          if (Number.isNaN(seasonStartYear)) return true;
+          // Estrae il secondo blocco di 4 cifre dalla stagione (anno
+          // di FINE, es. "2005-2006" -> 2006). Fallback sul primo se
+          // non trova un secondo blocco.
+          const matches = Array.from(season.matchAll(/(\d{4})/g));
+          const endStr = matches[1]?.[1] ?? matches[0]?.[1];
+          const seasonEndYear = endStr ? parseInt(endStr, 10) : Number.NaN;
+          if (Number.isNaN(seasonEndYear)) return true;
           const year = (context.document as { year?: number })?.year;
           if (typeof year !== "number") return true;
-          if (year !== seasonStartYear) {
-            return `Il campo Anno (${year}) deve corrispondere al primo anno della stagione (${seasonStartYear}). Aggiorna 'Anno' a ${seasonStartYear}.`;
+          if (year !== seasonEndYear) {
+            return `Il campo Anno (${year}) deve corrispondere al secondo anno della stagione (${seasonEndYear}). Aggiorna 'Anno' a ${seasonEndYear}.`;
           }
           return true;
         }),

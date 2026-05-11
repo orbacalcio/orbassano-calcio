@@ -245,23 +245,25 @@ export type TimelineEvent = {
  * Anno effettivo per l'ordinamento timeline.
  *
  * Convenzione (vedi schema timelineEvent.year): il campo `year`
- * rappresenta l'ANNO DI INIZIO. Per eventi puri = anno solare; per
- * eventi legati a stagione = primo anno della stagione (es. season
- * "2005-2006" -> year=2005). Lo schema ha una validation custom che
- * costringe questa coerenza ('Anno' deve corrispondere al primo
+ * rappresenta l'ANNO DI FINE. Per eventi puri = anno solare; per
+ * eventi legati a stagione = secondo anno della stagione (es. season
+ * "2005-2006" -> year=2006). Lo schema ha una validation custom che
+ * costringe questa coerenza ('Anno' deve corrispondere al secondo
  * della stagione).
  *
  * Questa funzione resta come SAFETY NET per documenti legacy o
- * importati con year disallineato (l'admin ha 12 documenti corretti
- * via migration `fix-timeline-years` il 2026-05-11). Se la regola
- * di schema viene rispettata, `effectiveTimelineYear === event.year`
- * sempre; ma se per errore qualcuno bypassa la validation,
- * proteggiamo l'ordinamento del sito.
+ * importati con year disallineato. Se la regola di schema viene
+ * rispettata, `effectiveTimelineYear === event.year` sempre; ma se
+ * per errore qualcuno bypassa la validation, proteggiamo
+ * l'ordinamento del sito.
  */
 function effectiveTimelineYear(event: TimelineEvent): number {
   if (event.season) {
-    const match = event.season.match(/^\D*(\d{4})/);
-    const parsed = match?.[1] ? parseInt(match[1], 10) : Number.NaN;
+    // Anno di FINE: secondo blocco di 4 cifre. Fallback sul primo
+    // se la stagione contiene solo un anno (es. season="2010" raro).
+    const matches = Array.from(event.season.matchAll(/(\d{4})/g));
+    const endStr = matches[1]?.[1] ?? matches[0]?.[1];
+    const parsed = endStr ? parseInt(endStr, 10) : Number.NaN;
     if (!Number.isNaN(parsed)) return parsed;
   }
   return event.year;
