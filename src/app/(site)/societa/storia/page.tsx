@@ -35,22 +35,29 @@ export default async function StoriaPage() {
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Fondato come Gruppo Sportivo Orbassano nel 1930, il club ha
               attraversato oltre 90 anni di calcio piemontese tra fasti,
-              fusioni, ricomincia e rinascite. Nove partecipazioni alla
-              Serie D, due semifinali di play-off promozione tra i
-              professionisti negli anni 2000, e un legame profondo con la
-              grande Torino calcistica: lo stadio Valentino Mazzola ha
-              ospitato gli allenamenti di Torino e Juventus.
+              cinque fusioni, ricominciamenti e rinascite. Nove
+              partecipazioni alla Serie D, due semifinali di play-off
+              promozione tra i professionisti negli anni 2000, e un legame
+              profondo con la grande Torino calcistica: lo stadio Valentino
+              Mazzola, all&apos;interno dello Sporting Orbassano (ex Sisport
+              Fiat), ha ospitato a periodi alterni gli allenamenti del Torino
+              dal 1979 alla met&agrave; degli anni 2000 e della Juventus tra
+              il 1990 e il 1994.
             </p>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Negli anni &rsquo;80 l&apos;Orbassano sfior&ograve; due volte la Serie C2 e
+              Negli anni &rsquo;80 l&apos;Orbassano sfior&ograve; la Serie C2
+              con il secondo posto nel Campionato Interregionale 1982-83 e
               gioc&ograve; amichevoli prestigiose contro la Juventus di
-              Trapattoni, Paolo Rossi, Bettega, Tardelli e Causio. Negli
-              anni 2000 &mdash; dopo la fusione con Venaria &mdash; vinse l&apos;Eccellenza
-              2002-03 e arriv&ograve; alle semifinali playoff Serie D nel
-              2005-06 e 2006-07. Nel <strong className="text-ink-hi">2022</strong>,
-              dopo le difficolt&agrave; degli anni 2010, una nuova cordata ha
-              rifondato l&apos;A.S.D. Orbassano Calcio riavvicinandosi alla
-              denominazione storica.
+              Trapattoni con Paolo Rossi, Bettega, Tardelli e Causio. Negli
+              anni 2000, dopo la fusione con Venaria, il club vinse
+              l&apos;Eccellenza 2002-03 e arriv&ograve; alle semifinali
+              playoff di Serie D nel 2005-06 (contro il Monopoli) e nel
+              2006-07 (contro il Casale). Tra il 2012 e il 2017 cinque
+              stagioni di sospensione segnarono la pausa pi&ugrave; difficile
+              della storia; nel <strong className="text-ink-hi">2022</strong>,
+              dopo nuove fusioni e cambi di denominazione, una nuova cordata
+              ha rifondato l&apos;A.S.D. Orbassano Calcio riavvicinandosi
+              alla denominazione storica.
             </p>
           </div>
         </Container>
