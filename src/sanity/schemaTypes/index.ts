@@ -3,6 +3,7 @@ import { clubOfficial } from "./clubOfficial";
 import { competition } from "./competition";
 import { consentLog } from "./consentLog";
 import { facility } from "./facility";
+import { gallery } from "./gallery";
 import { heroSlide } from "./heroSlide";
 import { match } from "./match";
 import { news } from "./news";
@@ -35,6 +36,7 @@ export const schemaTypes = [
   sponsor,
   timelineEvent,
   facility,
+  gallery,
   heroSlide,
   consentLog,
   // Governance & trasparenza (Codice Etico Allegati B/C)

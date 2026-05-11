@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import {
+  fetchAllGallerySlugs,
   fetchAllNewsSlugs,
   fetchAllPlayersForSitemap,
   fetchAllTeamSlugs,
@@ -35,6 +36,7 @@ const STATIC_ROUTES: Array<{
 }> = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/news/gallery", changeFrequency: "weekly", priority: 0.7 },
   { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
   { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
@@ -56,12 +58,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch dinamico in parallelo. Errori → array vuoti, non bloccano la
   // generazione del sitemap statico (i fetcher gia' loggano e ritornano [])
-  const [newsSlugs, teamSlugs, players, hasPartners] = await Promise.all([
-    fetchAllNewsSlugs(),
-    fetchAllTeamSlugs(),
-    fetchAllPlayersForSitemap(),
-    fetchHasActivePartners(),
-  ]);
+  const [newsSlugs, teamSlugs, players, hasPartners, gallerySlugs] =
+    await Promise.all([
+      fetchAllNewsSlugs(),
+      fetchAllTeamSlugs(),
+      fetchAllPlayersForSitemap(),
+      fetchHasActivePartners(),
+      fetchAllGallerySlugs(),
+    ]);
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((r) => ({
     url: `${SITE_URL}${r.path}`,
@@ -75,6 +79,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.6,
+  }));
+
+  const galleryEntries: MetadataRoute.Sitemap = gallerySlugs.map((slug) => ({
+    url: `${SITE_URL}/news/gallery/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.5,
   }));
 
   const teamEntries: MetadataRoute.Sitemap = teamSlugs.map((slug) => ({
@@ -149,6 +160,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...partnerEntry,
     ...governanceEntries,
     ...newsEntries,
+    ...galleryEntries,
     ...teamEntries,
     ...calendarEntries,
     ...playerEntries,

@@ -45,6 +45,60 @@ export const riferimentiOperativiQuery = defineQuery(`
   }
 `);
 
+// Gallerie fotografiche — index paginato. Slice [start..end] per
+// "Carica altre 20" senza scaricare tutti i record. Ordinamento:
+// ordering desc (pin manuale) poi uploadedAt desc (cronologico).
+// `imagesCount` per il badge numero foto nel mosaic — count(images)
+// e' O(N) ma resta veloce su pochi album. coverImage.asset->url
+// pre-risolto per next/image.
+export const galleriesPaginatedQuery = defineQuery(`
+  *[_type == "gallery" && defined(slug.current)]
+    | order(coalesce(ordering, 0) desc, uploadedAt desc)
+    [$start...$end]{
+      _id,
+      title,
+      "slug": slug.current,
+      uploadedAt,
+      category,
+      coverImage,
+      coverAlt,
+      "imagesCount": count(images)
+    }
+`);
+
+// Conteggio totale gallerie per UX 'altri X disponibili' e per
+// nascondere il pulsante 'Carica altre' a fine paginazione.
+export const galleriesTotalCountQuery = defineQuery(`
+  count(*[_type == "gallery" && defined(slug.current)])
+`);
+
+// Singolo album per /news/gallery/[slug]. Asset reference completi
+// con metadata + alt per il viewer.
+export const galleryBySlugQuery = defineQuery(`
+  *[_type == "gallery" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    uploadedAt,
+    category,
+    coverImage,
+    coverAlt,
+    "images": images[]{
+      _key,
+      asset,
+      hotspot,
+      crop,
+      alt,
+      caption
+    }
+  }
+`);
+
+// Tutti gli slug per generateStaticParams su /news/gallery/[slug].
+export const allGallerySlugsQuery = defineQuery(`
+  *[_type == "gallery" && defined(slug.current)].slug.current
+`);
+
 // Rendicontazione 5x1000 - tutti gli anni, ordinati discendenti.
 export const trasparenza5x1000Query = defineQuery(`
   *[_type == "trasparenza5x1000"] | order(anno desc){

@@ -226,8 +226,13 @@ export function NavigationDrawer({
           {sections.map((section) => {
             const isAccordion = section.children.length > 1;
             const isOpen = openSection === section.href;
+            // Font allineato pattern juventus.com (≈ text-4xl, peso 900,
+            // letter-spacing minimo). Stesso identico size per le voci
+            // secondarie quick-link in fondo al drawer: gerarchia
+            // piatta, niente caratterizzazione "principali vs minori"
+            // — l'utente vede una lista uniforme di scelte.
             const rowClass =
-              "font-display text-ink-hi hover:text-brand-gold flex w-full items-center justify-between text-5xl leading-none font-black tracking-[0.005em] uppercase transition-colors";
+              "font-display text-ink-hi hover:text-brand-gold flex w-full items-center justify-between text-4xl leading-none font-black tracking-[0.005em] uppercase transition-colors";
 
             return (
               <div key={section.href} className="flex flex-col">
@@ -292,23 +297,24 @@ export function NavigationDrawer({
         <div className="border-border/50 mx-4 border-t" aria-hidden />
 
         <nav
-          className="flex flex-col gap-1 px-2 py-4"
+          className="flex flex-col gap-3 px-4 py-4"
           aria-label="Sezioni secondarie"
         >
-          {sidebarOverflowItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className="text-ink-mid hover:bg-surface-1 hover:text-ink-hi flex items-center gap-3 rounded-lg px-4 py-2.5 text-base"
-              >
-                {Icon && <Icon size={18} aria-hidden />}
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+          {sidebarOverflowItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className="font-display text-ink-hi hover:text-brand-gold flex w-full items-center justify-between py-1 text-4xl leading-none font-black tracking-[0.005em] uppercase transition-colors"
+            >
+              <span>{item.label}</span>
+              <ChevronRight
+                size={28}
+                className="text-ink-low shrink-0"
+                aria-hidden
+              />
+            </Link>
+          ))}
         </nav>
 
         <div className="mt-auto flex flex-col gap-3 px-4 py-6">

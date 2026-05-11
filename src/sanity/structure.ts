@@ -7,6 +7,7 @@ import {
   Cog,
   Handshake,
   Image as ImageIcon,
+  Images,
   MapPin,
   Milestone,
   Newspaper,
@@ -231,6 +232,9 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
             ]),
         ),
       S.documentTypeListItem("news").title("News").icon(Newspaper),
+      S.documentTypeListItem("gallery")
+        .title("Gallery (album foto)")
+        .icon(Images),
       S.documentTypeListItem("sponsor")
         .title("Sponsor & partner")
         .icon(Handshake),

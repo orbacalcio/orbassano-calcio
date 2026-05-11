@@ -10,6 +10,10 @@ import {
   allTeamSlugsQuery,
   clubOfficialsQuery,
   facilitiesQuery,
+  galleriesPaginatedQuery,
+  galleriesTotalCountQuery,
+  galleryBySlugQuery,
+  allGallerySlugsQuery,
   mainSponsorsQuery,
   matchesByTeamSlugQuery,
   newsBySlugQuery,
@@ -750,6 +754,122 @@ export async function fetchMatchesByTeam(
     return (data ?? []) as MatchSummary[];
   } catch (err) {
     console.error("[fetchMatchesByTeam]", { slug, season }, err);
+    return [];
+  }
+}
+
+// ---------- Gallery (album foto) ---------------------------------------------
+
+export type GalleryCategory =
+  | "match"
+  | "training"
+  | "event"
+  | "youth"
+  | "team"
+  | "archive";
+
+export type SanityImageRef = {
+  _type?: "image";
+  asset?: { _ref?: string; _type?: string };
+  hotspot?: { x: number; y: number; height: number; width: number } | null;
+  crop?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  } | null;
+};
+
+export type GalleryCard = {
+  _id: string;
+  title: string;
+  slug: string;
+  uploadedAt: string;
+  category: GalleryCategory | null;
+  coverImage: SanityImageRef | null;
+  coverAlt: string | null;
+  imagesCount: number;
+};
+
+export type GalleryImageItem = SanityImageRef & {
+  _key: string;
+  alt: string | null;
+  caption: string | null;
+};
+
+export type GalleryDetail = {
+  _id: string;
+  title: string;
+  slug: string;
+  uploadedAt: string;
+  category: GalleryCategory | null;
+  coverImage: SanityImageRef | null;
+  coverAlt: string | null;
+  images: GalleryImageItem[];
+};
+
+/**
+ * Index gallerie paginato: 20 alla volta per default (offset 0/20/40...).
+ * Usato sia dal server (pagina /news/gallery initial batch) sia dal
+ * Server Action `loadMoreGalleries` per i batch successivi.
+ */
+export async function fetchGalleries(
+  offset = 0,
+  limit = 20,
+): Promise<GalleryCard[]> {
+  try {
+    const data = await sanityClient.fetch(
+      galleriesPaginatedQuery,
+      { start: offset, end: offset + limit },
+      { next: { tags: ["gallery"] } },
+    );
+    return (data ?? []) as GalleryCard[];
+  } catch (err) {
+    console.error("[fetchGalleries]", { offset, limit }, err);
+    return [];
+  }
+}
+
+export async function fetchGalleriesTotalCount(): Promise<number> {
+  try {
+    const data = await sanityClient.fetch(
+      galleriesTotalCountQuery,
+      {},
+      { next: { tags: ["gallery"] } },
+    );
+    return typeof data === "number" ? data : 0;
+  } catch (err) {
+    console.error("[fetchGalleriesTotalCount]", err);
+    return 0;
+  }
+}
+
+export async function fetchGalleryBySlug(
+  slug: string,
+): Promise<GalleryDetail | null> {
+  try {
+    const data = await sanityClient.fetch(
+      galleryBySlugQuery,
+      { slug },
+      { next: { tags: ["gallery"] } },
+    );
+    return (data ?? null) as GalleryDetail | null;
+  } catch (err) {
+    console.error("[fetchGalleryBySlug]", { slug }, err);
+    return null;
+  }
+}
+
+export async function fetchAllGallerySlugs(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      allGallerySlugsQuery,
+      {},
+      { next: { tags: ["gallery"] } },
+    );
+    return (data ?? []) as string[];
+  } catch (err) {
+    console.error("[fetchAllGallerySlugs]", err);
     return [];
   }
 }
