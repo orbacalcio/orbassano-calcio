@@ -16,6 +16,7 @@ import {
   allGallerySlugsQuery,
   mainSponsorsQuery,
   matchesByTeamSlugQuery,
+  nextMatchesByTeamSlugsQuery,
   newsBySlugQuery,
   playerBySlugQuery,
   riferimentiOperativiQuery,
@@ -871,5 +872,55 @@ export async function fetchAllGallerySlugs(): Promise<string[]> {
   } catch (err) {
     console.error("[fetchAllGallerySlugs]", err);
     return [];
+  }
+}
+
+// ---------- Strip homepage: prossime partite per team slug -------------------
+
+/**
+ * Payload alleggerito (vs MatchSummary): solo i campi che servono alla
+ * mini-strip Settore Giovanile in homepage. Score/reportLink esclusi
+ * (sempre scheduled), riportiamo invece teamSlug per raggruppare lato
+ * server.
+ */
+export type YouthNextMatch = {
+  _id: string;
+  date: string;
+  home: boolean;
+  isOpponentTbd: boolean | null;
+  isDateTbd: boolean | null;
+  teamSlug: string | null;
+  competition: {
+    shortName: string | null;
+    name: string | null;
+    group: string | null;
+    season: string | null;
+    defaultReportLink: string | null;
+  } | null;
+  opponent: { club: MatchOpponentClub | null } | null;
+};
+
+/**
+ * Per ognuno degli slug richiesti ritorna la PROSSIMA partita scheduled
+ * (data > now), o null se nessuna in calendario. Mantiene l'ordine
+ * degli slug passati.
+ */
+export async function fetchNextMatchesByTeamSlugs(
+  slugs: string[],
+): Promise<Array<{ slug: string; match: YouthNextMatch | null }>> {
+  if (slugs.length === 0) return [];
+  try {
+    const data = (await sanityClient.fetch(
+      nextMatchesByTeamSlugsQuery,
+      { slugs },
+      { next: { tags: ["match"] } },
+    )) as YouthNextMatch[];
+    return slugs.map((slug) => ({
+      slug,
+      match: data.find((m) => m.teamSlug === slug) ?? null,
+    }));
+  } catch (err) {
+    console.error("[fetchNextMatchesByTeamSlugs]", { slugs }, err);
+    return slugs.map((slug) => ({ slug, match: null }));
   }
 }

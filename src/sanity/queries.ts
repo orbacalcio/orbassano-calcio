@@ -246,6 +246,43 @@ export const matchesByTeamSlugQuery = defineQuery(`
   }
 `);
 
+// Prossime partite per un set di team slug (Juniores + Under 14/15/16/17
+// per la strip Settore Giovanile homepage). Una sola query con `in $slugs`
+// invece di 5 chiamate parallele. Ordinata per data crescente; lato server
+// si prende il primo match per ogni slug. Payload alleggerito rispetto a
+// matchesByTeamSlugQuery (no scoreHome/Away, no reportLink, no flag rari).
+export const nextMatchesByTeamSlugsQuery = defineQuery(`
+  *[_type == "match"
+    && team->slug.current in $slugs
+    && status == "scheduled"
+    && date > now()]
+  | order(date asc){
+    _id,
+    date,
+    home,
+    isOpponentTbd,
+    isDateTbd,
+    "teamSlug": team->slug.current,
+    "competition": competition->{
+      shortName,
+      name,
+      group,
+      season,
+      defaultReportLink
+    },
+    "opponent": opponent->{
+      "club": club->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current,
+        "logo": logo.asset->url,
+        primaryColor
+      }
+    }
+  }
+`);
+
 // Prossima partita Prima Squadra per il MatchStrip homepage. Stesso
 // payload di matchesByTeamSlugQuery (per riusare MatchCard compact).
 export const nextMatchQuery = defineQuery(`

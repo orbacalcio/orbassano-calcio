@@ -5,18 +5,25 @@ import { sanityClient } from "@/sanity/client";
 import { nextMatchQuery, settingsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
 import type { MatchSummary } from "@/sanity/fetchers";
+import { YouthMatchStrip } from "./YouthMatchStrip";
 
 /**
- * Strip "info dense" sotto l'hero, stile Juventus, 3 slot:
- *  [Campionato]  [Prossima partita Prima Squadra]  [Classifica esterna]
+ * Strip "info dense" sotto l'hero, due livelli:
  *
- * Slot 2 usa MatchCard variant=compact per coerenza visiva con la
- * pagina /squadre/prima-squadra/calendario. Il link sotto la card
- * porta al calendario completo.
+ * 1) Box Prima Squadra (prominente, padding generoso):
+ *    [ Prossima partita Prima Squadra  (2/3) ][ Classifica (1/3) ]
+ *    L'eyebrow della "Prossima partita" riporta anche il campionato
+ *    (es. "PRIMA CATEGORIA · 2026/27"), eliminando lo slot dedicato
+ *    Campionato della versione precedente.
  *
- * Hardcoded sulla Prima Squadra: la home rappresenta la Prima Squadra
- * di default (vedi spec 5b). Per Juniores/SGS l'utente naviga alle
- * pagine squadra e da lì al calendario dedicato (m5c CTA + mini-strip).
+ * 2) Box Settore Giovanile + Juniores (separato verticalmente, padding
+ *    ~30% piu' compatto): 5 righe — Juniores, Under 17, Under 16,
+ *    Under 15, Under 14 — con la prossima partita per ognuna. Vedi
+ *    YouthMatchStrip.tsx.
+ *
+ * Hardcoded sulla Prima Squadra nel box principale (la home rappresenta
+ * la Prima Squadra). Per le altre categorie la mini-strip sotto e' il
+ * "drill-down" rapido.
  */
 type Settings = {
   currentLeague: string | null;
@@ -62,95 +69,104 @@ export async function MatchStrip() {
     nextMatch?.competition?.defaultReportLink ??
     settings?.sprintsportLinks?.classifica ??
     null;
-  const subtitleParts = [group ? `Girone ${group}` : null, season].filter(
-    Boolean,
-  );
+  const competitionLabel = [league, group ? `Girone ${group}` : null, season]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <section
-      aria-label="Prossimo impegno"
-      className="border-border/60 border-y bg-surface-1/40"
-    >
-      <Container className="grid grid-cols-1 gap-px md:grid-cols-3" size="wide">
-        {/* Slot 1 — categoria + girone */}
-        <div className="bg-surface-1/60 flex flex-col gap-2 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
-            Campionato
-          </span>
-          <span className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.01em] uppercase">
-            {league}
-          </span>
-          <span className="text-ink-mid text-sm">
-            {subtitleParts.join(" · ")}
-          </span>
-        </div>
+    <>
+      {/* BOX 1 — Prima Squadra (prominente) */}
+      <section
+        aria-label="Prossimo impegno Prima Squadra"
+        className="border-border/60 border-y bg-surface-1/40"
+      >
+        <Container
+          className="grid grid-cols-1 gap-px lg:grid-cols-3"
+          size="wide"
+        >
+          {/* Slot prossima partita — 2/3 */}
+          <div className="bg-surface-2/60 flex flex-col gap-3 p-6 md:p-8 lg:col-span-2">
+            <div className="flex flex-col gap-1">
+              <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
+                <CalendarDays
+                  size={12}
+                  className="-mt-0.5 mr-1.5 inline"
+                  aria-hidden
+                />
+                Prossima partita · {PRIMA_SQUADRA_NAME}
+              </span>
+              <span className="font-mono text-ink-mid text-[11px] font-semibold tracking-[0.12em] uppercase">
+                {competitionLabel}
+              </span>
+            </div>
+            {nextMatch ? (
+              <>
+                <MatchCard
+                  match={nextMatch}
+                  ourTeamSlug={PRIMA_SQUADRA_SLUG}
+                  ourTeamName={PRIMA_SQUADRA_NAME}
+                  variant="compact"
+                />
+                <Link
+                  href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+                  className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
+                >
+                  Calendario completo
+                  <ArrowUpRight size={14} />
+                </Link>
+              </>
+            ) : (
+              <>
+                <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
+                  Calendario in arrivo
+                </span>
+                <span className="text-ink-mid text-sm">
+                  Le prossime giornate saranno pubblicate appena la federazione
+                  comunica gli accoppiamenti del girone.
+                </span>
+                <Link
+                  href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+                  className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
+                >
+                  Apri calendario
+                  <ArrowUpRight size={14} />
+                </Link>
+              </>
+            )}
+          </div>
 
-        {/* Slot 2 — prossima partita (MatchCard compact) */}
-        <div className="bg-surface-2/60 flex flex-col gap-3 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
-            <CalendarDays size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
-            Prossima partita
-          </span>
-          {nextMatch ? (
-            <>
-              <MatchCard
-                match={nextMatch}
-                ourTeamSlug={PRIMA_SQUADRA_SLUG}
-                ourTeamName={PRIMA_SQUADRA_NAME}
-                variant="compact"
+          {/* Slot classifica — 1/3 */}
+          <div className="bg-surface-1/60 flex flex-col gap-3 p-6 md:p-8">
+            <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
+              <Trophy
+                size={12}
+                className="-mt-0.5 mr-1.5 inline"
+                aria-hidden
               />
-              <Link
-                href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+              Classifica
+            </span>
+            <span className="text-ink-mid text-sm leading-relaxed">
+              La classifica ufficiale del girone è gestita da Sprintesport,
+              il portale federale che aggrega risultati e statistiche del
+              campionato regionale.
+            </span>
+            {classificaUrl && (
+              <a
+                href={classificaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
               >
-                Calendario completo
+                Apri classifica
                 <ArrowUpRight size={14} />
-              </Link>
-            </>
-          ) : (
-            <>
-              <span className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.01em] uppercase">
-                Calendario in arrivo
-              </span>
-              <span className="text-ink-mid text-sm">
-                Le prossime giornate saranno pubblicate appena la federazione
-                comunica gli accoppiamenti del girone.
-              </span>
-              <Link
-                href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
-                className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
-              >
-                Apri calendario
-                <ArrowUpRight size={14} />
-              </Link>
-            </>
-          )}
-        </div>
+              </a>
+            )}
+          </div>
+        </Container>
+      </section>
 
-        {/* Slot 3 — classifica esterna */}
-        <div className="bg-surface-1/60 flex flex-col gap-3 p-6 md:p-8">
-          <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
-            <Trophy size={12} className="-mt-0.5 mr-1.5 inline" aria-hidden />
-            Classifica
-          </span>
-          <span className="text-ink-mid text-sm leading-relaxed">
-            La classifica ufficiale del girone è gestita da Sprintesport, il
-            portale federale che aggrega risultati e statistiche di tutto il
-            campionato regionale.
-          </span>
-          {classificaUrl && (
-            <a
-              href={classificaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors"
-            >
-              Apri classifica
-              <ArrowUpRight size={14} />
-            </a>
-          )}
-        </div>
-      </Container>
-    </section>
+      {/* BOX 2 — Settore Giovanile + Juniores (staccato verticalmente) */}
+      <YouthMatchStrip />
+    </>
   );
 }
