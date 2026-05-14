@@ -52,6 +52,9 @@ export async function generateMetadata({
   return {
     title: team.name,
     description: `Rosa, staff e info ${team.name} ASD Orbassano Calcio${seasonSuffix}.`,
+    openGraph: team.heroImage
+      ? { images: [{ url: team.heroImage, alt: team.name }] }
+      : undefined,
   };
 }
 

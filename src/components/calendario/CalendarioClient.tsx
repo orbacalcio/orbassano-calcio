@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import type { MatchSummary } from "@/sanity/fetchers";
@@ -44,9 +44,9 @@ type Tab = "prossime" | "risultati" | "tutte";
 
 const VALID_TABS: ReadonlySet<Tab> = new Set(["prossime", "risultati", "tutte"]);
 
-function parseTab(raw: string | null): Tab {
+function parseTab(raw: string | null, fallback: Tab): Tab {
   if (raw && VALID_TABS.has(raw as Tab)) return raw as Tab;
-  return "prossime";
+  return fallback;
 }
 
 function isPast(match: MatchSummary, now: number): boolean {
@@ -98,14 +98,36 @@ type Props = {
   matches: MatchSummary[];
   ourTeamSlug: string;
   ourTeamName: string;
+  /** Tab attiva quando l'URL non specifica `?tab=`. Stagione corrente
+   *  → "prossime" (default). Stagione archiviata → "risultati" (i match
+   *  futuri sono per definizione 0, mostrare la tab vuota e' inutile). */
+  defaultTab?: Tab;
 };
 
-export function CalendarioClient({ matches, ourTeamSlug, ourTeamName }: Props) {
+export function CalendarioClient({
+  matches,
+  ourTeamSlug,
+  ourTeamName,
+  defaultTab = "prossime",
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [now] = useState<number>(() => Date.now());
+  // `now` aggiornato ogni minuto + al re-focus della tab. Senza refresh,
+  // una pagina lasciata aperta tutto il giorno tiene un match appena
+  // giocato nella tab "Prossime" finche' l'utente non ricarica.
+  const [now, setNow] = useState<number>(() => Date.now());
 
-  const activeTab = parseTab(searchParams.get("tab"));
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    const onFocus = () => setNow(Date.now());
+    window.addEventListener("focus", onFocus);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
+
+  const activeTab = parseTab(searchParams.get("tab"), defaultTab);
 
   const counts = useMemo(() => {
     const prossime = matches.filter((m) => isFuture(m, now)).length;
@@ -153,7 +175,7 @@ export function CalendarioClient({ matches, ourTeamSlug, ourTeamName }: Props) {
 
   function setTab(next: Tab) {
     const params = new URLSearchParams(searchParams.toString());
-    if (next === "prossime") params.delete("tab");
+    if (next === defaultTab) params.delete("tab");
     else params.set("tab", next);
     const qs = params.toString();
     router.replace(qs ? `?${qs}` : "?", { scroll: false });
@@ -377,7 +399,7 @@ function EmptyContextual({
           Nessuna partita ancora giocata
         </p>
         <p className="text-ink-mid mx-auto mt-3 max-w-md text-sm leading-relaxed">
-          La stagione non e&apos; ancora iniziata o tutte le giornate sono
+          La stagione non è ancora iniziata o tutte le giornate sono
           ancora da giocare.
         </p>
         <button

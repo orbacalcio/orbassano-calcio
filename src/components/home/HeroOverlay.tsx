@@ -72,8 +72,9 @@ export function HeroOverlay({ season, league, group }: Props) {
         variants={item}
         className="text-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
       >
-        Oltre novanta anni di rossoblù. Una storia di promozioni, fusioni,
-        rinascite e di campioni che si sono allenati sui nostri campi.
+        Oltre novantacinque anni di rossoblù. Una storia di promozioni,
+        fusioni, rinascite e di campioni che si sono allenati sui nostri
+        campi.
       </motion.p>
       <motion.div variants={item} className="flex flex-wrap items-center gap-3">
         <Link

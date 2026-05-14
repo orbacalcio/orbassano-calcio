@@ -1,26 +1,27 @@
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, ChevronRight, Trophy } from "lucide-react";
+import { ArrowUpRight, ChevronRight, History, ListOrdered } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
+import { cn } from "@/lib/cn";
 import {
+  fetchLastMatchesByTeamSlugs,
   fetchNextMatchesByTeamSlugs,
+  type YouthLastMatch,
   type YouthNextMatch,
 } from "@/sanity/fetchers";
 
+const OUR_LOGO_SRC = "/Logo_Orbassano_2K.png";
+
 /**
  * Mini-strip Settore Giovanile + Juniores per la homepage, sotto il
- * box principale Prima Squadra. 5 righe (Juniores · U17 · U16 · U15
- * · U14) — una per categoria — con la prossima partita scheduled di
- * ognuna. Click sulla riga -> calendario completo della squadra.
+ * box principale Prima Squadra. 5 righe (Juniores · U17 · U16 · U15 ·
+ * U14) — una per categoria — ognuna con:
+ *   - ULTIMA partita finished (sx), con tag risultato V/X/P
+ *   - PROSSIMA partita scheduled (dx), con data/ora
+ *   - Bottone Classifica esterno + chevron al calendario completo
  *
- * Dimensionamento ~30% piu' compatto del box Prima Squadra (padding
- * md:p-5 invece di md:p-8, font ridotto): visivamente subordinato,
- * coerente con la gerarchia "Prima Squadra come team principale,
- * settore giovanile come supporto/profondita'".
- *
- * Le squadre che non hanno match scheduled in calendario mostrano
- * "Calendario in arrivo" + link al calendario vuoto. Niente squadra
- * viene mai nascosta — la riga e' sempre presente.
+ * Squadre senza match in archivio mostrano "—" al posto del box vuoto;
+ * niente intera riga viene nascosta (struttura sempre coerente).
  */
 const YOUTH_TEAMS: Array<{ slug: string; label: string }> = [
   { slug: "juniores", label: "Juniores" },
@@ -31,7 +32,7 @@ const YOUTH_TEAMS: Array<{ slug: string; label: string }> = [
 ];
 
 function formatMatchDate(iso: string, isDateTbd: boolean | null): string {
-  if (isDateTbd) return "Data da definire";
+  if (isDateTbd) return "TBD";
   const d = new Date(iso);
   const date = d.toLocaleDateString("it-IT", {
     day: "2-digit",
@@ -44,32 +45,147 @@ function formatMatchDate(iso: string, isDateTbd: boolean | null): string {
   return `${date} · ${time}`;
 }
 
-function opponentLabel(match: YouthNextMatch): string {
-  if (match.isOpponentTbd) return "Avversario da definire";
+function formatPastDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+}
+
+function opponentLabel(match: YouthNextMatch | YouthLastMatch): string {
+  if (match.isOpponentTbd) return "TBD";
   const club = match.opponent?.club;
   return club?.shortName ?? club?.name ?? "—";
 }
 
-export async function YouthMatchStrip() {
-  const rows = await fetchNextMatchesByTeamSlugs(
-    YOUTH_TEAMS.map((t) => t.slug),
+type ResultTag = "V" | "X" | "P";
+
+function getResultTag(
+  home: boolean,
+  scoreHome: number | null,
+  scoreAway: number | null,
+): ResultTag | null {
+  if (typeof scoreHome !== "number" || typeof scoreAway !== "number")
+    return null;
+  const ourScore = home ? scoreHome : scoreAway;
+  const oppScore = home ? scoreAway : scoreHome;
+  if (ourScore > oppScore) return "V";
+  if (ourScore < oppScore) return "P";
+  return "X";
+}
+
+const RESULT_TAG_CLASS: Record<ResultTag, string> = {
+  V: "border-brand-gold/40 bg-brand-gold/20 text-brand-gold",
+  X: "border-border/40 bg-surface-2 text-ink-mid",
+  P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
+};
+
+function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
+  if (!match) {
+    return (
+      <span className="text-ink-low text-xs italic md:pr-16 md:text-sm">—</span>
+    );
+  }
+  const club = match.opponent?.club ?? null;
+  const tag = getResultTag(match.home, match.scoreHome, match.scoreAway);
+  const score =
+    typeof match.scoreHome === "number" &&
+    typeof match.scoreAway === "number"
+      ? `${match.scoreHome}-${match.scoreAway}`
+      : "—";
+  return (
+    <div className="flex min-w-0 flex-1 items-center gap-2 md:pr-16">
+      <TeamLogo
+        name={club?.shortName ?? club?.name ?? "?"}
+        src={club?.logo ?? null}
+        primaryColor={club?.primaryColor ?? null}
+        size={32}
+        interactive={false}
+      />
+      <div className="flex min-w-0 flex-col leading-tight">
+        <span className="font-display text-ink-hi truncate text-xs font-bold tracking-[0.02em] uppercase md:text-sm">
+          {opponentLabel(match)}
+        </span>
+        <span className="text-ink-low font-mono text-[10px] font-bold tracking-wide uppercase md:text-[11px]">
+          {formatPastDate(match.date)} · {match.home ? "CASA" : "TRASFERTA"}
+        </span>
+      </div>
+      <div className="ml-auto flex shrink-0 items-center gap-1.5">
+        <span className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.005em] md:text-3xl">
+          {score}
+        </span>
+        {tag && (
+          <span
+            className={cn(
+              "font-mono inline-flex h-5 min-w-5 items-center justify-center rounded-sm border px-1 text-[11px] font-bold",
+              RESULT_TAG_CLASS[tag],
+            )}
+            aria-label={
+              tag === "V" ? "Vittoria" : tag === "P" ? "Sconfitta" : "Pareggio"
+            }
+          >
+            {tag}
+          </span>
+        )}
+      </div>
+    </div>
   );
-  const byLabel = new Map(YOUTH_TEAMS.map((t) => [t.slug, t.label]));
+}
+
+function FutureMatchCell({ match }: { match: YouthNextMatch | null }) {
+  if (!match) {
+    return (
+      <span className="text-ink-low text-xs italic md:text-sm">
+        Calendario in arrivo
+      </span>
+    );
+  }
+  const club = match.opponent?.club ?? null;
+  return (
+    <div className="flex min-w-0 flex-1 items-center gap-2">
+      <TeamLogo
+        name={club?.shortName ?? club?.name ?? "?"}
+        src={club?.logo ?? null}
+        primaryColor={club?.primaryColor ?? null}
+        size={32}
+        interactive={false}
+      />
+      <div className="flex min-w-0 flex-col leading-tight">
+        <span className="font-display text-ink-hi truncate text-xs font-bold tracking-[0.02em] uppercase md:text-sm">
+          {opponentLabel(match)}
+        </span>
+        <span className="text-ink-low font-mono text-[10px] font-bold tracking-wide uppercase md:text-[11px]">
+          {formatMatchDate(match.date, match.isDateTbd)} ·{" "}
+          {match.home ? "CASA" : "TRASFERTA"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export async function YouthMatchStrip() {
+  const slugs = YOUTH_TEAMS.map((t) => t.slug);
+  const [nextRows, lastRows] = await Promise.all([
+    fetchNextMatchesByTeamSlugs(slugs),
+    fetchLastMatchesByTeamSlugs(slugs),
+  ]);
+  const nextBySlug = new Map(nextRows.map((r) => [r.slug, r.match]));
+  const lastBySlug = new Map(lastRows.map((r) => [r.slug, r.match]));
 
   return (
     <section
-      aria-label="Prossimi impegni Settore Giovanile"
+      aria-label="Settore Giovanile · ultimi risultati e prossime partite"
       className="border-border/60 mt-4 border-y bg-surface-1/25 md:mt-6"
     >
       <Container className="py-5 md:py-6" size="wide">
         <header className="mb-4 flex items-baseline justify-between gap-4">
           <span className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase">
-            <CalendarDays
+            <History
               size={11}
               className="-mt-0.5 mr-1.5 inline"
               aria-hidden
             />
-            Settore Giovanile · prossime partite
+            Settore Giovanile · ultimi risultati e prossime partite
           </span>
           <Link
             href="/squadre"
@@ -80,90 +196,75 @@ export async function YouthMatchStrip() {
           </Link>
         </header>
 
+        {/* Header colonne — visibile da md in su, su mobile lo skippiamo
+            per privilegiare lo spazio verticale. */}
+        <div className="text-ink-low border-border/40 mb-1 hidden grid-cols-[12rem_1fr_1fr_8rem_2rem] items-center gap-x-3 gap-y-3 border-b pb-2 font-mono text-[10px] tracking-[0.15em] uppercase md:grid">
+          <span>Squadra</span>
+          <span className="md:pr-16">Ultimi risultati</span>
+          <span>Prossime partite</span>
+          <span />
+          <span />
+        </div>
+
         <ul className="divide-border/40 flex flex-col divide-y">
-          {rows.map(({ slug, match }) => {
-            const label = byLabel.get(slug) ?? slug;
-            const club = match?.opponent?.club ?? null;
-            const dateLabel = match
-              ? formatMatchDate(match.date, match.isDateTbd)
-              : null;
-            const homeAway = match
-              ? match.home
-                ? "Casa"
-                : "Trasferta"
-              : null;
-            // Priorita' link classifica: externalRankingUrl (campo
-            // dedicato) batte defaultReportLink (Tuttocampo che mostra
-            // anche risultati). Modificabile dall'admin su ogni
-            // competition in Studio (cambia ogni stagione).
+          {YOUTH_TEAMS.map(({ slug, label }) => {
+            const lastMatch = lastBySlug.get(slug) ?? null;
+            const nextMatch = nextBySlug.get(slug) ?? null;
+            // Priorita' link classifica: prima la prossima competition,
+            // poi la passata (per squadre senza match futuri). Fallback
+            // null → bottone nascosto.
             const classificaUrl =
-              match?.competition?.externalRankingUrl ??
-              match?.competition?.defaultReportLink ??
+              nextMatch?.competition?.externalRankingUrl ??
+              nextMatch?.competition?.defaultReportLink ??
+              lastMatch?.competition?.externalRankingUrl ??
+              lastMatch?.competition?.defaultReportLink ??
               null;
             return (
-              <li key={slug} className="flex items-stretch">
-                {/* Click area principale -> calendario squadra */}
+              <li
+                key={slug}
+                className="grid grid-cols-[8rem_1fr] items-center gap-2 py-3 md:grid-cols-[12rem_1fr_1fr_8rem_2rem] md:gap-x-3 md:gap-y-3 md:py-4"
+              >
                 <Link
                   href={`/squadre/${slug}/calendario`}
-                  className="group hover:bg-surface-2/40 focus-visible:outline-brand-gold flex flex-1 items-center gap-3 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 md:gap-5 md:py-4"
+                  className="group flex min-w-0 items-center gap-2.5 transition-colors"
                 >
-                  <span className="font-display text-ink-hi w-28 shrink-0 text-sm font-extrabold tracking-[0.04em] uppercase md:w-36 md:text-base">
+                  <TeamLogo
+                    name="Orbassano Calcio"
+                    src={OUR_LOGO_SRC}
+                    size={32}
+                    interactive={false}
+                  />
+                  <span className="font-display text-ink-hi group-hover:text-brand-gold truncate text-sm font-extrabold tracking-[0.04em] uppercase transition-colors md:text-base">
                     {label}
                   </span>
-
-                  {match ? (
-                    <>
-                      <TeamLogo
-                        name={club?.shortName ?? club?.name ?? "?"}
-                        src={club?.logo ?? null}
-                        primaryColor={club?.primaryColor ?? null}
-                        size={28}
-                        interactive={false}
-                      />
-                      <span className="text-ink-hi flex-1 truncate text-sm md:text-base">
-                        <span className="text-ink-low mr-1.5">vs</span>
-                        <span className="font-medium">
-                          {opponentLabel(match)}
-                        </span>
-                      </span>
-                      <span className="text-ink-mid hidden font-mono text-xs sm:inline">
-                        {homeAway}
-                      </span>
-                      <span aria-hidden className="text-ink-low hidden sm:inline">
-                        ·
-                      </span>
-                      <span className="text-ink-mid font-mono text-xs md:text-sm">
-                        {dateLabel}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-ink-low flex-1 text-sm italic">
-                      Calendario in arrivo
-                    </span>
-                  )}
-                  <ChevronRight
-                    size={16}
-                    className="text-ink-low group-hover:text-brand-gold shrink-0 transition-colors"
-                    aria-hidden
-                  />
                 </Link>
-
-                {/* Tasto Classifica (esterno Sprintsport/Tuttocampo). Visibile
-                    solo se l'admin ha popolato il campo competition.
-                    externalRankingUrl (o defaultReportLink come fallback).
-                    Modificabile dal CMS senza toccare il codice. */}
-                {classificaUrl && (
+                {/* Mobile: stack verticale ultima+prossima nello stesso col.
+                    Desktop md: due colonne separate. */}
+                <div className="col-span-1 flex flex-col gap-2 md:contents">
+                  <PastMatchCell match={lastMatch} />
+                  <FutureMatchCell match={nextMatch} />
+                </div>
+                {classificaUrl ? (
                   <a
                     href={classificaUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Classifica ${label}`}
-                    className="text-ink-mid hover:text-brand-gold focus-visible:outline-brand-gold ml-1 inline-flex items-center gap-1.5 self-center rounded-md px-2 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-2 md:gap-2 md:text-sm"
+                    className="text-ink-mid hover:text-brand-gold focus-visible:outline-brand-gold col-start-2 row-start-3 inline-flex items-center gap-1.5 justify-self-start rounded-md px-2 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-2 md:col-start-auto md:row-start-auto md:gap-2 md:justify-self-auto md:text-sm"
                   >
-                    <Trophy size={14} aria-hidden />
+                    <ListOrdered size={14} aria-hidden />
                     <span className="hidden md:inline">Classifica</span>
                   </a>
+                ) : (
+                  <span aria-hidden />
                 )}
+                <Link
+                  href={`/squadre/${slug}/calendario`}
+                  aria-label={`Calendario completo ${label}`}
+                  className="text-ink-low hover:text-brand-gold focus-visible:outline-brand-gold col-start-2 row-start-3 inline-flex shrink-0 items-center justify-end transition-colors focus-visible:outline-2 md:col-start-auto md:row-start-auto"
+                >
+                  <ChevronRight size={16} aria-hidden />
+                </Link>
               </li>
             );
           })}

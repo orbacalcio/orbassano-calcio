@@ -242,7 +242,18 @@ export function HeroCarousel({
         </motion.div>
       </AnimatePresence>
 
-      {/* Layer 2: gradient di leggibilita' (statico, no fade). */}
+      {/* Layer 2a: tint blu uniforme full-cover. Scurisce leggermente
+          la foto e tinge col brand quando la sorgente e' molto chiara
+          (cielo, divise bianche, esultanze in primo piano) — i testi
+          dell'hero restano leggibili senza dover dipendere dal solo
+          gradient bottom-up. */}
+      <div
+        aria-hidden
+        className="bg-brand-blue/25 absolute inset-0"
+      />
+
+      {/* Layer 2b: gradient di leggibilita' bottom-up (statico, no fade).
+          Rinforza il dark sotto, dove vivono headline + subhead + CTA. */}
       <div
         aria-hidden
         className="from-surface-0 via-surface-0/60 absolute inset-0 bg-gradient-to-t to-transparent"

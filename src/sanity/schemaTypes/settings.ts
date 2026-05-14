@@ -96,7 +96,7 @@ export const settings = defineType({
       name: "storyNumbersTitle",
       title: "Titolo del box",
       description:
-        'Es. "Oltre novanta anni di rossoblù raccontati in quattro numeri".',
+        'Es. "Oltre novantacinque anni di rossoblù raccontati in quattro numeri".',
       type: "string",
       fieldset: "storyNumbers",
     }),

@@ -10,6 +10,12 @@ import { cn } from "@/lib/cn";
 import type { MatchSummary } from "@/sanity/fetchers";
 import { TeamLogo } from "./TeamLogo";
 
+// Stemma del club: file statico in /public, lo stesso usato in
+// topbar/footer/hero. Vale per tutte le squadre Orbassano (Prima,
+// Juniores, Settore Giovanile) e tutte le stagioni — non gira mai
+// via CMS perche' lo stemma e' UNO solo.
+const OUR_LOGO_SRC = "/Logo_Orbassano_2K.png";
+
 /**
  * Card singola partita per la pagina /squadre/[slug]/calendario.
  *
@@ -59,13 +65,13 @@ function getResultTag(
   home: boolean,
   scoreHome: number | null,
   scoreAway: number | null,
-): "V" | "P" | "N" | null {
+): "V" | "P" | "X" | null {
   if (typeof scoreHome !== "number" || typeof scoreAway !== "number") return null;
   const ourScore = home ? scoreHome : scoreAway;
   const oppScore = home ? scoreAway : scoreHome;
   if (ourScore > oppScore) return "V";
   if (ourScore < oppScore) return "P";
-  return "N";
+  return "X";
 }
 
 function StatusBadge({ status }: { status: MatchSummary["status"] }) {
@@ -95,11 +101,14 @@ function StatusBadge({ status }: { status: MatchSummary["status"] }) {
   return null;
 }
 
-function ResultTag({ tag }: { tag: "V" | "P" | "N" }) {
+function ResultTag({ tag }: { tag: "V" | "P" | "X" }) {
+  // Tag V/X/P (italiano: Vittoria / pareggio / Persa) — colori semantici
+  // coordinati col nome Orbassano nella stessa card:
+  // - V verde (emerald-300), - X grigio neutro, - P rosso (brand-red).
   const map = {
-    V: "border-brand-blue/40 bg-brand-blue/30 text-brand-blue",
+    V: "border-brand-gold/40 bg-brand-gold/20 text-brand-gold",
+    X: "border-border/40 bg-surface-2 text-ink-mid",
     P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
-    N: "border-border/40 bg-surface-2 text-ink-mid",
   } as const;
   return (
     <span
@@ -112,6 +121,20 @@ function ResultTag({ tag }: { tag: "V" | "P" | "N" }) {
       {tag}
     </span>
   );
+}
+
+// Colore del nome squadra: SOLO sul nostro nome (Orbassano), niente
+// effetto sull'avversario. V → oro, X → grigio, P → rosso. Match futuri
+// (resultTag null): ink-hi default.
+function teamNameColor(
+  isOurs: boolean,
+  tag: "V" | "P" | "X" | null,
+): string {
+  if (!isOurs) return "text-ink-hi";
+  if (tag === "V") return "text-brand-gold";
+  if (tag === "P") return "text-brand-red";
+  if (tag === "X") return "text-ink-mid";
+  return "text-ink-hi";
 }
 
 type MatchCardProps = {
@@ -166,10 +189,10 @@ export function MatchCard({
   if (variant === "compact") {
     return (
       <article
-        className="border-border bg-surface-2/40 hover:border-brand-gold/30 flex flex-col gap-2 rounded-lg border p-4 transition-colors"
+        className="border-border bg-surface-2/40 hover:border-brand-gold/30 flex flex-1 flex-col justify-center gap-5 rounded-lg border p-6 transition-colors md:p-7"
         aria-label={`Partita ${formatDay(match.date)} ${formatMonthShort(match.date)}`}
       >
-        <div className="text-ink-mid flex items-center justify-between gap-2 text-[10px] font-semibold tracking-[0.15em] uppercase">
+        <div className="text-ink-mid flex items-center justify-between gap-2 text-[12px] font-semibold tracking-[0.15em] uppercase">
           <span className="font-mono">
             {formatDay(match.date)} {formatMonthShort(match.date)}
             {!match.isDateTbd && ` · ${formatTime(match.date)}`}
@@ -177,30 +200,38 @@ export function MatchCard({
           </span>
           <StatusBadge status={match.status} />
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-1 justify-center">
             <TeamLogo
-              src={match.home ? null : opponentLogo}
+              src={match.home ? OUR_LOGO_SRC : opponentLogo}
               name={match.home ? ourTeamName : opponentName}
-              size={20}
+              size={96}
               interactive={false}
               primaryColor={!match.home ? opponentClub?.primaryColor ?? null : null}
             />
-            <span className="font-display text-ink-hi truncate text-sm font-bold tracking-[0.005em] uppercase">
-              {match.home ? ourTeamName : opponentName}
-            </span>
           </div>
-          <div className="font-display text-ink-hi shrink-0 text-base font-extrabold tracking-[0.005em]">
-            {hasScore ? `${match.scoreHome} - ${match.scoreAway}` : "vs"}
+          <div className="flex shrink-0 flex-col items-center gap-1">
+            <div className="font-display text-ink-hi text-4xl font-extrabold tracking-[0.005em] md:text-5xl">
+              {hasScore ? `${match.scoreHome} - ${match.scoreAway}` : "vs"}
+            </div>
+            {match.status === "finished" && reportHref && (
+              <a
+                href={reportHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Apri tabellino esterno"
+                className="text-brand-gold hover:text-brand-white inline-flex items-center gap-1 text-xs font-semibold tracking-wide uppercase transition-colors"
+              >
+                Tabellino
+                <ExternalLink size={11} aria-hidden />
+              </a>
+            )}
           </div>
-          <div className="flex min-w-0 items-center gap-2">
-            <span className="font-display text-ink-hi truncate text-sm font-bold tracking-[0.005em] uppercase">
-              {match.home ? opponentName : ourTeamName}
-            </span>
+          <div className="flex flex-1 justify-center">
             <TeamLogo
-              src={match.home ? opponentLogo : null}
+              src={match.home ? opponentLogo : OUR_LOGO_SRC}
               name={match.home ? opponentName : ourTeamName}
-              size={20}
+              size={96}
               interactive={false}
               primaryColor={match.home ? opponentClub?.primaryColor ?? null : null}
             />
@@ -243,19 +274,12 @@ export function MatchCard({
       </div>
 
       {/* Meta competition + venue */}
-      <div className="flex min-w-0 flex-col gap-1 md:w-32">
+      <div className="flex min-w-0 flex-col gap-1 md:w-52">
         <span className="font-display text-ink-mid text-xs font-bold tracking-[0.1em] uppercase truncate">
           {competitionLabel || "—"}
         </span>
         <div className="flex flex-wrap items-center gap-1.5">
-          <span
-            className={cn(
-              "rounded-sm px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
-              match.home
-                ? "bg-brand-blue/20 text-brand-blue border border-brand-blue/40"
-                : "bg-surface-2 text-ink-mid border border-border/40",
-            )}
-          >
+          <span className="bg-surface-2 text-ink-mid border-border/40 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase">
             {match.home ? "Casa" : "Trasferta"}
           </span>
           <StatusBadge status={match.status} />
@@ -273,18 +297,15 @@ export function MatchCard({
         <span
           className={cn(
             "font-display truncate text-base font-extrabold tracking-[0.005em] uppercase md:text-lg",
-            match.home && resultTag === "P"
-              ? "text-ink-mid"
-              : match.home && (resultTag === "V" || resultTag === "N")
-                ? "text-brand-gold"
-                : "text-ink-hi",
+            teamNameColor(match.home, resultTag),
           )}
         >
           {match.home ? ourTeamName : opponentName}
         </span>
         <TeamLogo
-          src={match.home ? null : opponentLogo}
+          src={match.home ? OUR_LOGO_SRC : opponentLogo}
           name={match.home ? ourTeamName : opponentName}
+          size={96}
           interactive={!cardIsAnchor}
           href={match.home ? ourLogoHref : opponentHref}
           primaryColor={!match.home ? opponentClub?.primaryColor ?? null : null}
@@ -316,8 +337,9 @@ export function MatchCard({
       {/* Squadra in trasferta */}
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <TeamLogo
-          src={match.home ? opponentLogo : null}
+          src={match.home ? opponentLogo : OUR_LOGO_SRC}
           name={match.home ? opponentName : ourTeamName}
+          size={96}
           interactive={!cardIsAnchor}
           href={match.home ? opponentHref : ourLogoHref}
           primaryColor={match.home ? opponentClub?.primaryColor ?? null : null}
@@ -325,11 +347,7 @@ export function MatchCard({
         <span
           className={cn(
             "font-display truncate text-base font-extrabold tracking-[0.005em] uppercase md:text-lg",
-            !match.home && resultTag === "P"
-              ? "text-ink-mid"
-              : !match.home && (resultTag === "V" || resultTag === "N")
-                ? "text-brand-gold"
-                : "text-ink-hi",
+            teamNameColor(!match.home, resultTag),
           )}
         >
           {match.home ? opponentName : ourTeamName}

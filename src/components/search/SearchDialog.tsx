@@ -91,6 +91,7 @@ export function SearchDialog({ open, onClose }: Props) {
   const [results, setResults] = useState<SearchResults>(EMPTY);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   // Reset & focus on open. Le setState qui sono OK: sono one-shot al
@@ -117,11 +118,31 @@ export function SearchDialog({ open, onClose }: Props) {
     };
   }, [open]);
 
-  // Esc to close
+  // Esc to close + focus trap (Tab/Shift+Tab restano dentro il dialog).
+  // Senza trap il focus uscirebbe sugli elementi sotto l'overlay, che
+  // sono visivamente coperti ma ancora tabbabili → rotto a livello a11y.
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(
+        "a, button, input, [tabindex]:not([tabindex='-1'])",
+      );
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!first || !last) return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -174,6 +195,7 @@ export function SearchDialog({ open, onClose }: Props) {
       {open && (
         <motion.div
           key="search-dialog"
+          ref={dialogRef}
           initial={reduced ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={reduced ? undefined : { opacity: 0 }}

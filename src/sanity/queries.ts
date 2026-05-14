@@ -306,6 +306,45 @@ export const nextMatchesByTeamSlugsQuery = defineQuery(`
   }
 `);
 
+// Ultima partita giocata per un set di team slug (Settore Giovanile +
+// Juniores). Stesso pattern di nextMatchesByTeamSlugsQuery ma filtra
+// status="finished" e ordina date desc. Payload include scoreHome/
+// scoreAway per il tag risultato V/X/P sulla card.
+export const lastMatchesByTeamSlugsQuery = defineQuery(`
+  *[_type == "match"
+    && team->slug.current in $slugs
+    && status == "finished"]
+  | order(date desc){
+    _id,
+    date,
+    home,
+    isOpponentTbd,
+    isDateTbd,
+    scoreHome,
+    scoreAway,
+    reportLink,
+    "teamSlug": team->slug.current,
+    "competition": competition->{
+      shortName,
+      name,
+      group,
+      season,
+      defaultReportLink,
+      externalRankingUrl
+    },
+    "opponent": opponent->{
+      "club": club->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current,
+        "logo": logo.asset->url,
+        primaryColor
+      }
+    }
+  }
+`);
+
 // Prossima partita Prima Squadra per il MatchStrip homepage. Stesso
 // payload di matchesByTeamSlugQuery (per riusare MatchCard compact).
 export const nextMatchQuery = defineQuery(`
@@ -314,6 +353,53 @@ export const nextMatchQuery = defineQuery(`
     && status == "scheduled"
     && date > now()]
   | order(date asc)[0]{
+    _id,
+    date,
+    matchday,
+    home,
+    venue,
+    status,
+    scoreHome,
+    scoreAway,
+    reportLink,
+    highlightsUrl,
+    isOpponentTbd,
+    isClosedDoors,
+    isDateTbd,
+    notes,
+    "competition": competition->{
+      "slug": slug.current,
+      shortName,
+      name,
+      season,
+      group,
+      category,
+      defaultReportLink,
+      externalRankingUrl,
+      "logo": logo.asset->url
+    },
+    "opponent": opponent->{
+      "club": club->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current,
+        "logo": logo.asset->url,
+        websiteUrl,
+        tuttocampoUrl,
+        primaryColor
+      }
+    }
+  }
+`);
+
+// Ultima partita finished Prima Squadra per il MatchStrip homepage.
+// Stesso shape di nextMatchQuery: l'unica differenza e' filtro + ordine.
+export const lastMatchQuery = defineQuery(`
+  *[_type == "match"
+    && team->slug.current == "prima-squadra"
+    && status == "finished"]
+  | order(date desc)[0]{
     _id,
     date,
     matchday,
@@ -409,7 +495,8 @@ export const newsBySlugQuery = defineQuery(`
       caption
     },
     author,
-    isPinned
+    isPinned,
+    originalArticleUrl
   }
 `);
 

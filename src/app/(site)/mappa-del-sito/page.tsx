@@ -60,7 +60,7 @@ export default async function MappaDelSitoPage() {
     {
       title: "Società",
       links: [
-        { href: "/societa", label: "Overview" },
+        { href: "/societa", label: "Panoramica" },
         { href: "/societa/storia", label: "Storia" },
         { href: "/societa/organigramma", label: "Organigramma" },
         { href: "/societa/impianti", label: "Impianti sportivi" },
@@ -98,7 +98,7 @@ export default async function MappaDelSitoPage() {
       title: "Legale",
       links: [
         { href: "/legal/privacy", label: "Informativa privacy" },
-        { href: "/legal/cookie", label: "Cookie policy" },
+        { href: "/legal/cookie", label: "Informativa cookie" },
         { href: "/legal/termini", label: "Termini e condizioni" },
       ],
     },

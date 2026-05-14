@@ -40,9 +40,15 @@ export async function generateMetadata({
   const fullName = `${player.firstName} ${player.lastName}`;
   const role = player.role ? ` · ${player.role}` : "";
   const teamName = player.team?.name ?? "ASD Orbassano Calcio";
+  // Photo prioritaria per OG: action (in campo) > studio. Se nessuna
+  // delle due e' caricata, cade sul logo del club (default root layout).
+  const ogImage = player.photoAction ?? player.photo;
   return {
     title: fullName,
     description: `${fullName}${role} — ${teamName}.`,
+    openGraph: ogImage
+      ? { images: [{ url: ogImage, alt: fullName }] }
+      : undefined,
   };
 }
 

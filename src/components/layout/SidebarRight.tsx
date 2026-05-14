@@ -7,8 +7,9 @@ import { Z } from "@/lib/z-indexes";
  * Sidebar destra desktop (≥ lg, 80px width, fixed full-height).
  *
  * Visibilita' gestita da ClientShell (opacity + pointer-events):
- * appare solo sopra l'hero, sostituita da TopbarScrolled allo scroll.
- * Estetica sempre trasparente, tarata per stare sopra le foto hero.
+ * appare solo sopra l'hero, fadeout in parallelo all'allargamento della
+ * Topbar (pattern juventus.com). Estetica sempre trasparente, tarata
+ * per stare sopra le foto hero.
  *
  * I link arrivano dal singleton settings di Sanity. Fallback ai link
  * statici di DATA_ORBASSANO §1 finche' il CMS non e' popolato.

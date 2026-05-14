@@ -1,12 +1,9 @@
 import { createHash } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@sanity/client";
-import {
-  apiVersion,
-  dataset,
-  projectId,
-  writeToken,
-} from "@/sanity/env";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
+import { writeToken } from "@/sanity/env.server";
 
 /**
  * Audit log dei consensi cookie. Riceve POST dal CookieBanner client
@@ -44,6 +41,21 @@ const VALID_CATEGORIES = new Set([
 ]);
 
 export async function POST(req: NextRequest) {
+  // Rate limit aggressivo: il consent log non deve crescere a dismisura
+  // da spam bot. 10 req/min/IP basta per cambi legittimi di preferenze.
+  const rl = checkRateLimit({
+    req,
+    bucket: "consent",
+    limit: 10,
+    windowMs: 60 * 1000,
+  });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false },
+      { status: 429, headers: { "retry-after": String(rl.retryAfter) } },
+    );
+  }
+
   let body: Payload;
   try {
     body = (await req.json()) as Payload;

@@ -92,6 +92,15 @@ export const news = defineType({
       validation: (r) => r.max(280),
     }),
     defineField({
+      name: "originalArticleUrl",
+      title: "Link articolo originale",
+      description:
+        "URL all'articolo originale su una testata esterna (es. sprintesport.it). Se valorizzato, sotto il corpo dell'articolo appare il CTA \"PER LEGGERE L'ARTICOLO ORIGINALE CLICCA QUI\". Lascia vuoto se la news e' nativa del sito.",
+      type: "url",
+      validation: (r) =>
+        r.uri({ scheme: ["http", "https"], allowRelative: false }),
+    }),
+    defineField({
       name: "body",
       title: "Corpo",
       type: "array",

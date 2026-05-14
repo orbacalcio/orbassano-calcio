@@ -33,7 +33,7 @@ const TITLES: PalmaresEntry[] = [
     details: "2000-2001 girone D · 1979-1980 girone B · promosse in Eccellenza e Serie D",
   },
   {
-    competition: "Promozione (promozione di girone)",
+    competition: "Prima Categoria (promozione di girone)",
     details: "1977-1978 · promossa in Promozione",
   },
 ];
@@ -61,7 +61,7 @@ const PLACEMENTS: PalmaresEntry[] = [
       "2009-2010 finale playoff persa · 2010-2011 quarti playoff persi, girone C",
   },
   {
-    competition: "Seconda Divisione — 1° girone + finale playoff",
+    competition: "Seconda Divisione — 1° posto girone + finale playoff",
     details: "1958-1959, girone E · finale persa ai rigori contro il Valperga",
   },
   {

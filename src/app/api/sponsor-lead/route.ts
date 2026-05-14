@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
+import { checkRateLimit } from "@/lib/rate-limit";
 import {
   escapeHtml,
   isEmail,
+  isSafeUrl,
   looksLikeSpam,
   nonEmpty,
   trimToMax,
@@ -28,6 +30,22 @@ const PACKAGE_LABELS: Record<string, string> = {
 };
 
 export async function POST(req: NextRequest) {
+  const rl = checkRateLimit({
+    req,
+    bucket: "sponsor-lead",
+    limit: 5,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (!rl.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: `Troppe richieste. Riprova fra ${Math.ceil(rl.retryAfter / 60)} minuti.`,
+      },
+      { status: 429, headers: { "retry-after": String(rl.retryAfter) } },
+    );
+  }
+
   let body: Payload;
   try {
     body = (await req.json()) as Payload;
@@ -43,7 +61,12 @@ export async function POST(req: NextRequest) {
   const role = trimToMax(String(body.role ?? ""), 120);
   const email = trimToMax(String(body.email ?? ""), 180);
   const phone = trimToMax(String(body.phone ?? ""), 40);
-  const website = trimToMax(String(body.website ?? ""), 240);
+  // website: sanitize per evitare XSS via `javascript:` URI nella mail
+  // admin (l'utente puo' compilare il campo con qualsiasi cosa). Se non
+  // safe, droppiamo il campo dalla mail invece di rifiutare l'intero
+  // form: la lead resta utile, l'admin la contatta via email.
+  const websiteRaw = trimToMax(String(body.website ?? ""), 240);
+  const website = isSafeUrl(websiteRaw) ? websiteRaw : "";
   const packageType = trimToMax(String(body.packageType ?? ""), 32);
   const message = trimToMax(String(body.message ?? ""), 2000);
   const privacy = body.privacy === true;

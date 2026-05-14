@@ -132,7 +132,7 @@ export default async function OrganigrammaPage() {
               id="contatti-segreteria"
               className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl"
             >
-              Come ci contatti
+              Come contattarci
             </h2>
           </div>
           <ul className="text-ink-mid grid gap-6 sm:grid-cols-2">

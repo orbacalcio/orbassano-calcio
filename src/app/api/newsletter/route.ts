@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
+import { checkRateLimit } from "@/lib/rate-limit";
 import {
   escapeHtml,
   isEmail,
@@ -32,6 +33,22 @@ const BREVO_REDIRECT_URL =
   process.env.BREVO_DOI_REDIRECT_URL ?? "https://orbassanocalcio.com/newsletter";
 
 export async function POST(req: NextRequest) {
+  const rl = checkRateLimit({
+    req,
+    bucket: "newsletter",
+    limit: 3,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (!rl.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: `Troppe richieste. Riprova fra ${Math.ceil(rl.retryAfter / 60)} minuti.`,
+      },
+      { status: 429, headers: { "retry-after": String(rl.retryAfter) } },
+    );
+  }
+
   let body: Payload;
   try {
     body = (await req.json()) as Payload;

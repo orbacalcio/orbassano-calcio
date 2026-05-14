@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId } from "./env";
+import { writeToken } from "./env.server";
 
 /**
  * Client Sanity con write token. Usato esclusivamente da API route
@@ -18,8 +19,6 @@ import { apiVersion, dataset, projectId } from "./env";
  * devono fare graceful error handling (vedi pattern in
  * /api/whistleblowing/route.ts).
  */
-const writeToken = process.env.SANITY_API_WRITE_TOKEN;
-
 export const sanityWriteClient = createClient({
   projectId,
   dataset,

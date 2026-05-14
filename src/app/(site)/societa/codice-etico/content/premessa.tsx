@@ -21,7 +21,7 @@ export function Premessa() {
       <div className="text-ink-mid hyphens-auto flex flex-col gap-4 text-justify text-[0.95rem] leading-relaxed [&_strong]:text-ink-hi [&_strong]:font-semibold">
         <p>
           L&apos;A.S.D. Orbassano Calcio &egrave; una societ&agrave; sportiva
-          dilettantistica fondata nel 1930. In oltre 90 anni di storia ha
+          dilettantistica fondata nel 1930. In oltre 95 anni di storia ha
           attraversato la Serie D negli anni &apos;80, sfiorando il
           professionismo, e oggi opera come polo calcistico del territorio
           piemontese, con una Prima Squadra in Prima Categoria Piemonte VdA e

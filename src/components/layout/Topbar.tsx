@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Z } from "@/lib/z-indexes";
 import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { MainSponsorTile } from "@/components/sponsors/MainSponsorTile";
@@ -13,7 +13,7 @@ import { sidebarMainItems } from "./SidebarLeft.items";
 /**
  * Topbar unica (pattern juventus.com): una sola barra che cambia
  * "forma" tra HERO e SCROLLED, invece di due barre separate con
- * crossfade. Niente piu' transizione tra elementi diversi.
+ * crossfade.
  *
  * Ruoli:
  *  - HERO (heroVisible=true): la barra e' contenuta tra le sidebar
@@ -121,7 +121,20 @@ export function Topbar({
           onClick={onMenuClick}
           className="text-ink-hi hover:text-brand-gold focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md transition-colors focus-visible:outline-2"
         >
-          <Menu size={26} />
+          <svg
+            width={26}
+            height={26}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.25}
+            strokeLinecap="round"
+            aria-hidden
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="8" y1="12" x2="16" y2="12" className="stroke-brand-gold" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
         <ul className="flex items-center gap-6">
           {navItems.map((item) => (
@@ -156,8 +169,8 @@ export function Topbar({
           <Image
             src="/Logo_Orbassano_2K.png"
             alt=""
-            width={32}
-            height={45}
+            width={56}
+            height={79}
             priority
           />
         </Link>

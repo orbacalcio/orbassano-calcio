@@ -1,7 +1,7 @@
-import { createHash } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { FEATURES } from "@/lib/features";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
+import { checkRateLimit } from "@/lib/rate-limit";
 import {
   isEmail,
   isInList,
@@ -66,44 +66,6 @@ const RUOLI_VALIDI = [
 const GIA_SEGNALATO_VALIDI = ["no", "si"] as const;
 
 const MAX_PROTOCOLLO_RETRIES = 5;
-const MAX_RATE_LIMIT_HOUR = 3;
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 ora
-
-// Map module-level: persiste tra richieste sulla stessa istanza serverless.
-// Su Vercel cold start si azzera (accettabile per MVP — vedi spec).
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-
-function getClientIpHash(req: NextRequest): string {
-  const fwd = req.headers.get("x-forwarded-for");
-  const real = req.headers.get("x-real-ip");
-  const raw = fwd?.split(",")[0]?.trim() ?? real?.trim() ?? "unknown";
-  // Per IPv4 prendiamo i primi 3 ottetti (/24); per IPv6 i primi 4 gruppi.
-  let normalized = raw;
-  const v4 = raw.match(/^(\d+)\.(\d+)\.(\d+)\.\d+$/);
-  if (v4) {
-    normalized = `${v4[1]}.${v4[2]}.${v4[3]}.0/24`;
-  } else if (raw.includes(":")) {
-    normalized = raw.split(":").slice(0, 4).join(":") + "::/64";
-  }
-  return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
-}
-
-function checkRateLimit(ipHash: string): { ok: true } | { ok: false; retryAfter: number } {
-  const now = Date.now();
-  const entry = rateLimitStore.get(ipHash);
-  if (!entry || now >= entry.resetAt) {
-    rateLimitStore.set(ipHash, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
-    });
-    return { ok: true };
-  }
-  if (entry.count >= MAX_RATE_LIMIT_HOUR) {
-    return { ok: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) };
-  }
-  entry.count += 1;
-  return { ok: true };
-}
 
 type Payload = Record<string, unknown>;
 
@@ -510,18 +472,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, protocollo: "WB-0000-0000" });
   }
 
-  // 3. Rate limit
-  const ipHash = getClientIpHash(req);
-  const rl = checkRateLimit(ipHash);
+  // 3. Rate limit IP-hashed: 3 segnalazioni/ora/IP.
+  const rl = checkRateLimit({
+    req,
+    bucket: "whistleblowing",
+    limit: 3,
+    windowMs: 60 * 60 * 1000,
+  });
   if (!rl.ok) {
     return NextResponse.json(
       {
         ok: false,
         error: `Hai gia' inviato troppe segnalazioni. Riprova fra ${Math.ceil(rl.retryAfter / 60)} minuti.`,
       },
-      { status: 429 },
+      { status: 429, headers: { "retry-after": String(rl.retryAfter) } },
     );
   }
+  const ipHash = rl.ipHash;
 
   // 4. Validazione
   const parsed = parseAndValidate(body);

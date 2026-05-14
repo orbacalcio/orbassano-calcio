@@ -39,7 +39,7 @@ const STEPS = [
   {
     number: "04",
     title: "Consegna la dichiarazione",
-    body: "Tutto qui. Il commercialista o il CAF si occupa del resto. La quota arriva direttamente al club, senza che tu paghi nulla in più.",
+    body: "Tutto qui. Il commercialista o il CAF se ne occupa. La quota arriva direttamente al club, senza che tu paghi nulla in più.",
   },
 ];
 

@@ -60,7 +60,7 @@ export function Manifesto() {
           href="/societa/storia"
           className="bg-brand-gold text-brand-white hover:bg-brand-blue hover:text-brand-white focus-visible:outline-brand-red inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
         >
-          Storia del club
+          La nostra storia
           <ArrowRight size={14} aria-hidden />
         </Link>
       </Container>

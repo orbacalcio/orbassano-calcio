@@ -104,7 +104,7 @@ export default function TypographyPage() {
               </span>
               <p className="text-ink-hi text-xl leading-[1.6] font-normal tracking-[-0.005em]">
                 Fondato nel 1930 come Gruppo Sportivo Orbassano, il club ha
-                attraversato oltre 90 anni di calcio piemontese tra fasti, fusioni e
+                attraversato oltre 95 anni di calcio piemontese tra fasti, fusioni e
                 rinascite.
               </p>
             </div>

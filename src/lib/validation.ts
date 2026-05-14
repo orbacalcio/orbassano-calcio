@@ -57,3 +57,40 @@ export function escapeHtml(input: string): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+
+/**
+ * Verifica che una URL sia sicura da usare in attributi `href`/`src`.
+ *
+ * Accetta solo schemi safe (http/https/mailto/tel) e percorsi relativi
+ * (`/`, `#`, `?`). Rifiuta `javascript:`, `data:`, `vbscript:` etc.
+ * che possono eseguire codice quando l'utente clicca il link.
+ *
+ * Difesa contro:
+ *  - XSS via campo `linkValue.href` in PortableText (admin Studio)
+ *  - XSS via campo `website` nel form sponsor-lead (utente esterno)
+ *  - XSS via campo `externalLink`/`mapsUrl`/`websiteUrl` in CMS
+ *
+ * Sanity validation `Rule.uri({ scheme: ['http','https'] })` blocca
+ * questi schemi a livello editor, ma e' UI-only (un admin determinato
+ * puo' bypassare con "Pubblica forzato"). Defense-in-depth lato render.
+ */
+export function isSafeUrl(value: string | null | undefined): boolean {
+  if (!value) return false;
+  const trimmed = value.trim();
+  if (trimmed.length === 0) return false;
+  // Percorsi relativi e fragment-only sono sempre safe.
+  if (trimmed.startsWith("/") || trimmed.startsWith("#") || trimmed.startsWith("?")) {
+    return true;
+  }
+  // Schemi assoluti consentiti. Case-insensitive + tollera spazi/tab
+  // prima dello schema (es. browser tipo strip whitespace).
+  return /^(https?|mailto|tel):/i.test(trimmed);
+}
+
+/** Helper render-side: ritorna `value` se safe, altrimenti `fallback` (default "#"). */
+export function safeUrlOr(
+  value: string | null | undefined,
+  fallback = "#",
+): string {
+  return isSafeUrl(value) ? value!.trim() : fallback;
+}

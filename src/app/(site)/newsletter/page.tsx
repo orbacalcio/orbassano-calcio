@@ -19,7 +19,7 @@ const PROMISES = [
   {
     icon: Calendar,
     title: "Prossime partite",
-    body: "Calendario della settimana con orari, campi e info trasferte. Mai più a chiedere «a che ora si gioca?» il sabato sera.",
+    body: "Calendario della settimana con orari, campi e info trasferte. Mai più chiedersi «a che ora si gioca?» il sabato sera.",
   },
   {
     icon: Mail,

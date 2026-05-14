@@ -24,7 +24,7 @@ const BASE_HUB_CARDS = [
     number: "01",
     title: "Storia",
     description:
-      "Dal 1930 ai nostri giorni: 95 anni di rossoblù raccontati attraverso fondazione, promozioni, fusioni e rifondazioni.",
+      "Dal 1930 ai nostri giorni: oltre 95 anni di rossoblù raccontati attraverso fondazione, promozioni, fusioni e rifondazioni.",
     href: "/societa/storia",
     icon: Landmark,
   },

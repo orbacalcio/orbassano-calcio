@@ -15,7 +15,13 @@ import type { NewsGalleryImage } from "@/sanity/fetchers";
  * Gallery foto news con lightbox al click.
  *
  * Comportamento:
- * - Griglia thumbnail (1, 2 o 3 colonne in base al numero di foto)
+ * - Griglia thumbnail SEMPRE a 3 colonne su sm+ (su mobile stack
+ *   verticale). Le 3 colonne sono sempre disegnate — le slot vuote
+ *   restano per uniformare il layout tra news con 1/2/3 foto:
+ *     1 foto  → posizionata al centro    (col 2)
+ *     2 foto  → posizionate ai lati      (col 1 + col 3)
+ *     3 foto  → tutte e tre piene        (flow naturale)
+ *   Niente foto = niente gallery (componente ritorna null).
  * - Click su una thumb apre l'overlay lightbox con foto piena
  * - Frecce sx/dx per navigare (anche keyboard ←/→)
  * - Esc chiude, click sullo sfondo chiude
@@ -72,19 +78,23 @@ export function NewsGallery({ images }: Props) {
 
   if (valid.length === 0) return null;
 
-  const cols =
-    valid.length === 1
-      ? "grid-cols-1"
-      : valid.length === 2
-        ? "grid-cols-2"
-        : "grid-cols-1 sm:grid-cols-3";
+  // Layout 3-col fisso su sm+: posizionamento esplicito per 1 o 2 foto
+  // tramite col-start, cosi' la slot vuota e' la prima/centrale/ultima
+  // a seconda di quante foto ci sono. Niente CSS condizionale sull'intera
+  // grid: e' sempre 3 colonne, e' solo la posizione delle <li> che cambia.
+  function slotPlacement(index: number): string {
+    if (valid.length === 1) return "sm:col-start-2";
+    if (valid.length === 2)
+      return index === 0 ? "sm:col-start-1" : "sm:col-start-3";
+    return "";
+  }
   const active = activeIndex !== null ? valid[activeIndex] : null;
 
   return (
     <>
-      <ul className={`grid gap-3 ${cols}`}>
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {valid.map((img, i) => (
-          <li key={img.url ?? `gallery-${i}`}>
+          <li key={img.url ?? `gallery-${i}`} className={slotPlacement(i)}>
             <button
               type="button"
               onClick={() => setActiveIndex(i)}
@@ -96,11 +106,7 @@ export function NewsGallery({ images }: Props) {
                 alt={img.alt ?? img.caption ?? ""}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                sizes={
-                  valid.length === 1
-                    ? "(max-width: 1024px) 100vw, 768px"
-                    : "(max-width: 640px) 100vw, 33vw"
-                }
+                sizes="(max-width: 640px) 100vw, 33vw"
                 placeholder={img.lqip ? "blur" : "empty"}
                 blurDataURL={img.lqip ?? undefined}
               />

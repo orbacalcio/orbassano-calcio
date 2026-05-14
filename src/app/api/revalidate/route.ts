@@ -1,7 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { parseBody } from "next-sanity/webhook";
-import { revalidateSecret } from "@/sanity/env";
+import { revalidateSecret } from "@/sanity/env.server";
 
 /**
  * Webhook Sanity → revalidate on-demand.

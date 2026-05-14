@@ -109,6 +109,9 @@ function buildOpponentsByTeam(S: StructureBuilder) {
                 '_type == "opponent" && competition->targetTeam->slug.current == $slug',
               )
               .params({ slug: t.slug })
+              .defaultOrdering([
+                { field: "club.name", direction: "asc" },
+              ])
               .canHandleIntent(
                 (intentName, params) =>
                   intentName === "edit" && params.type === "opponent",

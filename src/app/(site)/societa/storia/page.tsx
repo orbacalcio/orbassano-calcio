@@ -9,7 +9,7 @@ import { fetchTimelineEvents } from "@/sanity/fetchers";
 export const metadata: Metadata = {
   title: "Storia",
   description:
-    "Dal 1930 ad oggi: la storia di ASD Orbassano Calcio in fondazione, promozioni, semifinali playoff Serie D, fusioni e rinascite.",
+    "Dal 1930 ad oggi: la storia di ASD Orbassano Calcio tra fondazione, promozioni, semifinali playoff Serie D, fusioni e rinascite.",
 };
 
 const WIKIPEDIA_URL = "https://it.wikipedia.org/wiki/Orbassano_Calcio";
@@ -34,9 +34,9 @@ export default async function StoriaPage() {
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Fondato come Gruppo Sportivo Orbassano nel 1930, il club ha
-              attraversato oltre 90 anni di calcio piemontese tra fasti,
+              attraversato oltre 95 anni di calcio piemontese tra fasti,
               fusioni e rinascite. Nove partecipazioni alla Serie D, due
-              semifinali di play-off promozione tra i professionisti negli
+              semifinali di playoff promozione tra i professionisti negli
               anni 2000, e un legame profondo con la grande Torino
               calcistica.
             </p>
@@ -50,8 +50,8 @@ export default async function StoriaPage() {
               playoff di Serie D nel 2005-06 (contro il Monopoli) e nel
               2006-07 (contro il Casale). Tra il 2012 e il 2017 cinque
               stagioni di sospensione segnarono la pausa pi&ugrave; difficile
-              della storia; nel <strong className="text-ink-hi">2022</strong>,
-              dopo nuove fusioni e cambi di denominazione, una nuova cordata
+              della storia; nel 2022, dopo nuove fusioni e cambi di
+              denominazione, una nuova cordata
               ha rifondato l&apos;A.S.D. Orbassano Calcio riavvicinandosi
               alla denominazione storica.
             </p>

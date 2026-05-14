@@ -101,7 +101,7 @@ export default function PrivacyPage() {
         <LegalList
           items={[
             "Form di contatto e sponsor: 24 mesi dall'ultima interazione, salvo richiesta di cancellazione anticipata.",
-            "Newsletter: fino alla revoca del consenso (link «cancellati» in calce a ogni email).",
+            "Newsletter: fino alla revoca del consenso (link di disiscrizione in calce a ogni email).",
             "Tesseramenti: per tutta la durata del rapporto associativo e successivamente per il tempo richiesto dagli obblighi fiscali e federali (tipicamente 10 anni).",
             "Log tecnici di sicurezza: massimo 12 mesi.",
           ]}

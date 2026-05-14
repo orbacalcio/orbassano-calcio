@@ -14,6 +14,7 @@ import {
   galleriesTotalCountQuery,
   galleryBySlugQuery,
   allGallerySlugsQuery,
+  lastMatchesByTeamSlugsQuery,
   mainSponsorsQuery,
   matchesByTeamSlugQuery,
   nextMatchesByTeamSlugsQuery,
@@ -435,6 +436,7 @@ export type NewsDetail = {
   gallery: NewsGalleryImage[] | null;
   author: string | null;
   isPinned: boolean | null;
+  originalArticleUrl: string | null;
 };
 
 export async function fetchAllNews(): Promise<NewsSummary[]> {
@@ -1024,6 +1026,38 @@ export async function fetchNextMatchesByTeamSlugs(
     }));
   } catch (err) {
     console.error("[fetchNextMatchesByTeamSlugs]", { slugs }, err);
+    return slugs.map((slug) => ({ slug, match: null }));
+  }
+}
+
+/**
+ * Per ognuno degli slug richiesti ritorna l'ULTIMA partita finished
+ * (ordinata per data desc), o null se nessuna giocata in archivio.
+ * Estende YouthNextMatch con scoreHome/scoreAway/reportLink per
+ * renderizzare il tag risultato V/X/P sulla card homepage.
+ */
+export type YouthLastMatch = YouthNextMatch & {
+  scoreHome: number | null;
+  scoreAway: number | null;
+  reportLink: string | null;
+};
+
+export async function fetchLastMatchesByTeamSlugs(
+  slugs: string[],
+): Promise<Array<{ slug: string; match: YouthLastMatch | null }>> {
+  if (slugs.length === 0) return [];
+  try {
+    const data = (await sanityClient.fetch(
+      lastMatchesByTeamSlugsQuery,
+      { slugs },
+      { next: { tags: ["match"] } },
+    )) as YouthLastMatch[];
+    return slugs.map((slug) => ({
+      slug,
+      match: data.find((m) => m.teamSlug === slug) ?? null,
+    }));
+  } catch (err) {
+    console.error("[fetchLastMatchesByTeamSlugs]", { slugs }, err);
     return slugs.map((slug) => ({ slug, match: null }));
   }
 }

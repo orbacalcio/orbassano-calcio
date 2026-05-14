@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, User } from "lucide-react";
+import { ArrowLeft, Calendar, ExternalLink, User } from "lucide-react";
 import { NewsGallery } from "@/components/news/NewsGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
@@ -12,6 +12,7 @@ import {
   buildBreadcrumbLd,
   buildNewsArticleLd,
 } from "@/lib/json-ld";
+import { isSafeUrl } from "@/lib/validation";
 import { fetchAllNewsSlugs, fetchNewsBySlug } from "@/sanity/fetchers";
 
 type Params = { slug: string };
@@ -110,16 +111,47 @@ export default async function NewsDetailPage(props: {
         </Container>
       </header>
 
+      {/* CTA articolo originale esterno (es. sprintesport.it). Reso
+          solo se l'admin ha popolato `originalArticleUrl` in CMS e
+          l'URL passa il check defense-in-depth isSafeUrl (blocca
+          javascript:/data:/vbscript: anche se la validation server
+          ha lasciato passare qualcosa). Posizionato a inizio pagina,
+          sopra la cover: utile per news che sono solo "preview"
+          della fonte esterna — il lettore sa subito dove andare. */}
+      {isSafeUrl(news.originalArticleUrl) && (
+        <div className="border-border/50 border-b">
+          <Container className="py-6 md:py-8" size="wide">
+            <div className="border-border/40 bg-surface-1/40 mx-auto flex max-w-3xl flex-col items-center gap-4 rounded-2xl border p-6 text-center md:p-8">
+              <span className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase md:text-sm">
+                Fonte esterna
+              </span>
+              <a
+                href={news.originalArticleUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 md:text-base"
+              >
+                Per leggere l&apos;articolo originale clicca qui
+                <ExternalLink size={16} aria-hidden />
+              </a>
+            </div>
+          </Container>
+        </div>
+      )}
+
       {news.cover && (
         <div className="border-border/50 border-b">
           <Container size="wide">
-            <div className="relative -mt-px aspect-[16/9] w-full overflow-hidden">
+            {/* Cover ridotta del 40%: max-w-[60%] su md+ con mx-auto
+                cosi' resta centrata. Mobile: full-width per non perdere
+                il colpo d'occhio su schermi piccoli. */}
+            <div className="relative -mt-px mx-auto aspect-[16/9] w-full overflow-hidden md:max-w-[60%]">
               <Image
                 src={news.cover}
                 alt={news.title}
                 fill
                 className="object-cover"
-                sizes="(max-width: 1280px) 100vw, 1280px"
+                sizes="(max-width: 768px) 100vw, 60vw"
                 placeholder={news.coverLqip ? "blur" : "empty"}
                 blurDataURL={news.coverLqip ?? undefined}
                 priority

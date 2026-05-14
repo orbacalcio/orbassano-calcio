@@ -1,13 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@sanity/client";
 import { parseBody } from "next-sanity/webhook";
-import {
-  apiVersion,
-  dataset,
-  projectId,
-  revalidateSecret,
-  writeToken,
-} from "@/sanity/env";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
+import { revalidateSecret, writeToken } from "@/sanity/env.server";
 
 /**
  * Webhook Sanity → invio email newsletter (Brevo Email Campaign).

@@ -1,7 +1,11 @@
 /**
- * Variabili d'ambiente Sanity. Pattern strict via assertValue per
- * projectId e dataset: senza fallback silenziosi che mascherano la
- * mancanza di .env.local con un placeholder phantom.
+ * Variabili d'ambiente Sanity PUBBLICHE (NEXT_PUBLIC_*).
+ *
+ * Pattern strict via assertValue: senza fallback silenziosi che
+ * mascherano la mancanza di .env.local con un placeholder phantom.
+ *
+ * I valori esportati qui sono safe da importare anche lato client
+ * (image url builder etc). Per i token segreti vedi `env.server.ts`.
  */
 
 function assertValue<T>(value: T | undefined, errorMessage: string): T {
@@ -23,12 +27,3 @@ export const dataset = assertValue(
 
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2026-01-01";
-
-/** Token di sola lettura per server components. Mai esposto al client. */
-export const readToken = process.env.SANITY_API_READ_TOKEN ?? "";
-
-/** Token di scrittura per scripts/seed.ts. Mai esposto al client. */
-export const writeToken = process.env.SANITY_API_WRITE_TOKEN ?? "";
-
-/** Segreto condiviso col webhook Sanity per /api/revalidate. */
-export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET ?? "";

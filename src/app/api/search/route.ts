@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { sanityClient } from "@/sanity/client";
 
 /**
@@ -87,6 +88,22 @@ export async function GET(req: NextRequest) {
 
   if (q.length < 2) {
     return NextResponse.json(empty);
+  }
+
+  // Rate limit per evitare scraping massivo + bruciare quota Sanity.
+  // 30 req/min/IP copre usi legittimi (anche typeahead aggressivo),
+  // ferma bot. La SearchDialog debounce 250ms → ~4 req/sec max in UI.
+  const rl = checkRateLimit({
+    req,
+    bucket: "search",
+    limit: 30,
+    windowMs: 60 * 1000,
+  });
+  if (!rl.ok) {
+    return NextResponse.json(empty, {
+      status: 429,
+      headers: { "retry-after": String(rl.retryAfter) },
+    });
   }
 
   const expr = buildMatchExpr(q);

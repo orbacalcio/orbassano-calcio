@@ -4,14 +4,15 @@ import { sanityClient } from "@/sanity/client";
 import { latestNewsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { cn } from "@/lib/cn";
 
 /**
- * Griglia editoriale 2x2 sulla homepage:
- * 1 card grande a sinistra + 3 card piccole a destra.
+ * Griglia news homepage — card uniformi (1/2/3 colonne responsive,
+ * stesso aspect ratio, stessa typography, stessa height). Niente
+ * gerarchia editoriale (no "1 grande + N piccole"): l'utente vede
+ * blocchi visivamente equivalenti, piu' facile da scorrere.
  *
- * Hover: zoom della cover + reveal del kicker. Implementato con
- * gruppi Tailwind (group-hover:scale-[1.04]).
+ * Hover: zoom della cover. Implementato con gruppi Tailwind
+ * (group-hover:scale-[1.04]).
  */
 type News = {
   _id: string;
@@ -45,27 +46,13 @@ function formatItalianDate(iso: string): string {
   });
 }
 
-function NewsCard({
-  news,
-  size,
-}: {
-  news: News;
-  size: "large" | "small";
-}) {
+function NewsCard({ news }: { news: News }) {
   return (
     <Link
       href={`/news/${news.slug.current}`}
-      className={cn(
-        "group border-border bg-surface-1 hover:border-brand-gold/30 focus-visible:outline-brand-gold relative flex flex-col overflow-hidden rounded-2xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
-        size === "large" ? "row-span-2 sm:col-span-2 lg:col-span-1" : "",
-      )}
+      className="group border-border bg-surface-1 hover:border-brand-gold/30 focus-visible:outline-brand-gold relative flex flex-col overflow-hidden rounded-2xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
     >
-      <div
-        className={cn(
-          "from-surface-2 to-surface-1 relative w-full overflow-hidden bg-gradient-to-br",
-          size === "large" ? "aspect-[16/11]" : "aspect-[16/10]",
-        )}
-      >
+      <div className="from-surface-2 to-surface-1 relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br">
         {news.cover ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -89,26 +76,23 @@ function NewsCard({
         <span className="text-ink-low font-mono text-[11px] tracking-wide uppercase">
           {formatItalianDate(news.publishedAt)}
         </span>
-        <h3
-          className={cn(
-            "font-display text-ink-hi font-bold tracking-[0.01em] uppercase",
-            size === "large" ? "text-3xl leading-[0.95]" : "text-xl leading-tight",
-          )}
-        >
+        <h3 className="font-display text-ink-hi line-clamp-3 text-xl leading-tight font-bold tracking-[0.01em] uppercase">
           {news.title}
         </h3>
-        {size === "large" && news.excerpt && (
-          <p className="text-ink-mid text-sm leading-relaxed">
+        {news.excerpt && (
+          <p className="text-ink-mid line-clamp-2 text-sm leading-relaxed">
             {news.excerpt}
           </p>
         )}
         {/* Pseudo-bottone (e' uno <span>, non un altro <a>: evita anchor
             nesting illegale dentro la card-Link). Il click sull'intera
             card naviga gia' all'articolo, lo span aggiunge solo l'affordance
-            visiva richiesta. */}
+            visiva richiesta. mt-auto ancora il bottone al fondo della card
+            per uniformare l'altezza tra card con titoli/excerpt di lunghezza
+            diversa. */}
         <span
           aria-hidden
-          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-red/90 mt-2 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors"
+          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-red/90 mt-auto inline-flex w-fit items-center gap-2 rounded-full px-5 py-2 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors"
         >
           Leggi l&apos;articolo
           <ArrowRight size={12} aria-hidden />
@@ -155,10 +139,9 @@ export async function NewsGrid() {
         {news.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2">
-            {news[0] && <NewsCard news={news[0]} size="large" />}
-            {news.slice(1, 4).map((n) => (
-              <NewsCard key={n._id} news={n} size="small" />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {news.slice(0, 3).map((n) => (
+              <NewsCard key={n._id} news={n} />
             ))}
           </div>
         )}

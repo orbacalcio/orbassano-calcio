@@ -293,7 +293,7 @@ function PreferencesView(props: {
               Le tue preferenze
             </h2>
             <p className="text-ink-mid text-xs leading-relaxed">
-              Imposta una categoria alla volta. La revoca del consenso e&apos;
+              Imposta una categoria alla volta. La revoca del consenso è
               sempre possibile cancellando i cookie del browser.
             </p>
           </div>

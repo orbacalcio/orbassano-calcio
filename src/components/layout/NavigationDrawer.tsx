@@ -13,8 +13,9 @@ import { sidebarOverflowItems } from "./SidebarLeft.items";
  * Drawer di navigazione full-screen aperto via hamburger.
  *
  * Riusato da:
- * - MobileShell (mobile <lg, drawer 88vw)
- * - TopbarScrolled (desktop ≥lg scrollato oltre hero, stesso pattern)
+ * - MobileTopbar (mobile <lg, drawer 88vw)
+ * - Topbar in modalita' scrolled (desktop ≥lg scrollato oltre hero)
+ * - SidebarLeft tasto "ALTRO" (desktop ≥lg sopra hero)
  *
  * Pattern: slide da sinistra 250ms, focus trap, ESC dismiss,
  * click-outside dismiss, body scroll lock mentre aperto.

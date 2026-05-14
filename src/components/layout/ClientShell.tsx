@@ -78,6 +78,18 @@ export function ClientShell({
   }, []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
 
+  // Punto di ingresso alternativo per aprire la ricerca: la SearchPromptCTA
+  // sopra il footer (server-rendered nel SiteLayout) non puo' chiamare
+  // direttamente setSearchOpen. Comunica via CustomEvent globale.
+  useEffect(() => {
+    function onOpenSearch() {
+      setDrawerOpen(false);
+      setSearchOpen(true);
+    }
+    window.addEventListener("orba:open-search", onOpenSearch);
+    return () => window.removeEventListener("orba:open-search", onOpenSearch);
+  }, []);
+
   // Curva Material "standard" (0.4, 0, 0.2, 1), 450ms. Stessa usata
   // dentro Topbar per allargamento/contenuti scrolled — sincronizzato.
   const sidebarFade = reduced

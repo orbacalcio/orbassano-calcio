@@ -1,5 +1,5 @@
 import { Swords } from "lucide-react";
-import { defineField, defineType } from "sanity";
+import { defineField, defineType, type Reference } from "sanity";
 
 /**
  * Join tra `club` e `competition`. Indica che un dato club partecipa a
@@ -22,11 +22,29 @@ export const opponent = defineType({
     defineField({
       name: "club",
       title: "Club",
-      description: "Anagrafica del club avversario (logo, sito, social).",
+      description:
+        "Anagrafica del club avversario (logo, sito, social). Il dropdown nasconde i club gia' registrati come avversari della stessa competizione, per evitare duplicati.",
       type: "reference",
       to: [{ type: "club" }],
       options: {
-        filter: "isActive == true",
+        filter: ({ document }) => {
+          const compRef = (document as { competition?: Reference })?.competition
+            ?._ref;
+          if (!compRef) return { filter: "isActive == true" };
+          // Escludi i club gia' presi da altri opponent per la stessa
+          // competition. `selfPub`/`selfDraft` escludono il documento
+          // corrente (sia che lo stiamo modificando come draft sia come
+          // published), altrimenti l'opponent corrente toglierebbe dalla
+          // dropdown il suo stesso club selezionato.
+          const docId = document?._id ?? "";
+          const selfPub = docId.replace(/^drafts\./, "");
+          const selfDraft = `drafts.${selfPub}`;
+          return {
+            filter:
+              'isActive == true && !(_id in *[_type == "opponent" && competition._ref == $compId && !(_id in [$selfPub, $selfDraft])].club._ref)',
+            params: { compId: compRef, selfPub, selfDraft },
+          };
+        },
       },
       validation: (r) => r.required(),
     }),

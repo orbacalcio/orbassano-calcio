@@ -16,11 +16,11 @@ import {
  */
 const FALLBACK_EYEBROW = "Storia in numeri";
 const FALLBACK_TITLE =
-  "Oltre novanta anni di rossoblù raccontati in quattro numeri";
+  "Oltre novantacinque anni di rossoblù raccontati in quattro numeri";
 
 const FALLBACK_ITEMS: StoryNumberItem[] = [
   {
-    value: 90,
+    value: 95,
     prefix: "+",
     suffix: null,
     label: "Anni di rossoblù",

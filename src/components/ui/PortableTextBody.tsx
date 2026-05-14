@@ -1,5 +1,6 @@
 import { PortableText, type PortableTextBlock } from "@portabletext/react";
 import { cn } from "@/lib/cn";
+import { isSafeUrl, safeUrlOr } from "@/lib/validation";
 
 /**
  * Renderer minimal per i campi PortableText di Sanity (descrizione team,
@@ -47,9 +48,16 @@ export function PortableTextBody({ value, className }: Props) {
             ),
             em: ({ children }) => <em className="italic">{children}</em>,
             link: ({ value: linkValue, children }) => {
-              const href =
-                typeof linkValue?.href === "string" ? linkValue.href : "#";
-              const isExternal = /^https?:\/\//.test(href);
+              // Sanitize href: rifiuta javascript:/data:/vbscript: anche se
+              // un admin riuscisse a salvarli forzando la validation Studio.
+              const rawHref =
+                typeof linkValue?.href === "string" ? linkValue.href : "";
+              if (!isSafeUrl(rawHref)) {
+                // Link non navigabile: rende come <span>, niente href eseguibile.
+                return <span className="text-ink-mid">{children}</span>;
+              }
+              const href = safeUrlOr(rawHref);
+              const isExternal = /^https?:\/\//i.test(href);
               return (
                 <a
                   href={href}

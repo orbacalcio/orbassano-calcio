@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 const NUMBERS = [
-  { value: "+90", label: "Anni di rossoblù" },
+  { value: "+95", label: "Anni di rossoblù" },
   { value: "23", label: "Atleti prima squadra" },
   { value: "120+", label: "Giovani nel SGS" },
   { value: "9", label: "Partecipazioni Serie D" },
