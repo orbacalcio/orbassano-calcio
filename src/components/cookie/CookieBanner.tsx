@@ -228,18 +228,16 @@ function BannerView({
           />
           <div className="flex flex-col gap-2">
             <h2 className="font-display text-ink-hi text-base font-bold tracking-[0.005em] uppercase">
-              Briefing tecnico
+              Cookie
             </h2>
             <p className="text-ink-mid text-sm leading-relaxed">
-              Cookie tecnici in formazione titolare. I panchinari —
-              analytics anonimi e contenuti embedded (Instagram via
-              Behold) — li scegli tu prima del fischio. Niente
-              profilazione pubblicitaria.{" "}
+              Tecnici sempre attivi. Analytics anonimi e widget
+              Instagram solo se accetti. Niente pubblicità.{" "}
               <a
                 href="/legal/cookie"
                 className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
               >
-                Leggi la cookie policy
+                Maggiori informazioni
               </a>
               .
             </p>

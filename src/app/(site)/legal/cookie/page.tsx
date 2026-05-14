@@ -1,196 +1,260 @@
 import type { Metadata } from "next";
-import {
-  LegalLayout,
-  LegalList,
-  LegalSection,
-} from "@/components/legal/LegalLayout";
+import Link from "next/link";
+import { Ban, Eye, Shield } from "lucide-react";
+import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
   title: "Cookie policy",
   description:
-    "Informativa estesa sui cookie utilizzati dal sito orbassanocalcio.com ai sensi del Provvedimento Garante 10 giugno 2021 e del GDPR.",
+    "Cookie utilizzati da orbassanocalcio.com: tecnici sempre attivi, analytics e widget esterni solo con consenso. Conforme GDPR + Garante 10/06/2021.",
 };
 
 const LAST_UPDATE = "9 maggio 2026";
 
+/**
+ * Cookie policy "versione semplice": 3 card colorate (gold/blue/red)
+ * spiegano in modo immediato cosa attiviamo. Il dettaglio legale resta
+ * a fondo pagina (riferimenti GDPR, link policy dei terzi, browser
+ * instructions, contatti). Conformita' GDPR + Provvedimento Garante
+ * 10/06/2021: tutto cio' che serve c'e', ma scritto come parlerebbe
+ * una persona, non un avvocato.
+ */
 export default function CookiePage() {
   return (
     <LegalLayout
       eyebrow="Cookie policy"
-      title="Informativa estesa sui cookie"
-      intro="Questo sito utilizza cookie tecnici e di preferenza necessari al funzionamento e cookie di terze parti per analytics anonimizzati. Nessun cookie di profilazione viene installato senza il tuo consenso esplicito."
+      title="Cookie usati su questo sito"
+      intro="In sintesi: cookie tecnici sempre attivi, tutto il resto solo se accetti, mai pubblicità o profilazione."
       lastUpdate={LAST_UPDATE}
     >
-      <LegalSection title="1. Cosa sono i cookie">
-        <p>
-          I cookie sono piccoli file di testo che i siti visitati salvano
-          sul dispositivo dell&apos;utente. Sono utilizzati per far funzionare
-          il sito, migliorare le prestazioni, ricordare preferenze e — solo
-          se autorizzati — raccogliere statistiche d&apos;uso aggregate.
-        </p>
-      </LegalSection>
-
-      <LegalSection title="2. Cookie tecnici (sempre attivi)">
-        <p>
-          I cookie tecnici sono necessari al funzionamento del sito e non
-          richiedono consenso (art. 122 D.lgs. 196/2003 e Provvedimento
-          Garante 10 giugno 2021). In questa categoria rientrano:
-        </p>
-        <LegalList
+      <div className="grid gap-4 md:grid-cols-3">
+        <CategoryCard
+          variant="always"
+          title="Sempre attivi"
+          subtitle="Servono al sito"
+          icon={<Shield size={32} aria-hidden />}
           items={[
-            <>
-              <strong className="text-ink-hi">Sessione</strong>:
-              identificano la tua sessione di navigazione (durata: chiusura
-              del browser).
-            </>,
-            <>
-              <strong className="text-ink-hi">Preferenze</strong>: salvano
-              le scelte di lingua e il consenso espresso al banner cookie
-              (durata: 6 mesi).
-            </>,
-            <>
-              <strong className="text-ink-hi">Sicurezza</strong>: protezione
-              CSRF e mitigazione bot (durata: sessione).
-            </>,
+            "Sessione di navigazione",
+            "Sicurezza (anti-spam, anti-bot)",
+            "Memoria della tua scelta su questo banner",
           ]}
         />
-      </LegalSection>
-
-      <LegalSection title="3. Cookie di terze parti">
-        <p>
-          Possiamo utilizzare cookie di terze parti per analytics e
-          contenuti embedded:
-        </p>
-        <LegalList
+        <CategoryCard
+          variant="optional"
+          title="Solo se accetti"
+          subtitle="Migliorano il sito"
+          icon={<Eye size={32} aria-hidden />}
           items={[
-            <>
-              <strong className="text-ink-hi">Vercel Analytics</strong>{" "}
-              (analytics): metriche di pagina anonime, senza profilazione.
-              Privacy policy:{" "}
-              <a
-                href="https://vercel.com/legal/privacy-policy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand-gold hover:underline"
-              >
-                vercel.com/legal/privacy-policy
-              </a>
-              .
-            </>,
-            <>
-              <strong className="text-ink-hi">Behold (Instagram embed)</strong>:
-              caricato sulla sezione &laquo;Vivi l&apos;Orba&raquo; della
-              homepage. Imposta cookie tecnici di Meta/Instagram. Privacy
-              policy:{" "}
-              <a
-                href="https://www.behold.so/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand-gold hover:underline"
-              >
-                behold.so/privacy
-              </a>
-              .
-            </>,
-            <>
-              <strong className="text-ink-hi">YouTube</strong>: solo se
-              embedded all&apos;interno di articoli news. Privacy policy:{" "}
-              <a
-                href="https://policies.google.com/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand-gold hover:underline"
-              >
-                policies.google.com/privacy
-              </a>
-              .
-            </>,
+            "Statistiche pagina anonime (Vercel Analytics)",
+            "Widget Instagram nella sezione Vivi l'Orba (Behold)",
+            "Video YouTube se embedded in news",
           ]}
         />
-        <p>
-          Non utilizziamo cookie di profilazione pubblicitaria. Non
-          condividiamo dati con piattaforme adv (Google Ads, Meta Ads,
-          ecc.).
-        </p>
-      </LegalSection>
-
-      <LegalSection title="4. Gestione del consenso">
-        <p>
-          Al primo accesso al sito un banner ti permette di accettare o
-          rifiutare i cookie non tecnici. Puoi modificare la tua scelta in
-          qualunque momento dal link &laquo;Preferenze cookie&raquo; in
-          fondo a ogni pagina o cancellando i cookie dal browser.
-        </p>
-        <p>
-          Il consenso viene registrato in forma anonima e granulare in un
-          log di compliance, per dimostrare la conformit&agrave; al GDPR
-          (art. 7).
-        </p>
-      </LegalSection>
-
-      <LegalSection title="5. Disabilitare i cookie dal browser">
-        <p>Istruzioni ufficiali per i principali browser:</p>
-        <LegalList
+        <CategoryCard
+          variant="never"
+          title="Mai"
+          subtitle="Non li useremo"
+          icon={<Ban size={32} aria-hidden />}
           items={[
-            <a
-              key="chrome"
-              href="https://support.google.com/chrome/answer/95647"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-gold hover:underline"
-            >
-              Google Chrome
-            </a>,
-            <a
-              key="firefox"
-              href="https://support.mozilla.org/it/kb/Eliminare%20i%20cookie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-gold hover:underline"
-            >
-              Mozilla Firefox
-            </a>,
-            <a
-              key="safari"
-              href="https://support.apple.com/it-it/guide/safari/sfri11471/mac"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-gold hover:underline"
-            >
-              Apple Safari
-            </a>,
-            <a
-              key="edge"
-              href="https://support.microsoft.com/it-it/microsoft-edge"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-gold hover:underline"
-            >
-              Microsoft Edge
-            </a>,
+            "Pubblicità targetizzata",
+            "Profilazione del comportamento",
+            "Vendita dati a terzi",
           ]}
         />
-      </LegalSection>
+      </div>
 
-      <LegalSection title="6. Contatti">
+      <section className="flex flex-col gap-3">
+        <h2 className="font-display text-ink-hi text-2xl leading-tight font-bold tracking-[0.01em] uppercase">
+          Cambia idea quando vuoi
+        </h2>
         <p>
-          Per domande sulla cookie policy scrivi a{" "}
+          Le tue scelte restano valide 6 mesi. Per modificarle prima:
+          cancella i cookie del browser e ricarica il sito — il banner
+          ricompare e puoi rifare la scelta. Oppure usa le impostazioni
+          del browser:{" "}
+          <a
+            href="https://support.google.com/chrome/answer/95647"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-gold hover:underline"
+          >
+            Chrome
+          </a>
+          ,{" "}
+          <a
+            href="https://support.mozilla.org/it/kb/Eliminare%20i%20cookie"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-gold hover:underline"
+          >
+            Firefox
+          </a>
+          ,{" "}
+          <a
+            href="https://support.apple.com/it-it/guide/safari/sfri11471/mac"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-gold hover:underline"
+          >
+            Safari
+          </a>
+          ,{" "}
+          <a
+            href="https://support.microsoft.com/it-it/microsoft-edge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-gold hover:underline"
+          >
+            Edge
+          </a>
+          .
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="font-display text-ink-hi text-2xl leading-tight font-bold tracking-[0.01em] uppercase">
+          Chi tratta i tuoi dati
+        </h2>
+        <p>
+          I cookie opzionali sono installati da servizi esterni con loro
+          informativa privacy:
+        </p>
+        <ul className="ml-5 flex list-disc flex-col gap-2">
+          <li>
+            <a
+              href="https://vercel.com/legal/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-gold hover:underline"
+            >
+              Vercel
+            </a>{" "}
+            — hosting e analytics anonime
+          </li>
+          <li>
+            <a
+              href="https://www.behold.so/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-gold hover:underline"
+            >
+              Behold
+            </a>{" "}
+            — widget Instagram (passa per Meta/Instagram)
+          </li>
+          <li>
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-gold hover:underline"
+            >
+              Google/YouTube
+            </a>{" "}
+            — video embedded nelle news (solo se presenti)
+          </li>
+        </ul>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="font-display text-ink-hi text-2xl leading-tight font-bold tracking-[0.01em] uppercase">
+          Domande?
+        </h2>
+        <p>
+          Scrivi a{" "}
           <a
             href="mailto:info@orbassanocalcio.com"
             className="text-brand-gold hover:underline"
           >
             info@orbassanocalcio.com
           </a>
-          . Per i tuoi diritti privacy consulta l&apos;{" "}
-          <a
+          . Per i tuoi diritti completi (accesso, rettifica,
+          cancellazione) leggi l&apos;
+          <Link
             href="/legal/privacy"
             className="text-brand-gold hover:underline"
           >
-            informativa sulla privacy
-          </a>
+            informativa privacy
+          </Link>
           .
         </p>
-      </LegalSection>
+        <p className="text-ink-low text-xs leading-relaxed">
+          Riferimenti normativi: art. 122 D.lgs. 196/2003, Reg. UE 2016/679
+          (GDPR), Provvedimento Garante Privacy 10 giugno 2021.
+        </p>
+      </section>
     </LegalLayout>
+  );
+}
+
+/**
+ * Card 3-stato (sempre attivi / opzionali / mai) — bordo colorato per
+ * categoria + icona big + lista bullet plain. L'effetto wow vive qui:
+ * non e' una pagina-prosa monolitica, e' una griglia che si scansiona
+ * in 5 secondi.
+ */
+function CategoryCard({
+  variant,
+  title,
+  subtitle,
+  icon,
+  items,
+}: {
+  variant: "always" | "optional" | "never";
+  title: string;
+  subtitle: string;
+  icon: React.ReactNode;
+  items: string[];
+}) {
+  // Token per variant: solo border + icon color cambiano. Body resta
+  // neutro per leggibilita' (i 3 colori in pieno sarebbero rumore).
+  const styles = {
+    always: {
+      border: "border-brand-gold/50",
+      accent: "text-brand-gold",
+      bg: "bg-brand-gold/[0.04]",
+    },
+    optional: {
+      border: "border-brand-blue/50",
+      accent: "text-brand-blue",
+      bg: "bg-brand-blue/[0.04]",
+    },
+    never: {
+      border: "border-brand-red/50",
+      accent: "text-brand-red",
+      bg: "bg-brand-red/[0.04]",
+    },
+  }[variant];
+
+  return (
+    <div
+      className={`${styles.border} ${styles.bg} flex flex-col gap-4 rounded-2xl border p-6`}
+    >
+      <div className={`${styles.accent} flex items-center gap-3`}>
+        {icon}
+        <div className="flex flex-col">
+          <span className="font-display text-ink-hi text-xl font-bold tracking-[0.005em] uppercase">
+            {title}
+          </span>
+          <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+            {subtitle}
+          </span>
+        </div>
+      </div>
+      <ul className="flex flex-col gap-2">
+        {items.map((item, i) => (
+          <li
+            key={i}
+            className="text-ink-mid flex items-start gap-2 text-sm leading-relaxed"
+          >
+            <span
+              className={`${styles.accent} mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-current`}
+              aria-hidden
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
