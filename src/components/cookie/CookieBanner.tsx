@@ -5,7 +5,7 @@ import {
   motion,
   useReducedMotion,
 } from "framer-motion";
-import { Settings2, Shield, X } from "lucide-react";
+import { ClipboardList, Settings2, Shield, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
@@ -68,11 +68,6 @@ export function CookieBanner() {
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [embedSocial, setEmbedSocial] = useState(false);
-  // Stato della "celebrazione goal" sul click di "Accetta tutto": il
-  // burst di coriandoli oro + pulse del bottone gira ~600ms prima che
-  // il banner svanisca via persist(). Con prefers-reduced-motion
-  // saltiamo direttamente a persist senza animazione.
-  const [celebrating, setCelebrating] = useState(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -138,21 +133,12 @@ export function CookieBanner() {
   }
 
   function acceptAll() {
-    const categories: Categories = {
+    persist("accept-all", {
       necessary: true,
       analytics: true,
       marketing: true,
       embedSocial: true,
-    };
-    if (reduced) {
-      persist("accept-all", categories);
-      return;
-    }
-    // Celebrazione goal: il burst gira ~700ms, dopodiche' persist
-    // chiude il banner. L'audit log fetch parte dentro persist e gira
-    // in parallelo, quindi il delay e' solo UX.
-    setCelebrating(true);
-    setTimeout(() => persist("accept-all", categories), 700);
+    });
   }
 
   function rejectAll() {
@@ -190,13 +176,12 @@ export function CookieBanner() {
         aria-label="Banner cookie"
       >
         <Container size="wide" className="pointer-events-auto py-4 sm:py-6">
-          <div className="border-brand-gold/40 bg-surface-1/95 ring-border/30 rounded-3xl border p-6 shadow-2xl backdrop-blur-md ring-1 sm:p-8">
+          <div className="border-brand-gold/40 bg-surface-1/95 ring-border/30 relative overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-md ring-1 sm:p-8">
             {view === "banner" ? (
               <BannerView
                 onAcceptAll={acceptAll}
                 onRejectAll={rejectAll}
                 onCustomize={() => setView("preferences")}
-                celebrating={celebrating}
                 reduced={!!reduced}
               />
             ) : (
@@ -224,124 +209,165 @@ function BannerView({
   onAcceptAll,
   onRejectAll,
   onCustomize,
-  celebrating,
   reduced,
 }: {
   onAcceptAll: () => void;
   onRejectAll: () => void;
   onCustomize: () => void;
-  celebrating: boolean;
   reduced: boolean;
 }) {
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[1fr_auto]">
-      <div className="flex items-start gap-4">
-        {/* Calcio d'inizio: la palla rotola in entrata da sx (-120px) e
-            si ferma nello slot dell'icona dopo 1.4s, con 2 rotazioni
-            complete. Reduced motion → statica subito, niente roll. */}
-        <motion.span
-          aria-hidden
-          className="text-4xl leading-none shrink-0 select-none"
-          initial={
-            reduced ? false : { x: -120, rotate: -720, opacity: 0 }
-          }
-          animate={reduced ? undefined : { x: 0, rotate: 0, opacity: 1 }}
-          transition={
-            reduced
-              ? undefined
-              : { duration: 1.4, ease: [0.215, 0.61, 0.355, 1] }
-          }
-        >
-          ⚽
-        </motion.span>
-        <div className="flex flex-col gap-2">
-          <h2 className="font-display text-ink-hi text-base font-bold tracking-[0.005em] uppercase">
-            Si comincia
-          </h2>
-          <p className="text-ink-mid text-sm leading-relaxed">
-            Cookie tecnici sempre in campo. Gli altri — analytics anonimi
-            e contenuti embedded (Instagram via Behold) — li scegli tu
-            prima del fischio. Niente profilazione pubblicitaria.{" "}
-            <a
-              href="/legal/cookie"
-              className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
-            >
-              Leggi la cookie policy
-            </a>
-            .
-          </p>
+    <>
+      <ChalkPitchBackground reduced={reduced} />
+      <div className="relative grid items-start gap-6 lg:grid-cols-[1fr_auto]">
+        <div className="flex items-start gap-4">
+          <ClipboardList
+            size={28}
+            className="text-brand-gold mt-1 shrink-0"
+            aria-hidden
+          />
+          <div className="flex flex-col gap-2">
+            <h2 className="font-display text-ink-hi text-base font-bold tracking-[0.005em] uppercase">
+              Briefing tecnico
+            </h2>
+            <p className="text-ink-mid text-sm leading-relaxed">
+              Cookie tecnici in formazione titolare. I panchinari —
+              analytics anonimi e contenuti embedded (Instagram via
+              Behold) — li scegli tu prima del fischio. Niente
+              profilazione pubblicitaria.{" "}
+              <a
+                href="/legal/cookie"
+                className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
+              >
+                Leggi la cookie policy
+              </a>
+              .
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-wrap items-center justify-end gap-2 lg:flex-col lg:items-stretch">
-        {/* Wrapper relativo per ospitare i coriandoli oro all'esultanza
-            "GOAL". Particelle assolutamente centrate sul bottone, scalano
-            verso fuori con ease-out 700ms, opacita' → 0. */}
-        <div className="relative">
-          <motion.button
+        <div className="flex flex-wrap items-center justify-end gap-2 lg:flex-col lg:items-stretch">
+          <button
             type="button"
             onClick={onAcceptAll}
-            animate={
-              celebrating && !reduced
-                ? { scale: [1, 1.08, 1] }
-                : undefined
-            }
-            transition={
-              celebrating && !reduced
-                ? { duration: 0.5, times: [0, 0.4, 1] }
-                : undefined
-            }
-            className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             Accetta tutto
-          </motion.button>
-          <AnimatePresence>
-            {celebrating && !reduced && (
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 flex items-center justify-center"
-              >
-                {Array.from({ length: 12 }).map((_, i) => {
-                  const angle = (i / 12) * Math.PI * 2;
-                  const distance = 48 + (i % 3) * 14;
-                  return (
-                    <motion.span
-                      key={i}
-                      className="bg-brand-gold absolute h-1.5 w-1.5 rounded-full"
-                      initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                      animate={{
-                        x: Math.cos(angle) * distance,
-                        y: Math.sin(angle) * distance,
-                        opacity: 0,
-                        scale: 0,
-                      }}
-                      transition={{
-                        duration: 0.65,
-                        ease: [0.165, 0.84, 0.44, 1],
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </AnimatePresence>
+          </button>
+          <button
+            type="button"
+            onClick={onRejectAll}
+            className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi focus-visible:outline-brand-gold inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            Solo necessari
+          </button>
+          <button
+            type="button"
+            onClick={onCustomize}
+            className="text-ink-mid hover:text-brand-gold inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors"
+          >
+            <Settings2 size={14} aria-hidden />
+            Personalizza
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={onRejectAll}
-          className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi focus-visible:outline-brand-gold inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
-        >
-          Solo necessari
-        </button>
-        <button
-          type="button"
-          onClick={onCustomize}
-          className="text-ink-mid hover:text-brand-gold inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors"
-        >
-          <Settings2 size={14} aria-hidden />
-          Personalizza
-        </button>
       </div>
-    </div>
+    </>
+  );
+}
+
+/**
+ * Sfondo "lavagna tattica" — meta' campo vista dall'alto disegnata con
+ * chalk lines bianche basse-opacita' (8%) sul lato destro del banner.
+ * Le linee si "auto-disegnano" all'entrata con pathLength 0→1
+ * staggerato (totale ~1.8s) — effetto coach che traccia gli schemi
+ * a inizio briefing. Reduced motion: tutto disegnato statico,
+ * niente animazione.
+ *
+ * preserveAspectRatio="xMaxYMid slice" tiene il rettangolo dell'area
+ * di rigore ancorato al bordo destro qualunque sia la larghezza della
+ * card — niente stretch innaturale.
+ */
+function ChalkPitchBackground({ reduced }: { reduced: boolean }) {
+  const baseTransition = reduced
+    ? { duration: 0 }
+    : { duration: 0.7, ease: [0.215, 0.61, 0.355, 1] as const };
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 400 200"
+      preserveAspectRatio="xMaxYMid slice"
+      className="text-ink-hi pointer-events-none absolute inset-0 h-full w-full opacity-[0.08]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+    >
+      {/* Linea di metacampo (sinistra) */}
+      <motion.line
+        x1={1}
+        y1={0}
+        x2={1}
+        y2={200}
+        initial={reduced ? false : { pathLength: 0 }}
+        animate={reduced ? undefined : { pathLength: 1 }}
+        transition={{ ...baseTransition, delay: reduced ? 0 : 0.1 }}
+      />
+      {/* Cerchio centrale (mezzo, visibile sul bordo sinistro) */}
+      <motion.path
+        d="M 1 70 A 30 30 0 0 1 1 130"
+        initial={reduced ? false : { pathLength: 0 }}
+        animate={reduced ? undefined : { pathLength: 1 }}
+        transition={{ ...baseTransition, delay: reduced ? 0 : 0.3 }}
+      />
+      {/* Punto del centrocampo */}
+      <motion.circle
+        cx={1}
+        cy={100}
+        r={2}
+        fill="currentColor"
+        stroke="none"
+        initial={reduced ? false : { opacity: 0 }}
+        animate={reduced ? undefined : { opacity: 1 }}
+        transition={{ duration: 0.3, delay: reduced ? 0 : 0.6 }}
+      />
+      {/* Area di rigore (grande rettangolo lato destro) */}
+      <motion.rect
+        x={300}
+        y={40}
+        width={100}
+        height={120}
+        initial={reduced ? false : { pathLength: 0 }}
+        animate={reduced ? undefined : { pathLength: 1 }}
+        transition={{ ...baseTransition, delay: reduced ? 0 : 0.5 }}
+      />
+      {/* Area piccola (goal area) */}
+      <motion.rect
+        x={355}
+        y={70}
+        width={45}
+        height={60}
+        initial={reduced ? false : { pathLength: 0 }}
+        animate={reduced ? undefined : { pathLength: 1 }}
+        transition={{ ...baseTransition, delay: reduced ? 0 : 0.9 }}
+      />
+      {/* Dischetto del rigore */}
+      <motion.circle
+        cx={335}
+        cy={100}
+        r={2}
+        fill="currentColor"
+        stroke="none"
+        initial={reduced ? false : { opacity: 0 }}
+        animate={reduced ? undefined : { opacity: 1 }}
+        transition={{ duration: 0.3, delay: reduced ? 0 : 1.2 }}
+      />
+      {/* Arco del rigore */}
+      <motion.path
+        d="M 312 88 A 18 18 0 0 0 312 112"
+        initial={reduced ? false : { pathLength: 0 }}
+        animate={reduced ? undefined : { pathLength: 1 }}
+        transition={{ ...baseTransition, delay: reduced ? 0 : 1.3 }}
+      />
+    </svg>
   );
 }
 
