@@ -358,7 +358,7 @@ function HeadlineBlock({
   return (
     <motion.h1
       variants={makeWrapperVariants()}
-      className="font-display text-ink-hi text-7xl leading-[0.92] font-black tracking-[0.005em] uppercase sm:text-8xl lg:text-[10rem]"
+      className="font-display text-ink-hi text-[clamp(3.5rem,8vw,9rem)] leading-[0.92] font-black tracking-[0.005em] uppercase"
     >
       {lines.map((line, i) => {
         const isLast = i === lines.length - 1;
