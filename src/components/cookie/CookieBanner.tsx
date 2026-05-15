@@ -68,6 +68,12 @@ export function CookieBanner() {
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [embedSocial, setEmbedSocial] = useState(false);
+  // True quando localStorage ha gia' un consenso fresco. Determina la
+  // visibilita' del pulsante fluttuante in basso a destra (l'utente
+  // puo' riaprire il banner per cambiare le preferenze in qualunque
+  // momento). Resta false durante SSR + primo render: la palla
+  // appare solo dopo l'idratazione, quando sappiamo lo stato reale.
+  const [hasStoredConsent, setHasStoredConsent] = useState(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -76,16 +82,25 @@ export function CookieBanner() {
     // sola: evita il pattern di cascading re-render che la regola
     // react-hooks/set-state-in-effect intende prevenire.
     let nextView: View = "hidden";
+    let consentFound = false;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
         nextView = "banner";
       } else {
         const stored = JSON.parse(raw) as StoredConsent;
-        if (!isFresh(stored)) nextView = "banner";
+        if (isFresh(stored)) {
+          consentFound = true;
+        } else {
+          nextView = "banner";
+        }
       }
     } catch {
       nextView = "banner";
+    }
+    if (consentFound) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setHasStoredConsent(true);
     }
     if (nextView !== "hidden") {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -111,6 +126,7 @@ export function CookieBanner() {
       // l'audit log lato server resta comunque la fonte di verita'.
     }
     setView("hidden");
+    setHasStoredConsent(true);
 
     // Best-effort POST al log audit. Errori silenziati: non vogliamo
     // bloccare la UX se Sanity e' temporaneamente irraggiungibile.
@@ -159,49 +175,81 @@ export function CookieBanner() {
     });
   }
 
-  if (view === "hidden") return null;
-
   const transition = reduced ? { duration: 0 } : { duration: 0.3 };
 
   return (
-    <AnimatePresence>
-      <motion.div
-        key={view}
-        initial={reduced ? false : { opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={reduced ? undefined : { opacity: 0, y: 24 }}
-        transition={transition}
-        className="fixed inset-x-0 bottom-0 z-[60] pointer-events-none"
-        role="region"
-        aria-label="Banner cookie"
-      >
-        <Container size="wide" className="pointer-events-auto py-4 sm:py-6">
-          <div className="border-brand-gold/40 bg-surface-1/95 ring-border/30 relative overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-md ring-1 sm:p-8">
-            {view === "banner" ? (
-              <BannerView
-                onAcceptAll={acceptAll}
-                onRejectAll={rejectAll}
-                onCustomize={() => setView("preferences")}
-                reduced={!!reduced}
-              />
-            ) : (
-              <PreferencesView
-                analytics={analytics}
-                marketing={marketing}
-                embedSocial={embedSocial}
-                setAnalytics={setAnalytics}
-                setMarketing={setMarketing}
-                setEmbedSocial={setEmbedSocial}
-                onCancel={() => setView("banner")}
-                onSave={savePreferences}
-                onAcceptAll={acceptAll}
-                onRejectAll={rejectAll}
-              />
-            )}
-          </div>
-        </Container>
-      </motion.div>
-    </AnimatePresence>
+    <>
+      {/* Pulsante fluttuante (pallone) in basso a destra per riaprire
+          il banner. Visibile solo quando: consenso gia' salvato e
+          banner attualmente chiuso. Permette all'utente di revocare
+          o modificare le preferenze in qualunque momento (GDPR art. 7
+          comma 3: il consenso deve essere revocabile con la stessa
+          facilita' con cui e' stato dato). */}
+      <AnimatePresence>
+        {view === "hidden" && hasStoredConsent && (
+          <motion.button
+            key="cookie-reopen"
+            type="button"
+            onClick={() => setView("banner")}
+            aria-label="Apri preferenze cookie"
+            title="Preferenze cookie"
+            initial={reduced ? false : { opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reduced ? undefined : { opacity: 0, scale: 0.6 }}
+            transition={{ duration: 0.25 }}
+            whileHover={reduced ? undefined : { scale: 1.08, rotate: 12 }}
+            whileTap={reduced ? undefined : { scale: 0.92 }}
+            className="bg-surface-1/90 border-brand-gold/50 ring-border/30 fixed right-4 bottom-4 z-[55] flex h-12 w-12 items-center justify-center rounded-full border shadow-xl ring-1 backdrop-blur-md transition-colors hover:bg-surface-2 sm:right-6 sm:bottom-6"
+          >
+            <SoccerBallIcon />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {view !== "hidden" && (
+          <motion.div
+            key={view}
+            initial={reduced ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduced ? undefined : { opacity: 0, y: 24 }}
+            transition={transition}
+            className="fixed inset-x-0 bottom-0 z-[60] pointer-events-none"
+            role="region"
+            aria-label="Banner cookie"
+          >
+            <Container
+              size="wide"
+              className="pointer-events-auto py-4 sm:py-6"
+            >
+              <div className="border-brand-gold/40 bg-surface-1/95 ring-border/30 relative overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-md ring-1 sm:p-8">
+                {view === "banner" ? (
+                  <BannerView
+                    onAcceptAll={acceptAll}
+                    onRejectAll={rejectAll}
+                    onCustomize={() => setView("preferences")}
+                    reduced={!!reduced}
+                  />
+                ) : (
+                  <PreferencesView
+                    analytics={analytics}
+                    marketing={marketing}
+                    embedSocial={embedSocial}
+                    setAnalytics={setAnalytics}
+                    setMarketing={setMarketing}
+                    setEmbedSocial={setEmbedSocial}
+                    onCancel={() => setView("banner")}
+                    onSave={savePreferences}
+                    onAcceptAll={acceptAll}
+                    onRejectAll={rejectAll}
+                  />
+                )}
+              </div>
+            </Container>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -514,4 +562,42 @@ function serializeCategories(c: Categories): string[] {
   if (c.marketing) list.push("marketing");
   if (c.embedSocial) list.push("embed-social");
   return list;
+}
+
+/**
+ * Pallone da calcio stilizzato — circle bianco con pentagono centrale
+ * nero + 5 segmenti radiali che suggeriscono i lati dei pentagoni
+ * adiacenti. Niente pattern fotorealistico: e' un'icona, non
+ * un'illustrazione. Dimensione fissa 24x24 (la dimensione visiva
+ * dipende dal wrapper button).
+ */
+function SoccerBallIcon() {
+  return (
+    <svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.4}
+      strokeLinejoin="round"
+      strokeLinecap="round"
+      aria-hidden
+      className="text-ink-hi"
+    >
+      {/* Sfera bianca */}
+      <circle cx="12" cy="12" r="10" fill="#ffffff" stroke="currentColor" />
+      {/* Pentagono centrale nero */}
+      <polygon
+        points="12,7 16,9.8 14.5,14.5 9.5,14.5 8,9.8"
+        fill="currentColor"
+      />
+      {/* 5 segmenti che escono dai vertici verso il bordo della sfera */}
+      <line x1="12" y1="7" x2="12" y2="3.2" />
+      <line x1="16" y1="9.8" x2="19.6" y2="8.4" />
+      <line x1="14.5" y1="14.5" x2="17.4" y2="18" />
+      <line x1="9.5" y1="14.5" x2="6.6" y2="18" />
+      <line x1="8" y1="9.8" x2="4.4" y2="8.4" />
+    </svg>
+  );
 }
