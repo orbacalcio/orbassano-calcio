@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 
 /**
@@ -12,18 +15,21 @@ import { Container } from "@/components/ui/Container";
  * Tecnica:
  * - `repeating-linear-gradient(to right, ...)` come background del <h2>
  *   alterna brand-red e brand-blue a strisce di 22px (totale 44px =
- *   ~3 strisce per larghezza-glifo a text-[10rem], proporzioni jersey)
+ *   ~3 strisce per larghezza-glifo, proporzioni jersey)
  * - `background-clip: text` + `WebkitTextFillColor: transparent`
  *   ritaglia il pattern dentro le glifi
- * - Niente skew: con strisce verticali le strisce stesse danno
- *   impatto, lo skew le inclinerebbe rendendole confuse
+ *
+ * Wow effect: al primo ingresso in viewport (viewport.once = true), le
+ * strisce scorrono orizzontalmente dentro le lettere da -440px (10 cicli
+ * di 44px) a 0 sopra 1.6s ease-out. Single play, niente loop infinito.
+ * Reduced-motion: pattern statico, niente animazione.
  *
  * Sfondo cream (#F5F1E8) vintage/parchment: stesso contrasto del
  * bianco puro per far brillare il rossoblu', ma transizione meno
- * stridente col navy del resto della pagina. Richiama anche le foto
- * storiche/cimeli del club (per chi ricorda gli anni '80).
+ * stridente col navy del resto della pagina.
  */
 export function Manifesto() {
+  const reduced = useReducedMotion();
   return (
     <section
       aria-labelledby="manifesto-title"
@@ -33,17 +39,19 @@ export function Manifesto() {
         size="wide"
         className="flex flex-col items-center gap-10 text-center sm:gap-12"
       >
-        <h2
+        <motion.h2
           id="manifesto-title"
           className="font-display leading-[0.9] font-black tracking-[0.005em] uppercase"
+          initial={reduced ? false : { backgroundPositionX: "-440px" }}
+          whileInView={{ backgroundPositionX: "0px" }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{
+            duration: 1.6,
+            ease: [0.215, 0.61, 0.355, 1],
+          }}
           style={{
-            // Dimensione fluida +30% rispetto alla precedente: cresce con la
-            // viewport invece di saltare a tre breakpoint discreti. A 320px
-            // (iPhone SE) la clamp tiene 3rem; a 1280px (desktop tipico)
-            // ~11rem; a >=1486px max 13rem (= 10rem precedente +30%).
-            // Il clamp evita l'overflow orizzontale su mobile che avrebbe
-            // dato il +30% statico (text-6xl -> 4.875rem = 78px troppo
-            // largo per la stringa "Never give up" a 320-375px).
+            // Dimensione fluida con clamp: 320px iPhone SE → 3rem,
+            // 1280px desktop → ~11rem, >=1486px max 13rem.
             fontSize: "clamp(3rem, 14vw, 13rem)",
             backgroundImage:
               "repeating-linear-gradient(to right, #e91f22 0, #e91f22 22px, #213f8c 22px, #213f8c 44px)",
@@ -56,7 +64,7 @@ export function Manifesto() {
           Never give up
           <br />
           Since 1930
-        </h2>
+        </motion.h2>
 
         <Link
           href="/societa/storia"
