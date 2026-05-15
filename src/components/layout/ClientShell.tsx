@@ -111,10 +111,11 @@ export function ClientShell({
         onSearchClick={openSearch}
       />
 
-      {/* Sidebar verticali: visibili in HERO, fadono in parallelo
-          all'allargamento della Topbar (stessa curva, stessa durata).
-          Il bottone "Altro" della SidebarLeft apre il NavigationDrawer
-          (pattern juventus.com): pass-through del callback openDrawer. */}
+      {/* SidebarLeft: visibile in HERO, fade out in parallelo
+          all'allargamento della Topbar (stessa curva/durata). Il
+          bottone "Altro" apre il NavigationDrawer (pattern juventus.com).
+          Niente fade per SidebarRight: i social del club devono essere
+          accessibili in ogni pagina, come per il pulsante cookie. */}
       <motion.div
         initial={false}
         animate={{
@@ -124,8 +125,8 @@ export function ClientShell({
         transition={sidebarFade}
       >
         <SidebarLeft onMoreClick={openDrawer} />
-        <SidebarRight />
       </motion.div>
+      <SidebarRight />
 
       {/* Drawer condiviso (mobile + desktop scrolled) */}
       <NavigationDrawer
