@@ -1,6 +1,7 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { ClearGalleryAction } from "@/sanity/actions/clearGalleryAction";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemaTypes";
 import { structure } from "@/sanity/structure";
@@ -44,4 +45,17 @@ export default defineConfig({
     // Vision: query GROQ live nello Studio (utile in dev e per l'admin del club)
     visionTool({ defaultApiVersion: apiVersion }),
   ],
+  document: {
+    // Document Actions custom. Le actions standard (Publish, Discard,
+    // Duplicate, Unpublish, Delete) restano via `prev`; aggiungiamo
+    // azioni mirate per schema type. ClearGalleryAction svuota in un
+    // colpo l'array images di un album gallery (alternativa al delete
+    // manuale di N foto una a una).
+    actions: (prev, context) => {
+      if (context.schemaType === "gallery") {
+        return [...prev, ClearGalleryAction];
+      }
+      return prev;
+    },
+  },
 });
