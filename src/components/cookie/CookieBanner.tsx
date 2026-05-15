@@ -565,39 +565,57 @@ function serializeCategories(c: Categories): string[] {
 }
 
 /**
- * Pallone da calcio stilizzato — circle bianco con pentagono centrale
- * nero + 5 segmenti radiali che suggeriscono i lati dei pentagoni
- * adiacenti. Niente pattern fotorealistico: e' un'icona, non
- * un'illustrazione. Dimensione fissa 24x24 (la dimensione visiva
- * dipende dal wrapper button).
+ * Pallone da calcio stilizzato — sfera bianca con stroke + pattern
+ * di pentagoni neri (uno centrale + 5 patch ai vertici verso il
+ * bordo, parzialmente clippati dalla circonferenza). Coppia di
+ * colori white/black hardcoded perche' e' un'icona simbolica: il
+ * pallone "vero" e' bianco e nero, non blu navy.
  */
 function SoccerBallIcon() {
+  // Pentagono centrale (vertici a 72°, raggio 5 da centro 16,16):
+  // alto, alto-dx, basso-dx, basso-sx, alto-sx
+  const CENTER = "16,10 20.76,13.46 18.94,19.04 13.06,19.04 11.24,13.46";
+  // 5 "patch" pentagonali piccole ai vertici verso il bordo. Centro
+  // di ogni patch ~radius 11, lato 4. Vengono clippate dal cerchio
+  // sfera ma il pezzo visibile dentro la sfera basta a leggere il
+  // pattern soccer-ball.
+  const PATCH_TOP = "16,2 18,5 17.05,8 14.95,8 14,5";
+  const PATCH_TR = "26.46,8.66 27.34,11.79 24.78,13.6 22.46,11.71 24.05,8.85";
+  const PATCH_BR = "22.46,26.34 20.13,24.45 21.05,21.51 24.18,21.51 25.1,24.45";
+  const PATCH_BL = "9.54,26.34 6.9,24.45 7.82,21.51 10.95,21.51 11.87,24.45";
+  const PATCH_TL = "5.54,8.66 7.95,8.85 9.54,11.71 7.22,13.6 4.66,11.79";
   return (
     <svg
-      width={24}
-      height={24}
-      viewBox="0 0 24 24"
+      width={26}
+      height={26}
+      viewBox="0 0 32 32"
       fill="none"
-      stroke="currentColor"
-      strokeWidth={1.4}
       strokeLinejoin="round"
-      strokeLinecap="round"
       aria-hidden
-      className="text-ink-hi"
     >
-      {/* Sfera bianca */}
-      <circle cx="12" cy="12" r="10" fill="#ffffff" stroke="currentColor" />
-      {/* Pentagono centrale nero */}
-      <polygon
-        points="12,7 16,9.8 14.5,14.5 9.5,14.5 8,9.8"
-        fill="currentColor"
-      />
-      {/* 5 segmenti che escono dai vertici verso il bordo della sfera */}
-      <line x1="12" y1="7" x2="12" y2="3.2" />
-      <line x1="16" y1="9.8" x2="19.6" y2="8.4" />
-      <line x1="14.5" y1="14.5" x2="17.4" y2="18" />
-      <line x1="9.5" y1="14.5" x2="6.6" y2="18" />
-      <line x1="8" y1="9.8" x2="4.4" y2="8.4" />
+      {/* Sfera bianca con bordo nero */}
+      <circle cx="16" cy="16" r="14" fill="#ffffff" stroke="#0a0e1a" strokeWidth="1.6" />
+      {/* Clip path = la sfera stessa, cosi' i patch laterali non escono */}
+      <defs>
+        <clipPath id="sb-clip">
+          <circle cx="16" cy="16" r="14" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#sb-clip)" fill="#0a0e1a" stroke="#0a0e1a" strokeWidth="1.2" strokeLinejoin="round">
+        <polygon points={CENTER} />
+        <polygon points={PATCH_TOP} />
+        <polygon points={PATCH_TR} />
+        <polygon points={PATCH_BR} />
+        <polygon points={PATCH_BL} />
+        <polygon points={PATCH_TL} />
+        {/* Linee che connettono pentagono centrale a patch (lati degli
+            esagoni intermedi) */}
+        <line x1="16" y1="10" x2="16" y2="8" />
+        <line x1="20.76" y1="13.46" x2="22.46" y2="11.71" />
+        <line x1="18.94" y1="19.04" x2="21.05" y2="21.51" />
+        <line x1="13.06" y1="19.04" x2="10.95" y2="21.51" />
+        <line x1="11.24" y1="13.46" x2="9.54" y2="11.71" />
+      </g>
     </svg>
   );
 }
