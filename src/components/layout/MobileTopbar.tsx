@@ -31,7 +31,7 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
         aria-label="Apri menu"
         aria-controls="navigation-drawer"
         onClick={onMenuClick}
-        className="text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md focus-visible:outline-2"
+        className="text-ink-hi focus-visible:outline-brand-gold flex h-11 w-11 items-center justify-center rounded-md focus-visible:outline-2"
       >
         <svg
           width={22}
@@ -62,7 +62,7 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
           priority
         />
       </Link>
-      <span aria-hidden className="h-9 w-9" />
+      <span aria-hidden className="h-11 w-11" />
     </header>
   );
 }

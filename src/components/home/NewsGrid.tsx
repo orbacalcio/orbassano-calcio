@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Newspaper } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
@@ -54,11 +55,12 @@ function NewsCard({ news }: { news: News }) {
     >
       <div className="from-surface-2 to-surface-1 relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br">
         {news.cover ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={news.cover}
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">

@@ -28,12 +28,27 @@ export async function generateMetadata(props: {
   const { slug } = await props.params;
   const news = await fetchNewsBySlug(slug);
   if (!news) return { title: "Articolo non trovato" };
+  const canonical = `/news/${news.slug}`;
   return {
     title: news.title,
     description: news.excerpt ?? undefined,
-    openGraph: news.cover
-      ? { images: [{ url: news.cover }] }
-      : undefined,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      title: news.title,
+      description: news.excerpt ?? undefined,
+      url: canonical,
+      publishedTime: news.publishedAt ?? undefined,
+      authors: news.author ? [news.author] : undefined,
+      section: news.category ?? undefined,
+      images: news.cover ? [{ url: news.cover }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: news.title,
+      description: news.excerpt ?? undefined,
+      images: news.cover ? [news.cover] : undefined,
+    },
   };
 }
 

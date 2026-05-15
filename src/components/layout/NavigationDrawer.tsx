@@ -263,7 +263,7 @@ export function NavigationDrawer({
             type="button"
             aria-label="Chiudi menu"
             onClick={onClose}
-            className="text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md focus-visible:outline-2"
+            className="text-ink-hi focus-visible:outline-brand-gold flex h-11 w-11 items-center justify-center rounded-md focus-visible:outline-2"
           >
             <X size={22} />
           </button>
@@ -275,7 +275,7 @@ export function NavigationDrawer({
               onSearchClick();
             }}
             aria-label="Cerca"
-            className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-md focus-visible:outline-2"
+            className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-11 w-11 items-center justify-center rounded-md focus-visible:outline-2"
           >
             <Search size={20} />
           </button>

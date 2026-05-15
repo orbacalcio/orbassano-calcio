@@ -204,7 +204,13 @@ export function CookieBanner() {
             transition={{ duration: 0.25 }}
             whileHover={reduced ? undefined : { scale: 1.08, rotate: 12 }}
             whileTap={reduced ? undefined : { scale: 0.92 }}
-            className="group border-ink-mid/40 hover:bg-ink-hi hover:border-ink-hi focus-visible:outline-brand-gold fixed right-4 bottom-4 z-[55] flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 lg:right-[20px] lg:bottom-7"
+            // bottom usa env(safe-area-inset-bottom) per evitare che il
+            // bottone finisca sotto l'home indicator di iPhone con notch.
+            style={{
+              bottom: "max(1rem, calc(env(safe-area-inset-bottom) + 0.5rem))",
+              right: "max(1rem, env(safe-area-inset-right))",
+            }}
+            className="group border-ink-mid/40 hover:bg-ink-hi hover:border-ink-hi focus-visible:outline-brand-gold fixed z-[55] flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 lg:!right-[20px] lg:!bottom-7"
           >
             <SoccerBallIcon />
           </motion.button>

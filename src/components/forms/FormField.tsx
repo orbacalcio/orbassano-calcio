@@ -19,8 +19,11 @@ type BaseProps = {
 
 const labelClass =
   "text-ink-mid font-mono text-[11px] tracking-[0.15em] uppercase";
+// text-base (16px) e' la soglia sotto cui iOS Safari zooma automaticamente
+// sul focus. md:text-sm riporta il rendering desktop al 14px del design
+// originale: il fix riguarda solo i breakpoint touch.
 const inputClass =
-  "border-border bg-surface-2 text-ink-hi placeholder:text-ink-low focus:border-brand-gold focus:outline-none w-full rounded-xl border px-4 py-3 text-sm leading-relaxed transition-colors";
+  "border-border bg-surface-2 text-ink-hi placeholder:text-ink-low focus:border-brand-gold focus:outline-none w-full rounded-xl border px-4 py-3 text-base leading-relaxed transition-colors md:text-sm";
 
 export function TextField({
   id,

@@ -65,14 +65,7 @@ export const metadata: Metadata = {
     title: "ASD Orbassano Calcio — Dal 1930 il calcio di Orbassano",
     description:
       "Sito ufficiale del club rossoblù: Prima Squadra, Settore Giovanile e Scuola Calcio. News, calendario, sponsor.",
-    images: [
-      {
-        url: "/Logo_Orbassano_2K.png",
-        width: 1024,
-        height: 1440,
-        alt: "Logo ASD Orbassano Calcio",
-      },
-    ],
+    // images: gestite da src/app/opengraph-image.tsx (ImageResponse 1200x630)
   },
   twitter: {
     card: "summary_large_image",
@@ -81,7 +74,7 @@ export const metadata: Metadata = {
     title: "ASD Orbassano Calcio",
     description:
       "Sito ufficiale del club rossoblù di Orbassano. Dal 1930 il calcio di Orbassano.",
-    images: ["/Logo_Orbassano_2K.png"],
+    // images: stesse di OG (twitter-image.tsx eredita da opengraph-image.tsx)
   },
   robots: {
     index: true,
@@ -99,6 +92,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: "#0A1428",
   colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  // Niente maximumScale ne' userScalable=no: bloccare lo zoom utente
+  // viola WCAG 1.4.4 (Resize text). L'utente DEVE poter zoomare.
 };
 
 export default function RootLayout({
