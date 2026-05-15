@@ -62,12 +62,24 @@ const wixRedirects = [
  */
 const cspReportOnly = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.sanity.io https://*.sanity.io https://w.behold.so https://embed.behold.so",
+  // script-src include:
+  // - cdn.sanity.io + *.sanity.io: Studio embedded
+  // - core.sanity-cdn.com + *.sanity-cdn.com: bridge JS di Sanity Studio
+  //   (caricato dinamicamente per AI helpers + assist features)
+  // - w.behold.so + embed.behold.so: widget Instagram Vivi l'Orba
+  // - vercel.live + *.vercel.live: Vercel preview comments / feedback
+  //   (script iniettato sui deploy preview Vercel, non in produzione
+  //   ma comodo per testing)
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://*.sanity-cdn.com https://w.behold.so https://embed.behold.so https://vercel.live https://*.vercel.live",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.cdninstagram.com https://*.fbcdn.net https://behold.so https://w.behold.so",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://w.behold.so https://behold.so https://*.cdninstagram.com",
-  "frame-src 'self' https://www.instagram.com https://w.behold.so",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.cdninstagram.com https://*.fbcdn.net https://behold.so https://w.behold.so https://vercel.live",
+  "font-src 'self' data: https://fonts.gstatic.com https://vercel.live",
+  // connect-src: Sanity API (HTTP + WebSocket per real-time sync),
+  // Behold, Instagram CDN, Vercel Live (feedback API).
+  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity-cdn.com https://w.behold.so https://behold.so https://*.cdninstagram.com https://vercel.live wss://*.pusher.com",
+  // frame-src: Instagram embed (Behold widget), Behold direct,
+  // Vercel Live (toolbar comments preview).
+  "frame-src 'self' https://www.instagram.com https://w.behold.so https://vercel.live",
   "media-src 'self' https://cdn.sanity.io",
   "object-src 'none'",
   "base-uri 'self'",
