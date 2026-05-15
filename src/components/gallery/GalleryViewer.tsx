@@ -212,7 +212,9 @@ export function GalleryViewer({ images, albumTitle }: Props) {
               aria-label={zoomed ? "Riduci zoom" : "Aumenta zoom 2x"}
               className={cn(
                 "relative z-[1] max-h-[90vh] max-w-[90vw] overflow-hidden transition-transform duration-300 ease-out",
-                zoomed ? "cursor-zoom-out scale-200" : "cursor-zoom-in scale-100",
+                zoomed
+                  ? "cursor-zoom-out scale-[2]"
+                  : "cursor-zoom-in scale-100",
               )}
             >
               {/* La foto stessa: src 2000px wide per qualità adeguata

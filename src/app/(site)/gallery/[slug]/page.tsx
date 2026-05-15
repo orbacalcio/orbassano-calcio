@@ -74,6 +74,15 @@ export default async function GalleryDetailPage({ params }: PageProps) {
   const gallery = await fetchGalleryBySlug(slug);
   if (!gallery) notFound();
 
+  // Filtro defensivo: scartiamo le immagini senza asset valido
+  // (placeholder vuoti dell'array images creati in Studio e non
+  // ancora popolati con un file). Senza questo filter urlFor() lancia
+  // TypeError 'Cannot read properties of null (reading _ref)' e
+  // rompe il prerender al build.
+  const validImages = (gallery.images ?? []).filter(
+    (img) => img.asset != null,
+  );
+
   // Ordinamento cronologico crescente per data di scatto:
   // 1) EXIF DateTimeOriginal (presente solo se il file ha metadata
   //    e Sanity li ha estratti — vale per gli asset caricati DOPO
@@ -83,7 +92,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
   // Ordinamento qui in app (post-fetch) invece che in GROQ per evitare
   // edge case in cui la pipe | order(...) restituisce null se uno dei
   // dereference fallisce su asset legacy.
-  const sortedImages = [...(gallery.images ?? [])].sort((a, b) => {
+  const sortedImages = [...validImages].sort((a, b) => {
     const aKey = a.exifDateTime ?? a.assetCreatedAt ?? "";
     const bKey = b.exifDateTime ?? b.assetCreatedAt ?? "";
     return aKey.localeCompare(bKey);
