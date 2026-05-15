@@ -323,7 +323,7 @@ function EyebrowBlock({
     return (
       <motion.span
         variants={makeReducedFadeVariants()}
-        className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base"
+        className="font-display text-[#FFD580] text-sm font-bold tracking-[0.2em] uppercase md:text-base"
       >
         {text}
       </motion.span>
@@ -332,12 +332,12 @@ function EyebrowBlock({
   return (
     <motion.span
       variants={makeEyebrowVariants(mult)}
-      className="text-brand-gold font-display relative inline-block overflow-hidden text-sm font-bold tracking-[0.2em] uppercase md:text-base"
+      className="font-display relative inline-block overflow-hidden text-[#FFD580] text-sm font-bold tracking-[0.2em] uppercase md:text-base"
     >
       <span className="block">{text}</span>
       <motion.span
         aria-hidden
-        className="bg-brand-gold mt-1 block h-px w-full origin-left"
+        className="mt-1 block h-px w-full origin-left bg-[#FFD580]"
         variants={makeEyebrowUnderlineVariants(mult)}
       />
     </motion.span>

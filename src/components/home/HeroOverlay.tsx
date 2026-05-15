@@ -54,7 +54,7 @@ export function HeroOverlay({ season, league, group }: Props) {
     >
       <motion.span
         variants={item}
-        className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base"
+        className="font-display text-[#FFD580] text-sm font-bold tracking-[0.2em] uppercase md:text-base"
       >
         {eyebrow}
       </motion.span>
