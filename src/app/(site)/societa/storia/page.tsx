@@ -61,6 +61,12 @@ export default async function StoriaPage() {
 
       <Container className="py-16 lg:py-24" size="wide">
         <RevealOnScroll>
+          <PalmaresList />
+        </RevealOnScroll>
+      </Container>
+
+      <Container className="py-16 lg:py-24" size="wide">
+        <RevealOnScroll>
           <div className="flex flex-col gap-3">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
               Cronistoria
@@ -76,12 +82,6 @@ export default async function StoriaPage() {
           <div className="mt-12">
             <Timeline events={events} />
           </div>
-        </RevealOnScroll>
-      </Container>
-
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <PalmaresList />
         </RevealOnScroll>
       </Container>
 
