@@ -721,3 +721,41 @@ export const playerBySlugQuery = defineQuery(`
     }
   }
 `);
+
+// Settore Giovanile — Open Days. Tutti i record con isActive!=false
+// ordinati per categoria + data crescente. Il filter category-then-date
+// permette al render di raggruppare senza ulteriori passaggi.
+export const openDaysQuery = defineQuery(`
+  *[_type == "openDay" && isActive != false]
+  | order(category asc, date asc){
+    _id,
+    title,
+    category,
+    season,
+    date,
+    endTime,
+    venue,
+    notes,
+    downloadModuleUrl
+  }
+`);
+
+// Settore Giovanile — Tornei. Stesso pattern degli Open Days, con
+// fields extra (format, prize, participatingTeams, registrationUrl).
+export const tournamentsQuery = defineQuery(`
+  *[_type == "tournament" && isActive != false]
+  | order(category asc, date asc){
+    _id,
+    title,
+    category,
+    season,
+    date,
+    endDate,
+    venue,
+    format,
+    prize,
+    participatingTeams,
+    notes,
+    registrationUrl
+  }
+`);

@@ -100,6 +100,14 @@ function buildSections(opts: {
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile",
   });
+  squadreItems.push({
+    href: "/settore-giovanile/open-days",
+    label: "Open Days",
+  });
+  squadreItems.push({
+    href: "/settore-giovanile/tornei",
+    label: "Tornei",
+  });
 
   // Sezioni: include Codice Etico + Segnalazioni quando il flag
   // governance e' attivo. NB: Trasparenza temporaneamente NON

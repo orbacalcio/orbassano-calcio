@@ -2,9 +2,11 @@ import {
   Archive,
   Briefcase,
   Building2,
+  CalendarCheck,
   CalendarDays,
   Coins,
   Cog,
+  GraduationCap,
   Handshake,
   Image as ImageIcon,
   Images,
@@ -191,6 +193,26 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
           S.documentTypeList("club")
             .title("Club avversari (anagrafica)")
             .defaultOrdering([{ field: "name", direction: "asc" }]),
+        ),
+
+      // ----- SETTORE GIOVANILE -----------------------------------------
+      // Open Days (sessioni di prova pre-stagione) + Tornei (eventi
+      // organizzati o ospitati). Vivono fuori da "Stagione corrente"
+      // perche' la stagione e' un field del singolo documento.
+      S.listItem()
+        .title("Settore Giovanile")
+        .icon(GraduationCap)
+        .child(
+          S.list()
+            .title("Settore Giovanile")
+            .items([
+              S.documentTypeListItem("openDay")
+                .title("Open Days")
+                .icon(CalendarCheck),
+              S.documentTypeListItem("tournament")
+                .title("Tornei")
+                .icon(Trophy),
+            ]),
         ),
 
       // ----- AREE EDITORIALI -------------------------------------------

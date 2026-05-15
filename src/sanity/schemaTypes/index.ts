@@ -7,6 +7,7 @@ import { gallery } from "./gallery";
 import { heroSlide } from "./heroSlide";
 import { match } from "./match";
 import { news } from "./news";
+import { openDay } from "./openDay";
 import { opponent } from "./opponent";
 import { player } from "./player";
 import { riferimentiOperativi } from "./riferimentiOperativi";
@@ -15,6 +16,7 @@ import { settings } from "./settings";
 import { sponsor } from "./sponsor";
 import { staffMember, team } from "./team";
 import { timelineEvent } from "./timelineEvent";
+import { tournament } from "./tournament";
 import { trasparenza5x1000 } from "./trasparenza5x1000";
 
 export const schemaTypes = [
@@ -39,6 +41,10 @@ export const schemaTypes = [
   gallery,
   heroSlide,
   consentLog,
+  // Settore Giovanile: Open Days + Tornei (gestiti dall'admin
+  // sezione giovanile, separati da match/competition)
+  openDay,
+  tournament,
   // Governance & trasparenza (Codice Etico Allegati B/C)
   trasparenza5x1000,
   // Segnalazioni: schema RISERVATO. Nessuna query GROQ pubblica.

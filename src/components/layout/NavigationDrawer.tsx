@@ -96,6 +96,16 @@ function buildSections(opts: {
   if (teamSlugs.has("scuola-calcio")) {
     teamsChildren.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
   }
+  // Sezione dedicata Settore Giovanile (calendari Open Days + Tornei):
+  // separata dalle pagine team perche' raggruppa eventi extra-campionato.
+  teamsChildren.push({
+    href: "/settore-giovanile/open-days",
+    label: "Open Days",
+  });
+  teamsChildren.push({
+    href: "/settore-giovanile/tornei",
+    label: "Tornei",
+  });
 
   return [
     {

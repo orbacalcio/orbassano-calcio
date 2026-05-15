@@ -19,6 +19,7 @@ import {
   matchesByTeamSlugQuery,
   nextMatchesByTeamSlugsQuery,
   newsBySlugQuery,
+  openDaysQuery,
   playerBySlugQuery,
   riferimentiOperativiQuery,
   settingsQuery,
@@ -27,6 +28,7 @@ import {
   teamsByCategoryQuery,
   teamsListQuery,
   timelineEventsQuery,
+  tournamentsQuery,
   trasparenza5x1000Query,
 } from "./queries";
 import type { PortableTextBlock } from "@portabletext/react";
@@ -1059,5 +1061,70 @@ export async function fetchLastMatchesByTeamSlugs(
   } catch (err) {
     console.error("[fetchLastMatchesByTeamSlugs]", { slugs }, err);
     return slugs.map((slug) => ({ slug, match: null }));
+  }
+}
+
+// ===== Settore Giovanile: Open Days + Tornei =================================
+
+export type OpenDayEntry = {
+  _id: string;
+  title: string;
+  category: string;
+  season: string;
+  date: string;
+  endTime: string | null;
+  venue: string;
+  notes: string | null;
+  downloadModuleUrl: string | null;
+};
+
+export type TournamentEntry = {
+  _id: string;
+  title: string;
+  category: string;
+  season: string;
+  date: string;
+  endDate: string | null;
+  venue: string;
+  format: string | null;
+  prize: string | null;
+  participatingTeams: string | null;
+  notes: string | null;
+  registrationUrl: string | null;
+};
+
+/**
+ * Fetch tutti gli Open Day attivi, gia' ordinati per categoria+data
+ * dalla query GROQ. Cache tag "openDay" → invalidato dal webhook
+ * Sanity quando un Open Day viene creato/modificato.
+ */
+export async function fetchOpenDays(): Promise<OpenDayEntry[]> {
+  try {
+    const data = await sanityClient.fetch(
+      openDaysQuery,
+      {},
+      { next: { tags: ["openDay"] } },
+    );
+    return (data ?? []) as OpenDayEntry[];
+  } catch (err) {
+    console.error("[fetchOpenDays]", err);
+    return [];
+  }
+}
+
+/**
+ * Fetch tutti i Tornei attivi, ordinati per categoria+data.
+ */
+export async function fetchTournaments(): Promise<TournamentEntry[]> {
+  try {
+    const data = await sanityClient.fetch(
+      tournamentsQuery,
+      {},
+      { next: { tags: ["tournament"] } },
+    );
+    return (data ?? []) as TournamentEntry[];
+  } catch (err) {
+    console.error("[fetchTournaments]", err);
+    return [];
   }
 }
