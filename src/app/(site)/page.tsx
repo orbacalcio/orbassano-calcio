@@ -52,10 +52,10 @@ export default function Home() {
         <TeamsCards />
       </RevealOnScroll>
       <RevealOnScroll>
-        <Manifesto />
+        <StoryNumbers />
       </RevealOnScroll>
       <RevealOnScroll>
-        <StoryNumbers />
+        <Manifesto />
       </RevealOnScroll>
       <RevealOnScroll>
         <VivLOrba />
