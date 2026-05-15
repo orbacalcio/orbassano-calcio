@@ -123,16 +123,20 @@ export async function MatchStrip() {
         aria-label="Ultimo e prossimo impegno Prima Squadra"
         className="border-border/60 border-y bg-surface-1/40"
       >
-        <Container size="wide" className="flex flex-col">
-          {/* Header unico "PRIMA SQUADRA" sopra la grid: evita di
-              ripetere "Prima Squadra" in ogni eyebrow degli slot. */}
-          <header className="border-border/40 px-8 pt-6 pb-4 md:px-11 md:pt-8">
+        <Container
+          size="wide"
+          className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]"
+        >
+          {/* Header "PRIMA SQUADRA" DENTRO la grid: span totale
+              riga 1, stesso bg-surface-2/60 degli slot sottostanti
+              cosi' fluisce con i contenuti come un unico blocco.
+              Niente piu' striscia navy esterna separata. */}
+          <header className="bg-surface-2/60 px-8 pt-6 pb-3 md:px-11 md:pt-8 lg:col-span-3">
             <h2 className="font-display text-ink-hi text-2xl leading-none font-extrabold tracking-[0.04em] uppercase md:text-3xl">
               Prima Squadra
             </h2>
           </header>
 
-          <div className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]">
           {/* Slot 1 — ULTIMO RISULTATO (40%) */}
           <div className="bg-surface-2/60 flex flex-col gap-4 p-8 md:p-11">
             <div className="flex flex-col gap-1.5">
@@ -245,7 +249,6 @@ export async function MatchStrip() {
               ariaLabelOn="Apri le statistiche del campionato Prima Squadra"
               ariaLabelOff="Statistiche non disponibili"
             />
-          </div>
           </div>
         </Container>
       </section>
