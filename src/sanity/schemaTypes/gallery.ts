@@ -198,6 +198,15 @@ export const gallery = defineType({
       type: "number",
       fieldset: "extra",
     }),
+    defineField({
+      name: "isFeatured",
+      title: "In evidenza nel mosaico",
+      description:
+        "Se attivo, questo album occupa una card grande 2×2 nel mosaico /gallery (al posto della card normale 1×1). Usa per album importanti che vuoi far risaltare (es. partita decisiva, evento sociale). Lascia disattivato per la maggior parte degli album: il mosaico funziona meglio con poche card grandi.",
+      type: "boolean",
+      fieldset: "extra",
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {

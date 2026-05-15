@@ -50,7 +50,8 @@ export const riferimentiOperativiQuery = defineQuery(`
 // ordering desc (pin manuale) poi uploadedAt desc (cronologico).
 // `imagesCount` per il badge numero foto nel mosaic — count(images)
 // e' O(N) ma resta veloce su pochi album. coverImage.asset->url
-// pre-risolto per next/image.
+// pre-risolto per next/image. `isFeatured` controlla il rendering
+// big card 2×2 nel mosaic (CMS-driven, non posizione automatica).
 export const galleriesPaginatedQuery = defineQuery(`
   *[_type == "gallery" && defined(slug.current)]
     | order(coalesce(ordering, 0) desc, uploadedAt desc)
@@ -62,6 +63,7 @@ export const galleriesPaginatedQuery = defineQuery(`
       category,
       coverImage,
       coverAlt,
+      isFeatured,
       "imagesCount": count(images)
     }
 `);

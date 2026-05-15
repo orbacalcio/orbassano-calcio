@@ -12,8 +12,10 @@ import { cn } from "@/lib/cn";
 
 /**
  * Index gallerie pattern juventus.com: mosaic grid 4 colonne con
- * card di dimensioni miste. Alcune card occupano 2×2 ("big"),
- * intervallate ogni 7 card.
+ * card miste. Le card grandi (2×2) sono CMS-driven: l'admin marca
+ * un album come `isFeatured: true` in Studio per renderlo big.
+ * Vantaggi vs regola posizionale (ogni N): prevedibile, intenzionale,
+ * funziona bene con qualsiasi numero di album (anche pochi).
  *
  * Stato server-side: la pagina passa il batch iniziale (20). Questo
  * componente client gestisce:
@@ -30,13 +32,6 @@ type Props = {
   initialItems: GalleryCard[];
   totalCount: number;
 };
-
-const BIG_INDEX_MOD = 7; // ogni 7 card, una e' "big" (2×2)
-const BIG_INDEX_OFFSET = 2; // 3a card del gruppo
-
-function isBigCard(index: number): boolean {
-  return index % BIG_INDEX_MOD === BIG_INDEX_OFFSET;
-}
 
 export function GalleryMosaic({ initialItems, totalCount }: Props) {
   const [items, setItems] = useState<GalleryCard[]>(initialItems);
@@ -69,7 +64,10 @@ export function GalleryMosaic({ initialItems, totalCount }: Props) {
     <>
       <ul className="grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:grid-cols-3 lg:auto-rows-[220px] lg:grid-cols-4">
         {items.map((item, index) => {
-          const big = isBigCard(index);
+          // Big card CMS-driven: campo `isFeatured` su gallery in Sanity.
+          // Default false → tutte le card uguali. L'admin attiva il
+          // toggle per gli album da mettere in evidenza.
+          const big = item.isFeatured === true;
           return (
             <GalleryCardTile
               key={item._id}

@@ -895,6 +895,7 @@ export type GalleryCard = {
   category: GalleryCategory | null;
   coverImage: SanityImageRef | null;
   coverAlt: string | null;
+  isFeatured: boolean | null;
   imagesCount: number;
 };
 
