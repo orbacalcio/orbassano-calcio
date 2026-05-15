@@ -8,7 +8,7 @@ import {
 import { GALLERY_PAGE_SIZE } from "./config";
 
 /**
- * /news/gallery — index gallerie fotografiche del club.
+ * /gallery — index gallerie fotografiche del club.
  *
  * Pattern juventus.com: mosaic con cover di ogni album, alcune card
  * grandi (2×2) intervallate ogni 7. Pagina server fetch primo batch
@@ -18,9 +18,9 @@ import { GALLERY_PAGE_SIZE } from "./config";
  * Ordinamento di default: pin order (manuale, opzionale) poi
  * uploadedAt desc. Modificabile dall'admin in Sanity Studio.
  *
- * Asset upload: solo dallo Studio (mai dal seed). Lesson learned dai
- * loghi sponsor cancellati 10/05/2026 — pattern createIfNotExists +
- * patch.set ovunque ci siano image asset caricati a mano.
+ * Promossa a voce top-level di menu (era /news/gallery): redirect 301
+ * dalle vecchie URL configurato in next.config.ts per preservare
+ * eventuali bookmark / link esterni.
  */
 export const metadata: Metadata = {
   title: "Gallery",
@@ -44,7 +44,7 @@ export default async function GalleryIndexPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              News · Gallery
+              Gallery
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Foto e video

@@ -72,7 +72,7 @@ export const galleriesTotalCountQuery = defineQuery(`
   count(*[_type == "gallery" && defined(slug.current)])
 `);
 
-// Singolo album per /news/gallery/[slug]. Asset reference completi
+// Singolo album per /gallery/[slug]. Asset reference completi
 // con metadata + alt per il viewer. Ogni immagine porta:
 // - dimensions (width/height) → next/image aspect ratio nativo, niente
 //   layout shift, mosaico rispetta i rapporti originali (16:9, 4:5, 1:1).
@@ -106,7 +106,7 @@ export const galleryBySlugQuery = defineQuery(`
   }
 `);
 
-// Tutti gli slug per generateStaticParams su /news/gallery/[slug].
+// Tutti gli slug per generateStaticParams su /gallery/[slug].
 export const allGallerySlugsQuery = defineQuery(`
   *[_type == "gallery" && defined(slug.current)].slug.current
 `);

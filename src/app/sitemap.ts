@@ -36,7 +36,7 @@ const STATIC_ROUTES: Array<{
 }> = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/news/gallery", changeFrequency: "weekly", priority: 0.7 },
+  { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
   { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
   { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
@@ -82,7 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const galleryEntries: MetadataRoute.Sitemap = gallerySlugs.map((slug) => ({
-    url: `${SITE_URL}/news/gallery/${slug}`,
+    url: `${SITE_URL}/gallery/${slug}`,
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.5,

@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { ArrowRight, Images } from "lucide-react";
-import { loadMoreGalleries } from "@/app/(site)/news/gallery/actions";
-import { GALLERY_PAGE_SIZE } from "@/app/(site)/news/gallery/config";
+import { loadMoreGalleries } from "@/app/(site)/gallery/actions";
+import { GALLERY_PAGE_SIZE } from "@/app/(site)/gallery/config";
 import { urlFor } from "@/sanity/image";
 import type { GalleryCard } from "@/sanity/fetchers";
 import { cn } from "@/lib/cn";
@@ -134,7 +134,7 @@ function GalleryCardTile({
       )}
     >
       <Link
-        href={`/news/gallery/${gallery.slug}`}
+        href={`/gallery/${gallery.slug}`}
         className="focus-visible:outline-brand-gold relative block h-full w-full overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-[-4px]"
       >
         {cover ? (

@@ -39,6 +39,11 @@ const wixRedirects = [
   { source: "/termini-e-condizioni", destination: "/legal/termini" },
   { source: "/informativa-privacy", destination: "/legal/privacy" },
   { source: "/cookie-policy", destination: "/legal/cookie" },
+  // Gallery promossa a top-level (2026-05-15): le vecchie URL /news/gallery
+  // reindirizzano permanentemente al nuovo /gallery. Preserva eventuali
+  // link esterni / bookmark / Open Graph cache.
+  { source: "/news/gallery", destination: "/gallery" },
+  { source: "/news/gallery/:slug", destination: "/gallery/:slug" },
 ];
 
 /**

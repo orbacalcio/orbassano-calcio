@@ -33,45 +33,12 @@ type DrawerSection = {
   children: Array<{ href: string; label: string }>;
 };
 
-// Squadre del Settore Giovanile in ordine decrescente di eta'. Usato
-// per la sotto-sezione "Calendario" del drawer (e altrove se serve).
-const YOUTH_TEAM_SLUGS: ReadonlyArray<{ slug: string; label: string }> = [
-  { slug: "under-17", label: "Under 17" },
-  { slug: "under-16", label: "Under 16" },
-  { slug: "under-15", label: "Under 15" },
-  { slug: "under-14", label: "Under 14" },
-];
-
 function buildSections(opts: {
   hasPartners: boolean;
   activeTeamSlugs: string[];
 }): DrawerSection[] {
   const teamSlugs = new Set(opts.activeTeamSlugs);
 
-  // Sotto-voci Calendario: ogni squadra attiva ha la sua scorciatoia
-  // verso /squadre/[slug]/calendario. L'ordine segue la gerarchia
-  // sportiva (Prima Squadra > Juniores > Settore Giovanile decrescente).
-  const calendariChildren: DrawerSection["children"] = [];
-  if (teamSlugs.has("prima-squadra")) {
-    calendariChildren.push({
-      href: "/squadre/prima-squadra/calendario",
-      label: "Prima Squadra",
-    });
-  }
-  if (teamSlugs.has("juniores")) {
-    calendariChildren.push({
-      href: "/squadre/juniores/calendario",
-      label: "Juniores",
-    });
-  }
-  for (const youth of YOUTH_TEAM_SLUGS) {
-    if (teamSlugs.has(youth.slug)) {
-      calendariChildren.push({
-        href: `/squadre/${youth.slug}/calendario`,
-        label: youth.label,
-      });
-    }
-  }
   // /squadre/settore-giovanile è una vista categoria, non una squadra
   // singola: mostrato sempre se almeno una squadra del settore è attiva.
   const teamsChildren: DrawerSection["children"] = [
@@ -107,19 +74,27 @@ function buildSections(opts: {
     label: "Tornei",
   });
 
+  // 4 voci main in ordine fisso: News · Squadre · Gallery · Società.
+  // Sponsor + Calendario sono usciti dalle main e vivono ora nei
+  // quick-link overflow (vedi sidebarOverflowItems in SidebarLeft.items.ts).
+  // Gallery promossa a top-level (era /news/gallery sotto News).
   return [
     {
       href: "/news",
       label: "News",
-      children: [
-        { href: "/news", label: "Archivio completo" },
-        { href: "/news/gallery", label: "Gallery" },
-      ],
+      // 1 solo child = link diretto, nessun accordion (vedi rendering
+      // drawer: isAccordion = children.length > 1).
+      children: [{ href: "/news", label: "News" }],
     },
     {
       href: "/squadre",
       label: "Squadre",
       children: teamsChildren,
+    },
+    {
+      href: "/gallery",
+      label: "Gallery",
+      children: [{ href: "/gallery", label: "Gallery" }],
     },
     {
       href: "/societa",
@@ -132,34 +107,6 @@ function buildSections(opts: {
         { href: "/societa/biglietteria", label: "Biglietteria" },
       ],
     },
-    {
-      href: "/sponsor",
-      label: "Sponsor",
-      children: [
-        { href: "/sponsor", label: "I nostri sponsor" },
-        ...(opts.hasPartners
-          ? [{ href: "/sponsor/partner", label: "Corporate Partner" }]
-          : []),
-        { href: "/sponsor/opportunita", label: "Diventa sponsor" },
-      ],
-    },
-    // Sezione "Calendario": accordion con scorciatoia per ogni squadra
-    // verso il proprio calendario. Niente pagina hub /calendario (scelta
-    // utente: 'solo sottomenu'). Posizionata DOPO Sponsor e PRIMA dei
-    // quick-link Biglietteria/Newsletter/5x1000/Contatti in fondo al
-    // drawer. La sezione e' mostrata solo se almeno una squadra attiva
-    // — niente accordion vuoto.
-    ...(calendariChildren.length > 0
-      ? ([
-          {
-            // href "fittizio" del parent: il drawer non lo usa come link
-            // (e' un accordion, non c'e' pagina hub). Serve solo come key.
-            href: "/calendario",
-            label: "Calendario",
-            children: calendariChildren,
-          },
-        ] as DrawerSection[])
-      : []),
   ];
 }
 const FALLBACK_LINKS: SocialLinks = {

@@ -922,7 +922,7 @@ export type GalleryDetail = {
 
 /**
  * Index gallerie paginato: 20 alla volta per default (offset 0/20/40...).
- * Usato sia dal server (pagina /news/gallery initial batch) sia dal
+ * Usato sia dal server (pagina /gallery initial batch) sia dal
  * Server Action `loadMoreGalleries` per i batch successivi.
  */
 export async function fetchGalleries(

@@ -11,7 +11,7 @@ import {
 import { urlFor } from "@/sanity/image";
 
 /**
- * /news/gallery/[slug] — viewer di un singolo album.
+ * /gallery/[slug] — viewer di un singolo album.
  *
  * Pattern: hero compatto (titolo + data + count) + griglia foto
  * masonry (CSS columns, layout naturale che rispetta gli aspect
@@ -97,7 +97,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
         />
         <Container className="relative py-12 lg:py-16" size="wide">
           <Link
-            href="/news/gallery"
+            href="/gallery"
             className="text-ink-mid hover:text-brand-gold mb-6 inline-flex items-center gap-2 text-sm transition-colors"
           >
             <ArrowLeft size={16} aria-hidden />
@@ -105,7 +105,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
           </Link>
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              News · Gallery
+              Gallery
             </span>
             <h1 className="font-display text-ink-hi text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase md:text-5xl lg:text-6xl">
               {gallery.title}

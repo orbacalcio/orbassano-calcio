@@ -2,8 +2,8 @@ import { Images } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Galleria fotografica (album) — pagina /news/gallery (index mosaic)
- * + /news/gallery/[slug] (viewer dell'album).
+ * Galleria fotografica (album) — pagina /gallery (index mosaic)
+ * + /gallery/[slug] (viewer dell'album).
  *
  * Pattern juventus.com: ogni album e' un evento/momento (es. "Gallery
  * | Prima Squadra | Juventus-Lecce", "Allenamento pre-partita") con
@@ -75,7 +75,7 @@ export const gallery = defineType({
       name: "coverImage",
       title: "Cover (immagine di copertina)",
       description:
-        "L'immagine che rappresenta l'album nel mosaic /news/gallery. Scegli quella piu' forte/iconica del set.",
+        "L'immagine che rappresenta l'album nel mosaic /gallery. Scegli quella piu' forte/iconica del set.",
       type: "image",
       fieldset: "contenuto",
       options: { hotspot: true, accept: "image/*" },

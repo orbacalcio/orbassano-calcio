@@ -52,6 +52,7 @@ export default async function MappaDelSitoPage() {
         { href: "/", label: "Home" },
         { href: "/news", label: "Archivio news" },
         { href: "/squadre", label: "Squadre" },
+        { href: "/gallery", label: "Gallery" },
         { href: "/societa", label: "Società" },
         { href: "/sponsor", label: "Sponsor" },
         { href: "/contatti", label: "Contatti" },
