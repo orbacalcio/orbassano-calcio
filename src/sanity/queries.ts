@@ -142,7 +142,8 @@ export const settingsQuery = defineQuery(`
     mazzolaTitle,
     mazzolaBody,
     mazzolaPlayers,
-    "defaultOgImage": defaultOgImage.asset->url
+    "defaultOgImage": defaultOgImage.asset->url,
+    "registrationFormUrl": registrationFormFile.asset->url
   }
 `);
 
