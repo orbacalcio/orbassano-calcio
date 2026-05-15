@@ -83,16 +83,18 @@ export const gallery = defineType({
     }),
     defineField({
       name: "coverAlt",
-      title: "Testo alternativo della cover",
-      description: "Descrizione breve per a11y + SEO (8-200 caratteri).",
+      title: "Testo alternativo della cover (opzionale)",
+      description:
+        "Frase breve che descrive cosa si vede nella cover. La leggono screen reader (utenti non vedenti) e Google per indicizzare l'immagine. Se lasciato vuoto, il sito usa automaticamente il TITOLO dell'album come alt: nella maggior parte dei casi va benissimo cosi'. Compilalo solo se vuoi qualcosa di piu' descrittivo del titolo (es. titolo='Allenamento pre-Pinerolo' → alt='Squadra in cerchio sul campo principale del Centro Sportivo Aldo Porta durante il riscaldamento').",
       type: "string",
       fieldset: "contenuto",
       validation: (r) =>
         r
-          .required()
           .min(8)
           .max(200)
-          .warning("Tieni l'alt tra 8 e 200 caratteri."),
+          .warning(
+            "Se compilato, l'alt dovrebbe essere tra 8 e 200 caratteri per essere efficace su a11y/SEO.",
+          ),
     }),
     defineField({
       name: "images",
