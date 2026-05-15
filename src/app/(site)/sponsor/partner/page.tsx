@@ -114,17 +114,17 @@ function PartnerRow({
 }) {
   return (
     <li
-      className={`border-border bg-surface-1 grid items-center gap-8 rounded-3xl border p-8 lg:grid-cols-[1fr_2fr] lg:p-10 ${
+      className={`border-border bg-surface-1 grid items-center gap-8 rounded-3xl border p-8 lg:grid-cols-2 lg:p-10 ${
         index % 2 === 0 ? "" : "lg:[&>div:first-child]:order-2"
       }`}
     >
-      <div className="flex h-40 items-center justify-center rounded-2xl bg-white p-6">
+      <div className="flex h-56 items-center justify-center rounded-2xl bg-white p-8">
         <SponsorLogo
           sponsor={partner}
           variant="color"
-          width={280}
-          height={120}
-          className="text-surface-0 max-h-28 max-w-[280px] object-contain"
+          width={360}
+          height={180}
+          className="text-surface-0 max-h-40 max-w-full object-contain"
         />
       </div>
       <div className="flex flex-col gap-4">
