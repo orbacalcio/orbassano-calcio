@@ -15,8 +15,7 @@ import {
  * recuperare i dati) e isola lo "use client" alla sola animazione.
  */
 const FALLBACK_EYEBROW = "Storia in numeri";
-const FALLBACK_TITLE =
-  "Oltre novantacinque anni di rossoblù raccontati in quattro numeri";
+const FALLBACK_TITLE = "La storia rossoblù";
 
 const FALLBACK_ITEMS: StoryNumberItem[] = [
   {
