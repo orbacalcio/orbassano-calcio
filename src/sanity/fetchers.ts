@@ -902,6 +902,11 @@ export type GalleryImageItem = SanityImageRef & {
   _key: string;
   alt: string | null;
   caption: string | null;
+  width: number | null;
+  height: number | null;
+  lqip: string | null;
+  exifDateTime: string | null;
+  assetCreatedAt: string | null;
 };
 
 export type GalleryDetail = {

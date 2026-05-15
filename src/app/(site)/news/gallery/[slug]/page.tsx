@@ -72,7 +72,21 @@ export default async function GalleryDetailPage({ params }: PageProps) {
   const gallery = await fetchGalleryBySlug(slug);
   if (!gallery) notFound();
 
-  const photoCount = gallery.images.length;
+  // Ordinamento cronologico crescente per data di scatto:
+  // 1) EXIF DateTimeOriginal (presente solo se il file ha metadata
+  //    e Sanity li ha estratti — vale per gli asset caricati DOPO
+  //    il fix schema metadata['exif']).
+  // 2) Fallback: data di caricamento asset (_createdAt) per i file
+  //    privi di EXIF (screenshot, foto editate, vecchi asset).
+  // Ordinamento qui in app (post-fetch) invece che in GROQ per evitare
+  // edge case in cui la pipe | order(...) restituisce null se uno dei
+  // dereference fallisce su asset legacy.
+  const sortedImages = [...(gallery.images ?? [])].sort((a, b) => {
+    const aKey = a.exifDateTime ?? a.assetCreatedAt ?? "";
+    const bKey = b.exifDateTime ?? b.assetCreatedAt ?? "";
+    return aKey.localeCompare(bKey);
+  });
+  const photoCount = sortedImages.length;
 
   return (
     <>
@@ -118,8 +132,15 @@ export default async function GalleryDetailPage({ params }: PageProps) {
           </p>
         ) : (
           <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 [&>figure]:mb-4 [&>figure]:break-inside-avoid">
-            {gallery.images.map((img) => {
+            {sortedImages.map((img) => {
+              // Larghezza Sanity 1200 per il file scaricato, ma aspect
+              // ratio del DOM placeholder usa width/height nativi della
+              // foto: il browser riserva lo spazio corretto PRIMA che
+              // l'immagine carichi (zero layout shift) e rispetta i
+              // rapporti originali (16:9, 4:5, 1:1, portrait, ecc).
               const src = urlFor(img).width(1200).fit("max").url();
+              const w = img.width ?? 1200;
+              const h = img.height ?? 800;
               return (
                 <figure
                   key={img._key}
@@ -135,11 +156,12 @@ export default async function GalleryDetailPage({ params }: PageProps) {
                     <Image
                       src={src}
                       alt={img.alt ?? gallery.title}
-                      width={1200}
-                      height={0}
+                      width={w}
+                      height={h}
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="h-auto w-full object-contain"
-                      style={{ height: "auto" }}
+                      placeholder={img.lqip ? "blur" : "empty"}
+                      blurDataURL={img.lqip ?? undefined}
+                      className="h-auto w-full"
                     />
                   </a>
                   {img.caption && (

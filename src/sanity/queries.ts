@@ -73,7 +73,14 @@ export const galleriesTotalCountQuery = defineQuery(`
 `);
 
 // Singolo album per /news/gallery/[slug]. Asset reference completi
-// con metadata + alt per il viewer.
+// con metadata + alt per il viewer. Ogni immagine porta:
+// - dimensions (width/height) → next/image aspect ratio nativo, niente
+//   layout shift, mosaico rispetta i rapporti originali (16:9, 4:5, 1:1).
+// - lqip → placeholder blur durante il caricamento.
+// - exifDateTime → data di scatto dall'EXIF della macchina/telefono.
+// - assetCreatedAt → fallback per foto senza EXIF (screenshot, foto
+//   editate che hanno perso i metadati).
+// Ordinamento finale: data scatto ASC (cronologico crescente).
 export const galleryBySlugQuery = defineQuery(`
   *[_type == "gallery" && slug.current == $slug][0]{
     _id,
@@ -89,7 +96,12 @@ export const galleryBySlugQuery = defineQuery(`
       hotspot,
       crop,
       alt,
-      caption
+      caption,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "lqip": asset->metadata.lqip,
+      "exifDateTime": asset->metadata.exif.DateTimeOriginal,
+      "assetCreatedAt": asset->_createdAt
     }
   }
 `);

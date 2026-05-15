@@ -98,24 +98,40 @@ export const gallery = defineType({
       name: "images",
       title: "Immagini dell'album",
       description:
-        "Le foto contenute nella galleria. Ordine = ordine di visualizzazione nel viewer. La cover puo' anche essere ripetuta qui se vuoi mostrarla nel set.",
+        "Trascina N foto contemporaneamente in quest'area per caricarle in blocco. L'ordine di visualizzazione nel viewer pubblico segue la DATA DI SCATTO (EXIF DateTimeOriginal) in ordine crescente, con fallback sulla data di caricamento se l'EXIF manca. Niente bisogno di riordinare a mano: carica tutto e Sanity ordina.",
       type: "array",
       fieldset: "contenuto",
+      // layout:'grid' mostra le miniature come griglia visuale invece
+      // della lista verticale di default → UX bulk upload molto migliore.
+      options: { layout: "grid" },
       of: [
         {
           type: "image",
-          options: { hotspot: true, accept: "image/*" },
+          // metadata:['exif','lqip','palette'] istruisce Sanity a estrarre
+          // i metadati EXIF (data/ora scatto, orientation, fotocamera)
+          // dall'asset al momento dell'upload. La data di scatto viene
+          // poi usata lato sito per l'ordinamento cronologico crescente.
+          // 'lqip' = base64 placeholder per blur-up sotto Image next/og.
+          options: {
+            hotspot: true,
+            accept: "image/*",
+            metadata: ["exif", "lqip", "palette", "dimensions"],
+            storeOriginalFilename: true,
+          },
           fields: [
             defineField({
               name: "alt",
               title: "Testo alternativo (a11y + SEO)",
+              description:
+                "Compilabile dopo il bulk upload: lo screen reader e Google leggono questo per descrivere la foto. Lasciato vuoto temporaneamente non blocca la pubblicazione.",
               type: "string",
               validation: (r) =>
                 r
-                  .required()
                   .min(8)
                   .max(200)
-                  .warning("Tieni l'alt tra 8 e 200 caratteri."),
+                  .warning(
+                    "Se compilato, l'alt dovrebbe essere tra 8 e 200 caratteri per essere efficace su a11y/SEO.",
+                  ),
             }),
             defineField({
               name: "caption",
