@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, ChevronRight, History, ListOrdered } from "lucide-react";
+import { ArrowUpRight, ChevronRight, ListOrdered } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
 import { cn } from "@/lib/cn";
@@ -198,15 +198,13 @@ function StripBlock({
 }) {
   return (
     <section aria-label={ariaLabel}>
-      <header className="mb-4 flex items-baseline justify-between gap-4">
-        <span className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase">
-          <History
-            size={11}
-            className="-mt-0.5 mr-1.5 inline"
-            aria-hidden
-          />
+      {/* Header pattern allineato al box Prima Squadra: H2 grande
+          uppercase navy bianco, niente eyebrow gold inline. Link
+          "Tutte le squadre" a destra (solo sul primo blocco). */}
+      <header className="mb-4 flex flex-wrap items-baseline justify-between gap-4">
+        <h2 className="font-display text-ink-hi text-2xl leading-none font-extrabold tracking-[0.04em] uppercase md:text-3xl">
           {title}
-        </span>
+        </h2>
         {showAllTeamsLink && (
           <Link
             href="/squadre"
@@ -313,7 +311,7 @@ export async function YouthMatchStrip() {
     >
       <Container className="flex flex-col gap-10 py-5 md:gap-12 md:py-6" size="wide">
         <StripBlock
-          title="Juniores · ultimi risultati e prossime partite"
+          title="Juniores"
           ariaLabel="Juniores · ultimi risultati e prossime partite"
           teams={JUNIORES_TEAMS}
           nextBySlug={nextBySlug}
@@ -321,7 +319,7 @@ export async function YouthMatchStrip() {
           showAllTeamsLink
         />
         <StripBlock
-          title="Settore Giovanile Scolastico · ultimi risultati e prossime partite"
+          title="Settore Giovanile Scolastico"
           ariaLabel="Settore Giovanile Scolastico · ultimi risultati e prossime partite"
           teams={SCOLASTICO_TEAMS}
           nextBySlug={nextBySlug}
