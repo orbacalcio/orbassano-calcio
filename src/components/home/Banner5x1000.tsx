@@ -60,8 +60,7 @@ export function Banner5x1000() {
               95634370019
             </span>
             <span className="text-ink-mid text-sm">
-              A.S.D. Orbassano Calcio · Centro Sportivo Aldo Porta · Orbassano
-              (TO)
+              A.S.D. Orbassano Calcio
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-3">

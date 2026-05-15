@@ -110,8 +110,7 @@ export default function CinquePerMillePage() {
                 {FISCAL_CODE}
               </span>
               <span className="text-ink-mid text-sm">
-                A.S.D. Orbassano Calcio &middot; Centro Sportivo Aldo Porta
-                &middot; Orbassano (TO)
+                A.S.D. Orbassano Calcio
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-3">
