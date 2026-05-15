@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Images as ImagesIcon } from "lucide-react";
+import { GalleryViewer } from "@/components/gallery/GalleryViewer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { buildBreadcrumbLd } from "@/lib/json-ld";
@@ -140,48 +140,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
             Questa galleria è vuota: le foto saranno caricate a breve.
           </p>
         ) : (
-          <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 [&>figure]:mb-4 [&>figure]:break-inside-avoid">
-            {sortedImages.map((img) => {
-              // Larghezza Sanity 1200 per il file scaricato, ma aspect
-              // ratio del DOM placeholder usa width/height nativi della
-              // foto: il browser riserva lo spazio corretto PRIMA che
-              // l'immagine carichi (zero layout shift) e rispetta i
-              // rapporti originali (16:9, 4:5, 1:1, portrait, ecc).
-              const src = urlFor(img).width(1200).fit("max").url();
-              const w = img.width ?? 1200;
-              const h = img.height ?? 800;
-              return (
-                <figure
-                  key={img._key}
-                  className="overflow-hidden rounded-xl bg-surface-1"
-                >
-                  <a
-                    href={urlFor(img).width(2000).fit("max").url()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Apri ${img.alt ?? "immagine"} in formato originale`}
-                    className="block"
-                  >
-                    <Image
-                      src={src}
-                      alt={img.alt ?? gallery.title}
-                      width={w}
-                      height={h}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      placeholder={img.lqip ? "blur" : "empty"}
-                      blurDataURL={img.lqip ?? undefined}
-                      className="h-auto w-full"
-                    />
-                  </a>
-                  {img.caption && (
-                    <figcaption className="text-ink-mid bg-surface-1 px-3 py-2 text-xs">
-                      {img.caption}
-                    </figcaption>
-                  )}
-                </figure>
-              );
-            })}
-          </div>
+          <GalleryViewer images={sortedImages} albumTitle={gallery.title} />
         )}
       </Container>
     </>

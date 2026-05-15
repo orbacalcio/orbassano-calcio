@@ -38,20 +38,6 @@ function isBigCard(index: number): boolean {
   return index % BIG_INDEX_MOD === BIG_INDEX_OFFSET;
 }
 
-function formatUploadedAt(iso: string): string {
-  const d = new Date(iso);
-  const date = d.toLocaleDateString("it-IT", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  const time = d.toLocaleTimeString("it-IT", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return `${date} ${time}`;
-}
-
 export function GalleryMosaic({ initialItems, totalCount }: Props) {
   const [items, setItems] = useState<GalleryCard[]>(initialItems);
   const [isPending, startTransition] = useTransition();
@@ -169,11 +155,9 @@ function GalleryCardTile({
           {gallery.imagesCount}
         </span>
 
-        {/* Meta + titolo, bottom-left */}
+        {/* Titolo bottom-left. Data/ora rimosse su richiesta utente:
+            sono rumore visivo e gia' presenti nella pagina detail. */}
         <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 px-4 pb-4">
-          <span className="text-brand-gold font-mono text-[11px] font-semibold tracking-[0.12em] uppercase">
-            {formatUploadedAt(gallery.uploadedAt)}
-          </span>
           <h3
             className={cn(
               "font-display text-white leading-tight font-extrabold tracking-[0.005em] uppercase",
