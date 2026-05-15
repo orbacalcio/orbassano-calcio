@@ -118,15 +118,21 @@ export async function MatchStrip() {
 
   return (
     <>
-      {/* BOX 1 — Prima Squadra: grid 40/40/20 (Ultimo · Prossima · Classifica) */}
+      {/* BOX 1 — Prima Squadra: header sopra + grid 40/40/20 sotto */}
       <section
         aria-label="Ultimo e prossimo impegno Prima Squadra"
         className="border-border/60 border-y bg-surface-1/40"
       >
-        <Container
-          className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]"
-          size="wide"
-        >
+        <Container size="wide" className="flex flex-col">
+          {/* Header unico "PRIMA SQUADRA" sopra la grid: evita di
+              ripetere "Prima Squadra" in ogni eyebrow degli slot. */}
+          <header className="border-border/40 px-8 pt-6 pb-4 md:px-11 md:pt-8">
+            <h2 className="font-display text-ink-hi text-2xl leading-none font-extrabold tracking-[0.04em] uppercase md:text-3xl">
+              Prima Squadra
+            </h2>
+          </header>
+
+          <div className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]">
           {/* Slot 1 — ULTIMO RISULTATO (40%) */}
           <div className="bg-surface-2/60 flex flex-col gap-4 p-8 md:p-11">
             <div className="flex flex-col gap-1.5">
@@ -136,7 +142,7 @@ export async function MatchStrip() {
                   className="-mt-0.5 mr-2 inline"
                   aria-hidden
                 />
-                Ultimo risultato · {PRIMA_SQUADRA_NAME}
+                Ultimo risultato
               </span>
               <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
                 {lastCompetitionLabel}
@@ -178,7 +184,7 @@ export async function MatchStrip() {
                   className="-mt-0.5 mr-2 inline"
                   aria-hidden
                 />
-                Prossima partita · {PRIMA_SQUADRA_NAME}
+                Prossima partita
               </span>
               <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
                 {nextCompetitionLabel}
@@ -239,6 +245,7 @@ export async function MatchStrip() {
               ariaLabelOn="Apri le statistiche del campionato Prima Squadra"
               ariaLabelOff="Statistiche non disponibili"
             />
+          </div>
           </div>
         </Container>
       </section>
