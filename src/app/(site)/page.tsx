@@ -46,10 +46,10 @@ export default function Home() {
         <MatchStrip />
       </RevealOnScroll>
       <RevealOnScroll>
-        <NewsGrid />
+        <TeamsCards />
       </RevealOnScroll>
       <RevealOnScroll>
-        <TeamsCards />
+        <NewsGrid />
       </RevealOnScroll>
       <RevealOnScroll>
         <StoryNumbers />
