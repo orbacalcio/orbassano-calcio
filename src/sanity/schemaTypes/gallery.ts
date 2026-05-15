@@ -123,25 +123,44 @@ export const gallery = defineType({
           fields: [
             defineField({
               name: "alt",
-              title: "Testo alternativo (a11y + SEO)",
+              title: "Testo alternativo (opzionale)",
               description:
-                "Compilabile dopo il bulk upload: lo screen reader e Google leggono questo per descrivere la foto. Lasciato vuoto temporaneamente non blocca la pubblicazione.",
+                "Lascia vuoto: il sito usa automaticamente il titolo dell'album come alt per tutte le foto. Compilalo solo se vuoi descrivere ESATTAMENTE questa specifica foto agli screen reader (utenti non vedenti). Nella stragrande maggioranza dei casi non serve.",
               type: "string",
-              validation: (r) =>
-                r
-                  .min(8)
-                  .max(200)
-                  .warning(
-                    "Se compilato, l'alt dovrebbe essere tra 8 e 200 caratteri per essere efficace su a11y/SEO.",
-                  ),
+              // Niente validation: campo completamente opzionale, nessun
+              // warning su lunghezza. L'utente non deve essere costretto
+              // a compilare alt per ognuna delle N foto di un album.
             }),
             defineField({
               name: "caption",
               title: "Didascalia (opzionale)",
-              description: "Mostrata sotto la foto nel viewer.",
+              description: "Mostrata sotto la foto nel viewer pubblico.",
               type: "string",
             }),
           ],
+          preview: {
+            // Preview del singolo item nell'array: invece di mostrare
+            // "Untitled" quando alt e caption sono vuoti, usa il nome
+            // originale del file (es. IMG_2845.jpg). Cosi' l'utente puo'
+            // identificare visivamente le foto senza dover scrivere
+            // titoli a mano.
+            select: {
+              media: "asset",
+              alt: "alt",
+              caption: "caption",
+              filename: "asset.originalFilename",
+            },
+            prepare({ media, alt, caption, filename }) {
+              return {
+                title:
+                  (alt as string | undefined) ??
+                  (caption as string | undefined) ??
+                  (filename as string | undefined) ??
+                  "Foto",
+                media: media as never,
+              };
+            },
+          },
         },
       ],
       validation: (r) =>
