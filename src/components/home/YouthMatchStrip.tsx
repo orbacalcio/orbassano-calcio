@@ -174,7 +174,7 @@ export async function YouthMatchStrip() {
 
   return (
     <section
-      aria-label="Settore Giovanile · ultimi risultati e prossime partite"
+      aria-label="Settore Giovanile Scolastico · ultimi risultati e prossime partite"
       className="border-border/60 mt-4 border-y bg-surface-1/25 md:mt-6"
     >
       <Container className="py-5 md:py-6" size="wide">
@@ -185,7 +185,7 @@ export async function YouthMatchStrip() {
               className="-mt-0.5 mr-1.5 inline"
               aria-hidden
             />
-            Settore Giovanile · ultimi risultati e prossime partite
+            Settore Giovanile Scolastico · ultimi risultati e prossime partite
           </span>
           <Link
             href="/squadre"
