@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Images as ImagesIcon } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchAllGallerySlugs,
   fetchGalleryBySlug,
@@ -90,6 +92,13 @@ export default async function GalleryDetailPage({ params }: PageProps) {
 
   return (
     <>
+      <JsonLd
+        data={buildBreadcrumbLd([
+          { name: "Home", url: "/" },
+          { name: "Gallery", url: "/gallery" },
+          { name: gallery.title, url: `/gallery/${gallery.slug}` },
+        ])}
+      />
       <header className="border-border/50 relative overflow-hidden border-b">
         <div
           aria-hidden

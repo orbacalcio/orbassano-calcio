@@ -117,6 +117,7 @@ function buildSections(opts: {
   // linkata da qui.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
+    { href: "/gallery", label: "Gallery" },
     { href: "/societa", label: "Società" },
     { href: "/societa/storia", label: "Storia" },
     { href: "/societa/organigramma", label: "Organigramma" },
