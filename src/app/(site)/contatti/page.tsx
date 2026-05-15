@@ -22,7 +22,10 @@ const CHANNELS = [
     icon: ShieldCheck,
     title: "PEC",
     body: "orbassanocalcio@legalmail.it",
-    href: "mailto:orbassanocalcio@legalmail.it",
+    // Niente href: la PEC NON deve essere cliccabile (apre un client
+    // mail standard che non puo' firmare/cifrare con la chiave PEC,
+    // generando confusione). L'utente la copia manualmente.
+    href: undefined as string | undefined,
     helper: "Per comunicazioni ufficiali e legali.",
   },
   {
@@ -86,18 +89,26 @@ export default function ContattiPage() {
                       {c.title}
                     </span>
                   </div>
-                  <a
-                    href={c.href}
-                    target={c.href.startsWith("http") ? "_blank" : undefined}
-                    rel={
-                      c.href.startsWith("http")
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
-                    className="text-ink-hi group-hover:text-brand-gold whitespace-pre-line text-base leading-relaxed transition-colors"
-                  >
-                    {c.body}
-                  </a>
+                  {c.href ? (
+                    <a
+                      href={c.href}
+                      target={
+                        c.href.startsWith("http") ? "_blank" : undefined
+                      }
+                      rel={
+                        c.href.startsWith("http")
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
+                      className="text-ink-hi group-hover:text-brand-gold whitespace-pre-line text-base leading-relaxed transition-colors"
+                    >
+                      {c.body}
+                    </a>
+                  ) : (
+                    <span className="text-ink-hi whitespace-pre-line text-base leading-relaxed">
+                      {c.body}
+                    </span>
+                  )}
                   <span className="text-ink-low text-xs">{c.helper}</span>
                 </li>
               ))}

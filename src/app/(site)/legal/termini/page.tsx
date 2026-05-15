@@ -171,12 +171,9 @@ export default function TerminiPage() {
             info@orbassanocalcio.com
           </a>{" "}
           o invia una PEC a{" "}
-          <a
-            href="mailto:orbassanocalcio@legalmail.it"
-            className="text-brand-gold hover:underline"
-          >
+          <span className="text-ink-hi font-mono">
             orbassanocalcio@legalmail.it
-          </a>
+          </span>
           .
         </p>
       </LegalSection>

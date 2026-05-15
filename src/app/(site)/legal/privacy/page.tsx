@@ -32,7 +32,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           Email: <a href="mailto:info@orbassanocalcio.com" className="text-brand-gold hover:underline">info@orbassanocalcio.com</a>
-          &nbsp;&middot; PEC: <a href="mailto:orbassanocalcio@legalmail.it" className="text-brand-gold hover:underline">orbassanocalcio@legalmail.it</a>.
+          &nbsp;&middot; PEC: <span className="text-ink-hi font-mono">orbassanocalcio@legalmail.it</span>.
         </p>
       </LegalSection>
 
@@ -163,12 +163,9 @@ export default function PrivacyPage() {
             info@orbassanocalcio.com
           </a>{" "}
           oppure invia una PEC a{" "}
-          <a
-            href="mailto:orbassanocalcio@legalmail.it"
-            className="text-brand-gold hover:underline"
-          >
+          <span className="text-ink-hi font-mono">
             orbassanocalcio@legalmail.it
-          </a>
+          </span>
           . Risponderemo entro 30 giorni.
         </p>
       </LegalSection>
