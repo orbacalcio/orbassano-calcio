@@ -18,14 +18,16 @@ import { Container } from "@/components/ui/Container";
  * - Niente skew: con strisce verticali le strisce stesse danno
  *   impatto, lo skew le inclinerebbe rendendole confuse
  *
- * Sfondo brand-white per massimizzare il contrasto con red/blue (il
- * rossoblu' nasce per maglia bianca/chiara, non navy).
+ * Sfondo cream (#F5F1E8) vintage/parchment: stesso contrasto del
+ * bianco puro per far brillare il rossoblu', ma transizione meno
+ * stridente col navy del resto della pagina. Richiama anche le foto
+ * storiche/cimeli del club (per chi ricorda gli anni '80).
  */
 export function Manifesto() {
   return (
     <section
       aria-labelledby="manifesto-title"
-      className="bg-brand-white relative overflow-hidden py-24 lg:py-32"
+      className="relative overflow-hidden bg-[#F5F1E8] py-24 lg:py-32"
     >
       <Container
         size="wide"
