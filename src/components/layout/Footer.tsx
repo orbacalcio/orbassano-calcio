@@ -304,9 +304,6 @@ export async function Footer() {
           <span className="text-ink-mid font-mono text-[11px] tracking-wide">
             © {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
           </span>
-          <span className="text-ink-mid text-xs">
-            Sito ricostruito con cura, dal 1930 ai nostri giorni.
-          </span>
         </Container>
       </div>
     </footer>
