@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { urlFor } from "@/sanity/image";
 import type { GalleryImageItem } from "@/sanity/fetchers";
 import { Z } from "@/lib/z-indexes";
@@ -49,6 +49,12 @@ export function GalleryViewer({ images, albumTitle }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [zoomed, setZoomed] = useState(false);
   const reduced = useReducedMotion();
+  // Ref del backdrop del lightbox: serve a framer-motion come
+  // dragConstraints per limitare il pan della foto zoomata. Quando
+  // l'utente trascina, framer-motion calcola i bounds dal rect del
+  // container vs il rect del child scalato 2x, permettendo pan solo
+  // fin dove la foto esce dal viewport e bloccando oltre.
+  const dragContainerRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => {
     setSelectedIndex(null);
@@ -144,6 +150,7 @@ export function GalleryViewer({ images, albumTitle }: Props) {
         {selected && selectedIndex !== null && (
           <motion.div
             key="gallery-lightbox"
+            ref={dragContainerRef}
             role="dialog"
             aria-modal="true"
             aria-label={`Foto ${selectedIndex + 1} di ${images.length}: ${selected.alt ?? albumTitle}`}
@@ -152,7 +159,7 @@ export function GalleryViewer({ images, albumTitle }: Props) {
             exit={reduced ? undefined : { opacity: 0 }}
             transition={{ duration: 0.2 }}
             onContextMenu={(e) => e.preventDefault()}
-            className="fixed inset-0 flex items-center justify-center bg-black/95 backdrop-blur-md"
+            className="fixed inset-0 flex items-center justify-center overflow-hidden bg-black/95 backdrop-blur-md"
             style={{ zIndex: Z.modal }}
           >
             {/* Click sul backdrop chiude. Il pulsante avvolge tutto lo
@@ -201,20 +208,28 @@ export function GalleryViewer({ images, albumTitle }: Props) {
               </>
             )}
 
-            {/* Foto + zoom toggle */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setZoomed((z) => !z);
-              }}
+            {/* Foto con click-to-zoom + pan via drag quando zoomata.
+                motion.div invece di button: framer-motion gestisce
+                onTap (click semplice senza drag) e drag (>5px movimento)
+                in modo mutuamente esclusivo — non si interferiscono.
+                Tasto a11y separato in basso a sx per chi usa solo
+                tastiera (Tab + Enter su 'Zoom'). */}
+            <motion.div
+              role="img"
+              aria-label={selected.alt ?? albumTitle}
               onContextMenu={(e) => e.preventDefault()}
-              aria-label={zoomed ? "Riduci zoom" : "Aumenta zoom 2x"}
+              animate={{ scale: zoomed ? 2 : 1, x: zoomed ? undefined : 0, y: zoomed ? undefined : 0 }}
+              transition={{ type: "tween", duration: reduced ? 0 : 0.3, ease: "easeOut" }}
+              drag={zoomed}
+              dragConstraints={dragContainerRef}
+              dragElastic={0.05}
+              dragMomentum={false}
+              onTap={() => setZoomed((z) => !z)}
               className={cn(
-                "relative z-[1] max-h-[90vh] max-w-[90vw] overflow-hidden transition-transform duration-300 ease-out",
+                "relative z-[1] max-h-[90vh] max-w-[90vw] overflow-hidden",
                 zoomed
-                  ? "cursor-zoom-out scale-[2]"
-                  : "cursor-zoom-in scale-100",
+                  ? "cursor-grab active:cursor-grabbing"
+                  : "cursor-zoom-in",
               )}
             >
               {/* La foto stessa: src 2000px wide per qualità adeguata
@@ -227,7 +242,7 @@ export function GalleryViewer({ images, albumTitle }: Props) {
                 priority
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
-                className="block max-h-[90vh] w-auto select-none [-webkit-user-drag:none]"
+                className="pointer-events-none block max-h-[90vh] w-auto select-none [-webkit-user-drag:none]"
                 placeholder={selected.lqip ? "blur" : "empty"}
                 blurDataURL={selected.lqip ?? undefined}
               />
@@ -240,12 +255,19 @@ export function GalleryViewer({ images, albumTitle }: Props) {
               >
                 © orbassanocalcio.com
               </span>
-            </button>
+            </motion.div>
 
-            {/* Hint zoom in basso a sx (icona indicativa) */}
-            <span
-              aria-hidden
-              className="font-mono pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[10px] tracking-wider uppercase text-white/70 md:bottom-6 md:left-6 md:text-xs"
+            {/* Hint zoom + tasto a11y in basso a sinistra. Cliccabile
+                anche col cursore mouse (zoom toggle alternativo) e
+                attivabile da tastiera per a11y. */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoomed((z) => !z);
+              }}
+              aria-label={zoomed ? "Riduci zoom" : "Aumenta zoom"}
+              className="focus-visible:outline-brand-gold font-mono pointer-events-auto absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[10px] tracking-wider uppercase text-white/70 transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-2 md:bottom-6 md:left-6 md:text-xs"
             >
               {zoomed ? (
                 <>
@@ -253,10 +275,10 @@ export function GalleryViewer({ images, albumTitle }: Props) {
                 </>
               ) : (
                 <>
-                  <ZoomIn size={12} aria-hidden /> Click per zoom 2x
+                  <ZoomIn size={12} aria-hidden /> Click per zoom
                 </>
               )}
-            </span>
+            </button>
 
             {/* Caption se presente */}
             {selected.caption && (
