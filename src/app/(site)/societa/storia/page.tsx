@@ -66,21 +66,23 @@ export default async function StoriaPage() {
       </Container>
 
       <Container className="py-16 lg:py-24" size="wide">
-        <div className="flex flex-col gap-3">
-          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-            Cronistoria
-          </span>
-          <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-            Gli eventi che hanno fatto la storia del club
-          </h2>
-          <p className="text-ink-mid max-w-2xl text-sm leading-relaxed">
-            Trofei vinti, promozioni raggiunte, rifondazioni ed
-            eventi storici della Società in ordine cronologico.
-          </p>
-        </div>
-        <div className="mt-12">
-          <Timeline events={events} />
-        </div>
+        <RevealOnScroll>
+          <div className="flex flex-col gap-3">
+            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+              Cronistoria
+            </span>
+            <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+              Gli eventi che hanno fatto la storia del club
+            </h2>
+            <p className="text-ink-mid max-w-2xl text-sm leading-relaxed">
+              Trofei vinti, promozioni raggiunte, rifondazioni ed
+              eventi storici della Società in ordine cronologico.
+            </p>
+          </div>
+          <div className="mt-12">
+            <Timeline events={events} />
+          </div>
+        </RevealOnScroll>
       </Container>
 
       <Container className="border-border/40 border-t py-12 lg:py-16" size="wide">
