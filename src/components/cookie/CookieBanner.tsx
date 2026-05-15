@@ -179,12 +179,17 @@ export function CookieBanner() {
 
   return (
     <>
-      {/* Pulsante fluttuante (pallone) in basso a destra per riaprire
-          il banner. Visibile solo quando: consenso gia' salvato e
-          banner attualmente chiuso. Permette all'utente di revocare
-          o modificare le preferenze in qualunque momento (GDPR art. 7
-          comma 3: il consenso deve essere revocabile con la stessa
-          facilita' con cui e' stato dato). */}
+      {/* Pulsante fluttuante (pallone) per riaprire il banner. Visibile
+          solo quando: consenso gia' salvato e banner attualmente chiuso.
+          Permette all'utente di revocare o modificare le preferenze in
+          qualunque momento (GDPR art. 7c3).
+          Stile e dimensione allineati alle icone social (h-10 w-10,
+          rounded-full, border outlined, hover inverso) per coerenza
+          visiva. Su desktop (lg+) si posiziona alla base della
+          SidebarRight (right=20px = centro della sidebar 80px wide,
+          bottom=28px = pari al pb-6 della sidebar). Su mobile/tablet,
+          dove la SidebarRight e' nascosta, resta floating bottom-right
+          ma comunque piu' piccolo. */}
       <AnimatePresence>
         {view === "hidden" && hasStoredConsent && (
           <motion.button
@@ -199,7 +204,7 @@ export function CookieBanner() {
             transition={{ duration: 0.25 }}
             whileHover={reduced ? undefined : { scale: 1.08, rotate: 12 }}
             whileTap={reduced ? undefined : { scale: 0.92 }}
-            className="bg-surface-1/90 border-brand-gold/50 ring-border/30 fixed right-4 bottom-4 z-[55] flex h-12 w-12 items-center justify-center rounded-full border shadow-xl ring-1 backdrop-blur-md transition-colors hover:bg-surface-2 sm:right-6 sm:bottom-6"
+            className="group border-ink-mid/40 hover:bg-ink-hi hover:border-ink-hi focus-visible:outline-brand-gold fixed right-4 bottom-4 z-[55] flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 lg:right-[20px] lg:bottom-7"
           >
             <SoccerBallIcon />
           </motion.button>
@@ -586,8 +591,8 @@ function SoccerBallIcon() {
   const PATCH_TL = "5.54,8.66 7.95,8.85 9.54,11.71 7.22,13.6 4.66,11.79";
   return (
     <svg
-      width={26}
-      height={26}
+      width={20}
+      height={20}
       viewBox="0 0 32 32"
       fill="none"
       strokeLinejoin="round"
