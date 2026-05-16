@@ -176,13 +176,13 @@ function TeamView({ team }: { team: TeamDetail }) {
             />
             <div
               aria-hidden
-              className="from-surface-0 via-surface-0/85 absolute inset-0 bg-gradient-to-r to-transparent"
+              className="from-dark-bg-0 via-dark-bg-0/85 absolute inset-0 bg-gradient-to-r to-transparent"
             />
           </>
         ) : (
           <div
             aria-hidden
-            className="from-surface-2 via-surface-1 to-brand-blue/30 absolute inset-0 bg-gradient-to-br"
+            className="from-dark-bg-2 via-dark-bg-1 to-brand-blue/30 absolute inset-0 bg-gradient-to-br"
           />
         )}
         <Container
@@ -192,11 +192,11 @@ function TeamView({ team }: { team: TeamDetail }) {
           <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             {team.category}
           </span>
-          <h1 className="font-display text-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
+          <h1 className="font-display text-dark-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
             {team.name}
           </h1>
           {subtitle && (
-            <span className="text-ink-mid text-lg lg:text-xl">{subtitle}</span>
+            <span className="text-dark-ink-mid text-lg lg:text-xl">{subtitle}</span>
           )}
         </Container>
       </header>

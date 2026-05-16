@@ -256,7 +256,7 @@ export function HeroCarousel({
           Rinforza il dark sotto, dove vivono headline + subhead + CTA. */}
       <div
         aria-hidden
-        className="from-surface-0 via-surface-0/60 absolute inset-0 bg-gradient-to-t to-transparent"
+        className="from-dark-bg-0 via-dark-bg-0/60 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
       {/* Layer 3: testo della slide — mode="wait" (no overlap). */}
@@ -287,7 +287,7 @@ export function HeroCarousel({
             {current.subhead && (
               <motion.p
                 variants={makeSubheadVariants(mult, !!reduced)}
-                className="text-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
+                className="text-dark-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
               >
                 {current.subhead}
               </motion.p>
@@ -358,7 +358,7 @@ function HeadlineBlock({
   return (
     <motion.h1
       variants={makeWrapperVariants()}
-      className="font-display text-ink-hi text-[clamp(3.5rem,8vw,9rem)] leading-[0.92] font-black tracking-[0.005em] uppercase"
+      className="font-display text-dark-ink-hi text-[clamp(3.5rem,8vw,9rem)] leading-[0.92] font-black tracking-[0.005em] uppercase"
     >
       {lines.map((line, i) => {
         const isLast = i === lines.length - 1;

@@ -47,7 +47,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
         )}
         <div
           aria-hidden
-          className="from-surface-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
+          className="from-dark-bg-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
         />
         {news.isPinned && (
           <span className="bg-brand-gold text-surface-0 font-display absolute top-4 right-4 rounded-full px-3 py-1 text-[10px] font-bold tracking-[0.15em] uppercase">

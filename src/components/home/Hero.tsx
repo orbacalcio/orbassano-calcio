@@ -150,7 +150,7 @@ export async function Hero() {
       ) : (
         <>
           <div aria-hidden className="absolute inset-0 overflow-hidden">
-            <div className="from-surface-2 via-surface-1 to-surface-0 absolute inset-0 bg-gradient-to-br" />
+            <div className="from-dark-bg-2 via-dark-bg-1 to-dark-bg-0 absolute inset-0 bg-gradient-to-br" />
             <div className="bg-brand-blue/40 absolute -top-32 -left-32 h-[44rem] w-[44rem] rounded-full blur-[140px]" />
             <div className="bg-brand-red/25 absolute top-1/3 -right-40 h-[36rem] w-[36rem] rounded-full blur-[160px]" />
             <div className="bg-brand-gold/10 absolute -bottom-32 left-1/4 h-[32rem] w-[32rem] rounded-full blur-[140px]" />
@@ -164,7 +164,7 @@ export async function Hero() {
                 className="object-contain"
               />
             </div>
-            <div className="from-surface-0 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
+            <div className="from-dark-bg-0 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
           </div>
           <HeroOverlay season={season} league={league} group={group} />
         </>

@@ -200,7 +200,7 @@ export function SearchDialog({ open, onClose }: Props) {
           animate={{ opacity: 1 }}
           exit={reduced ? undefined : { opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="bg-surface-0/95 fixed inset-0 backdrop-blur-md"
+          className="bg-dark-bg-0/95 fixed inset-0 backdrop-blur-md"
           style={{ zIndex: Z.modal }}
           role="dialog"
           aria-modal="true"
@@ -208,7 +208,7 @@ export function SearchDialog({ open, onClose }: Props) {
           onClick={onClose}
         >
           <div
-            className="border-border/50 sticky top-0 border-b backdrop-blur-md"
+            className="border-dark-border/50 sticky top-0 border-b backdrop-blur-md"
             onClick={(e) => e.stopPropagation()}
           >
             <Container size="wide">
@@ -227,12 +227,12 @@ export function SearchDialog({ open, onClose }: Props) {
                   aria-label="Termine di ricerca"
                   autoComplete="off"
                   spellCheck={false}
-                  className="text-ink-hi placeholder:text-ink-low font-display flex-1 bg-transparent text-2xl leading-none font-bold tracking-[0.005em] uppercase outline-none sm:text-3xl"
+                  className="text-dark-ink-hi placeholder:text-dark-ink-low font-display flex-1 bg-transparent text-2xl leading-none font-bold tracking-[0.005em] uppercase outline-none sm:text-3xl"
                 />
                 {loading && (
                   <Loader2
                     size={18}
-                    className="text-ink-mid animate-spin"
+                    className="text-dark-ink-mid animate-spin"
                     aria-hidden
                   />
                 )}
@@ -240,7 +240,7 @@ export function SearchDialog({ open, onClose }: Props) {
                   type="button"
                   onClick={onClose}
                   aria-label="Chiudi ricerca"
-                  className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:outline-2"
+                  className="text-dark-ink-mid hover:text-dark-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:outline-2"
                 >
                   <X size={20} aria-hidden />
                 </button>
@@ -255,11 +255,11 @@ export function SearchDialog({ open, onClose }: Props) {
           >
             <Container size="wide" className="py-8 lg:py-12">
               {q.trim().length < 2 ? (
-                <p className="text-ink-mid text-center text-sm">
+                <p className="text-dark-ink-mid text-center text-sm">
                   Inizia a scrivere (almeno 2 caratteri).
                 </p>
               ) : !loading && totalResults === 0 ? (
-                <p className="text-ink-mid text-center text-sm">
+                <p className="text-dark-ink-mid text-center text-sm">
                   Nessun risultato per &laquo;{q}&raquo;.
                 </p>
               ) : (
@@ -364,12 +364,12 @@ function ResultItem({
       <Link
         href={href}
         onClick={onClick}
-        className="border-border bg-surface-1 hover:border-brand-gold/40 hover:bg-surface-2 group flex flex-col gap-1 rounded-xl border p-4 transition-colors"
+        className="border-dark-border bg-dark-bg-1 hover:border-brand-gold/40 hover:bg-dark-bg-2 group flex flex-col gap-1 rounded-xl border p-4 transition-colors"
       >
-        <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+        <span className="text-dark-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
           {subtitle}
         </span>
-        <span className="font-display text-ink-hi text-base leading-tight font-bold tracking-[0.005em] uppercase">
+        <span className="font-display text-dark-ink-hi text-base leading-tight font-bold tracking-[0.005em] uppercase">
           {title}
         </span>
       </Link>

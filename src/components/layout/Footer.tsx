@@ -183,7 +183,7 @@ export async function Footer() {
   const sections = buildSections({ hasPartners, activeTeamSlugs });
 
   return (
-    <footer className="bg-surface-1 border-border border-t" role="contentinfo">
+    <footer className="bg-dark-bg-1 border-dark-border border-t" role="contentinfo">
       <Container size="wide" className="py-12 lg:py-14">
         {/* TOP ROW: brand block (sx) + social (dx) */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -195,10 +195,10 @@ export async function Footer() {
               height={79}
             />
             <div className="flex flex-col gap-1">
-              <span className="font-display text-ink-hi text-xl leading-none font-extrabold tracking-[0.01em] uppercase">
+              <span className="font-display text-dark-ink-hi text-xl leading-none font-extrabold tracking-[0.01em] uppercase">
                 Orbassano Calcio
               </span>
-              <span className="text-ink-mid font-mono text-[11px] tracking-widest uppercase">
+              <span className="text-dark-ink-mid font-mono text-[11px] tracking-widest uppercase">
                 A.S.D. · dal 1930
               </span>
             </div>
@@ -206,7 +206,7 @@ export async function Footer() {
           <SocialIcons links={social} />
         </div>
 
-        <div aria-hidden className="border-border/40 my-10 border-t lg:my-12" />
+        <div aria-hidden className="border-dark-border/40 my-10 border-t lg:my-12" />
 
         {/* CATEGORIE: 6 colonne lg (4 strette + 2 larghe per Contatti/Legali
             che hanno testi più lunghi tipo IBAN/email/PEC) / 3 col md / 2 sm */}
@@ -223,7 +223,7 @@ export async function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-ink-mid hover:text-ink-hi text-sm transition-colors"
+                      className="text-dark-ink-mid hover:text-dark-ink-hi text-sm transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -236,7 +236,7 @@ export async function Footer() {
           {/* Contatti */}
           <div className="flex flex-col gap-3">
             <span className={COLUMN_TITLE}>Contatti</span>
-            <ul className="text-ink-mid flex flex-col gap-2 text-sm">
+            <ul className="text-dark-ink-mid flex flex-col gap-2 text-sm">
               {contact.address && (
                 <li className="flex items-start gap-2">
                   <MapPin
@@ -254,7 +254,7 @@ export async function Footer() {
                   <Phone size={14} className="shrink-0" aria-hidden />
                   <a
                     href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                    className="hover:text-ink-hi transition-colors"
+                    className="hover:text-dark-ink-hi transition-colors"
                   >
                     {contact.phone}
                   </a>
@@ -265,14 +265,14 @@ export async function Footer() {
                   <Mail size={14} className="shrink-0" aria-hidden />
                   <a
                     href={`mailto:${contact.email}`}
-                    className="hover:text-ink-hi truncate transition-colors"
+                    className="hover:text-dark-ink-hi truncate transition-colors"
                   >
                     {contact.email}
                   </a>
                 </li>
               )}
               {contact.pec && (
-                <li className="text-ink-low pl-6 text-xs leading-relaxed break-all">
+                <li className="text-dark-ink-low pl-6 text-xs leading-relaxed break-all">
                   PEC: {contact.pec}
                 </li>
               )}
@@ -282,22 +282,22 @@ export async function Footer() {
           {/* Dati legali */}
           <div className="flex flex-col gap-3">
             <span className={COLUMN_TITLE}>Dati legali</span>
-            <ul className="font-mono text-ink-mid flex flex-col gap-1.5 text-xs">
+            <ul className="font-mono text-dark-ink-mid flex flex-col gap-1.5 text-xs">
               {legal.fiscalCode && (
                 <li>
-                  CF <span className="text-ink-hi">{legal.fiscalCode}</span>
+                  CF <span className="text-dark-ink-hi">{legal.fiscalCode}</span>
                 </li>
               )}
               {legal.vatNumber && (
                 <li>
                   P.IVA{" "}
-                  <span className="text-ink-hi">{legal.vatNumber}</span>
+                  <span className="text-dark-ink-hi">{legal.vatNumber}</span>
                 </li>
               )}
               {legal.figcMatricola && (
                 <li>
                   Matricola FIGC{" "}
-                  <span className="text-ink-hi">{legal.figcMatricola}</span>
+                  <span className="text-dark-ink-hi">{legal.figcMatricola}</span>
                 </li>
               )}
             </ul>
@@ -305,12 +305,12 @@ export async function Footer() {
         </div>
       </Container>
 
-      <div className="border-border/60 border-t">
+      <div className="border-dark-border/60 border-t">
         <Container
           className="flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center sm:justify-between"
           size="wide"
         >
-          <span className="text-ink-mid font-mono text-[11px] tracking-wide">
+          <span className="text-dark-ink-mid font-mono text-[11px] tracking-wide">
             © {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
           </span>
         </Container>
