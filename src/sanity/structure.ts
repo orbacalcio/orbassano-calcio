@@ -94,6 +94,33 @@ function buildMatchesByTeam(S: StructureBuilder) {
     );
 }
 
+function buildArchivedMatchesByTeam(S: StructureBuilder) {
+  return S.list()
+    .title("Partite archiviate per squadra")
+    .items(
+      TEAM_ITEMS.map((t) =>
+        S.listItem()
+          .id(`archived-matches-${t.slug}`)
+          .title(t.label)
+          .icon(CalendarDays)
+          .child(
+            S.documentList()
+              .title(`Partite archiviate ${t.label}`)
+              .schemaType("match")
+              .filter(
+                '_type == "match" && team->slug.current == $slug && competition->season != $season',
+              )
+              .params({ slug: t.slug, season: CURRENT_SEASON })
+              .defaultOrdering([{ field: "date", direction: "desc" }])
+              .canHandleIntent(
+                (intentName, params) =>
+                  intentName === "edit" && params.type === "match",
+              ),
+          ),
+      ),
+    );
+}
+
 function buildOpponentsByTeam(S: StructureBuilder) {
   return S.list()
     .title("Avversari per squadra")
@@ -295,16 +322,7 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.listItem()
                 .title("Partite archiviate")
                 .icon(CalendarDays)
-                .child(
-                  S.documentList()
-                    .title("Partite stagioni passate")
-                    .schemaType("match")
-                    .filter(
-                      '_type == "match" && competition->season != $season',
-                    )
-                    .params({ season: CURRENT_SEASON })
-                    .defaultOrdering([{ field: "date", direction: "desc" }]),
-                ),
+                .child(buildArchivedMatchesByTeam(S)),
               S.listItem()
                 .title("Club inattivi")
                 .icon(Shield)
