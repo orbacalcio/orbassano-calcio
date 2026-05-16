@@ -46,7 +46,7 @@ export function FacilityCard({ facility, index }: Props) {
         )}
         <div
           aria-hidden
-          className="from-dark-bg-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
+          className="from-surface-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
         />
       </div>
 

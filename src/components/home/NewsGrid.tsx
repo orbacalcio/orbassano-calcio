@@ -68,7 +68,7 @@ function NewsCard({ news }: { news: News }) {
           bottone, lascia respirare la parte alta della foto. */}
       <div
         aria-hidden
-        className="from-dark-bg-0/95 via-dark-bg-0/55 absolute inset-0 bg-gradient-to-t to-transparent"
+        className="from-surface-0/95 via-surface-0/55 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
       {/* Categoria top-left (gold piccolo uppercase) */}
@@ -80,7 +80,7 @@ function NewsCard({ news }: { news: News }) {
 
       {/* Overlay testuale in basso: titolo + pseudo-bottone */}
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 md:p-6">
-        <h3 className="font-display text-dark-ink-hi line-clamp-3 text-lg leading-tight font-bold tracking-[0.01em] uppercase md:text-xl">
+        <h3 className="font-display text-ink-hi line-clamp-3 text-lg leading-tight font-bold tracking-[0.01em] uppercase md:text-xl">
           {news.title}
         </h3>
         <span

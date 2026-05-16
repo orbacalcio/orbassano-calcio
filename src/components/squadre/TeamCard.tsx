@@ -38,7 +38,7 @@ export function TeamCard({ team }: Props) {
         )}
         <div
           aria-hidden
-          className="from-dark-bg-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
+          className="from-surface-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
         />
       </div>
       <div className="flex flex-col gap-2 p-6">

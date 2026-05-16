@@ -60,7 +60,7 @@ export function HeroOverlay({ season, league, group }: Props) {
       </motion.span>
       <motion.h1
         variants={item}
-        className="font-display text-dark-ink-hi text-[clamp(3.5rem,8vw,9rem)] leading-[0.92] font-black tracking-[0.005em] uppercase"
+        className="font-display text-ink-hi text-[clamp(3.5rem,8vw,9rem)] leading-[0.92] font-black tracking-[0.005em] uppercase"
       >
         Dal 1930
         <br />
@@ -70,7 +70,7 @@ export function HeroOverlay({ season, league, group }: Props) {
       </motion.h1>
       <motion.p
         variants={item}
-        className="text-dark-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
+        className="text-ink-mid max-w-xl text-base leading-relaxed sm:text-lg"
       >
         Oltre novantacinque anni di rossoblù. Una storia di promozioni,
         fusioni, rinascite e di campioni che si sono allenati sui nostri

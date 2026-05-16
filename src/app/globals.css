@@ -9,46 +9,23 @@
  * Tienili in sincrono con src/lib/design-tokens.ts.
  */
 @theme {
-  /* Colori brand (logo) — invariati tra tema dark e mid-light */
+  /* Colori brand (logo) */
   --color-brand-blue: #213f8c;
   --color-brand-red: #e91f22;
   --color-brand-gold: #dfb16c;
   --color-brand-white: #fefdfd;
 
-  /* Mid-light theme — sfondi bianco-navy (pattern juventus.com).
-     Niente bianco puro: la scala parte da #F2F4F8, tinta navy
-     leggera per coerenza brand. Surface-3 è l'hover/active piu'
-     denso, ancora chiaro ma con stacco percepibile. */
-  --color-surface-0: #f2f4f8;
-  --color-surface-1: #e8edf5;
-  --color-surface-2: #dce3ee;
-  --color-surface-3: #c9d2e0;
-  --color-border: #9ba8c1;
+  /* Scala navy — sfondi e superfici (mai nero puro) */
+  --color-surface-0: #0a1428;
+  --color-surface-1: #0f1d38;
+  --color-surface-2: #16294a;
+  --color-surface-3: #1f3460;
+  --color-border: #1f2f4d;
 
-  /* Inchiostro — testo navy scuro su sfondo chiaro.
-     Contrasto verificato WCAG AA:
-     - ink-hi su surface-0: 15.8:1 (AAA)
-     - ink-mid su surface-0: 7.2:1 (AAA)
-     - ink-low su surface-0: 4.1:1 (AA su body text 16px+) */
-  --color-ink-hi: #0a1428;
-  --color-ink-mid: #3d4f73;
-  --color-ink-low: #7a8aa8;
-
-  /* Isole scure invarianti — usate da Hero (full-screen), Footer,
-     overlay sopra foto, lightbox e modali fullscreen. Pattern
-     juventus.com: il body e' chiaro ma alcune sezioni restano navy
-     come ancore brand. Sono i valori della scala navy originale,
-     congelati qui per non ribaltare quando il tema cambia.
-     Mappa: dark-bg-0 == vecchio surface-0, dark-bg-1 == vecchio
-     surface-1, ecc. */
-  --color-dark-bg-0: #0a1428;
-  --color-dark-bg-1: #0f1d38;
-  --color-dark-bg-2: #16294a;
-  --color-dark-bg-3: #1f3460;
-  --color-dark-border: #1f2f4d;
-  --color-dark-ink-hi: #f5f7fa;
-  --color-dark-ink-mid: #a8b5cc;
-  --color-dark-ink-low: #6b7a99;
+  /* Inchiostro — testo virato leggermente blu */
+  --color-ink-hi: #f5f7fa;
+  --color-ink-mid: #a8b5cc;
+  --color-ink-low: #6b7a99;
 
   /* Famiglie tipografiche (vedi docs/TYPOGRAPHY.md).
      I CSS custom property con il vero font sono iniettati da next/font
@@ -67,14 +44,13 @@
 }
 
 /**
- * Mid-light theme: sfondo bianco-navy chiaro, testo navy scuro.
- * Identita' brand preservata via overlay foto e isole scure
- * (footer, lightbox, modali) hardcoded scure. Pattern juventus.com.
+ * Dark mode forzato: il brand è navy. Niente prefers-color-scheme,
+ * niente light mode. Ogni schermata deve essere riconoscibilmente blu.
  */
 html {
   background-color: var(--color-surface-0);
   color: var(--color-ink-hi);
-  color-scheme: light;
+  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   /* Smooth scroll universale per anchor link e scroll programmati.
@@ -94,10 +70,9 @@ body {
   color: var(--color-brand-white);
 }
 
-/* Scrollbar discreta sul bianco-navy: thumb piu' scuro del border
-   per stacco visibile, track come surface-0 (continuita' col body). */
+/* Scrollbar discreta sul navy */
 * {
-  scrollbar-color: var(--color-border) var(--color-surface-0);
+  scrollbar-color: var(--color-surface-3) var(--color-surface-0);
 }
 
 /* Riduzione movimento: rispettiamo prefers-reduced-motion ovunque */
