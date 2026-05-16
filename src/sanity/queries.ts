@@ -110,13 +110,13 @@ export const galleryBySlugQuery = defineQuery(`
     },
     "cloudinaryImages": cloudinaryImages[]{
       _key,
-      "public_id": asset.public_id,
-      "secure_url": asset.secure_url,
-      "width": asset.width,
-      "height": asset.height,
-      "format": asset.format,
-      "createdAt": asset.created_at,
-      "context": asset.context
+      public_id,
+      secure_url,
+      width,
+      height,
+      format,
+      "createdAt": created_at,
+      context
     }
   }
 `);
