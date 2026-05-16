@@ -46,6 +46,12 @@ __pycache__/
 # in attesa di asset Sanity reali). NON committare: copyright Wix.
 /public/temp-hero/
 
+# Cartelle locali per lo script di compressione foto (pnpm compress).
+# Non committare: sono input/output temporanei dell'admin, possono
+# pesare GB. Vedi scripts/compress-photos.mjs.
+/photos-in/
+/photos-out/
+
 # vercel
 .vercel
 
