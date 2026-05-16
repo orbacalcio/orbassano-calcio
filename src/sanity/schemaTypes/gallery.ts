@@ -100,9 +100,15 @@ export const gallery = defineType({
       name: "cloudinaryImages",
       title: "Immagini dell'album (Cloudinary — consigliato)",
       description:
-        "Storage esterno Cloudinary (25 GB free vs 5 GB Sanity). Per ogni nuova foto: clicca 'Add item', poi 'Browse Cloudinary library' nel popup, e nel widget Cloudinary fai bulk upload trascinando N foto. Le foto vivono su cdn Cloudinary, il sito le serve direttamente da li' senza pesare sullo storage Sanity. Per le foto vecchie caricate prima della migrazione resta disponibile il campo 'Immagini dell'album (Sanity — legacy)' qui sotto: il sito renderizza entrambi indistintamente. Da preferire SEMPRE Cloudinary per i nuovi album.",
+        "Storage esterno Cloudinary (25 GB free vs 5 GB Sanity). Per ogni nuova foto: clicca 'Add item', poi 'Browse Cloudinary library' nel popup, e nel widget Cloudinary fai bulk upload trascinando N foto. Limite Cloudinary widget: max 20 foto selezionabili per click — per album piu' grandi ripeti 'Add multiple' a batch da 20. Le foto vivono su cdn Cloudinary, il sito le serve direttamente da li' senza pesare sullo storage Sanity. Per le foto vecchie caricate prima della migrazione resta disponibile il campo 'Immagini dell'album (Sanity — legacy)' qui sotto: il sito renderizza entrambi indistintamente. Da preferire SEMPRE Cloudinary per i nuovi album.",
       type: "array",
       fieldset: "contenuto",
+      // layout:'grid' rende le miniature come griglia visuale invece
+      // di lista verticale di default. Il numero di item per riga e'
+      // auto-fit in base alla larghezza disponibile del campo: tipico
+      // 4-6 per riga su pannello document standard, 6-8 su pannello
+      // wide. Su mobile/pannello stretto si compatta a 2-3.
+      options: { layout: "grid" },
       of: [{ type: "cloudinary.asset" }],
     }),
     defineField({
