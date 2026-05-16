@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Images as ImagesIcon } from "lucide-react";
-import { GalleryViewer } from "@/components/gallery/GalleryViewer";
+import {
+  GalleryViewer,
+  type UnifiedPhoto,
+} from "@/components/gallery/GalleryViewer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { buildCloudinaryUrl } from "@/lib/cloudinary";
 import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchAllGallerySlugs,
@@ -74,30 +78,70 @@ export default async function GalleryDetailPage({ params }: PageProps) {
   const gallery = await fetchGalleryBySlug(slug);
   if (!gallery) notFound();
 
-  // Filtro defensivo: scartiamo le immagini senza asset valido
-  // (placeholder vuoti dell'array images creati in Studio e non
-  // ancora popolati con un file). Senza questo filter urlFor() lancia
-  // TypeError 'Cannot read properties of null (reading _ref)' e
-  // rompe il prerender al build.
-  const validImages = (gallery.images ?? []).filter(
-    (img) => img.asset != null,
+  // Fonde le due sorgenti (Sanity legacy + Cloudinary nuova) in un
+  // singolo array UnifiedPhoto. Il viewer client non distingue tra
+  // i due tipi: usa src/srcFull/width/height uniformi.
+  //
+  // Sanity: filtro defensive di asset:null (placeholder vuoti in CMS),
+  // poi map a UnifiedPhoto via urlFor.
+  // Cloudinary: filtro defensive di public_id mancante, poi map via
+  // buildCloudinaryUrl con transformations (w/f/q auto).
+  type PhotoWithSortKey = UnifiedPhoto & { sortKey: string };
+
+  const sanityPhotos: PhotoWithSortKey[] = (gallery.images ?? [])
+    .filter((img) => img.asset != null)
+    .map((img) => ({
+      key: img._key,
+      src: urlFor(img).width(1200).fit("max").url(),
+      srcFull: urlFor(img).width(2000).fit("max").url(),
+      width: img.width ?? 1200,
+      height: img.height ?? 800,
+      alt: img.alt,
+      caption: img.caption,
+      lqip: img.lqip,
+      source: "sanity" as const,
+      sortKey: img.exifDateTime ?? img.assetCreatedAt ?? "",
+    }));
+
+  const cloudinaryPhotos: PhotoWithSortKey[] = (gallery.cloudinaryImages ?? [])
+    .filter((img) => img.public_id != null)
+    .map((img) => {
+      const alt = img.context?.custom?.alt ?? null;
+      const caption = img.context?.custom?.caption ?? null;
+      const src = buildCloudinaryUrl({
+        publicId: img.public_id,
+        format: img.format,
+        transform: { width: 1200, crop: "limit" },
+      });
+      const srcFull = buildCloudinaryUrl({
+        publicId: img.public_id,
+        format: img.format,
+        transform: { width: 2000, crop: "limit" },
+      });
+      return {
+        key: img._key,
+        src,
+        srcFull,
+        width: img.width ?? 1200,
+        height: img.height ?? 800,
+        alt,
+        caption,
+        lqip: null, // Cloudinary non fornisce LQIP base64 di default
+        source: "cloudinary" as const,
+        sortKey: img.createdAt ?? "",
+      };
+    });
+
+  // Concatena Sanity + Cloudinary, ordina cronologicamente crescente
+  // (data scatto EXIF se disponibile, altrimenti data upload), poi
+  // elimina il campo sortKey con cast.
+  const merged: PhotoWithSortKey[] = [...sanityPhotos, ...cloudinaryPhotos];
+  merged.sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+  const sortedPhotos: UnifiedPhoto[] = merged.map(
+    ({ sortKey: _sortKey, ...rest }) => rest,
   );
 
-  // Ordinamento cronologico crescente per data di scatto:
-  // 1) EXIF DateTimeOriginal (presente solo se il file ha metadata
-  //    e Sanity li ha estratti — vale per gli asset caricati DOPO
-  //    il fix schema metadata['exif']).
-  // 2) Fallback: data di caricamento asset (_createdAt) per i file
-  //    privi di EXIF (screenshot, foto editate, vecchi asset).
-  // Ordinamento qui in app (post-fetch) invece che in GROQ per evitare
-  // edge case in cui la pipe | order(...) restituisce null se uno dei
-  // dereference fallisce su asset legacy.
-  const sortedImages = [...validImages].sort((a, b) => {
-    const aKey = a.exifDateTime ?? a.assetCreatedAt ?? "";
-    const bKey = b.exifDateTime ?? b.assetCreatedAt ?? "";
-    return aKey.localeCompare(bKey);
-  });
-  const photoCount = sortedImages.length;
+  const photoCount = sortedPhotos.length;
 
   return (
     <>
@@ -149,7 +193,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
             Questa galleria è vuota: le foto saranno caricate a breve.
           </p>
         ) : (
-          <GalleryViewer images={sortedImages} albumTitle={gallery.title} />
+          <GalleryViewer photos={sortedPhotos} albumTitle={gallery.title} />
         )}
       </Container>
     </>

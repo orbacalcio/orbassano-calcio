@@ -70,16 +70,18 @@ const cspReportOnly = [
   // - vercel.live + *.vercel.live: Vercel preview comments / feedback
   //   (script iniettato sui deploy preview Vercel, non in produzione
   //   ma comodo per testing)
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://*.sanity-cdn.com https://w.behold.so https://embed.behold.so https://vercel.live https://*.vercel.live",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://*.sanity-cdn.com https://w.behold.so https://embed.behold.so https://vercel.live https://*.vercel.live https://media-library.cloudinary.com https://widget.cloudinary.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.cdninstagram.com https://*.fbcdn.net https://behold.so https://w.behold.so https://vercel.live",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.cdninstagram.com https://*.fbcdn.net https://behold.so https://w.behold.so https://vercel.live https://res.cloudinary.com",
   "font-src 'self' data: https://fonts.gstatic.com https://vercel.live",
   // connect-src: Sanity API (HTTP + WebSocket per real-time sync),
-  // Behold, Instagram CDN, Vercel Live (feedback API).
-  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity-cdn.com https://w.behold.so https://behold.so https://*.cdninstagram.com https://vercel.live wss://*.pusher.com",
+  // Behold, Instagram CDN, Vercel Live (feedback API), Cloudinary
+  // (upload API + media library widget).
+  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity-cdn.com https://w.behold.so https://behold.so https://*.cdninstagram.com https://vercel.live wss://*.pusher.com https://api.cloudinary.com https://res.cloudinary.com",
   // frame-src: Instagram embed (Behold widget), Behold direct,
-  // Vercel Live (toolbar comments preview).
-  "frame-src 'self' https://www.instagram.com https://w.behold.so https://vercel.live",
+  // Vercel Live (toolbar comments preview), Cloudinary Media Library
+  // widget (apre iframe verso media-library.cloudinary.com per browse).
+  "frame-src 'self' https://www.instagram.com https://w.behold.so https://vercel.live https://media-library.cloudinary.com",
   "media-src 'self' https://cdn.sanity.io",
   "object-src 'none'",
   "base-uri 'self'",
@@ -125,6 +127,13 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
+      },
+      // Cloudinary CDN per le foto delle gallery migrate dal pattern
+      // ibrido Sanity legacy + Cloudinary (2026-05-16). Tutte le foto
+      // caricate via il plugin sanity-plugin-cloudinary vivono qui.
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
       },
     ],
   },

@@ -97,10 +97,19 @@ export const gallery = defineType({
           ),
     }),
     defineField({
-      name: "images",
-      title: "Immagini dell'album",
+      name: "cloudinaryImages",
+      title: "Immagini dell'album (Cloudinary — consigliato)",
       description:
-        "Trascina N foto contemporaneamente in quest'area per caricarle in blocco. L'ordine di visualizzazione nel viewer pubblico segue la DATA DI SCATTO (EXIF DateTimeOriginal) in ordine crescente, con fallback sulla data di caricamento se l'EXIF manca. Niente bisogno di riordinare a mano: carica tutto e Sanity ordina.",
+        "Storage esterno Cloudinary (25 GB free vs 5 GB Sanity). Per ogni nuova foto: clicca 'Add item', poi 'Browse Cloudinary library' nel popup, e nel widget Cloudinary fai bulk upload trascinando N foto. Le foto vivono su cdn Cloudinary, il sito le serve direttamente da li' senza pesare sullo storage Sanity. Per le foto vecchie caricate prima della migrazione resta disponibile il campo 'Immagini dell'album (Sanity — legacy)' qui sotto: il sito renderizza entrambi indistintamente. Da preferire SEMPRE Cloudinary per i nuovi album.",
+      type: "array",
+      fieldset: "contenuto",
+      of: [{ type: "cloudinary.asset" }],
+    }),
+    defineField({
+      name: "images",
+      title: "Immagini dell'album (Sanity — legacy)",
+      description:
+        "Storage interno Sanity (5 GB free, condivisi con altri asset del sito). Da utilizzare SOLO se non si vuole/può usare Cloudinary. Trascina N foto in quest'area per caricarle in blocco. L'ordine di visualizzazione nel viewer pubblico segue la DATA DI SCATTO (EXIF DateTimeOriginal) in ordine crescente, con fallback sulla data di caricamento se l'EXIF manca. Le foto gia' caricate qui prima della migrazione Cloudinary restano e funzionano regolarmente.",
       type: "array",
       fieldset: "contenuto",
       // layout:'grid' mostra le miniature come griglia visuale invece

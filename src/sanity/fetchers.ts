@@ -910,6 +910,28 @@ export type GalleryImageItem = SanityImageRef & {
   assetCreatedAt: string | null;
 };
 
+/**
+ * Immagine Cloudinary su un album: subset del payload Cloudinary
+ * widget che ci interessa per il rendering.
+ * - public_id: identifier univoco (es. 'orbassano/match-2024-12-08/IMG_2845')
+ * - secure_url: URL diretto al CDN Cloudinary
+ * - width/height: dimensioni native (per next/image aspect ratio)
+ * - format: estensione originale (jpg, png, webp...)
+ * - createdAt: data di upload Cloudinary (fallback se EXIF manca)
+ * - context: Cloudinary custom metadata, possiamo metterci alt/caption
+ *   via il widget upload.
+ */
+export type CloudinaryImageItem = {
+  _key: string;
+  public_id: string;
+  secure_url: string;
+  width: number | null;
+  height: number | null;
+  format: string | null;
+  createdAt: string | null;
+  context: { custom?: { alt?: string; caption?: string } } | null;
+};
+
 export type GalleryDetail = {
   _id: string;
   title: string;
@@ -918,7 +940,10 @@ export type GalleryDetail = {
   category: GalleryCategory | null;
   coverImage: SanityImageRef | null;
   coverAlt: string | null;
-  images: GalleryImageItem[];
+  /** Foto su storage Sanity (legacy, pre-migrazione Cloudinary). */
+  images: GalleryImageItem[] | null;
+  /** Foto su storage Cloudinary (nuova default). */
+  cloudinaryImages: CloudinaryImageItem[] | null;
 };
 
 /**

@@ -28,6 +28,7 @@
     "react-email": "^6.1.1",
     "resend": "^6.12.3",
     "sanity": "^5.24.0",
+    "sanity-plugin-cloudinary": "^1.4.1",
     "tailwind-merge": "^3.5.0",
     "tsx": "^4.21.0"
   },

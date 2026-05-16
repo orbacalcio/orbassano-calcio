@@ -74,15 +74,18 @@ export const galleriesTotalCountQuery = defineQuery(`
   count(*[_type == "gallery" && defined(slug.current)])
 `);
 
-// Singolo album per /gallery/[slug]. Asset reference completi
-// con metadata + alt per il viewer. Ogni immagine porta:
-// - dimensions (width/height) → next/image aspect ratio nativo, niente
-//   layout shift, mosaico rispetta i rapporti originali (16:9, 4:5, 1:1).
-// - lqip → placeholder blur durante il caricamento.
-// - exifDateTime → data di scatto dall'EXIF della macchina/telefono.
-// - assetCreatedAt → fallback per foto senza EXIF (screenshot, foto
-//   editate che hanno perso i metadati).
-// Ordinamento finale: data scatto ASC (cronologico crescente).
+// Singolo album per /gallery/[slug]. Carica due sorgenti foto:
+// 1) Sanity legacy (campo `images`): asset reference con metadata
+//    EXIF/LQIP/dimensions estratti.
+// 2) Cloudinary (campo `cloudinaryImages`): object inline col
+//    public_id, secure_url, dimensioni, e info da Cloudinary widget.
+// Il viewer unisce i due array e ordina cronologicamente.
+//
+// Ogni immagine Sanity porta:
+// - dimensions (width/height) → next/image aspect ratio nativo
+// - lqip → placeholder blur
+// - exifDateTime → data scatto EXIF per ordinamento
+// - assetCreatedAt → fallback senza EXIF
 export const galleryBySlugQuery = defineQuery(`
   *[_type == "gallery" && slug.current == $slug][0]{
     _id,
@@ -104,6 +107,16 @@ export const galleryBySlugQuery = defineQuery(`
       "lqip": asset->metadata.lqip,
       "exifDateTime": asset->metadata.exif.DateTimeOriginal,
       "assetCreatedAt": asset->_createdAt
+    },
+    "cloudinaryImages": cloudinaryImages[]{
+      _key,
+      "public_id": asset.public_id,
+      "secure_url": asset.secure_url,
+      "width": asset.width,
+      "height": asset.height,
+      "format": asset.format,
+      "createdAt": asset.created_at,
+      "context": asset.context
     }
   }
 `);

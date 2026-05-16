@@ -1,6 +1,7 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { cloudinarySchemaPlugin } from "sanity-plugin-cloudinary";
 import { ClearGalleryAction } from "@/sanity/actions/clearGalleryAction";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemaTypes";
@@ -44,6 +45,13 @@ export default defineConfig({
     structureTool({ structure }),
     // Vision: query GROQ live nello Studio (utile in dev e per l'admin del club)
     visionTool({ defaultApiVersion: apiVersion }),
+    // Cloudinary: storage immagini esterno (25GB credit free vs 5GB
+    // Sanity). Registra il tipo `cloudinary.asset` riusabile dagli
+    // schema. La configurazione cloud_name/api_key vive nella console
+    // Cloudinary (Media Library Settings → API Keys) e va anche
+    // riportata nelle env vars Vercel come NEXT_PUBLIC_CLOUDINARY_*
+    // per il rendering lato sito. Vedi .env.local.example.
+    cloudinarySchemaPlugin(),
   ],
   document: {
     // Document Actions custom. Le actions standard (Publish, Discard,

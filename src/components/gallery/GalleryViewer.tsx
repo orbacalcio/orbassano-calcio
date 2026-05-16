@@ -4,10 +4,30 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { urlFor } from "@/sanity/image";
-import type { GalleryImageItem } from "@/sanity/fetchers";
 import { Z } from "@/lib/z-indexes";
 import { cn } from "@/lib/cn";
+
+/**
+ * Photo unificata che astrae le due sorgenti possibili:
+ * - 'sanity': asset legacy su CDN Sanity
+ * - 'cloudinary': asset nuovo su CDN Cloudinary
+ *
+ * Il viewer non si interessa della sorgente al rendering: usa
+ * src/srcFull/width/height/alt/caption/lqip in modo uniforme. Le
+ * funzioni che costruiscono l'URL diversificano in base al source
+ * tipo (urlFor vs buildCloudinaryUrl).
+ */
+export type UnifiedPhoto = {
+  key: string;
+  src: string; // URL preview (1200px wide)
+  srcFull: string; // URL full-res (2000px) per il lightbox zoom 2x
+  width: number;
+  height: number;
+  alt: string | null;
+  caption: string | null;
+  lqip: string | null;
+  source: "sanity" | "cloudinary";
+};
 
 /**
  * Viewer client di un singolo album.
@@ -41,11 +61,11 @@ import { cn } from "@/lib/cn";
  */
 
 type Props = {
-  images: GalleryImageItem[];
+  photos: UnifiedPhoto[];
   albumTitle: string;
 };
 
-export function GalleryViewer({ images, albumTitle }: Props) {
+export function GalleryViewer({ photos: images, albumTitle }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [zoomed, setZoomed] = useState(false);
   const reduced = useReducedMotion();
@@ -108,12 +128,9 @@ export function GalleryViewer({ images, albumTitle }: Props) {
     <>
       <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 [&>figure]:mb-4 [&>figure]:break-inside-avoid">
         {images.map((img, i) => {
-          const src = urlFor(img).width(1200).fit("max").url();
-          const w = img.width ?? 1200;
-          const h = img.height ?? 800;
           return (
             <figure
-              key={img._key}
+              key={img.key}
               className="overflow-hidden rounded-xl bg-surface-1"
             >
               <button
@@ -124,10 +141,10 @@ export function GalleryViewer({ images, albumTitle }: Props) {
                 className="focus-visible:outline-brand-gold block w-full cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-[-4px]"
               >
                 <Image
-                  src={src}
+                  src={img.src}
                   alt={img.alt ?? albumTitle}
-                  width={w}
-                  height={h}
+                  width={img.width}
+                  height={img.height}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   placeholder={img.lqip ? "blur" : "empty"}
                   blurDataURL={img.lqip ?? undefined}
@@ -232,13 +249,14 @@ export function GalleryViewer({ images, albumTitle }: Props) {
                   : "cursor-zoom-in",
               )}
             >
-              {/* La foto stessa: src 2000px wide per qualità adeguata
-                  al zoom 2x. fit=max preserva l'aspect ratio originale. */}
+              {/* La foto stessa: srcFull contiene la variante 2000px
+                  pre-costruita lato sorgente (Sanity urlFor o Cloudinary
+                  transform). fit=max preserva aspect ratio originale. */}
               <Image
-                src={urlFor(selected).width(2000).fit("max").url()}
+                src={selected.srcFull}
                 alt={selected.alt ?? albumTitle}
-                width={selected.width ?? 2000}
-                height={selected.height ?? 1333}
+                width={selected.width}
+                height={selected.height}
                 priority
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
