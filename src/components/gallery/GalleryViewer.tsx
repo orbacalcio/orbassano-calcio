@@ -68,13 +68,26 @@ type Props = {
 export function GalleryViewer({ photos: images, albumTitle }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [zoomed, setZoomed] = useState(false);
+  // Dimensioni viewport per calcolare i bounds del drag pan in modo
+  // generoso: quando foto scalata 2x, l'utente puo' pannare fino a
+  // ~50% di viewport in qualunque direzione → vede tutti i bordi
+  // della foto zoomata. Senza window-size, dragConstraints di
+  // framer-motion confonde le coordinate post-scale e blocca il pan
+  // a pochi centimetri (bug noto framer-motion con scale + drag).
+  const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const reduced = useReducedMotion();
-  // Ref del backdrop del lightbox: serve a framer-motion come
-  // dragConstraints per limitare il pan della foto zoomata. Quando
-  // l'utente trascina, framer-motion calcola i bounds dal rect del
-  // container vs il rect del child scalato 2x, permettendo pan solo
-  // fin dove la foto esce dal viewport e bloccando oltre.
+  // Ref del backdrop del lightbox (mantenuto per ESC/click outside).
   const dragContainerRef = useRef<HTMLDivElement>(null);
+
+  // Update viewport size on mount + window resize.
+  useEffect(() => {
+    function update() {
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
+    }
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   const close = useCallback(() => {
     setSelectedIndex(null);
@@ -238,8 +251,22 @@ export function GalleryViewer({ photos: images, albumTitle }: Props) {
               animate={{ scale: zoomed ? 2 : 1, x: zoomed ? undefined : 0, y: zoomed ? undefined : 0 }}
               transition={{ type: "tween", duration: reduced ? 0 : 0.3, ease: "easeOut" }}
               drag={zoomed}
-              dragConstraints={dragContainerRef}
-              dragElastic={0.05}
+              // Bounds calcolati su viewport (non sul container ref):
+              // a scale 2x l'utente puo' pannare fino a meta' viewport
+              // per direzione → vede tutti i bordi della foto. Le
+              // coordinate sono pre-scale (framer-motion). Bounds 0 se
+              // non zoomata → niente pan accidentale.
+              dragConstraints={
+                zoomed
+                  ? {
+                      left: -viewport.w / 2,
+                      right: viewport.w / 2,
+                      top: -viewport.h / 2,
+                      bottom: viewport.h / 2,
+                    }
+                  : { left: 0, right: 0, top: 0, bottom: 0 }
+              }
+              dragElastic={0.1}
               dragMomentum={false}
               onTap={() => setZoomed((z) => !z)}
               className={cn(
