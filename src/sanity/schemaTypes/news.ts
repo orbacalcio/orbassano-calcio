@@ -149,13 +149,11 @@ export const news = defineType({
       ],
     }),
     defineField({
-      name: "videoUrl",
-      title: "Video (URL YouTube o Vimeo)",
+      name: "video",
+      title: "Video (Cloudinary)",
       description:
-        "URL completo di un video YouTube (es. https://www.youtube.com/watch?v=...) o Vimeo (es. https://vimeo.com/...). Il video viene mostrato nella pagina news SOPRA la galleria foto. Lascia vuoto se non c'e' video.",
-      type: "url",
-      validation: (r) =>
-        r.uri({ scheme: ["http", "https"], allowRelative: false }),
+        "Carica un video su Cloudinary cliccando 'Browse Cloudinary library' e seleziona/uploada il file (mp4, mov, webm). Il video viene mostrato nella pagina news SOPRA la galleria foto, con player HTML5 nativo (controls, lazy-load). Lascia vuoto se non c'e' video.",
+      type: "cloudinary.asset",
     }),
     defineField({
       name: "gallery",

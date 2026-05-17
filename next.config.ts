@@ -80,10 +80,11 @@ const cspReportOnly = [
   "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity-cdn.com https://w.behold.so https://behold.so https://*.cdninstagram.com https://vercel.live wss://*.pusher.com https://api.cloudinary.com https://res.cloudinary.com",
   // frame-src: Instagram embed (Behold widget), Behold direct,
   // Vercel Live (toolbar comments preview), Cloudinary Media Library
-  // widget (apre iframe verso media-library.cloudinary.com per browse),
-  // YouTube + Vimeo per embed video nella pagina news (NewsVideo).
-  "frame-src 'self' https://www.instagram.com https://w.behold.so https://vercel.live https://media-library.cloudinary.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
-  "media-src 'self' https://cdn.sanity.io",
+  // widget (apre iframe verso media-library.cloudinary.com per browse).
+  "frame-src 'self' https://www.instagram.com https://w.behold.so https://vercel.live https://media-library.cloudinary.com",
+  // media-src: Sanity CDN (audio/video legacy) + Cloudinary
+  // (video news uploadati via plugin, vedi NewsVideo).
+  "media-src 'self' https://cdn.sanity.io https://res.cloudinary.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

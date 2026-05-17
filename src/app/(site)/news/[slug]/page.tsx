@@ -197,17 +197,17 @@ export default async function NewsDetailPage(props: {
         </Container>
       </div>
 
-      {/* Video YouTube/Vimeo opzionale: renderizzato SOPRA la
-          galleria foto se presente nel CMS. Se l'URL non e' un
-          provider supportato, NewsVideo ritorna null (graceful). */}
-      {news.videoUrl && (
+      {/* Video Cloudinary opzionale: renderizzato SOPRA la galleria
+          foto se presente nel CMS. NewsVideo gestisce graceful fail
+          se l'asset Cloudinary e' incompleto (no secure_url). */}
+      {news.video?.secure_url && (
         <Container className="border-border/40 border-t py-16" size="wide">
           <div className="mb-8 flex flex-col gap-2">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
               Video
             </span>
           </div>
-          <NewsVideo url={news.videoUrl} title={news.title} />
+          <NewsVideo video={news.video} title={news.title} />
         </Container>
       )}
 

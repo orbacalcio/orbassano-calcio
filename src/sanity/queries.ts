@@ -519,7 +519,15 @@ export const newsBySlugQuery = defineQuery(`
     "cover": cover.asset->url,
     "coverLqip": cover.asset->metadata.lqip,
     body,
-    videoUrl,
+    "video": video{
+      public_id,
+      secure_url,
+      format,
+      width,
+      height,
+      resource_type,
+      duration
+    },
     "gallery": gallery[]{
       "url": asset->url,
       "lqip": asset->metadata.lqip,

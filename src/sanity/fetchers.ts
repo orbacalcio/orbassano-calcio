@@ -425,6 +425,16 @@ export type NewsGalleryImage = {
   caption: string | null;
 };
 
+export type NewsVideoAsset = {
+  public_id: string | null;
+  secure_url: string | null;
+  format: string | null;
+  width: number | null;
+  height: number | null;
+  resource_type: string | null;
+  duration: number | null;
+};
+
 export type NewsDetail = {
   _id: string;
   title: string;
@@ -435,7 +445,7 @@ export type NewsDetail = {
   cover: string | null;
   coverLqip: string | null;
   body: PortableTextBlock[] | null;
-  videoUrl: string | null;
+  video: NewsVideoAsset | null;
   gallery: NewsGalleryImage[] | null;
   author: string | null;
   isPinned: boolean | null;
