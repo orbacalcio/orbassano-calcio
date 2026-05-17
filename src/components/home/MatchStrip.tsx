@@ -257,28 +257,24 @@ export async function MatchStrip() {
       {/* CTA "Calendario e risultati" tight contro il box navy: stesso
           pattern di AllContentLink in NewsGrid — label uppercase +
           freccia incorniciate da due righe orizzontali sottili
-          (stile juventus.com), allineato a destra. */}
+          (stile juventus.com), allineato a destra. Niente hover. */}
       <Container size="wide" className="mt-8 md:mt-10">
         <div className="flex justify-end">
           <Link
             href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
-            className="group focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <span
               aria-hidden
-              className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+              className="bg-light-ink-mid/40 block h-px"
             />
-            <span className="font-display text-light-ink-hi group-hover:text-brand-gold flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+            <span className="font-display text-light-ink-hi flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase">
               <span>Calendario e risultati</span>
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-300 group-hover:translate-x-0.5"
-                aria-hidden
-              />
+              <ArrowRight size={14} aria-hidden />
             </span>
             <span
               aria-hidden
-              className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+              className="bg-light-ink-mid/40 block h-px"
             />
           </Link>
         </div>

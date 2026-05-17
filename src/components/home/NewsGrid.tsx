@@ -115,31 +115,26 @@ function EmptyState() {
 /**
  * Link "Tutti i contenuti" sotto la grid: stile juventus.com — label
  * uppercase con freccia a destra incorniciata da due righe orizzontali
- * sottili (sopra + sotto). Su hover le righe si tingono gold insieme
- * alla label e alla freccia (che trasla leggermente verso destra).
+ * sottili (sopra + sotto). Niente hover state per scelta editoriale.
  */
 function AllContentLink() {
   return (
     <div className="mt-8 flex justify-end md:mt-10">
       <Link
         href="/news"
-        className="group focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
+        className="focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
       >
         <span
           aria-hidden
-          className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+          className="bg-light-ink-mid/40 block h-px"
         />
-        <span className="font-display text-light-ink-hi group-hover:text-brand-gold flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+        <span className="font-display text-light-ink-hi flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase">
           <span>Tutti i contenuti</span>
-          <ArrowRight
-            size={14}
-            className="transition-transform duration-300 group-hover:translate-x-0.5"
-            aria-hidden
-          />
+          <ArrowRight size={14} aria-hidden />
         </span>
         <span
           aria-hidden
-          className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+          className="bg-light-ink-mid/40 block h-px"
         />
       </Link>
     </div>
