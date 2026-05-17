@@ -255,24 +255,31 @@ export async function MatchStrip() {
         </Container>
       </div>
       {/* CTA "Calendario e risultati" tight contro il box navy: stesso
-          pattern di AllContentLink in NewsGrid (cerchio bordato +
-          freccia + label uppercase, allineato a destra). */}
+          pattern di AllContentLink in NewsGrid — label uppercase +
+          freccia incorniciate da due righe orizzontali sottili
+          (stile juventus.com), allineato a destra. */}
       <Container size="wide" className="mt-8 md:mt-10">
         <div className="flex justify-end">
           <Link
             href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
-            className="group focus-visible:outline-brand-gold inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="group focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
           >
-            <span className="border-light-ink-mid/40 group-hover:border-brand-gold group-hover:bg-brand-gold/10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300">
+            <span
+              aria-hidden
+              className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+            />
+            <span className="font-display text-light-ink-hi group-hover:text-brand-gold flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+              <span>Calendario e risultati</span>
               <ArrowRight
-                size={16}
-                className="text-light-ink-hi group-hover:text-brand-gold transition-all duration-300 group-hover:translate-x-0.5"
+                size={14}
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
                 aria-hidden
               />
             </span>
-            <span className="font-display text-light-ink-hi group-hover:text-brand-gold text-sm font-bold tracking-[0.15em] uppercase transition-colors">
-              Calendario e risultati
-            </span>
+            <span
+              aria-hidden
+              className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+            />
           </Link>
         </div>
       </Container>

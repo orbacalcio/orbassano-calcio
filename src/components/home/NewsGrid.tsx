@@ -113,27 +113,34 @@ function EmptyState() {
 }
 
 /**
- * Link "Tutti i contenuti" sotto la grid: stile juventus.com — freccia
- * dentro un cerchio bordato (cornicetta) + label in maiuscolo a destra.
- * Su hover: il cerchio si tinge gold e la freccia trasla a destra.
+ * Link "Tutti i contenuti" sotto la grid: stile juventus.com — label
+ * uppercase con freccia a destra incorniciata da due righe orizzontali
+ * sottili (sopra + sotto). Su hover le righe si tingono gold insieme
+ * alla label e alla freccia (che trasla leggermente verso destra).
  */
 function AllContentLink() {
   return (
     <div className="mt-8 flex justify-end md:mt-10">
       <Link
         href="/news"
-        className="group focus-visible:outline-brand-gold inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+        className="group focus-visible:outline-brand-gold inline-flex flex-col items-stretch gap-2.5 py-1 focus-visible:outline-2 focus-visible:outline-offset-4"
       >
-        <span className="border-light-ink-mid/40 group-hover:border-brand-gold group-hover:bg-brand-gold/10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300">
+        <span
+          aria-hidden
+          className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+        />
+        <span className="font-display text-light-ink-hi group-hover:text-brand-gold flex items-center gap-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+          <span>Tutti i contenuti</span>
           <ArrowRight
-            size={16}
-            className="text-light-ink-hi group-hover:text-brand-gold transition-all duration-300 group-hover:translate-x-0.5"
+            size={14}
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
             aria-hidden
           />
         </span>
-        <span className="font-display text-light-ink-hi group-hover:text-brand-gold text-sm font-bold tracking-[0.15em] uppercase transition-colors">
-          Tutti i contenuti
-        </span>
+        <span
+          aria-hidden
+          className="bg-light-ink-mid/40 group-hover:bg-brand-gold block h-px transition-colors duration-300"
+        />
       </Link>
     </div>
   );
