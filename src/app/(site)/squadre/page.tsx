@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
 import { fetchTeamsList, type TeamSummary } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
@@ -16,34 +18,75 @@ export const metadata: Metadata = {
 // La Scuola Calcio non e' in elenco: oggi e' gestita da Sporting
 // Orbassano e fuori dal tesseramento del club. Quando rientrera',
 // basta aggiungere la sezione qui (e riattivare la squadra in Studio).
+// Sezioni della pagina /squadre: la `category` corrisponde al campo
+// `category` dei documenti team in Sanity e determina lo split delle
+// card; `cols` e' layout-only (grid template per ciascuna categoria).
+// Eyebrow + title (h2) sono override-abili da Studio via singleton
+// settings → fieldset "Pagina /squadre" (squadrePageSections). I
+// valori qui sotto restano come fallback statico se il singleton non
+// e' popolato o il fetch fallisce.
 const SECTIONS: Array<{
   category: TeamSummary["category"];
-  number: string;
-  eyebrow: string;
+  fallbackEyebrow: string;
+  fallbackTitle: string;
   cols: string;
 }> = [
   {
     category: "Prima Squadra",
-    number: "01",
-    eyebrow: "01 — La punta di diamante",
+    fallbackEyebrow: "01 — La punta di diamante",
+    fallbackTitle: "Prima Squadra",
     cols: "lg:grid-cols-3",
   },
   {
     category: "Juniores",
-    number: "02",
-    eyebrow: "02 — Il ponte verso il senior",
+    fallbackEyebrow: "02 — Il ponte verso il senior",
+    fallbackTitle: "Juniores",
     cols: "lg:grid-cols-3",
   },
   {
     category: "Settore Giovanile",
-    number: "03",
-    eyebrow: "03 — Da qui passa il futuro",
+    fallbackEyebrow: "03 — Da qui passa il futuro",
+    fallbackTitle: "Settore Giovanile",
     cols: "sm:grid-cols-2 lg:grid-cols-4",
   },
 ];
 
+type SquadrePageSettings = {
+  squadrePageSections?: Array<{
+    category?: string | null;
+    eyebrow?: string | null;
+    title?: string | null;
+  }> | null;
+};
+
+async function fetchSquadrePageSettings(): Promise<SquadrePageSettings> {
+  try {
+    const data = await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    return (data ?? {}) as SquadrePageSettings;
+  } catch {
+    return {};
+  }
+}
+
 export default async function SquadrePage() {
-  const teams = await fetchTeamsList();
+  const [teams, settings] = await Promise.all([
+    fetchTeamsList(),
+    fetchSquadrePageSettings(),
+  ]);
+  const cmsSections = settings.squadrePageSections ?? [];
+  const sections = SECTIONS.map((s) => {
+    const cms = cmsSections.find((c) => c.category === s.category);
+    return {
+      category: s.category,
+      eyebrow: cms?.eyebrow?.trim() || s.fallbackEyebrow,
+      title: cms?.title?.trim() || s.fallbackTitle,
+      cols: s.cols,
+    };
+  });
 
   return (
     <>
@@ -73,7 +116,7 @@ export default async function SquadrePage() {
           card squadre interne scure (bg-surface-1) — pattern home. */}
       <section className="bg-light-bg-0">
         <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
-          {SECTIONS.map(({ category, eyebrow, cols }) => {
+          {sections.map(({ category, eyebrow, title, cols }) => {
             const items = teams.filter((t) => t.category === category);
             if (items.length === 0) return null;
             return (
@@ -81,7 +124,7 @@ export default async function SquadrePage() {
                 key={category}
                 tone="light"
                 eyebrow={eyebrow}
-                title={category}
+                title={title}
               >
                 <div className={`mt-2 grid grid-cols-1 gap-4 ${cols}`}>
                   {items.map((t) => (

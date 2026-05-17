@@ -165,6 +165,9 @@ export const settingsQuery = defineQuery(`
     "teamsCardsItems": teamsCardsItems[]{
       title, description
     },
+    "squadrePageSections": squadrePageSections[]{
+      category, eyebrow, title
+    },
     mazzolaEyebrow,
     mazzolaTitle,
     mazzolaBody,

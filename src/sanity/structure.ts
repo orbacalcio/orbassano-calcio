@@ -179,9 +179,34 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .title("Squadre")
                 .icon(Users)
                 .child(
-                  S.documentTypeList("team")
+                  S.list()
                     .title("Squadre")
-                    .defaultOrdering([{ field: "order", direction: "asc" }]),
+                    .items([
+                      S.listItem()
+                        .title("Anagrafica squadre")
+                        .icon(Users)
+                        .child(
+                          S.documentTypeList("team")
+                            .title("Squadre")
+                            .defaultOrdering([
+                              { field: "order", direction: "asc" },
+                            ]),
+                        ),
+                      // Shortcut diretto al fieldset "Pagina /squadre"
+                      // del singleton settings: l'utente edita eyebrow
+                      // + titolo h2 delle 3 sezioni (Prima Squadra /
+                      // Juniores / Settore Giovanile) senza scendere
+                      // a Impostazioni globali e cercare il fieldset.
+                      S.listItem()
+                        .title("Impostazioni pagina /squadre")
+                        .icon(Cog)
+                        .child(
+                          S.editor()
+                            .id("settings-squadre-page")
+                            .schemaType("settings")
+                            .documentId("settings"),
+                        ),
+                    ]),
                 ),
               S.listItem()
                 .title("Competizioni")

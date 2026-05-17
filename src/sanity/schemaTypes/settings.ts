@@ -35,6 +35,13 @@ export const settings = defineType({
         "Eyebrow, titolo, paragrafo descrittivo e lista dei campioni che si sono allenati al Mazzola. Mostrato sulla pagina /societa/impianti.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "squadrePage",
+      title: "Pagina /squadre — eyebrow e titoli sezioni",
+      description:
+        "Per ciascuna delle 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile) imposta l'eyebrow numerato (es. '01 — La punta di diamante') e il titolo h2 della sezione. Le card squadre dentro ogni sezione restano popolate dai documenti 'team'.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -226,6 +233,64 @@ export const settings = defineType({
           .max(3)
           .warning(
             "Il layout TeamsCards e' progettato per 3 card. Aggiungerne di piu' rompe la grid.",
+          ),
+    }),
+    // --- Pagina /squadre — eyebrow e titoli sezioni -------------------------
+    defineField({
+      name: "squadrePageSections",
+      title: "Sezioni della pagina /squadre (3 voci ordinate)",
+      description:
+        "Per ogni macro-categoria scegli la 'Categoria' (Prima Squadra / Juniores / Settore Giovanile), l'eyebrow editoriale numerato e il titolo h2. Le card delle squadre vengono filtrate automaticamente in base alla categoria. Riordinabili con drag-and-drop.",
+      type: "array",
+      fieldset: "squadrePage",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "squadrePageSection",
+          title: "Sezione",
+          fields: [
+            defineField({
+              name: "category",
+              title: "Categoria",
+              description:
+                "Chiave usata per filtrare le squadre da mostrare nella sezione. Deve corrispondere ESATTAMENTE al valore 'category' dei documenti team (Prima Squadra / Juniores / Settore Giovanile).",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Prima Squadra", value: "Prima Squadra" },
+                  { title: "Juniores", value: "Juniores" },
+                  { title: "Settore Giovanile", value: "Settore Giovanile" },
+                ],
+              },
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "eyebrow",
+              title: "Eyebrow",
+              description:
+                "Riga piccola sopra il titolo, in gold uppercase. Esempi: '01 — La punta di diamante', '02 — Il ponte verso il senior', '03 — Da qui passa il futuro'.",
+              type: "string",
+              validation: (r) => r.required().max(80),
+            }),
+            defineField({
+              name: "title",
+              title: "Titolo (h2)",
+              description:
+                "Titolo grande della sezione mostrato sotto l'eyebrow (es. 'Prima Squadra').",
+              type: "string",
+              validation: (r) => r.required().max(60),
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "eyebrow" },
+          },
+        }),
+      ],
+      validation: (r) =>
+        r
+          .max(3)
+          .warning(
+            "La pagina /squadre e' tarata su 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile).",
           ),
     }),
     // --- Box "Il Mazzola" (pagina Impianti) ---------------------------------
