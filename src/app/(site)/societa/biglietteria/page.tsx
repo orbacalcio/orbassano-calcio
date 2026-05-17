@@ -185,11 +185,11 @@ export default function BiglietteriaPage() {
                   Email segreteria
                 </span>
                 <a
-                  href="mailto:info@orbassanocalcio.com"
+                  href="mailto:segreteria@orbassanocalcio.com"
                   className="text-ink-hi hover:text-brand-gold flex items-center gap-2 text-base transition-colors"
                 >
                   <Mail size={14} aria-hidden />
-                  info@orbassanocalcio.com
+                  segreteria@orbassanocalcio.com
                 </a>
               </li>
               <li className="flex flex-col gap-2">
@@ -247,36 +247,54 @@ export default function BiglietteriaPage() {
             </p>
           </div>
 
-          <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-5 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
-            <div className="flex flex-col gap-2">
-              <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
-                Sostieni il club
+          {/* Box "Contatto dedicato": rimpiazza il vecchio box 5×1000.
+              Il box destro della sezione "Gruppi e abbonamenti" ora
+              focalizza sul canale segreteria per accordi gruppi/scuole/
+              aziende. Layout: eyebrow + paragrafo + email mailto
+              prominente in font-mono + lista 4 destinatari tipici +
+              CTA Contattaci pieno. */}
+          <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-7 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
+            <div className="flex flex-col gap-3">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                Contatto dedicato
               </span>
-              <span className="text-ink-hi text-base leading-relaxed">
-                Donare il 5×1000 non costa nulla: una firma nella
-                dichiarazione dei redditi diventa nuovi materiali per il
-                settore giovanile.
-              </span>
-              <span className="text-brand-gold font-mono mt-1 text-3xl font-medium tracking-[0.05em] sm:text-4xl">
-                95634370019
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/5x1000"
-                className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+              <p className="text-ink-mid text-base leading-relaxed">
+                Per ingressi di gruppo, accoglienza di scuole calcio
+                ospiti e abbonamenti su misura, scrivi alla segreteria
+                del club:
+              </p>
+              <a
+                href="mailto:segreteria@orbassanocalcio.com"
+                className="text-ink-hi hover:text-brand-gold font-mono text-xl leading-tight font-medium tracking-[0.02em] break-all transition-colors sm:text-2xl"
               >
-                <Heart size={16} />
-                Come donare
-              </Link>
-              <Link
-                href="/contatti"
-                className="border-border text-ink-mid hover:border-brand-gold hover:text-ink-hi inline-flex items-center gap-2.5 rounded-full border px-6 py-3 text-sm font-semibold transition-colors"
-              >
-                Contattaci
-                <ArrowRight size={14} />
-              </Link>
+                segreteria@orbassanocalcio.com
+              </a>
             </div>
+
+            <ul className="text-ink-mid grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {[
+                "Scuole calcio ospiti",
+                "Aziende e sponsor",
+                "Associazioni locali",
+                "Gruppi tifosi e famiglie",
+              ].map((label) => (
+                <li key={label} className="flex items-start gap-2 text-sm">
+                  <span
+                    aria-hidden
+                    className="bg-brand-gold mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                  />
+                  <span>{label}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link
+              href="/contatti"
+              className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              Contattaci
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </Container>
       </section>
