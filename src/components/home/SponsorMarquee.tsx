@@ -97,18 +97,15 @@ export async function SponsorMarquee() {
         </h2>
       </Container>
 
-      {/* Strip chiara (#f2f4f8 = light-bg-0) che contiene SOLO i loghi
-          in scorrimento. Stesso colore della banda news homepage e del
-          tile sponsor in topbar: continuita' visiva su tutta la
-          gerarchia "light" del sito. */}
-      <div className="bg-light-bg-0 relative mt-12 overflow-hidden py-8">
+      {/* Strip BIANCA che contiene SOLO i loghi in scorrimento */}
+      <div className="relative mt-12 overflow-hidden bg-white py-8">
         <div
           aria-hidden
-          className="from-light-bg-0 absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r to-transparent"
+          className="absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-white to-transparent"
         />
         <div
           aria-hidden
-          className="from-light-bg-0 absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l to-transparent"
+          className="absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-white to-transparent"
         />
         {/* hover sull'UL → pausa marquee (animation-play-state). Cosi'
             chi vuole leggere bene un logo non lo vede scappare via.
