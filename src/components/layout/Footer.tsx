@@ -12,7 +12,6 @@ import {
   type SocialLinks,
 } from "@/components/social/SocialIcons";
 import { Container } from "@/components/ui/Container";
-import { FEATURES } from "@/lib/features";
 
 /**
  * Footer dark del sito pubblico — pattern juventus.com:
@@ -112,10 +111,10 @@ function buildSections(opts: {
   // (Squadre, Sostieni, Legale). Storia / Organigramma / Impianti /
   // Codice Etico tolti dal footer per evitare cascate verticali
   // diverse tra colonne — restano linkati internamente da /societa
-  // e dal NavigationDrawer hamburger.
-  // NB: Trasparenza temporaneamente NON mostrata in footer (richiesta
-  // utente 2026-05-11). Segnalazioni resta condizionato al flag
-  // governance.
+  // (hub cards) e dal NavigationDrawer hamburger.
+  // Segnalazioni: NON viene piu' inclusa nel footer anche con flag
+  // governance ON (richiesta utente 2026-05-17). Resta accessibile
+  // dalla pagina /societa hub e dal Drawer hamburger.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
     { href: "/gallery", label: "Gallery" },
@@ -123,9 +122,6 @@ function buildSections(opts: {
     { href: "/societa/storia", label: "Storia" },
     { href: "/societa/biglietteria", label: "Biglietteria" },
   ];
-  if (FEATURES.governanceSection) {
-    sezioniItems.push({ href: "/societa/segnalazioni", label: "Segnalazioni" });
-  }
 
   return [
     {
