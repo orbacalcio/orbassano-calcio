@@ -121,6 +121,14 @@ export async function MatchStrip() {
   // (stagione archiviata mostra il campionato in cui si e' giocato).
   const lastCompetitionLabel = buildCompetitionLabel(lastMatch, settings);
   const nextCompetitionLabel = buildCompetitionLabel(nextMatch, settings);
+  // Countdown visibile SOLO se c'e' prossima partita inserita con data
+  // ufficiale (no TBD). In tutti gli altri casi (no match, data TBD)
+  // lo slot 3 viene rimosso e la grid si chiude a 3 colonne: lo slot
+  // classifica/statistiche occupa il posto.
+  const showCountdown = Boolean(nextMatch && !nextMatch.isDateTbd);
+  const gridClass = showCountdown
+    ? "grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1.1fr_1fr]"
+    : "grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]";
 
   return (
     <section
@@ -129,7 +137,7 @@ export async function MatchStrip() {
     >
       <div className="border-border bg-surface-1 relative overflow-hidden border-y">
         <Container className="relative" size="wide">
-          <div className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1.1fr_1fr]">
+          <div className={gridClass}>
             {/* Slot 1 — ULTIMO RISULTATO (40%) */}
             <div className="flex flex-col gap-4 p-8 md:p-11">
               <div className="flex flex-col gap-1.5">
@@ -202,22 +210,15 @@ export async function MatchStrip() {
 
             {/* Slot 3 — COUNTDOWN al kickoff della prossima partita.
                 Box dedicato stile juventus.com con orologio digitale
-                grande che tickka ogni secondo (client component). Se
-                niente prossima partita, slot vuoto. */}
-            <div className="border-border/40 flex flex-col items-stretch justify-center border-l border-r">
-              {nextMatch && !nextMatch.isDateTbd ? (
+                grande che tickka ogni secondo (client component).
+                Renderizzato SOLO se c'e' una prossima partita inserita
+                con data ufficiale (no TBD): grid layout si chiude a
+                3 colonne quando il countdown sparisce. */}
+            {showCountdown && nextMatch && (
+              <div className="border-border/40 flex flex-col items-stretch justify-center border-l border-r">
                 <MatchCountdown targetISO={nextMatch.date} />
-              ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-2 p-5 text-center">
-                  <span className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
-                    Countdown
-                  </span>
-                  <span className="text-ink-mid font-mono text-sm">
-                    In attesa della prossima data ufficiale.
-                  </span>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Slot 4 — CLASSIFICA + STATISTICHE impilate, con
                 attribution sprintesport in fondo. */}
