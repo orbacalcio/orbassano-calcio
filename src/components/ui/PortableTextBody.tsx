@@ -43,10 +43,17 @@ const TOKENS: Record<Variant, Tokens> = {
     heading: "text-light-ink-hi",
     strong: "text-light-ink-hi",
     blockquote: "text-light-ink-hi",
-    // brand-red sul testo del corpo news (banda chiara): contrasto
-    // forte vs il light-ink-mid del body e differenziazione netta
-    // dal testo normale. Underline al hover per riconoscibilita'.
-    link: "text-brand-red hover:text-brand-red/80",
+    // brand-red SEMPRE underline per riconoscibilita' al volo come
+    // hyperlink (anche prima del hover). `!text-brand-red` con bang
+    // perche' altrimenti perdiamo contro `.text-light-ink-hi` di
+    // <strong> quando un link e' anche grassetto (ordine alfabetico
+    // nel CSS Tailwind: brand-red < light-ink-hi vince l'ultimo).
+    // [&_strong]:!text-brand-red propaga il rosso anche allo strong
+    // interno nei casi <a><strong>...</strong></a>. font-semibold
+    // mantiene il peso bold tipico dei link news (titoli rassegna
+    // stampa). decoration-2 ispessisce l'underline brand-red.
+    link:
+      "!text-brand-red hover:!text-brand-red/80 [&_strong]:!text-brand-red font-semibold underline decoration-brand-red decoration-2 underline-offset-[3px]",
     linkDisabled: "text-light-ink-mid",
   },
 };
