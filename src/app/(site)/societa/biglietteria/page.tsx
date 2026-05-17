@@ -177,7 +177,7 @@ export default function BiglietteriaPage() {
                 <span className="text-ink-hi text-base leading-relaxed">
                   Campo a 11 omologato Serie D
                   <br />
-                  Tribuna, area parcheggio, spogliatoi
+                  Tribuna, bar, area parcheggio
                 </span>
               </li>
               <li className="flex flex-col gap-2">
