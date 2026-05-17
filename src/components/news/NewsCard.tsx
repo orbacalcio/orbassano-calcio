@@ -21,7 +21,11 @@ export function NewsCard({ news, variant = "default" }: Props) {
     <Link
       href={`/news/${news.slug.current}`}
       className={cn(
-        "group border-border bg-surface-1 hover:border-brand-gold/30 focus-visible:outline-brand-gold relative flex flex-col overflow-hidden rounded-2xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
+        // Allineato alle card news della homepage: rounded molto
+        // marcato (32-40px), niente border. Hover sfuma il bg verso
+        // surface-2 (era hover:border-gold con border, ora non c'e'
+        // piu' border quindi cambiamo affordance).
+        "group bg-surface-1 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex flex-col overflow-hidden rounded-[2rem] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 lg:rounded-[2.5rem]",
         isFeatured ? "lg:flex-row" : "",
       )}
     >
