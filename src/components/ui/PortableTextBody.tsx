@@ -43,7 +43,10 @@ const TOKENS: Record<Variant, Tokens> = {
     heading: "text-light-ink-hi",
     strong: "text-light-ink-hi",
     blockquote: "text-light-ink-hi",
-    link: "text-brand-gold hover:text-brand-gold/80",
+    // brand-red sul testo del corpo news (banda chiara): contrasto
+    // forte vs il light-ink-mid del body e differenziazione netta
+    // dal testo normale. Underline al hover per riconoscibilita'.
+    link: "text-brand-red hover:text-brand-red/80",
     linkDisabled: "text-light-ink-mid",
   },
 };
