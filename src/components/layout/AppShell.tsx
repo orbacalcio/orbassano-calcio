@@ -19,7 +19,7 @@ import { SkipLink } from "./SkipLink";
  * Router.
  *
  * Pattern desktop (≥lg) — la Topbar e' UNA sola e cambia forma:
- * - Hero visibile: Topbar 90px tra SidebarLeft 88px e SidebarRight 80px
+ * - Hero visibile: Topbar 78px tra SidebarLeft 88px e SidebarRight 80px
  * - Scrollato oltre hero: Topbar si allarga full-width, sidebar svaniscono
  * - Transizione 450ms con Framer Motion (cubic-bezier 0.4,0,0.2,1)
  *
@@ -47,7 +47,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
       <main
         id="main-content"
         tabIndex={-1}
-        className="pt-[84px] lg:pt-[90px] lg:pr-[80px] lg:pl-[88px]"
+        className="pt-[84px] lg:pt-[78px] lg:pr-[80px] lg:pl-[88px]"
       >
         {children}
       </main>

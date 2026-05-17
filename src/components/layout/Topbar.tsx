@@ -62,14 +62,13 @@ const BORDER_RGB = "31, 47, 77";
 const HERO_TILE_W = 196;
 const HERO_TILE_H = 78;
 const HERO_LOGO_MAX_H = 72;
-// SCROLLED: tile a piena altezza topbar (90px) per massimizzare la
-// presenza visiva dei loghi sponsor — sono il main revenue driver, si
-// vedono di piu'. Larghezza orizzontale invariata (168px) per non
-// rompere il layout della barra. Logo_max_h scalato a 78 (=tile - 12
-// di breathing top+bottom, ~6 cad).
+// SCROLLED: stessa altezza del tile HERO (78px) per non far "crescere"
+// la fascia navy percepita tra i due stati. Solo bg/border cambiano
+// (trasparenti → opachi). Larghezza orizzontale ridotta a 168 per
+// compattare la barra in scroll mode.
 const SCROLLED_TILE_W = 168;
-const SCROLLED_TILE_H = 90;
-const SCROLLED_LOGO_MAX_H = 78;
+const SCROLLED_TILE_H = 78;
+const SCROLLED_LOGO_MAX_H = 72;
 
 const TRANSITION_MS = 450;
 const TRANSITION_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
@@ -111,7 +110,7 @@ export function Topbar({
 
   return (
     <motion.header
-      className="fixed top-0 hidden h-[90px] items-center border-b lg:flex"
+      className="fixed top-0 hidden h-[78px] items-center border-b lg:flex"
       style={{ zIndex: Z.topbar }}
       initial={false}
       animate={{
@@ -195,8 +194,8 @@ export function Topbar({
           <Image
             src="/Logo_Orbassano_2K.png"
             alt=""
-            width={56}
-            height={79}
+            width={51}
+            height={72}
             priority
           />
         </Link>
@@ -215,8 +214,8 @@ export function Topbar({
           verticale delle social icons sotto.
           self-start → wrapper al top del topbar (Y=0).
           items-center → search centrata verticalmente nell'altezza
-          tile (78px HERO / 90px SCROLLED). In SCROLLED il tile e' a
-          piena altezza topbar (90px) e la search (h-9 = 36px) si
+          tile (78px sia HERO che SCROLLED). Il tile riempie tutta
+          l'altezza topbar (78px) e la search (h-9 = 36px) si
           ritrova a Y=27-63 = stesso Y center delle voci nav inline
           (items-center del topbar parent) → search e nav allineate. */}
       <div className="ml-auto flex items-center gap-[22px] self-start pr-[22px]">
