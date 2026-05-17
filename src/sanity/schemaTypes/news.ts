@@ -152,7 +152,7 @@ export const news = defineType({
       name: "video",
       title: "Video (Cloudinary)",
       description:
-        "Carica un video su Cloudinary cliccando 'Browse Cloudinary library' e seleziona/uploada il file (mp4, mov, webm). Il video viene mostrato nella pagina news SOPRA la galleria foto, con player HTML5 nativo (controls, lazy-load). Lascia vuoto se non c'e' video.",
+        "Carica un video su Cloudinary cliccando 'Browse Cloudinary library' (mp4, mov, webm). LIMITE FREE TIER: 100 MB per file. Se il video supera il limite, comprimilo prima con HandBrake (preset 'Web → Vimeo YouTube HQ 1080p60', bitrate ~5000 kbps) o con ffmpeg ('ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4'). Una partita di 30 min in 1080p sta tipicamente sotto 80 MB con questa compressione. Il video viene mostrato nella pagina news SOPRA la galleria foto, con player HTML5 nativo (controls, autoplay disattivato, poster auto-generato). Lascia vuoto se non c'e' video.",
       type: "cloudinary.asset",
     }),
     defineField({
