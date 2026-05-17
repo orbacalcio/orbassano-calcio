@@ -120,6 +120,7 @@ function buildSections(opts: {
     { href: "/news", label: "News" },
     { href: "/gallery", label: "Gallery" },
     { href: "/societa", label: "Società" },
+    { href: "/societa/storia", label: "Storia" },
     { href: "/societa/biglietteria", label: "Biglietteria" },
   ];
   if (FEATURES.governanceSection) {
