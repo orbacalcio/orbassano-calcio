@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, ExternalLink, User } from "lucide-react";
 import { NewsGallery } from "@/components/news/NewsGallery";
+import { NewsVideo } from "@/components/news/NewsVideo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import { Container } from "@/components/ui/Container";
@@ -188,6 +189,20 @@ export default async function NewsDetailPage(props: {
           </p>
         )}
       </Container>
+
+      {/* Video YouTube/Vimeo opzionale: renderizzato SOPRA la
+          galleria foto se presente nel CMS. Se l'URL non e' un
+          provider supportato, NewsVideo ritorna null (graceful). */}
+      {news.videoUrl && (
+        <Container className="border-border/40 border-t py-16" size="wide">
+          <div className="mb-8 flex flex-col gap-2">
+            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+              Video
+            </span>
+          </div>
+          <NewsVideo url={news.videoUrl} title={news.title} />
+        </Container>
+      )}
 
       {news.gallery && news.gallery.length > 0 && (
         <Container className="border-border/40 border-t py-16" size="wide">

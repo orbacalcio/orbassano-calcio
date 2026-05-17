@@ -149,6 +149,15 @@ export const news = defineType({
       ],
     }),
     defineField({
+      name: "videoUrl",
+      title: "Video (URL YouTube o Vimeo)",
+      description:
+        "URL completo di un video YouTube (es. https://www.youtube.com/watch?v=...) o Vimeo (es. https://vimeo.com/...). Il video viene mostrato nella pagina news SOPRA la galleria foto. Lascia vuoto se non c'e' video.",
+      type: "url",
+      validation: (r) =>
+        r.uri({ scheme: ["http", "https"], allowRelative: false }),
+    }),
+    defineField({
       name: "gallery",
       title: "Foto extra (max 3)",
       description:

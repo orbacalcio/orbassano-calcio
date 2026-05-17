@@ -435,6 +435,7 @@ export type NewsDetail = {
   cover: string | null;
   coverLqip: string | null;
   body: PortableTextBlock[] | null;
+  videoUrl: string | null;
   gallery: NewsGalleryImage[] | null;
   author: string | null;
   isPinned: boolean | null;
