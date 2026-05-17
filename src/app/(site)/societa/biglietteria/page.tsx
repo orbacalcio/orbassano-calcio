@@ -1,41 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Calendar,
-  HandCoins,
-  Heart,
-  MapPin,
-  Mail,
-  Phone,
-  Ticket,
-} from "lucide-react";
+import { ArrowRight, Heart, MapPin, Mail, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Biglietteria",
   description:
-    "Come accedere alle partite casalinghe di ASD Orbassano Calcio: ingresso al Centro Sportivo Aldo Porta, condizioni, abbonamenti, contatti.",
+    "Tariffe biglietti, biglietteria fisica, agevolazioni disabilità e accrediti stampa per le partite casalinghe di ASD Orbassano Calcio al Centro Sportivo Aldo Porta.",
 };
-
-const ACCESS_INFO = [
-  {
-    icon: Ticket,
-    title: "Ingresso libero",
-    body: "Le partite casalinghe della Prima Squadra al Centro Sportivo Aldo Porta sono ad accesso libero. Una piccola offerta volontaria a sostegno del club è sempre apprezzata: trovi la cassetta donazioni all'ingresso del campo.",
-  },
-  {
-    icon: HandCoins,
-    title: "Sostieni il club",
-    body: "Se vuoi contribuire in modo strutturale puoi destinare il 5×1000 ad ASD Orbassano Calcio (CF 95634370019), oppure entrare nel programma sponsor/partner. Bastano pochi minuti.",
-  },
-  {
-    icon: Calendar,
-    title: "Calendario casalingo",
-    body: "Il calendario completo delle partite di Prima Categoria 2026/2027 sarà disponibile dopo la pubblicazione LND di agosto. Ti consigliamo di seguirci sui social per gli aggiornamenti settimanali.",
-  },
-];
 
 export default function BiglietteriaPage() {
   return (
@@ -63,28 +36,100 @@ export default function BiglietteriaPage() {
         </Container>
       </header>
 
-      <section className="bg-light-bg-0">
-        <Container className="py-16 lg:py-24" size="wide">
+      {/* Blocco editoriale tariffe + modalità su banda chiara
+          light-bg-0 (stesso pattern del corpo articolo news). Layout
+          narrow per leggibilità testi lunghi. Le 4 sezioni interne
+          condividono pattern: eyebrow rosso brand + titolo h2 +
+          paragrafo body. Email mailto: in rosso bold (stesso pattern
+          dei link nelle news). */}
+      <section aria-labelledby="info-biglietti-title" className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="narrow">
           <RevealOnScroll>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {ACCESS_INFO.map((info) => (
-                <article
-                  key={info.title}
-                  className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
-                >
-                  <info.icon
-                    size={28}
-                    className="text-brand-gold"
-                    aria-hidden
-                  />
-                  <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em] uppercase">
-                    {info.title}
-                  </h3>
-                  <p className="text-ink-mid text-sm leading-relaxed">
-                    {info.body}
-                  </p>
-                </article>
-              ))}
+            <div className="flex flex-col gap-12">
+              <p
+                id="info-biglietti-title"
+                className="text-light-ink-mid text-base leading-relaxed lg:text-lg"
+              >
+                Orbassano Calcio comunica i prezzi e le modalità di
+                acquisto dei biglietti per i match casalinghi:
+              </p>
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                  Biglietti — Tariffe giorno gara
+                </h2>
+                <ul className="text-light-ink-mid flex flex-col gap-2 text-base leading-relaxed lg:text-lg">
+                  <li>
+                    Partite Prima Squadra:{" "}
+                    <strong className="text-light-ink-hi font-semibold">
+                      10€
+                    </strong>
+                  </li>
+                  <li>
+                    Partite Juniores e Settore Giovanile Scolastico:{" "}
+                    <strong className="text-light-ink-hi font-semibold">
+                      7€
+                    </strong>
+                  </li>
+                </ul>
+              </section>
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                  Biglietteria fisica
+                </h2>
+                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
+                  La biglietteria dello stadio (ingresso principale in
+                  Via Ignazio Silone 4) è sempre aperta il giorno della
+                  partita 1 ora prima del fischio di inizio. La Società
+                  invita i tifosi a recarsi agli sportelli con adeguato
+                  anticipo per facilitare le operazioni di ingresso.
+                </p>
+              </section>
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                  Agevolazioni
+                </h2>
+                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
+                  Tifosi con disabilità: ingresso gratuito. Per ottenere
+                  il titolo di accesso, è necessario inviare una mail a{" "}
+                  <a
+                    href="mailto:biglietteria@orbassanocalcio.com"
+                    className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
+                  >
+                    biglietteria@orbassanocalcio.com
+                  </a>{" "}
+                  entro 48 ore dall&apos;evento, allegando i documenti
+                  d&apos;identità dei richiedenti (persona con disabilità
+                  e accompagnatore), oltre al certificato di disabilità.
+                  Anche l&apos;accompagnatore accede gratuitamente.
+                </p>
+              </section>
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                  Accrediti stampa
+                </h2>
+                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
+                  I giornalisti e gli operatori dell&apos;informazione
+                  (foto e video), senza pass stagionale, possono
+                  richiedere l&apos;accredito alla partita inviando una
+                  mail a{" "}
+                  <a
+                    href="mailto:segreteria@orbassanocalcio.com"
+                    className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
+                  >
+                    segreteria@orbassanocalcio.com
+                  </a>
+                  . La richiesta dovrà indicare il nominativo, il media
+                  di appartenenza (testata giornalistica, agenzia o sito
+                  web) e, per i giornalisti, allegare copia della
+                  tessera dell&apos;Ordine dei Giornalisti in corso di
+                  validità. Le richieste dovranno pervenire entro e non
+                  oltre le ore 12.00 del giorno prima della partita.
+                </p>
+              </section>
             </div>
           </RevealOnScroll>
         </Container>
