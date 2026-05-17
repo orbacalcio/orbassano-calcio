@@ -42,9 +42,6 @@ export function TeamCard({ team }: Props) {
         />
       </div>
       <div className="flex flex-col gap-2 p-6">
-        <span className="text-brand-gold font-mono text-[11px] tracking-[0.12em] uppercase">
-          {team.category}
-        </span>
         <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
           {team.name}
         </h3>

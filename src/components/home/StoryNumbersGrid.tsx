@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion, useInView } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
+import { useFirstScrollDownReveal } from "@/lib/use-first-scroll-down-reveal";
 import type { StoryNumberItem } from "@/sanity/fetchers";
 
 /**
@@ -21,7 +22,9 @@ type Props = {
 
 function Counter({ end }: { end: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
+  // Reveala SOLO al primo scroll-down attraverso l'elemento. Scroll-up
+  // o re-entry successivi non re-triggerano il conteggio.
+  const inView = useFirstScrollDownReveal(ref, { amount: 0.6 });
   const reduced = useReducedMotion();
   const [value, setValue] = useState(reduced ? end : 0);
 
@@ -48,57 +51,58 @@ function Counter({ end }: { end: number }) {
   );
 }
 
-export function StoryNumbersGrid({ eyebrow, title, items }: Props) {
+export function StoryNumbersGrid({ items }: Props) {
+  // Single hook a livello di grid: tutte le tile rivelano insieme al
+  // primo scroll-down attraverso la grid. Niente re-trigger su
+  // scroll-up/down successivi.
+  const gridRef = useRef<HTMLUListElement>(null);
+  const gridRevealed = useFirstScrollDownReveal(gridRef, { amount: 0.4 });
   return (
     <section
       aria-label="Storia del club in numeri"
-      className="bg-surface-1 border-border/50 relative overflow-hidden border-y py-20"
+      className="bg-light-bg-0 relative overflow-hidden py-20"
     >
-      <div
-        aria-hidden
-        className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
-      />
-      <Container className="relative" size="wide">
-        <header className="flex flex-col items-center gap-3 text-center">
-          <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-            {eyebrow}
-          </span>
-          <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-            {title}
-          </h2>
-        </header>
-
-        <ul className={`mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl ${gridColsClass(items.length)}`}>
-          {items.map((s, i) => (
-            <motion.li
-              key={`${s.label}-${i}`}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="bg-surface-2/70 flex flex-col items-start gap-3 p-8 lg:p-10"
-            >
-              <span className="font-display text-brand-gold flex items-baseline gap-1 text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
-                {s.prefix && (
-                  <span className="text-4xl sm:text-5xl">{s.prefix}</span>
-                )}
-                <Counter end={s.value} />
-                {s.suffix && (
-                  <span className="text-4xl sm:text-5xl">{s.suffix}</span>
-                )}
-              </span>
-              <span className="font-display text-ink-hi text-lg font-bold tracking-[0.01em] uppercase">
-                {s.label}
-              </span>
-              {s.caption && (
-                <span className="text-ink-mid text-sm leading-relaxed">
-                  {s.caption}
+      {/* Banda navy full-wide che incornicia il gruppo numeri: si
+          estende dai limiti pagina e contiene le 4 tile centrate.
+          Stesso navy delle tile (bg-surface-2) per continuita': i
+          lati e il box sono uniformi, separati solo dai gap-px tra
+          le tile. */}
+      <div className="bg-surface-2 relative">
+        <Container className="relative" size="wide">
+          <ul
+            ref={gridRef}
+            className={`grid grid-cols-2 gap-px overflow-hidden bg-border/60 ${gridColsClass(items.length)}`}
+          >
+            {items.map((s, i) => (
+              <motion.li
+                key={`${s.label}-${i}`}
+                initial={{ opacity: 0, y: 24 }}
+                animate={gridRevealed ? { opacity: 1, y: 0 } : undefined}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="bg-surface-2 flex flex-col items-start gap-3 p-8 lg:p-10"
+              >
+                <span className="font-display text-brand-gold flex items-baseline gap-1 text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
+                  {s.prefix && (
+                    <span className="text-4xl sm:text-5xl">{s.prefix}</span>
+                  )}
+                  <Counter end={s.value} />
+                  {s.suffix && (
+                    <span className="text-4xl sm:text-5xl">{s.suffix}</span>
+                  )}
                 </span>
-              )}
-            </motion.li>
-          ))}
-        </ul>
-      </Container>
+                <span className="font-display text-ink-hi text-lg font-bold tracking-[0.01em] uppercase">
+                  {s.label}
+                </span>
+                {s.caption && (
+                  <span className="text-ink-mid text-sm leading-relaxed">
+                    {s.caption}
+                  </span>
+                )}
+              </motion.li>
+            ))}
+          </ul>
+        </Container>
+      </div>
     </section>
   );
 }

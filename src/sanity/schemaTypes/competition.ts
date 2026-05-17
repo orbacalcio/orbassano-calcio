@@ -124,6 +124,13 @@ export const competition = defineType({
       type: "url",
     }),
     defineField({
+      name: "externalStatisticheUrl",
+      title: "Statistiche esterne",
+      description:
+        "URL statistiche del campionato (Sprintsport, Tuttocampo). Mostrato come link 'Statistiche' nelle strip homepage accanto a Classifica. Per la Prima Squadra c'e' anche il fallback singleton settings.sprintsportLinks.statistiche.",
+      type: "url",
+    }),
+    defineField({
       name: "externalCalendarUrl",
       title: "Calendario esterno",
       description:

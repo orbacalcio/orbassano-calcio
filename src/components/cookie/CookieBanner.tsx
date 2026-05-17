@@ -103,7 +103,6 @@ export function CookieBanner() {
       setHasStoredConsent(true);
     }
     if (nextView !== "hidden") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setView(nextView);
     }
   }, []);

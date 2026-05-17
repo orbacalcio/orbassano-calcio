@@ -49,9 +49,9 @@ export function GalleryMosaic({ initialItems, totalCount }: Props) {
 
   if (items.length === 0) {
     return (
-      <div className="border-border/40 bg-surface-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
-        <Images size={28} className="text-ink-low" aria-hidden />
-        <p className="text-ink-mid text-sm">
+      <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+        <Images size={28} className="text-light-ink-low" aria-hidden />
+        <p className="text-light-ink-mid text-sm">
           Nessuna galleria pubblicata. Le foto degli ultimi eventi e
           delle partite arriveranno qui appena la redazione le
           caricherà.
@@ -85,7 +85,7 @@ export function GalleryMosaic({ initialItems, totalCount }: Props) {
             type="button"
             onClick={onLoadMore}
             disabled={isPending}
-            className="border-brand-gold text-ink-hi hover:bg-brand-gold hover:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full border-2 px-8 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-colors disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="border-brand-gold text-light-ink-hi hover:bg-brand-gold hover:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full border-2 px-8 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-colors disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             {isPending
               ? "Carico…"

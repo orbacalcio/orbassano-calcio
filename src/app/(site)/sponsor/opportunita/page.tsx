@@ -108,42 +108,44 @@ export default function OpportunitaPage() {
         </Container>
       </section>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <div className="flex flex-col gap-3">
-            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Pacchetti
-            </span>
-            <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-              Quattro modi di entrare nella famiglia rossobl&ugrave;
-            </h2>
-            <p className="text-ink-mid max-w-2xl text-sm leading-relaxed">
-              Ogni pacchetto &egrave; modulabile sulla base del tuo budget e
-              degli obiettivi di campagna. Compila il form sotto e ti
-              prepariamo una proposta su misura.
-            </p>
-          </div>
-          <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
-            {PACKAGES.map((p) => (
-              <li
-                key={p.title}
-                className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <p.icon size={28} className="text-brand-gold" aria-hidden />
-                  <span className="border-border text-ink-low font-mono inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
-                    {p.badge}
-                  </span>
-                </div>
-                <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase">
-                  {p.title}
-                </h3>
-                <p className="text-ink-mid text-sm leading-relaxed">{p.body}</p>
-              </li>
-            ))}
-          </ul>
-        </RevealOnScroll>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <div className="flex flex-col gap-3">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                Pacchetti
+              </span>
+              <h2 className="font-display text-light-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+                Quattro modi di entrare nella famiglia rossobl&ugrave;
+              </h2>
+              <p className="text-light-ink-mid max-w-2xl text-sm leading-relaxed">
+                Ogni pacchetto &egrave; modulabile sulla base del tuo budget e
+                degli obiettivi di campagna. Compila il form sotto e ti
+                prepariamo una proposta su misura.
+              </p>
+            </div>
+            <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
+              {PACKAGES.map((p) => (
+                <li
+                  key={p.title}
+                  className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <p.icon size={28} className="text-brand-gold" aria-hidden />
+                    <span className="border-border text-ink-low font-mono inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-[10px] tracking-[0.15em] uppercase">
+                      {p.badge}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase">
+                    {p.title}
+                  </h3>
+                  <p className="text-ink-mid text-sm leading-relaxed">{p.body}</p>
+                </li>
+              ))}
+            </ul>
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <section
         aria-labelledby="form-title"

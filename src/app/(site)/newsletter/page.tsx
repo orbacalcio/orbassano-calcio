@@ -55,9 +55,10 @@ export default function NewsletterPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr]">
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr]">
             <ul className="flex flex-col gap-5">
               {PROMISES.map((p) => (
                 <li
@@ -94,8 +95,9 @@ export default function NewsletterPage() {
               </div>
             </div>
           </div>
-        </RevealOnScroll>
-      </Container>
+          </RevealOnScroll>
+        </Container>
+      </section>
     </>
   );
 }

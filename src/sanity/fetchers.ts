@@ -787,6 +787,7 @@ export type MatchCompetition = {
   category: MatchCompetitionCategory | null;
   defaultReportLink: string | null;
   externalRankingUrl: string | null;
+  externalStatisticheUrl: string | null;
   logo: string | null;
 };
 
@@ -1034,6 +1035,7 @@ export type YouthNextMatch = {
     season: string | null;
     defaultReportLink: string | null;
     externalRankingUrl: string | null;
+    externalStatisticheUrl: string | null;
   } | null;
   opponent: { club: MatchOpponentClub | null } | null;
 };

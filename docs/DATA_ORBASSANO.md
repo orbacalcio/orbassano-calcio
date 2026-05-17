@@ -37,10 +37,12 @@ Via Ignazio Silone, 4
 ### Social media (in ordine di priorità)
 - Instagram: https://www.instagram.com/asdorbassanocalcio/
 - Facebook: https://facebook.com/asdorbassanocalcio
-- YouTube: https://www.youtube.com/@OrbassanoCalcio
+- YouTube: https://www.youtube.com/@OrbassanoCalcio/playlists
+- TikTok: https://www.tiktok.com/@asdorbassanocalcio
 - Threads: https://www.threads.net/@asdorbassanocalcio
-- Twitter/X: https://twitter.com/orbassanocalcio
 - Handle universale: `@asdorbassanocalcio`
+
+> X/Twitter rimosso dalla presenza brand il 2026-05-17 (il club non presidia piu' la piattaforma). Vedi commit / `src/components/social/SocialIcons.tsx`.
 
 ---
 

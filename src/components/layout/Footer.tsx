@@ -50,10 +50,9 @@ const FALLBACK: Required<Settings> = {
   social: {
     instagram: "https://www.instagram.com/asdorbassanocalcio/",
     facebook: "https://facebook.com/asdorbassanocalcio",
-    threads: "https://www.threads.net/@asdorbassanocalcio",
-    youtube: "https://www.youtube.com/@OrbassanoCalcio",
-    twitter: "https://twitter.com/orbassanocalcio",
+    youtube: "https://www.youtube.com/@OrbassanoCalcio/playlists",
     tiktok: "https://www.tiktok.com/@asdorbassanocalcio",
+    threads: "https://www.threads.net/@asdorbassanocalcio",
   },
   contactInfo: {
     email: "info@orbassanocalcio.com",
@@ -109,26 +108,22 @@ function buildSections(opts: {
     label: "Tornei",
   });
 
-  // Sezioni: include Codice Etico + Segnalazioni quando il flag
-  // governance e' attivo. NB: Trasparenza temporaneamente NON
-  // mostrata in footer (richiesta utente 2026-05-11; ricordare di
-  // riabilitarla quando i dati 5x1000 saranno definitivi). La pagina
-  // /societa/trasparenza continua a esistere dietro flag, solo non e'
-  // linkata da qui.
+  // Sezioni: lista compatta a 5 voci uniforme con le altre colonne
+  // (Squadre, Sostieni, Legale). Storia / Organigramma / Impianti /
+  // Codice Etico tolti dal footer per evitare cascate verticali
+  // diverse tra colonne — restano linkati internamente da /societa
+  // e dal NavigationDrawer hamburger.
+  // NB: Trasparenza temporaneamente NON mostrata in footer (richiesta
+  // utente 2026-05-11). Segnalazioni resta condizionato al flag
+  // governance.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
     { href: "/gallery", label: "Gallery" },
     { href: "/societa", label: "Società" },
-    { href: "/societa/storia", label: "Storia" },
-    { href: "/societa/organigramma", label: "Organigramma" },
-    { href: "/societa/impianti", label: "Impianti sportivi" },
     { href: "/societa/biglietteria", label: "Biglietteria" },
   ];
   if (FEATURES.governanceSection) {
-    sezioniItems.push(
-      { href: "/societa/codice-etico", label: "Codice Etico" },
-      { href: "/societa/segnalazioni", label: "Segnalazioni" },
-    );
+    sezioniItems.push({ href: "/societa/segnalazioni", label: "Segnalazioni" });
   }
 
   return [
@@ -183,8 +178,8 @@ export async function Footer() {
   const sections = buildSections({ hasPartners, activeTeamSlugs });
 
   return (
-    <footer className="bg-surface-1 border-border border-t" role="contentinfo">
-      <Container size="wide" className="py-12 lg:py-14">
+    <footer className="bg-surface-0 border-border border-t" role="contentinfo">
+      <Container size="wide" className="pt-12 pb-6 lg:pt-14 lg:pb-8">
         {/* TOP ROW: brand block (sx) + social (dx) */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
@@ -199,14 +194,14 @@ export async function Footer() {
                 Orbassano Calcio
               </span>
               <span className="text-ink-mid font-mono text-[11px] tracking-widest uppercase">
-                A.S.D. · dal 1930
+                Insieme dal 1930
               </span>
             </div>
           </div>
           <SocialIcons links={social} />
         </div>
 
-        <div aria-hidden className="border-border/40 my-10 border-t lg:my-12" />
+        <div aria-hidden className="border-ink-mid my-10 border-t lg:my-12" />
 
         {/* CATEGORIE: 6 colonne lg (4 strette + 2 larghe per Contatti/Legali
             che hanno testi più lunghi tipo IBAN/email/PEC) / 3 col md / 2 sm */}
@@ -271,11 +266,6 @@ export async function Footer() {
                   </a>
                 </li>
               )}
-              {contact.pec && (
-                <li className="text-ink-low pl-6 text-xs leading-relaxed break-all">
-                  PEC: {contact.pec}
-                </li>
-              )}
             </ul>
           </div>
 
@@ -305,13 +295,13 @@ export async function Footer() {
         </div>
       </Container>
 
-      <div className="border-border/60 border-t">
+      <div className="bg-surface-1 border-ink-mid border-t">
         <Container
-          className="flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center sm:justify-between"
+          className="flex items-center justify-center py-6"
           size="wide"
         >
-          <span className="text-ink-mid font-mono text-[11px] tracking-wide">
-            © {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
+          <span className="text-brand-white font-mono text-center text-[12px] tracking-normal">
+            <span className="text-[13px]">©</span> {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
           </span>
         </Container>
       </div>

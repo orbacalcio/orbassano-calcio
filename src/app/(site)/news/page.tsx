@@ -37,11 +37,16 @@ export default async function NewsPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <NewsArchive news={news} />
-        </RevealOnScroll>
-      </Container>
+      {/* Archivio su banda chiara (pattern home NewsGrid): le card news
+          scure restano "isole scure" su sfondo chiaro, i filtri sopra
+          usano testi navy (text-light-ink-*) per leggibilita'. */}
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <NewsArchive news={news} />
+          </RevealOnScroll>
+        </Container>
+      </section>
     </>
   );
 }

@@ -48,11 +48,11 @@ export function NewsArchive({ news }: Props) {
 
   if (news.length === 0) {
     return (
-      <div className="border-border/40 bg-surface-1 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-12 text-center">
-        <h2 className="font-display text-ink-hi text-2xl font-bold tracking-[0.01em] uppercase">
+      <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-12 text-center">
+        <h2 className="font-display text-light-ink-hi text-2xl font-bold tracking-[0.01em] uppercase">
           Archivio in arrivo
         </h2>
-        <p className="text-ink-mid max-w-md text-sm leading-relaxed">
+        <p className="text-light-ink-mid max-w-md text-sm leading-relaxed">
           La redazione del club non ha ancora pubblicato articoli. Torna
           qui appena la stagione ricomincia.
         </p>
@@ -65,9 +65,9 @@ export function NewsArchive({ news }: Props) {
 
   return (
     <div className="flex flex-col gap-12">
-      {/* Filtri categoria */}
+      {/* Filtri categoria (su banda chiara: testi navy per leggibilita') */}
       <div className="flex flex-col gap-3">
-        <div className="text-ink-mid flex items-center gap-2 text-xs">
+        <div className="text-light-ink-mid flex items-center gap-2 text-xs">
           <Filter size={14} aria-hidden />
           <span className="font-mono tracking-[0.12em] uppercase">
             Filtra per categoria
@@ -102,14 +102,14 @@ export function NewsArchive({ news }: Props) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="border-border/40 bg-surface-1 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-10 text-center">
-          <p className="text-ink-mid text-sm">
+        <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-10 text-center">
+          <p className="text-light-ink-mid text-sm">
             Nessun articolo per questa categoria.
           </p>
           <button
             type="button"
             onClick={() => setActiveCategory("all")}
-            className="text-brand-gold hover:text-brand-white text-sm font-semibold underline-offset-2 hover:underline"
+            className="text-brand-gold hover:text-light-ink-hi text-sm font-semibold underline-offset-2 hover:underline"
           >
             Mostra tutto
           </button>
@@ -149,17 +149,17 @@ function CategoryChip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "border-border focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
+        "border-light-border focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
         active
           ? "border-brand-gold bg-brand-gold text-surface-0"
-          : "text-ink-mid hover:border-brand-gold/50 hover:text-ink-hi",
+          : "text-light-ink-mid hover:border-brand-gold/50 hover:text-light-ink-hi",
       )}
     >
       <span>{children}</span>
       <span
         className={cn(
           "font-mono text-[10px]",
-          active ? "text-surface-0/70" : "text-ink-low",
+          active ? "text-surface-0/70" : "text-light-ink-low",
         )}
       >
         {count}

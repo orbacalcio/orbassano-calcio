@@ -14,10 +14,9 @@ const SITE_URL = "https://www.orbassanocalcio.com";
 const SOCIAL_LINKS = [
   "https://www.instagram.com/asdorbassanocalcio/",
   "https://facebook.com/asdorbassanocalcio",
-  "https://www.youtube.com/@OrbassanoCalcio",
-  "https://www.threads.net/@asdorbassanocalcio",
-  "https://twitter.com/orbassanocalcio",
+  "https://www.youtube.com/@OrbassanoCalcio/playlists",
   "https://www.tiktok.com/@asdorbassanocalcio",
+  "https://www.threads.net/@asdorbassanocalcio",
 ];
 
 export function buildOrganizationLd() {

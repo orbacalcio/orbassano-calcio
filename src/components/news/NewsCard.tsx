@@ -55,7 +55,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
           </span>
         )}
         {news.category && (
-          <span className="font-display text-brand-gold absolute top-4 left-4 text-[10px] font-semibold tracking-[0.2em] uppercase">
+          <span className="font-display text-white absolute top-4 left-4 text-[10px] font-bold tracking-[0.2em] uppercase">
             {news.category}
           </span>
         )}

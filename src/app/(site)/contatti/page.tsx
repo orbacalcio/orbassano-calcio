@@ -70,8 +70,9 @@ export default function ContattiPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
           <div className="grid gap-10 lg:grid-cols-2">
             <ul className="flex flex-col gap-4">
               {CHANNELS.map((c) => (
@@ -163,8 +164,9 @@ export default function ContattiPage() {
               </div>
             </div>
           </div>
-        </RevealOnScroll>
-      </Container>
+          </RevealOnScroll>
+        </Container>
+      </section>
     </>
   );
 }

@@ -5,40 +5,38 @@ import {
 } from "@/components/icons/BrandIcons";
 import { ThreadsIcon } from "@/components/icons/ThreadsIcon";
 import { TikTokIcon } from "@/components/icons/TikTokIcon";
-import { XIcon } from "@/components/icons/XIcon";
 import { cn } from "@/lib/cn";
 
 /**
  * Icone social riusabili: appaiono nella sidebar destra desktop e nel
- * footer del drawer mobile. L'ordine e' fissato dal cliente
- * (Instagram in cima per priorita').
+ * footer del drawer mobile. Ordine fissato dal cliente: Instagram in
+ * cima per priorita', Threads in fondo (canale piu' recente / minore
+ * priorita' di lettura). X/Twitter rimosso 2026-05-17 — il club non
+ * presidia piu' la piattaforma.
  */
 export type SocialPlatform =
   | "instagram"
   | "facebook"
-  | "threads"
   | "youtube"
-  | "twitter"
-  | "tiktok";
+  | "tiktok"
+  | "threads";
 
 export type SocialLinks = Partial<Record<SocialPlatform, string | undefined>>;
 
 const ORDER: SocialPlatform[] = [
   "instagram",
   "facebook",
-  "threads",
   "youtube",
-  "twitter",
   "tiktok",
+  "threads",
 ];
 
 const LABELS: Record<SocialPlatform, string> = {
   instagram: "Instagram",
   facebook: "Facebook",
-  threads: "Threads",
   youtube: "YouTube",
-  twitter: "X / Twitter",
   tiktok: "TikTok",
+  threads: "Threads",
 };
 
 function PlatformIcon({
@@ -55,12 +53,10 @@ function PlatformIcon({
       return <FacebookIcon size={size} />;
     case "youtube":
       return <YoutubeIcon size={size} />;
-    case "twitter":
-      return <XIcon size={size} />;
-    case "threads":
-      return <ThreadsIcon size={size} />;
     case "tiktok":
       return <TikTokIcon size={size} />;
+    case "threads":
+      return <ThreadsIcon size={size} />;
   }
 }
 

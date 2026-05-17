@@ -127,16 +127,15 @@ L'on-demand è preferibile per UX dell'admin del club, lo configuriamo in M1 qua
 
 **Stessa logica di trasparenza/opacità della sidebar sinistra.**
 
-**Contenuto**: solo icone social, **6 voci** in ordine di priorità del cliente:
+**Contenuto**: solo icone social, **5 voci** in ordine di priorità del cliente (X/Twitter rimosso 2026-05-17 — il club non presidia più la piattaforma):
 
-| # | Icona (lucide) | Link |
+| # | Icona | Link |
 |---|---|---|
-| 1 | `<Instagram />` | `https://instagram.com/asdorbassanocalcio` |
-| 2 | `<Facebook />` | `https://facebook.com/asdorbassanocalcio` |
-| 3 | `<AtSign />` *(uso AtSign come surrogato per Threads, lucide non ha icona ufficiale)* | `https://www.threads.net/@asdorbassanocalcio` |
-| 4 | `<Youtube />` | `https://youtube.com/@OrbassanoCalcio` |
-| 5 | `<Twitter />` | `https://twitter.com/orbassanocalcio` |
-| 6 | `<TikTok />` *(disponibile in lucide-react ≥0.474.0; se non disponibile, usare SVG custom dal brand kit ufficiale TikTok)* | `https://www.tiktok.com/@asdorbassanocalcio` |
+| 1 | `<InstagramIcon />` (BrandIcons) | `https://www.instagram.com/asdorbassanocalcio/` |
+| 2 | `<FacebookIcon />` (BrandIcons) | `https://facebook.com/asdorbassanocalcio` |
+| 3 | `<YoutubeIcon />` (BrandIcons) | `https://www.youtube.com/@OrbassanoCalcio/playlists` |
+| 4 | `<TikTokIcon />` (custom SVG da brand kit ufficiale) | `https://www.tiktok.com/@asdorbassanocalcio` |
+| 5 | `<ThreadsIcon />` (custom SVG, lucide non ha icona ufficiale) | `https://www.threads.net/@asdorbassanocalcio` |
 
 **No "shop" o "biglietti"** sulla sidebar destra (a differenza di Juve): per un club ASD non c'è negozio merchandising e le partite di Promozione sono spesso a ingresso libero.
 

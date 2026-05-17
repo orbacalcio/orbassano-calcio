@@ -58,12 +58,16 @@ export default async function GalleryIndexPage() {
         </Container>
       </header>
 
-      <Container className="py-12 lg:py-16" size="wide">
-        <GalleryMosaic
-          initialItems={initialItems}
-          totalCount={totalCount}
-        />
-      </Container>
+      {/* Mosaic gallerie su banda chiara: ogni tile e' una foto piena
+          con overlay scuro+titolo bianco (isola scura intenzionale). */}
+      <section className="bg-light-bg-0">
+        <Container className="py-12 lg:py-16" size="wide">
+          <GalleryMosaic
+            initialItems={initialItems}
+            totalCount={totalCount}
+          />
+        </Container>
+      </section>
     </>
   );
 }

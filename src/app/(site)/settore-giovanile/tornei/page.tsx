@@ -85,34 +85,36 @@ export default async function TorneiPage() {
         </Container>
       </header>
 
-      <Container className="py-12 lg:py-16" size="wide">
-        {events.length === 0 ? (
-          <div className="border-border/40 bg-surface-1/40 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
-            <Trophy size={48} className="text-ink-low" aria-hidden />
-            <h2 className="font-display text-ink-hi text-2xl font-bold tracking-[0.005em] uppercase">
-              Calendario in arrivo
-            </h2>
-            <p className="text-ink-mid max-w-md text-sm leading-relaxed">
-              I tornei della stagione saranno pubblicati appena
-              confermati dalla Segreteria.
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6">
-            {CATEGORY_ORDER.map((cat) => {
-              const rows = byCategory.get(cat) ?? [];
-              return (
-                <YouthEventGroup
-                  key={cat}
-                  category={cat}
-                  rows={rows}
-                  emptyLabel="Nessun torneo programmato per questa categoria."
-                />
-              );
-            })}
-          </div>
-        )}
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-12 lg:py-16" size="wide">
+          {events.length === 0 ? (
+            <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+              <Trophy size={48} className="text-light-ink-low" aria-hidden />
+              <h2 className="font-display text-light-ink-hi text-2xl font-bold tracking-[0.005em] uppercase">
+                Calendario in arrivo
+              </h2>
+              <p className="text-light-ink-mid max-w-md text-sm leading-relaxed">
+                I tornei della stagione saranno pubblicati appena
+                confermati dalla Segreteria.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-6">
+              {CATEGORY_ORDER.map((cat) => {
+                const rows = byCategory.get(cat) ?? [];
+                return (
+                  <YouthEventGroup
+                    key={cat}
+                    category={cat}
+                    rows={rows}
+                    emptyLabel="Nessun torneo programmato per questa categoria."
+                  />
+                );
+              })}
+            </div>
+          )}
+        </Container>
+      </section>
     </>
   );
 }

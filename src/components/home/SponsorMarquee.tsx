@@ -52,14 +52,14 @@ export async function SponsorMarquee() {
     return (
       <section
         aria-label="Sponsor del club"
-        className="border-border/50 border-y py-12"
+        className="py-12"
       >
         <Container
           className="flex flex-col items-center gap-3 text-center"
           size="default"
         >
           <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-            Sponsor & Partner
+            I nostri sponsor
           </span>
           <p className="text-ink-mid text-sm">
             La parete sponsor verrà popolata appena lo Studio Sanity sarà
@@ -83,17 +83,17 @@ export async function SponsorMarquee() {
   return (
     <section
       aria-label="Sponsor del club"
-      className="border-border/50 relative overflow-hidden border-y py-16"
+      className="relative overflow-hidden py-16"
     >
       <Container
         className="flex flex-col items-center gap-3 text-center"
         size="default"
       >
         <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-          Sponsor & Partner
+          I nostri sponsor
         </span>
         <h2 className="font-display text-ink-hi max-w-2xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-          Insieme rendiamo possibile ogni partita
+          Insieme rendono possibile ogni partita
         </h2>
       </Container>
 
@@ -107,14 +107,19 @@ export async function SponsorMarquee() {
           aria-hidden
           className="absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-white to-transparent"
         />
+        {/* hover sull'UL → pausa marquee (animation-play-state). Cosi'
+            chi vuole leggere bene un logo non lo vede scappare via.
+            hover sul singolo LI → zoom logo + cursor pointer.
+            Entrambi via transition smooth, non motion-safe per
+            l'interazione (gesto deliberato dell'utente). */}
         <ul
-          className="flex w-max items-center gap-16 motion-safe:animate-[marquee-sponsor_50s_linear_infinite]"
+          className="flex w-max items-center gap-16 motion-safe:animate-[marquee-sponsor_50s_linear_infinite] hover:[animation-play-state:paused]"
           aria-hidden="true"
         >
           {reel.map((s, i) => (
             <li
               key={`${s._id}-${i}`}
-              className="flex h-20 shrink-0 items-center"
+              className="flex h-20 shrink-0 items-center transition-transform duration-300 ease-out hover:scale-150"
             >
               {s.website ? (
                 <a
@@ -156,7 +161,7 @@ export async function SponsorMarquee() {
       <div className="mt-10 flex justify-center">
         <Link
           href="/sponsor"
-          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.05em] transition-colors"
         >
           Tutti gli sponsor del club
           <ArrowUpRight size={14} />

@@ -145,18 +145,19 @@ export default async function OpenDaysPage() {
         </Container>
       </header>
 
+      <section className="bg-light-bg-0">
       <Container className="py-12 lg:py-16" size="wide">
         {events.length === 0 ? (
-          <div className="border-border/40 bg-surface-1/40 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+          <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
             <CalendarCheck
               size={48}
-              className="text-ink-low"
+              className="text-light-ink-low"
               aria-hidden
             />
-            <h2 className="font-display text-ink-hi text-2xl font-bold tracking-[0.005em] uppercase">
+            <h2 className="font-display text-light-ink-hi text-2xl font-bold tracking-[0.005em] uppercase">
               Calendario in arrivo
             </h2>
-            <p className="text-ink-mid max-w-md text-sm leading-relaxed">
+            <p className="text-light-ink-mid max-w-md text-sm leading-relaxed">
               Le date degli Open Days per la prossima stagione saranno
               pubblicate appena confermate dalla Segreteria.
             </p>
@@ -314,6 +315,7 @@ export default async function OpenDaysPage() {
           </section>
         </div>
       </Container>
+      </section>
     </>
   );
 }

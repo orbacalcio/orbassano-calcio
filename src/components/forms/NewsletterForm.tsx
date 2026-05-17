@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  CheckboxField,
-  TextField,
-} from "@/components/forms/FormField";
+import { CheckboxField } from "@/components/forms/FormField";
 import {
   FormStatusMessage,
   type FormStatus,
@@ -23,7 +20,7 @@ export function NewsletterForm() {
     setStatus({ kind: "idle" });
 
     const payload = {
-      firstName: String(formData.get("firstName") ?? ""),
+      firstName: "",
       email: String(formData.get("email") ?? ""),
       privacy: formData.get("privacy") === "on",
     };
@@ -68,25 +65,30 @@ export function NewsletterForm() {
     <form
       id="newsletter-form"
       action={action}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-3"
       noValidate
     >
       <FormStatusMessage status={status} />
-      <div className="grid gap-5 sm:grid-cols-2">
-        <TextField
-          id="firstName"
-          label="Nome (opzionale)"
-          autoComplete="given-name"
-          maxLength={80}
-        />
-        <TextField
+      {/* Riga input + bottone inline (pattern juventus.com): input
+          lungo a sinistra, bottone "Registrati ora" stretto a destra.
+          Su mobile fa stack verticale. */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+        <label htmlFor="email" className="sr-only">
+          Indirizzo email
+        </label>
+        <input
           id="email"
-          label="Email"
+          name="email"
           type="email"
           required
           autoComplete="email"
           maxLength={180}
+          placeholder="Indirizzo email"
+          className="border-border bg-surface-2 text-ink-hi placeholder:text-ink-low focus:border-brand-gold w-full flex-1 rounded-xl border px-5 py-3.5 text-base leading-relaxed outline-none transition-colors md:text-sm"
         />
+        <div className="sm:shrink-0">
+          <SubmitButton label="Registrati ora" variant="gold" />
+        </div>
       </div>
       <CheckboxField
         id="privacy"
@@ -107,7 +109,6 @@ export function NewsletterForm() {
         }
         required
       />
-      <SubmitButton label="Iscriviti" variant="gold" />
     </form>
   );
 }

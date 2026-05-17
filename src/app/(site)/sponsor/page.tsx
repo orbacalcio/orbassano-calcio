@@ -57,7 +57,8 @@ export default async function SponsorPage() {
         </Container>
       </header>
 
-      <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
+      <section className="bg-light-bg-0">
+        <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
         {main.length > 0 && (
           <RevealOnScroll>
             <section className="flex flex-col gap-8">
@@ -66,7 +67,7 @@ export default async function SponsorPage() {
                   <Crown size={16} aria-hidden />
                   Main Sponsor
                 </span>
-                <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+                <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
                   In maglia con noi ogni domenica
                 </h2>
               </div>
@@ -86,7 +87,7 @@ export default async function SponsorPage() {
                 <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
                   Official Sponsor
                 </span>
-                <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+                <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
                   Le aziende che sostengono il club
                 </h2>
               </div>
@@ -107,11 +108,11 @@ export default async function SponsorPage() {
                   <Handshake size={16} aria-hidden />
                   Corporate Partner
                 </span>
-                <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+                <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
                   Convenzioni dedicate ai tesserati
                 </h2>
               </div>
-              <p className="text-ink-mid max-w-2xl text-sm leading-relaxed">
+              <p className="text-light-ink-mid max-w-2xl text-sm leading-relaxed">
                 I nostri Corporate Partner offrono benefit speciali ai
                 tesserati e alle famiglie del club. Approfondisci nella
                 pagina dedicata.
@@ -128,12 +129,13 @@ export default async function SponsorPage() {
         )}
 
         {main.length === 0 && official.length === 0 && partners.length === 0 && (
-          <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
+          <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
             Gli sponsor non sono ancora pubblicati. Controlla che il CMS
             sia popolato e i webhook revalidate configurati.
           </p>
         )}
-      </Container>
+        </Container>
+      </section>
     </>
   );
 }

@@ -259,15 +259,23 @@ export function HeroCarousel({
         className="from-surface-0 via-surface-0/60 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
-      {/* Layer 3: testo della slide — mode="wait" (no overlap). */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-end">
+      {/* Layer 3: testo della slide — mode="wait" (no overlap).
+          Centrato verticalmente nel viewport hero: il flex-col del
+          parent absolute usa justify-center, e l'inner div lascia
+          gap-6 + padding simmetrico per respirare. */}
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${current._id}`}
             initial="hidden"
             animate="show"
             exit="exit"
-            className="pointer-events-auto flex min-h-[40vh] flex-col items-start justify-end gap-6 px-6 pb-16 sm:pb-24 lg:px-12"
+            // hero-slide-text: classe-marker per la CSS rule in
+            // globals.css che compensa il padding-left del main
+            // durante la transizione past-hero. Cosi' il testo non
+            // scivola a sinistra quando le sidebar si ritirano —
+            // testo+CTA restano fermi al loro X di partenza.
+            className="hero-slide-text pointer-events-auto flex flex-col items-start justify-center gap-6 px-6 py-12 sm:py-16 lg:px-12"
           >
             {current.eyebrow && (
               <EyebrowBlock

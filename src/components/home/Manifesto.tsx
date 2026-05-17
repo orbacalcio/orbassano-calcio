@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
 import { Container } from "@/components/ui/Container";
+import { useFirstScrollDownReveal } from "@/lib/use-first-scroll-down-reveal";
 
 /**
  * Sezione manifesto: testo gigante con strisce verticali rossoblu' che
@@ -30,21 +32,38 @@ import { Container } from "@/components/ui/Container";
  */
 export function Manifesto() {
   const reduced = useReducedMotion();
+  // Hook custom: reveala SOLO al primo scroll-down attraverso l'elemento.
+  // Subsequent scroll-up/down sopra il manifesto NON re-triggerano
+  // l'animazione delle strisce. L'effetto hover (CSS keyframe loop +
+  // scale + drop-shadow) e' INDIPENDENTE da questo stato: funziona
+  // sempre, anche prima del reveal.
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const revealed = useFirstScrollDownReveal(titleRef, { amount: 0.4 });
   return (
     <section
       aria-labelledby="manifesto-title"
-      className="relative overflow-hidden bg-[#F5F1E8] py-24 lg:py-32"
+      className="bg-light-bg-0 relative overflow-hidden py-24 lg:py-32"
     >
       <Container
         size="wide"
         className="flex flex-col items-center gap-10 text-center sm:gap-12"
       >
+        {/* Hover wow effect: al passaggio del mouse le strisce
+            rossoblu' scorrono in loop orizzontale infinito (CSS
+            keyframe `manifesto-stripes-loop` in globals.css), il
+            testo fa un leggero scale-up e si tinge di un drop-shadow
+            oro. L'entry animation (framer) gira una volta sola al
+            primo ingresso viewport; il loop hover convive senza
+            conflitti perche' modifica la stessa proprieta'
+            (background-position-x) solo durante :hover. */}
         <motion.h2
+          ref={titleRef}
           id="manifesto-title"
-          className="font-display leading-[0.9] font-black tracking-[0.005em] uppercase"
+          className="font-display cursor-default leading-[0.9] font-black tracking-[0.005em] uppercase transition-transform duration-300 ease-out hover:scale-[1.02] hover:[animation:manifesto-stripes-loop_1.4s_linear_infinite] hover:[filter:drop-shadow(0_0_40px_rgba(223,177,108,0.85))]"
           initial={reduced ? false : { backgroundPositionX: "-440px" }}
-          whileInView={{ backgroundPositionX: "0px" }}
-          viewport={{ once: true, amount: 0.4 }}
+          animate={
+            revealed || reduced ? { backgroundPositionX: "0px" } : undefined
+          }
           transition={{
             duration: 1.6,
             ease: [0.215, 0.61, 0.355, 1],

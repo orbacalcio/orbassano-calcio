@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
   BarChart3,
   CalendarDays,
@@ -7,29 +8,30 @@ import {
   ListOrdered,
 } from "lucide-react";
 import { MatchCard } from "@/components/calendario/MatchCard";
+import { MatchCountdown } from "@/components/calendario/MatchCountdown";
 import { sanityClient } from "@/sanity/client";
 import { lastMatchQuery, nextMatchQuery, settingsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
 import type { MatchSummary } from "@/sanity/fetchers";
-import { YouthMatchStrip } from "./YouthMatchStrip";
 
 /**
- * Strip "info dense" sotto l'hero, due livelli:
- *
- * 1) Box Prima Squadra (prominente, padding generoso) — grid 40/40/20:
+ * Strip "info dense" Prima Squadra sotto l'hero — banda navy full-wide
+ * (bg-surface-1) ai limiti pagina, con grid 40/40/20 centrata in
+ * Container:
  *    [ Ultimo risultato (40%) ][ Prossima partita (40%) ][ Classifica (20%) ]
- *    Classifica e' un link icon-only (Trophy) per dare aria al layout
- *    e mettere in primo piano i due match. Le label dei due match
- *    portano competition + stagione.
  *
- * 2) Box Settore Giovanile + Juniores (staccato verticalmente, padding
- *    ~30% piu' compatto): 5 righe — Juniores, Under 17, Under 16,
- *    Under 15, Under 14 — con ultima+prossima partita per ognuna. Vedi
- *    YouthMatchStrip.tsx.
+ * Niente link "Tutti i risultati" / "Calendario completo" in fondo agli
+ * slot: subito sotto il box navy (stessa banda chiara, mt-8/10) c'e' un
+ * unico CTA "Calendario e risultati" → /squadre/prima-squadra/calendario.
+ * Pattern identico ad AllContentLink in NewsGrid: cerchio bordato +
+ * freccia + label uppercase a destra. Tight contro il box, niente
+ * sezione bianca intermedia.
  *
- * Hardcoded sulla Prima Squadra nel box principale (la home rappresenta
- * la Prima Squadra). Per le altre categorie la mini-strip sotto e' il
- * "drill-down" rapido.
+ * Le strip Juniores + Settore Giovanile Scolastico vivono in un blocco
+ * separato piu' in basso nella home (vedi YouthMatchStrip), dopo il
+ * manifesto, la sezione numeri e Vivi l'Orba.
+ *
+ * Hardcoded sulla Prima Squadra: la home rappresenta la Prima Squadra.
  */
 type Settings = {
   currentLeague: string | null;
@@ -106,156 +108,174 @@ export async function MatchStrip() {
     lastMatch?.competition?.defaultReportLink ??
     settings?.sprintsportLinks?.classifica ??
     null;
-  // Statistiche: per ora arriva solo dal singleton settings (campo
-  // sprintsportLinks.statistiche). Schema CMS lato competition non ha
-  // ancora un externalStatisticheUrl dedicato — se servisse per anno,
-  // si aggiunge a Competition senza toccare il componente.
-  const statisticheUrl = settings?.sprintsportLinks?.statistiche ?? null;
+  // Statistiche: stessa cascata della classifica.
+  //   1. competition.externalStatisticheUrl (prossima → poi ultima) per
+  //      tenere il link agganciato alla stagione/girone corrente.
+  //   2. settings.sprintsportLinks.statistiche (fallback singleton storico).
+  const statisticheUrl =
+    nextMatch?.competition?.externalStatisticheUrl ??
+    lastMatch?.competition?.externalStatisticheUrl ??
+    settings?.sprintsportLinks?.statistiche ??
+    null;
   // Eyebrow per blocco: ogni match porta la sua competition reale
   // (stagione archiviata mostra il campionato in cui si e' giocato).
   const lastCompetitionLabel = buildCompetitionLabel(lastMatch, settings);
   const nextCompetitionLabel = buildCompetitionLabel(nextMatch, settings);
 
   return (
-    <>
-      {/* BOX 1 — Prima Squadra: header sopra + grid 40/40/20 sotto */}
-      <section
-        aria-label="Ultimo e prossimo impegno Prima Squadra"
-        className="border-border/60 border-y bg-surface-1/40"
-      >
-        <Container
-          size="wide"
-          className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]"
-        >
-          {/* Header "PRIMA SQUADRA" DENTRO la grid: span totale
-              riga 1, stesso bg-surface-2/60 degli slot sottostanti
-              cosi' fluisce con i contenuti come un unico blocco.
-              Niente piu' striscia navy esterna separata. */}
-          <header className="bg-surface-2/60 px-8 pt-6 pb-3 md:px-11 md:pt-8 lg:col-span-3">
-            <h2 className="font-display text-ink-hi text-2xl leading-none font-extrabold tracking-[0.04em] uppercase md:text-3xl">
-              Prima Squadra
-            </h2>
-          </header>
-
-          {/* Slot 1 — ULTIMO RISULTATO (40%) */}
-          <div className="bg-surface-2/60 flex flex-col gap-4 p-8 md:p-11">
-            <div className="flex flex-col gap-1.5">
-              <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
-                <History
-                  size={16}
-                  className="-mt-0.5 mr-2 inline"
-                  aria-hidden
-                />
-                Ultimo risultato
-              </span>
-              <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
-                {lastCompetitionLabel}
-              </span>
-            </div>
-            {lastMatch ? (
-              <MatchCard
-                match={lastMatch}
-                ourTeamSlug={PRIMA_SQUADRA_SLUG}
-                ourTeamName={PRIMA_SQUADRA_NAME}
-                variant="compact"
-              />
-            ) : (
-              <div className="border-border/40 bg-surface-1/40 flex flex-1 flex-col gap-2.5 rounded-lg border p-5">
-                <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-                  Stagione in corso
+    <section
+      aria-label="Ultimo e prossimo impegno Prima Squadra"
+      className="bg-light-bg-0 py-10 lg:py-14"
+    >
+      <div className="border-border bg-surface-1 relative overflow-hidden border-y">
+        <Container className="relative" size="wide">
+          <div className="grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1.1fr_1fr]">
+            {/* Slot 1 — ULTIMO RISULTATO (40%) */}
+            <div className="flex flex-col gap-4 p-8 md:p-11">
+              <div className="flex flex-col gap-1.5">
+                <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
+                  <History
+                    size={16}
+                    className="-mt-0.5 mr-2 inline"
+                    aria-hidden
+                  />
+                  Ultimo risultato
                 </span>
-                <span className="text-ink-mid text-sm">
-                  Nessuna partita giocata ancora: il primo risultato comparirà qui
-                  appena ufficializzato dalla federazione.
+                <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
+                  {lastCompetitionLabel}
                 </span>
               </div>
-            )}
-            <Link
-              href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario?tab=risultati`}
-              className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-base font-semibold transition-colors"
-            >
-              Tutti i risultati
-              <ArrowUpRight size={18} />
-            </Link>
-          </div>
-
-          {/* Slot 2 — PROSSIMA PARTITA (40%) */}
-          <div className="bg-surface-2/60 flex flex-col gap-4 p-8 md:p-11">
-            <div className="flex flex-col gap-1.5">
-              <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
-                <CalendarDays
-                  size={16}
-                  className="-mt-0.5 mr-2 inline"
-                  aria-hidden
+              {lastMatch ? (
+                <MatchCard
+                  match={lastMatch}
+                  ourTeamSlug={PRIMA_SQUADRA_SLUG}
+                  ourTeamName={PRIMA_SQUADRA_NAME}
+                  variant="compact"
                 />
-                Prossima partita
-              </span>
-              <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
-                {nextCompetitionLabel}
-              </span>
+              ) : (
+                <div className="border-border/40 bg-surface-1/40 flex flex-1 flex-col gap-2.5 rounded-lg border p-5">
+                  <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
+                    Stagione in corso
+                  </span>
+                  <span className="text-ink-mid text-sm">
+                    Nessuna partita giocata ancora: il primo risultato comparirà qui
+                    appena ufficializzato dalla federazione.
+                  </span>
+                </div>
+              )}
             </div>
-            {nextMatch ? (
-              <MatchCard
-                match={nextMatch}
-                ourTeamSlug={PRIMA_SQUADRA_SLUG}
-                ourTeamName={PRIMA_SQUADRA_NAME}
-                variant="compact"
-              />
-            ) : (
-              <div className="border-border/40 bg-surface-1/40 flex flex-1 flex-col gap-2.5 rounded-lg border p-5">
-                <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-                  Calendario in arrivo
+
+            {/* Slot 2 — PROSSIMA PARTITA (40%) */}
+            <div className="flex flex-col gap-4 p-8 md:p-11">
+              <div className="flex flex-col gap-1.5">
+                <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
+                  <CalendarDays
+                    size={16}
+                    className="-mt-0.5 mr-2 inline"
+                    aria-hidden
+                  />
+                  Prossima partita
                 </span>
-                <span className="text-ink-mid text-sm">
-                  Le prossime giornate saranno pubblicate appena la federazione
-                  comunica gli accoppiamenti del girone.
+                <span className="font-mono text-ink-mid text-[14px] font-semibold tracking-[0.12em] uppercase">
+                  {nextCompetitionLabel}
                 </span>
               </div>
-            )}
-            <Link
-              href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
-              className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 self-start text-base font-semibold transition-colors"
-            >
-              Calendario completo
-              <ArrowUpRight size={18} />
-            </Link>
-          </div>
+              {nextMatch ? (
+                <MatchCard
+                  match={nextMatch}
+                  ourTeamSlug={PRIMA_SQUADRA_SLUG}
+                  ourTeamName={PRIMA_SQUADRA_NAME}
+                  variant="compact"
+                />
+              ) : (
+                <div className="border-border/40 bg-surface-1/40 flex flex-1 flex-col gap-2.5 rounded-lg border p-5">
+                  <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
+                    Calendario in arrivo
+                  </span>
+                  <span className="text-ink-mid text-sm">
+                    Le prossime giornate saranno pubblicate appena la federazione
+                    comunica gli accoppiamenti del girone.
+                  </span>
+                </div>
+              )}
+            </div>
 
-          {/* Slot 3 — CLASSIFICA + STATISTICHE (20%, split verticale con
-              attribution editoriale a separare i due tile). */}
-          <div className="grid grid-rows-[1fr_auto_1fr] gap-px bg-surface-1/60">
-            <ShortcutTile
-              href={classificaUrl}
-              label="Classifica"
-              icon={ListOrdered}
-              ariaLabelOn="Apri la classifica del campionato Prima Squadra"
-              ariaLabelOff="Classifica non disponibile"
-            />
-            <p className="bg-surface-1/60 text-ink-low px-4 py-3 text-center text-[10px] leading-relaxed">
-              Dati forniti dalla{" "}
-              <a
-                href="https://www.sprintesport.it/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-ink-mid hover:text-brand-gold underline-offset-2 hover:underline transition-colors"
-              >
-                Redazione Piemonte di sprintesport.it
-              </a>
-            </p>
-            <ShortcutTile
-              href={statisticheUrl}
-              label="Statistiche"
-              icon={BarChart3}
-              ariaLabelOn="Apri le statistiche del campionato Prima Squadra"
-              ariaLabelOff="Statistiche non disponibili"
-            />
+            {/* Slot 3 — COUNTDOWN al kickoff della prossima partita.
+                Box dedicato stile juventus.com con orologio digitale
+                grande che tickka ogni secondo (client component). Se
+                niente prossima partita, slot vuoto. */}
+            <div className="border-border/40 flex flex-col items-stretch justify-center border-l border-r">
+              {nextMatch && !nextMatch.isDateTbd ? (
+                <MatchCountdown targetISO={nextMatch.date} />
+              ) : (
+                <div className="flex h-full flex-col items-center justify-center gap-2 p-5 text-center">
+                  <span className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
+                    Countdown
+                  </span>
+                  <span className="text-ink-mid font-mono text-sm">
+                    In attesa della prossima data ufficiale.
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Slot 4 — CLASSIFICA + STATISTICHE impilate, con
+                attribution sprintesport in fondo. */}
+            <div className="flex flex-col">
+              <div className="grid flex-1 grid-rows-2 gap-px">
+                <ShortcutTile
+                  href={classificaUrl}
+                  label="Classifica"
+                  icon={ListOrdered}
+                  ariaLabelOn="Apri la classifica del campionato Prima Squadra"
+                  ariaLabelOff="Classifica non disponibile"
+                />
+                <ShortcutTile
+                  href={statisticheUrl}
+                  label="Statistiche"
+                  icon={BarChart3}
+                  ariaLabelOn="Apri le statistiche del campionato Prima Squadra"
+                  ariaLabelOff="Statistiche non disponibili"
+                />
+              </div>
+              <p className="text-ink-low px-4 pb-8 pt-3 text-center text-[10px] leading-relaxed md:pb-11">
+                Dati forniti dalla{" "}
+                <a
+                  href="https://www.sprintesport.it/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ink-mid hover:text-brand-gold underline-offset-2 hover:underline transition-colors"
+                >
+                  Redazione Piemonte di sprintesport.it
+                </a>
+              </p>
+            </div>
           </div>
         </Container>
-      </section>
-
-      {/* BOX 2 — Settore Giovanile + Juniores (staccato verticalmente) */}
-      <YouthMatchStrip />
-    </>
+      </div>
+      {/* CTA "Calendario e risultati" tight contro il box navy: stesso
+          pattern di AllContentLink in NewsGrid (cerchio bordato +
+          freccia + label uppercase, allineato a destra). */}
+      <Container size="wide" className="mt-8 md:mt-10">
+        <div className="flex justify-end">
+          <Link
+            href={`/squadre/${PRIMA_SQUADRA_SLUG}/calendario`}
+            className="group focus-visible:outline-brand-gold inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            <span className="border-light-ink-mid/40 group-hover:border-brand-gold group-hover:bg-brand-gold/10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300">
+              <ArrowRight
+                size={16}
+                className="text-light-ink-hi group-hover:text-brand-gold transition-all duration-300 group-hover:translate-x-0.5"
+                aria-hidden
+              />
+            </span>
+            <span className="font-display text-light-ink-hi group-hover:text-brand-gold text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+              Calendario e risultati
+            </span>
+          </Link>
+        </div>
+      </Container>
+    </section>
   );
 }
 
@@ -282,7 +302,7 @@ function ShortcutTile({
     return (
       <div
         aria-label={ariaLabelOff}
-        className="bg-surface-2/30 flex flex-col items-center justify-center gap-2.5 p-7 text-center"
+        className="flex flex-col items-center justify-center gap-2.5 p-7 text-center opacity-60"
       >
         <Icon
           size={48}
@@ -302,7 +322,7 @@ function ShortcutTile({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={ariaLabelOn}
-      className="group bg-surface-2/60 hover:bg-brand-gold/10 focus-visible:outline-brand-gold flex flex-col items-center justify-center gap-2.5 p-7 text-center transition-colors focus-visible:outline-2 focus-visible:-outline-offset-4"
+      className="group hover:bg-brand-gold/10 focus-visible:outline-brand-gold flex flex-col items-center justify-center gap-2.5 p-7 text-center transition-colors focus-visible:outline-2 focus-visible:-outline-offset-4"
     >
       <Icon
         size={48}

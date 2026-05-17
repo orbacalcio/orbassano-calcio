@@ -55,15 +55,17 @@ export default async function PartnerPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <ul className="flex flex-col gap-8">
-            {partners.map((p, i) => (
-              <PartnerRow key={p._id} partner={p} index={i} />
-            ))}
-          </ul>
-        </RevealOnScroll>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <ul className="flex flex-col gap-8">
+              {partners.map((p, i) => (
+                <PartnerRow key={p._id} partner={p} index={i} />
+              ))}
+            </ul>
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <section
         aria-labelledby="cta-title"

@@ -4,16 +4,15 @@ import { ArrowRight, Newspaper } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { latestNewsQuery } from "@/sanity/queries";
 import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
 
 /**
  * Griglia news homepage — pattern juventus.com: ogni card e'
- * UN'IMMAGINE intera con overlay testuale in basso (categoria gold +
- * titolo bianco bold + pseudo-bottone "Leggi l'articolo"). Niente
- * card "split image + text below": tutto vive dentro la foto, e
- * leggibilita' affidata al gradient bottom-up.
+ * UN'IMMAGINE intera (formato portrait 4:5) con overlay testuale in
+ * basso (categoria gold + titolo bianco bold + pseudo-bottone
+ * "Leggi l'articolo"). Niente header eyebrow/title/subtitle sopra
+ * la grid: le card stesse parlano, lo stacco editoriale e' dato
+ * dalla banda chiara di sfondo (light-bg-0).
  *
- * Aspect ratio 16:9 fisso su tutte le card per uniformita' visiva.
  * Hover: zoom della cover (group-hover:scale).
  *
  * Sotto la grid: link "Tutti i contenuti" con cornicetta (cerchio
@@ -48,7 +47,7 @@ function NewsCard({ news }: { news: News }) {
   return (
     <Link
       href={`/news/${news.slug.current}`}
-      className="group focus-visible:outline-brand-gold relative block aspect-[16/9] overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4"
+      className="group focus-visible:outline-brand-gold relative block aspect-[4/5] overflow-hidden rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-4 lg:rounded-[2.5rem]"
     >
       {news.cover ? (
         <Image
@@ -60,7 +59,7 @@ function NewsCard({ news }: { news: News }) {
         />
       ) : (
         <div className="from-surface-2 to-surface-1 flex h-full w-full items-center justify-center bg-gradient-to-br">
-          <Newspaper size={64} className="text-surface-3" aria-hidden />
+          <Newspaper size={80} className="text-surface-3" aria-hidden />
         </div>
       )}
 
@@ -73,22 +72,25 @@ function NewsCard({ news }: { news: News }) {
 
       {/* Categoria top-left (gold piccolo uppercase) */}
       {news.category && (
-        <span className="font-display text-brand-gold absolute top-4 left-4 text-[10px] font-semibold tracking-[0.2em] uppercase md:text-xs">
+        <span className="font-display text-white absolute top-5 left-5 text-xs font-bold tracking-[0.2em] uppercase md:top-7 md:left-7 md:text-sm">
           {news.category}
         </span>
       )}
 
-      {/* Overlay testuale in basso: titolo + pseudo-bottone */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 md:p-6">
-        <h3 className="font-display text-ink-hi line-clamp-3 text-lg leading-tight font-bold tracking-[0.01em] uppercase md:text-xl">
+      {/* Overlay testuale in basso: titolo + pseudo-bottone.
+          Padding piu' generoso (formato portrait 4:5) e titolo
+          piu' grande per allinearsi al peso visivo delle card
+          juventus.com. */}
+      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-6 md:gap-5 md:p-8">
+        <h3 className="font-display text-ink-hi line-clamp-3 text-xl leading-tight font-bold tracking-[0.01em] uppercase md:text-2xl lg:text-[1.7rem] lg:leading-[1.05]">
           {news.title}
         </h3>
         <span
           aria-hidden
-          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-red/90 inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-[10px] font-bold tracking-[0.15em] uppercase transition-colors md:text-[11px]"
+          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-red/90 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors md:text-xs"
         >
           Leggi l&apos;articolo
-          <ArrowRight size={12} aria-hidden />
+          <ArrowRight size={14} aria-hidden />
         </span>
       </div>
     </Link>
@@ -97,12 +99,12 @@ function NewsCard({ news }: { news: News }) {
 
 function EmptyState() {
   return (
-    <div className="border-border bg-surface-1/40 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
-      <Newspaper size={48} className="text-ink-low" aria-hidden />
-      <h3 className="font-display text-ink-hi text-2xl font-bold tracking-[0.01em] uppercase">
+    <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-[2rem] border p-12 text-center lg:rounded-[2.5rem]">
+      <Newspaper size={48} className="text-light-ink-low" aria-hidden />
+      <h3 className="font-display text-light-ink-hi text-2xl font-bold tracking-[0.01em] uppercase">
         Le news arrivano qui
       </h3>
-      <p className="text-ink-mid max-w-md text-sm leading-relaxed">
+      <p className="text-light-ink-mid max-w-md text-sm leading-relaxed">
         Appena la redazione del club pubblica un articolo dal CMS, lo trovi in
         questa sezione e nell&apos;archivio completo /news.
       </p>
@@ -122,14 +124,14 @@ function AllContentLink() {
         href="/news"
         className="group focus-visible:outline-brand-gold inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
       >
-        <span className="border-ink-mid/40 group-hover:border-brand-gold group-hover:bg-brand-gold/10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300">
+        <span className="border-light-ink-mid/40 group-hover:border-brand-gold group-hover:bg-brand-gold/10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300">
           <ArrowRight
             size={16}
-            className="text-ink-hi group-hover:text-brand-gold transition-all duration-300 group-hover:translate-x-0.5"
+            className="text-light-ink-hi group-hover:text-brand-gold transition-all duration-300 group-hover:translate-x-0.5"
             aria-hidden
           />
         </span>
-        <span className="font-display text-ink-hi group-hover:text-brand-gold text-sm font-bold tracking-[0.15em] uppercase transition-colors">
+        <span className="font-display text-light-ink-hi group-hover:text-brand-gold text-sm font-bold tracking-[0.15em] uppercase transition-colors">
           Tutti i contenuti
         </span>
       </Link>
@@ -140,18 +142,20 @@ function AllContentLink() {
 export async function NewsGrid() {
   const news = await fetchLatestNews();
 
+  // Isola chiara su body navy (pattern juventus.com a bande): wrapper
+  // bg-light-bg-0 + border-y per stacco netto. Niente header testuale
+  // (eyebrow/title/subtitle rimossi): le card portrait grandi parlano
+  // da sole. Le card news interne restano foto+overlay scuro+titolo
+  // bianco (sub-isole scure su banda chiara).
+  // Banda chiara con card portrait grandi (no header testuale).
   return (
-    <Container className="py-20" size="wide">
-      <Section
-        eyebrow="In primo piano"
-        title="Le ultime dal club"
-        subtitle="Risultati, dietro le quinte, comunicati ufficiali. Tutto quello che esce dalla redazione di Orbassano Calcio."
-      >
+    <section aria-label="Ultime news" className="bg-light-bg-0">
+      <Container className="py-16 lg:py-20" size="wide">
         {news.length === 0 ? (
           <EmptyState />
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {news.slice(0, 3).map((n) => (
                 <NewsCard key={n._id} news={n} />
               ))}
@@ -159,7 +163,7 @@ export async function NewsGrid() {
             <AllContentLink />
           </>
         )}
-      </Section>
-    </Container>
+      </Container>
+    </section>
   );
 }

@@ -67,17 +67,21 @@ function SidebarItemLink({
           size={28}
           className={cn(
             "transition-colors",
-            active ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
+            active ? "text-brand-gold" : "text-ink-hi group-hover:text-brand-gold",
           )}
           aria-hidden
         />
       ) : null}
       {item.microlabel && (
         <span
-          className={cn(
-            "font-display text-[11px] font-bold tracking-[0.12em] uppercase transition-colors",
-            active ? "text-brand-gold" : "text-ink-mid group-hover:text-ink-hi",
-          )}
+          // Posizionata absolute sotto l'icona (top-full + mt-1.5),
+          // centrata orizzontalmente, whitespace-nowrap cosi' label
+          // lunghe (SOCIETÀ, GALLERY) non vanno a capo nella sidebar
+          // stretta 88px. Opacity 0 di default → opacity 100 su hover
+          // del Link parent (group). Niente layout shift: in stato
+          // normale si vedono solo le icone (juve-style). La rotta
+          // attiva e' indicata dal bar oro a sinistra, non dal label.
+          className="font-display text-brand-gold pointer-events-none absolute top-full left-1/2 mt-1.5 -translate-x-1/2 text-[11px] font-bold tracking-[0.12em] whitespace-nowrap uppercase opacity-0 transition-opacity duration-200 group-hover:opacity-100"
         >
           {item.microlabel}
         </span>
@@ -93,14 +97,19 @@ function MoreButton({ onClick }: { onClick: () => void }) {
       aria-label="Apri menu completo"
       aria-controls="navigation-drawer"
       onClick={onClick}
-      className="group focus-visible:outline-brand-gold flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4"
+      className="group focus-visible:outline-brand-gold relative flex flex-col items-center gap-1.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4"
     >
       <MoreIcon
         size={28}
-        className="text-ink-mid group-hover:text-ink-hi transition-colors"
+        className="text-ink-hi group-hover:text-brand-gold transition-colors"
         aria-hidden
       />
-      <span className="font-display text-ink-mid group-hover:text-ink-hi text-[11px] font-bold tracking-[0.12em] uppercase transition-colors">
+      {/* Label "ALTRO" stesso pattern degli altri item: absolute sotto
+          l'icona, opacity 0 di default → 100 su hover. Niente layout
+          shift, normal state mostra solo l'icona dei 3 puntini. */}
+      <span
+        className="font-display text-brand-gold pointer-events-none absolute top-full left-1/2 mt-1.5 -translate-x-1/2 text-[11px] font-bold tracking-[0.12em] whitespace-nowrap uppercase opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+      >
         ALTRO
       </span>
     </button>

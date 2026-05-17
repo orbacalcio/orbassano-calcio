@@ -67,10 +67,13 @@ export const metadata: Metadata = {
       "Sito ufficiale del club rossoblù: Prima Squadra, Settore Giovanile e Scuola Calcio. News, calendario, sponsor.",
     // images: gestite da src/app/opengraph-image.tsx (ImageResponse 1200x630)
   },
+  // Twitter Card metadata: il club non presidia piu' X (2026-05-17), ma
+  // teniamo `card`/`title`/`description` perche' generano i meta tag
+  // `twitter:*` letti anche da Discord/Slack/Telegram per renderizzare
+  // le anteprime quando qualcuno incolla un link. Rimossi `site` /
+  // `creator` che linkavano l'@handle X non piu' attivo.
   twitter: {
     card: "summary_large_image",
-    site: "@orbassanocalcio",
-    creator: "@orbassanocalcio",
     title: "ASD Orbassano Calcio",
     description:
       "Sito ufficiale del club rossoblù di Orbassano. Dal 1930 il calcio di Orbassano.",

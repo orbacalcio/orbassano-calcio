@@ -13,18 +13,25 @@ export function NewsletterCTA() {
   return (
     <section
       aria-label="Iscriviti alla newsletter"
-      className="bg-surface-1 border-border/40 border-y py-16 md:py-20"
+      className="bg-light-bg-0 py-10 md:py-12"
     >
-      <Container size="narrow" className="flex flex-col items-center gap-6 text-center">
-        <h2 className="font-display text-ink-hi text-2xl leading-tight font-bold tracking-[0.01em] uppercase md:text-3xl">
-          Vuoi conoscere tutte le novità di ASD Orbassano Calcio?
-        </h2>
-        <p className="text-ink-mid text-base leading-relaxed">
-          Lasciaci la tua mail per restare aggiornato.
-        </p>
-
-        <div className="w-full max-w-xl text-left">
-          <NewsletterForm />
+      <Container size="default">
+        {/* Cornice bianca pattern juventus.com su sfondo navy: il box
+            resta scuro (bg-surface-0) con bordo bianco, ma la banda
+            attorno alla sezione e' chiara (light-bg-0) per stacco
+            visivo dalla sezione sopra. */}
+        <div className="bg-surface-0 border-white/30 border p-8 md:p-10 lg:p-12">
+          <div className="flex flex-col gap-5">
+            <p className="text-ink-hi max-w-2xl text-base leading-snug md:text-lg lg:text-xl">
+              Vuoi conoscere tutte le novità di orbassanocalcio.com?
+            </p>
+            <h2 className="font-display text-ink-hi text-2xl leading-tight font-bold tracking-[0.01em] uppercase md:text-3xl lg:text-4xl">
+              Lasciaci la tua mail per restare aggiornato!
+            </h2>
+            <div className="mt-2 w-full">
+              <NewsletterForm />
+            </div>
+          </div>
         </div>
       </Container>
     </section>

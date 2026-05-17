@@ -51,7 +51,7 @@ export function Banner5x1000() {
           </p>
         </div>
 
-        <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-6 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
+        <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-6 border p-8 backdrop-blur-sm sm:p-10">
           <div className="flex flex-col gap-2">
             <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
               Codice fiscale

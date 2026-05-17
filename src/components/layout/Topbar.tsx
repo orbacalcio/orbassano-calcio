@@ -16,19 +16,23 @@ import { sidebarMainItems } from "./SidebarLeft.items";
  * crossfade.
  *
  * Ruoli:
- *  - HERO (heroVisible=true): la barra e' contenuta tra le sidebar
- *    verticali (lg:left-[88px] lg:right-[80px]). Mostra solo i tile
- *    main sponsor a destra (196×78, logo +20% vs marquee).
+ *  - HERO (heroVisible=true): la barra e' INVISIBILE come "barra" — bg
+ *    e border trasparenti — e mostra SOLO la tile sponsor + search
+ *    fluttuante a destra. Il pulsante search si allinea orizzontalmente
+ *    al centro X delle icone social (right edge ≈ 40px dal bordo
+ *    viewport, stesso del social aside w-[80px] con icone h-10 w-10
+ *    centrate). L'hero foto e' visibile fino a Y=0.
  *  - SCROLLED (heroVisible=false): la barra si allarga full-width
- *    (left=0 right=0). Hamburger + nav inline + logo centrale a
- *    sinistra; sponsor compatti a destra (168×48). Le sidebar
- *    verticali svaniscono in parallelo (gestito in ClientShell).
+ *    (left=0 right=0) e diventa OPACA (bg-surface-0 + border-b).
+ *    Hamburger + nav inline + logo centrale a sinistra; sponsor
+ *    compatti a destra (168×48). Le sidebar verticali svaniscono in
+ *    parallelo (gestito in ClientShell).
  *
  * La transizione e' un'unica animazione coerente (450ms,
- * cubic-bezier(0.4,0,0.2,1)): bordi sx/dx, opacity dei contenuti
- * scrolled-only e dimensioni dei tile sponsor animano insieme. Niente
- * compositing alpha tra DOM differenti — tutto vive dentro la stessa
- * barra che si trasforma.
+ * cubic-bezier(0.4,0,0.2,1)): bordi sx/dx, bg, border, opacity dei
+ * contenuti scrolled-only e dimensioni dei tile sponsor animano
+ * insieme. Niente compositing alpha tra DOM differenti — tutto vive
+ * dentro la stessa barra che si trasforma.
  *
  * Mobile (<lg): la topbar e' nascosta del tutto. Pattern mobile
  * (MobileTopbar + MobileSponsorStrip) resta invariato.
@@ -39,17 +43,33 @@ const FALLBACK_MAIN_SPONSORS = [
   { name: "Ocert" },
 ];
 
+// HERO_RIGHT = 0: in HERO mode il bg e' trasparente, quindi non c'e'
+// bisogno di "clearare" la SidebarRight. Anzi: portando right a 0 il
+// search button si allinea col centro X delle icone social sotto (pr
+// HERO calcolato per metterlo a 40px dal bordo viewport).
 const HERO_LEFT = 88;
-const HERO_RIGHT = 80;
+const HERO_RIGHT = 0;
 const SCROLLED_LEFT = 0;
 const SCROLLED_RIGHT = 0;
+
+// Colori animati per la transizione bg/border della Topbar tra HERO
+// (trasparenti) e SCROLLED (navy opaco + border sottile). RGB di
+// surface-0 (#0A1428) e border (#1F2F4D) per evitare class-based
+// switching che non animerebbe smoothly.
+const SURFACE_0_RGB = "10, 20, 40";
+const BORDER_RGB = "31, 47, 77";
 
 const HERO_TILE_W = 196;
 const HERO_TILE_H = 78;
 const HERO_LOGO_MAX_H = 72;
+// SCROLLED: tile a piena altezza topbar (90px) per massimizzare la
+// presenza visiva dei loghi sponsor — sono il main revenue driver, si
+// vedono di piu'. Larghezza orizzontale invariata (168px) per non
+// rompere il layout della barra. Logo_max_h scalato a 78 (=tile - 12
+// di breathing top+bottom, ~6 cad).
 const SCROLLED_TILE_W = 168;
-const SCROLLED_TILE_H = 48;
-const SCROLLED_LOGO_MAX_H = 32;
+const SCROLLED_TILE_H = 90;
+const SCROLLED_LOGO_MAX_H = 78;
 
 const TRANSITION_MS = 450;
 const TRANSITION_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
@@ -91,12 +111,18 @@ export function Topbar({
 
   return (
     <motion.header
-      className="bg-surface-0 border-border/50 fixed top-0 hidden h-[90px] items-center border-b lg:flex"
+      className="fixed top-0 hidden h-[90px] items-center border-b lg:flex"
       style={{ zIndex: Z.topbar }}
       initial={false}
       animate={{
         left: heroVisible ? HERO_LEFT : SCROLLED_LEFT,
         right: heroVisible ? HERO_RIGHT : SCROLLED_RIGHT,
+        // HERO: bg/border trasparenti → la "barra" sparisce visivamente
+        //       e resta solo la tile sponsor + search a destra, che
+        //       fluttua sopra la foto hero.
+        // SCROLLED: bg navy opaco + border sottile, barra piena come prima.
+        backgroundColor: `rgba(${SURFACE_0_RGB}, ${heroVisible ? 0 : 1})`,
+        borderBottomColor: `rgba(${BORDER_RGB}, ${heroVisible ? 0 : 0.5})`,
       }}
       transition={transition}
       role="banner"
@@ -176,13 +202,27 @@ export function Topbar({
         </Link>
       </motion.div>
 
-      {/* Dx: tile sponsor + divider + search. Sempre visibili.
-          Le dimensioni dei tile e l'altezza dell'ul animano via CSS
-          transition (gestita da tileTransitionStyle). */}
-      <div className="ml-auto flex items-center gap-4 pr-4">
+      {/* Dx: tile sponsor (sx) + search button (dx).
+          Math allineamento:
+            - pr-[22px] sul wrapper → search right edge a viewport_right-22
+              → search CENTER a viewport_right-40 = centro X colonna
+              SidebarRight (w-80, icone h-10 w-10 centrate)
+            - gap-[22px] tra tile e search → tile right edge =
+              search_left - 22 = (viewport_right - 58) - 22 =
+              viewport_right - 80 = bordo SINISTRO della SidebarRight
+          Risultato: ultimo sponsor (Ocert) tocca esattamente il bordo
+          sinistro della sidebar; search icon vive nella stessa colonna
+          verticale delle social icons sotto.
+          self-start → wrapper al top del topbar (Y=0).
+          items-center → search centrata verticalmente nell'altezza
+          tile (78px HERO / 90px SCROLLED). In SCROLLED il tile e' a
+          piena altezza topbar (90px) e la search (h-9 = 36px) si
+          ritrova a Y=27-63 = stesso Y center delle voci nav inline
+          (items-center del topbar parent) → search e nav allineate. */}
+      <div className="ml-auto flex items-center gap-[22px] self-start pr-[22px]">
         {usingFallback ? (
           <ul
-            className="border-border/60 bg-surface-1/60 divide-border/60 flex items-center divide-x overflow-hidden rounded-md border"
+            className="bg-surface-0/55 flex items-center overflow-hidden backdrop-blur-md"
             style={{
               height: `${tileHeight}px`,
               ...tileTransitionStyle,
@@ -199,7 +239,7 @@ export function Topbar({
           </ul>
         ) : (
           <ul
-            className="border-border/60 divide-border/60 flex items-center divide-x overflow-hidden rounded-md border"
+            className="bg-surface-0/55 flex items-center overflow-hidden backdrop-blur-md"
             style={{
               height: `${tileHeight}px`,
               ...tileTransitionStyle,
@@ -216,8 +256,6 @@ export function Topbar({
             ))}
           </ul>
         )}
-
-        <div aria-hidden className="bg-border h-5 w-px" />
 
         <button
           type="button"

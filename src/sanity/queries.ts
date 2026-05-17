@@ -279,6 +279,7 @@ export const matchesByTeamSlugQuery = defineQuery(`
       category,
       defaultReportLink,
       externalRankingUrl,
+      externalStatisticheUrl,
       "logo": logo.asset->url
     },
     "opponent": opponent->{
@@ -319,7 +320,8 @@ export const nextMatchesByTeamSlugsQuery = defineQuery(`
       group,
       season,
       defaultReportLink,
-      externalRankingUrl
+      externalRankingUrl,
+      externalStatisticheUrl
     },
     "opponent": opponent->{
       "club": club->{
@@ -358,7 +360,8 @@ export const lastMatchesByTeamSlugsQuery = defineQuery(`
       group,
       season,
       defaultReportLink,
-      externalRankingUrl
+      externalRankingUrl,
+      externalStatisticheUrl
     },
     "opponent": opponent->{
       "club": club->{
@@ -404,6 +407,7 @@ export const nextMatchQuery = defineQuery(`
       category,
       defaultReportLink,
       externalRankingUrl,
+      externalStatisticheUrl,
       "logo": logo.asset->url
     },
     "opponent": opponent->{
@@ -451,6 +455,7 @@ export const lastMatchQuery = defineQuery(`
       category,
       defaultReportLink,
       externalRankingUrl,
+      externalStatisticheUrl,
       "logo": logo.asset->url
     },
     "opponent": opponent->{

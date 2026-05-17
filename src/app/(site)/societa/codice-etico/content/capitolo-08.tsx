@@ -115,7 +115,7 @@ export function Capitolo08() {
 
         <Article number="8.11">
           Le comunicazioni della Società attraverso il sito ufficiale, i
-          canali social (Instagram, Facebook, X, TikTok, YouTube, Threads),
+          canali social (Instagram, Facebook, YouTube, TikTok, Threads),
           le newsletter e i comunicati stampa sono ispirate ai principi di
           chiarezza, veridicità, tempestività e rispetto della dignità delle
           persone menzionate.

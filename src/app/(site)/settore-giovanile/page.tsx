@@ -52,8 +52,9 @@ export default function SettoreGiovanilePage() {
         </Container>
       </header>
 
-      <Container className="py-12 lg:py-16" size="wide">
-        <ul className="grid gap-4 md:grid-cols-2">
+      <section className="bg-light-bg-0">
+        <Container className="py-12 lg:py-16" size="wide">
+          <ul className="grid gap-4 md:grid-cols-2">
           {SECTIONS.map((s) => (
             <li key={s.href}>
               <Link
@@ -83,8 +84,9 @@ export default function SettoreGiovanilePage() {
               </Link>
             </li>
           ))}
-        </ul>
-      </Container>
+          </ul>
+        </Container>
+      </section>
     </>
   );
 }

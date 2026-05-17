@@ -1,12 +1,4 @@
 import type { Metadata } from "next";
-import {
-  Building2,
-  Landmark,
-  MapPin,
-  ScrollText,
-  ShieldAlert,
-  Ticket,
-} from "lucide-react";
 import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { SocietaHubCard } from "@/components/societa/SocietaHubCard";
 import { Container } from "@/components/ui/Container";
@@ -26,7 +18,6 @@ const BASE_HUB_CARDS = [
     description:
       "Dal 1930 ai nostri giorni: oltre 95 anni di rossoblù raccontati attraverso fondazione, promozioni, fusioni e rifondazioni.",
     href: "/societa/storia",
-    icon: Landmark,
   },
   {
     number: "02",
@@ -34,7 +25,6 @@ const BASE_HUB_CARDS = [
     description:
       "Presidente, vice, direttore generale, tesoriere e consiglio. Le persone che guidano oggi il club.",
     href: "/societa/organigramma",
-    icon: Building2,
   },
   {
     number: "03",
@@ -42,7 +32,6 @@ const BASE_HUB_CARDS = [
     description:
       "Centro Sportivo Aldo Porta: la sede ufficiale dove si allena e gioca la famiglia rossoblù.",
     href: "/societa/impianti",
-    icon: MapPin,
   },
   {
     number: "04",
@@ -50,7 +39,6 @@ const BASE_HUB_CARDS = [
     description:
       "Come accedere alle partite casalinghe, condizioni di ingresso e contatti per gruppi e abbonamenti stagionali.",
     href: "/societa/biglietteria",
-    icon: Ticket,
   },
 ];
 
@@ -67,7 +55,6 @@ const GOVERNANCE_HUB_CARDS = [
     description:
       "Principi, valori e regole di condotta del club. Documento giuridicamente vincolante per tesserati, tecnici, sponsor e fornitori.",
     href: "/societa/codice-etico",
-    icon: ScrollText,
   },
   {
     number: "06",
@@ -75,7 +62,6 @@ const GOVERNANCE_HUB_CARDS = [
     description:
       "Canale ufficiale per segnalare violazioni del Codice Etico. Riservatezza garantita, nessuna ritorsione.",
     href: "/societa/segnalazioni",
-    icon: ShieldAlert,
   },
 ];
 
@@ -109,15 +95,21 @@ export default function SocietaPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-20" size="wide">
-        <RevealOnScroll>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {HUB_CARDS.map((card) => (
-              <SocietaHubCard key={card.number} {...card} />
-            ))}
-          </div>
-        </RevealOnScroll>
-      </Container>
+      {/* Hub card su banda chiara: card scure (SocietaHubCard) interne.
+          Grid lg-3 colonne — stesso pattern di TeamsCards in homepage,
+          rows da 3. Con flag governance attivo, 6 card = 2 righe piene.
+          Senza flag, 4 card = 1 riga piena + 1 orfana (acceptable). */}
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-20" size="wide">
+          <RevealOnScroll>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {HUB_CARDS.map((card) => (
+                <SocietaHubCard key={card.number} {...card} />
+              ))}
+            </div>
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <RevealOnScroll>
         <StoryNumbers />

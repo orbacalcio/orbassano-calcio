@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import type { MatchSummary } from "@/sanity/fetchers";
+import { MatchDatePill } from "./MatchDatePill";
 import { TeamLogo } from "./TeamLogo";
 
 // Stemma del club: file statico in /public, lo stesso usato in
@@ -189,30 +190,38 @@ export function MatchCard({
   if (variant === "compact") {
     return (
       <article
-        className="border-border bg-surface-2/40 hover:border-brand-gold/30 flex flex-1 flex-col justify-center gap-5 rounded-lg border p-6 transition-colors md:p-7"
+        className="border-border bg-surface-2/40 hover:border-brand-gold/30 flex flex-1 items-stretch overflow-hidden rounded-lg border transition-colors"
         aria-label={`Partita ${formatDay(match.date)} ${formatMonthShort(match.date)}`}
       >
-        <div className="text-ink-mid flex items-center justify-between gap-2 text-[12px] font-semibold tracking-[0.15em] uppercase">
-          <span className="font-mono">
-            {formatDay(match.date)} {formatMonthShort(match.date)}
-            {!match.isDateTbd && ` · ${formatTime(match.date)}`}
-            {match.isDateTbd && ` · TBD`}
-          </span>
-          <StatusBadge status={match.status} />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-1 justify-center">
+        {/* Pill data verticale a sinistra: barra stretta + alta che va
+            da bordo a bordo della card (oltre i loghi squadra sopra e
+            sotto). Flush ai bordi; la card ha overflow-hidden per
+            mascherare gli angoli arrotondati sopra la pill. */}
+        <MatchDatePill iso={match.date} isDateTbd={match.isDateTbd} />
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-3 p-5 md:p-6">
+          <div className="flex items-center justify-end">
+            <StatusBadge status={match.status} />
+          </div>
+          <div className="flex items-center justify-between gap-4 md:gap-6">
+          <div className="flex min-w-0 flex-1 justify-center">
             <TeamLogo
               src={match.home ? OUR_LOGO_SRC : opponentLogo}
               name={match.home ? ourTeamName : opponentName}
-              size={96}
+              size={72}
               interactive={false}
               primaryColor={!match.home ? opponentClub?.primaryColor ?? null : null}
             />
           </div>
-          <div className="flex shrink-0 flex-col items-center gap-1">
-            <div className="font-display text-ink-hi text-4xl font-extrabold tracking-[0.005em] md:text-5xl">
-              {hasScore ? `${match.scoreHome} - ${match.scoreAway}` : "vs"}
+          <div className="flex shrink-0 flex-col items-center gap-1 px-2 md:px-3">
+            <div
+              className={cn(
+                "font-display text-4xl font-extrabold tracking-[0.005em] md:text-5xl",
+                hasScore ? "text-brand-red" : "text-ink-hi",
+              )}
+            >
+              {hasScore
+                ? `${match.scoreHome}  -  ${match.scoreAway}`
+                : "vs"}
             </div>
             {match.status === "finished" && reportHref && (
               <a
@@ -227,14 +236,15 @@ export function MatchCard({
               </a>
             )}
           </div>
-          <div className="flex flex-1 justify-center">
+          <div className="flex min-w-0 flex-1 justify-center">
             <TeamLogo
               src={match.home ? opponentLogo : OUR_LOGO_SRC}
               name={match.home ? opponentName : ourTeamName}
-              size={96}
+              size={72}
               interactive={false}
               primaryColor={match.home ? opponentClub?.primaryColor ?? null : null}
             />
+          </div>
           </div>
         </div>
       </article>
@@ -315,11 +325,13 @@ export function MatchCard({
       {/* Centro: score o orario */}
       <div className="font-display text-ink-hi flex shrink-0 items-center justify-center font-extrabold tracking-[0.005em] md:w-32 md:text-2xl">
         {hasScore ? (
-          <span className="text-3xl">
-            {match.scoreHome} - {match.scoreAway}
+          <span className="text-brand-red text-3xl">
+            {match.scoreHome}
+            {"  -  "}
+            {match.scoreAway}
           </span>
         ) : match.status === "postponed" || match.status === "cancelled" ? (
-          <span className="text-ink-low text-2xl">— — —</span>
+          <span className="text-ink-low text-2xl">{"  -  "}</span>
         ) : match.isDateTbd ? (
           <span className="text-ink-mid font-mono text-sm" title="Data e ora ancora da definire">
             <CalendarClock

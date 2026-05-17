@@ -33,6 +33,13 @@ import { Z } from "@/lib/z-indexes";
  * (vedi /api/search). Indice incrementale o ranking smart sono follow-up
  * post-launch quando avremo volumi che lo giustificano.
  */
+type Page = {
+  id: string;
+  title: string;
+  path: string;
+  section: string;
+};
+
 type News = {
   _id: string;
   title: string;
@@ -67,6 +74,7 @@ type Sponsor = {
 
 type SearchResults = {
   q: string;
+  pages: Page[];
   news: News[];
   players: Player[];
   teams: Team[];
@@ -75,6 +83,7 @@ type SearchResults = {
 
 const EMPTY: SearchResults = {
   q: "",
+  pages: [],
   news: [],
   players: [],
   teams: [],
@@ -185,6 +194,7 @@ export function SearchDialog({ open, onClose }: Props) {
   }, [onClose]);
 
   const totalResults =
+    results.pages.length +
     results.news.length +
     results.players.length +
     results.teams.length +
@@ -264,6 +274,19 @@ export function SearchDialog({ open, onClose }: Props) {
                 </p>
               ) : (
                 <div className="flex flex-col gap-12">
+                  {results.pages.length > 0 && (
+                    <ResultGroup title="Pagine">
+                      {results.pages.map((p) => (
+                        <ResultItem
+                          key={p.id}
+                          href={p.path}
+                          title={p.title}
+                          subtitle={p.section}
+                          onClick={handleNavigate}
+                        />
+                      ))}
+                    </ResultGroup>
+                  )}
                   {results.news.length > 0 && (
                     <ResultGroup title="News">
                       {results.news.map((n) => (

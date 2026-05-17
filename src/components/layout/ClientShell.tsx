@@ -62,13 +62,28 @@ export function ClientShell({
       const raf = requestAnimationFrame(() => setHeroVisible(false));
       return () => cancelAnimationFrame(raf);
     }
+    // rootMargin top -50%: root effettivo = meta' inferiore del
+     // viewport. L'hero e' considerato visibile solo finche' sovrappone
+     // questa zona. Quando il bottom dell'hero sale sopra meta' viewport
+     // (cioe' l'utente vede gia' le news nella parte bassa), l'observer
+     // emette isIntersecting=false → sidebar fade out + padding lg via.
+     // Trigger anticipato rispetto al "completamente passato".
     const observer = new IntersectionObserver(
       ([entry]) => setHeroVisible(Boolean(entry?.isIntersecting)),
-      { rootMargin: "-44px 0px 0px 0px", threshold: 0 },
+      { rootMargin: "-50% 0px 0px 0px", threshold: 0 },
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [pathname]);
+
+  // Toggle classe `past-hero` su <html> quando l'hero esce dal
+  // viewport: una regola CSS in globals.css azzera il padding-left/right
+  // lg del main e del footer wrapper, cosi' le strisce navy laterali
+  // (sotto le sidebar verticali) spariscono in sincrono col fade delle
+  // sidebar. Niente effetti — switch secco.
+  useEffect(() => {
+    document.documentElement.classList.toggle("past-hero", !heroVisible);
+  }, [heroVisible]);
 
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
@@ -111,22 +126,37 @@ export function ClientShell({
         onSearchClick={openSearch}
       />
 
-      {/* SidebarLeft: visibile in HERO, fade out in parallelo
-          all'allargamento della Topbar (stessa curva/durata). Il
-          bottone "Altro" apre il NavigationDrawer (pattern juventus.com).
-          Niente fade per SidebarRight: i social del club devono essere
-          accessibili in ogni pagina, come per il pulsante cookie. */}
+      {/* SidebarLeft + SidebarRight: visibili sopra hero, entrambe in
+          fade-out + slide laterale quando l'hero esce dal viewport.
+          Lo slide laterale (x: -88 / +80) e' la stessa larghezza
+          delle sidebar — sembra che si "ritirino" nei bordi del
+          viewport invece di sparire sul posto. Combinato con fade
+          opacity + stessa curva 450ms cubic-bezier(0.4,0,0.2,1) della
+          Topbar morph, l'effetto e' coerente con la trasformazione
+          della topbar che avviene in parallelo: tutto sembra UNA
+          coreografia sincrona, non tre animazioni separate. */}
       <motion.div
         initial={false}
         animate={{
           opacity: heroVisible ? 1 : 0,
+          x: heroVisible ? 0 : -88,
           pointerEvents: heroVisible ? "auto" : "none",
         }}
         transition={sidebarFade}
       >
         <SidebarLeft onMoreClick={openDrawer} />
       </motion.div>
-      <SidebarRight />
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: heroVisible ? 1 : 0,
+          x: heroVisible ? 0 : 80,
+          pointerEvents: heroVisible ? "auto" : "none",
+        }}
+        transition={sidebarFade}
+      >
+        <SidebarRight />
+      </motion.div>
 
       {/* Drawer condiviso (mobile + desktop scrolled) */}
       <NavigationDrawer

@@ -7,6 +7,7 @@ import { SponsorMarquee } from "@/components/home/SponsorMarquee";
 import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { TeamsCards } from "@/components/home/TeamsCards";
 import { VivLOrba } from "@/components/home/VivLOrba";
+import { YouthMatchStrip } from "@/components/home/YouthMatchStrip";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { buildSportsTeamLd } from "@/lib/json-ld";
@@ -14,23 +15,25 @@ import { buildSportsTeamLd } from "@/lib/json-ld";
 /**
  * Homepage cinematografica (M3).
  *
- * Otto blocchi in scroll verticale:
+ * Blocchi in scroll verticale:
  * 1. Hero full-bleed con carosello (testi per-slide + Ken Burns) — ha
  *    coreografia interna, niente RevealOnScroll esterno.
- * 2. Match strip info dense
- * 3. News in evidenza 2x2
- * 4. Tre card 01/02/03 per le aree del club
- * 5. Storia in numeri (StoryNumbers ha gia' i suoi counter animati,
- *    ma va comunque sotto un RevealOnScroll per il fade del wrapper)
+ * 2. News in evidenza (con CTA "Tutti i contenuti" tight in basso)
+ * 3. MatchStrip Prima Squadra (banda navy + CTA "Calendario e risultati"
+ *    tight in basso, stesso pattern delle news)
+ * 4. Manifesto "Never give up since 1930"
+ * 5. Storia in numeri
  * 6. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
- * 7. Banner 5×1000 con CF in mono
- * 8. Marquee sponsor scorrimento infinito
- * (9. Footer dark — viene da AppShell)
+ * 7. YouthMatchStrip — Juniores + Settore Giovanile Scolastico
+ * 8. Tre card 01/02/03 per le aree del club (LE SQUADRE)
+ * 9. Banner 5×1000 con CF in mono
+ * 10. Marquee sponsor scorrimento infinito
+ * (11. Footer dark — viene da AppShell)
  *
- * Ogni blocco sotto l'hero e' wrappato in <RevealOnScroll> per il
- * fade + translateY al primo ingresso nel viewport: la pagina
- * "respira" mentre l'utente scrolla, niente blocchi che appaiono di
- * netto.
+ * Tutti i wrapper RevealOnScroll sono no-op (vedi RevealOnScroll.tsx):
+ * l'animazione di slide-in `y: +32 -> 0` creava un effetto "salto verso
+ * l'alto" fastidioso al primo scroll-down. Le sezioni si presentano
+ * statiche; i wrapper restano per backward compat / futura riattivazione.
  */
 export default function Home() {
   return (
@@ -43,22 +46,23 @@ export default function Home() {
       />
       <Hero />
       <RevealOnScroll>
-        <MatchStrip />
-      </RevealOnScroll>
-      <RevealOnScroll>
-        <TeamsCards />
-      </RevealOnScroll>
-      <RevealOnScroll>
         <NewsGrid />
+      </RevealOnScroll>
+      <MatchStrip />
+      <RevealOnScroll>
+        <Manifesto />
       </RevealOnScroll>
       <RevealOnScroll>
         <StoryNumbers />
       </RevealOnScroll>
       <RevealOnScroll>
-        <Manifesto />
+        <VivLOrba />
       </RevealOnScroll>
       <RevealOnScroll>
-        <VivLOrba />
+        <YouthMatchStrip />
+      </RevealOnScroll>
+      <RevealOnScroll>
+        <TeamsCards />
       </RevealOnScroll>
       <RevealOnScroll>
         <Banner5x1000 />

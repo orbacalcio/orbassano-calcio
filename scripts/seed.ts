@@ -79,10 +79,9 @@ const settings = {
   social: {
     instagram: "https://www.instagram.com/asdorbassanocalcio/",
     facebook: "https://facebook.com/asdorbassanocalcio",
-    youtube: "https://www.youtube.com/@OrbassanoCalcio",
-    threads: "https://www.threads.net/@asdorbassanocalcio",
-    twitter: "https://twitter.com/orbassanocalcio",
+    youtube: "https://www.youtube.com/@OrbassanoCalcio/playlists",
     tiktok: "https://www.tiktok.com/@asdorbassanocalcio",
+    threads: "https://www.threads.net/@asdorbassanocalcio",
   },
   sprintsportLinks: {
     classifica: "https://www.sprintesport.it/sezioni/119/classifiche",

@@ -50,7 +50,7 @@ export function HeroOverlay({ season, league, group }: Props) {
       variants={wrapper}
       initial={initial}
       animate="show"
-      className="relative flex flex-col items-start gap-6 px-6 pb-16 sm:pb-24 lg:px-12"
+      className="relative flex flex-col items-start gap-6 px-6 py-12 sm:py-16 lg:px-12"
     >
       <motion.span
         variants={item}

@@ -48,14 +48,11 @@ export async function VivLOrba() {
   return (
     <section
       aria-label="Vivi l'Orba — feed Instagram"
-      className="border-border/50 relative overflow-hidden border-y py-20"
+      className="bg-light-bg-0 relative overflow-hidden py-20"
     >
-      <div
-        aria-hidden
-        className="bg-brand-red/10 pointer-events-none absolute -top-32 right-1/4 h-[36rem] w-[36rem] rounded-full blur-[160px]"
-      />
       <Container className="relative" size="wide">
         <Section
+          tone="light"
           eyebrow="Vivi l'Orba"
           title="Il club dentro Instagram"
           subtitle="Allenamenti, partite, momenti di spogliatoio. Quello che succede sui campi di Orbassano arriva prima qui."

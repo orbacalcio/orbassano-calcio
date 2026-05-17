@@ -39,25 +39,23 @@ export default async function ImpiantiPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          {facilities.length > 0 ? (
-            // Le facility occupano la larghezza piena del Container: ogni
-            // card e' una "scheda impianto" che merita spazio per
-            // foto + indirizzo + dettagli. Se ce ne sono piu' di una
-            // attive, vanno una sotto l'altra (stack verticale).
-            <div className="flex flex-col gap-8">
-              {facilities.map((f, i) => (
-                <FacilityCard key={f._id} facility={f} index={i} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
-              Gli impianti non sono ancora popolati nel CMS.
-            </p>
-          )}
-        </RevealOnScroll>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            {facilities.length > 0 ? (
+              <div className="flex flex-col gap-8">
+                {facilities.map((f, i) => (
+                  <FacilityCard key={f._id} facility={f} index={i} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
+                Gli impianti non sono ancora popolati nel CMS.
+              </p>
+            )}
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       {/* Box editoriale "Il Mazzola" — sempre visibile (testo + lista
           campioni editabili da Studio → singleton settings → fieldset

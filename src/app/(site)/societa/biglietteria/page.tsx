@@ -63,30 +63,32 @@ export default function BiglietteriaPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {ACCESS_INFO.map((info) => (
-              <article
-                key={info.title}
-                className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
-              >
-                <info.icon
-                  size={28}
-                  className="text-brand-gold"
-                  aria-hidden
-                />
-                <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em] uppercase">
-                  {info.title}
-                </h3>
-                <p className="text-ink-mid text-sm leading-relaxed">
-                  {info.body}
-                </p>
-              </article>
-            ))}
-          </div>
-        </RevealOnScroll>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+              {ACCESS_INFO.map((info) => (
+                <article
+                  key={info.title}
+                  className="border-border bg-surface-1 hover:border-brand-gold/30 flex flex-col gap-4 rounded-2xl border p-7 transition-colors"
+                >
+                  <info.icon
+                    size={28}
+                    className="text-brand-gold"
+                    aria-hidden
+                  />
+                  <h3 className="font-display text-ink-hi text-xl leading-tight font-bold tracking-[0.005em] uppercase">
+                    {info.title}
+                  </h3>
+                  <p className="text-ink-mid text-sm leading-relaxed">
+                    {info.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <section
         aria-labelledby="venue-title"

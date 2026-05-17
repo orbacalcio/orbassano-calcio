@@ -133,36 +133,38 @@ export default function CinquePerMillePage() {
         </Container>
       </header>
 
-      <Container id="come-fare" className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          <div className="flex flex-col gap-3">
-            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Come fare
-            </span>
-            <h2 className="font-display text-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-              Quattro passaggi, due minuti del tuo tempo
-            </h2>
-          </div>
-          <ol className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {STEPS.map((step) => (
-              <li
-                key={step.number}
-                className="border-border bg-surface-1 flex flex-col gap-4 rounded-2xl border p-6"
-              >
-                <span className="font-display text-brand-gold/40 text-5xl leading-none font-black tracking-[0.005em]">
-                  {step.number}
-                </span>
-                <h3 className="font-display text-ink-hi text-lg leading-tight font-bold tracking-[0.01em] uppercase">
-                  {step.title}
-                </h3>
-                <p className="text-ink-mid text-sm leading-relaxed">
-                  {step.body}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </RevealOnScroll>
-      </Container>
+      <section id="come-fare" className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            <div className="flex flex-col gap-3">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                Come fare
+              </span>
+              <h2 className="font-display text-light-ink-hi max-w-3xl text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
+                Quattro passaggi, due minuti del tuo tempo
+              </h2>
+            </div>
+            <ol className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {STEPS.map((step) => (
+                <li
+                  key={step.number}
+                  className="border-border bg-surface-1 flex flex-col gap-4 rounded-2xl border p-6"
+                >
+                  <span className="font-display text-brand-gold/40 text-5xl leading-none font-black tracking-[0.005em]">
+                    {step.number}
+                  </span>
+                  <h3 className="font-display text-ink-hi text-lg leading-tight font-bold tracking-[0.01em] uppercase">
+                    {step.title}
+                  </h3>
+                  <p className="text-ink-mid text-sm leading-relaxed">
+                    {step.body}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <section
         aria-labelledby="usi-title"

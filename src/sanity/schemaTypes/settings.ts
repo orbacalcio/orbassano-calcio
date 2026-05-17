@@ -285,14 +285,15 @@ export const settings = defineType({
     defineField({
       name: "social",
       title: "Social media",
+      description:
+        "X / Twitter rimosso 2026-05-17 (il club non presidia piu' la piattaforma). I documenti gia' salvati potrebbero ancora avere il campo `twitter`: viene ignorato dal sito ma puoi pulirlo dal dataset con uno sweep di sanity exec.",
       type: "object",
       fields: [
         defineField({ name: "instagram", type: "url" }),
         defineField({ name: "facebook", type: "url" }),
         defineField({ name: "youtube", type: "url" }),
-        defineField({ name: "threads", type: "url" }),
-        defineField({ name: "twitter", type: "url" }),
         defineField({ name: "tiktok", type: "url" }),
+        defineField({ name: "threads", type: "url" }),
       ],
     }),
     defineField({

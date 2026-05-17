@@ -17,10 +17,9 @@ import { Z } from "@/lib/z-indexes";
 const FALLBACK_LINKS: SocialLinks = {
   instagram: "https://www.instagram.com/asdorbassanocalcio/",
   facebook: "https://facebook.com/asdorbassanocalcio",
-  threads: "https://www.threads.net/@asdorbassanocalcio",
-  youtube: "https://www.youtube.com/@OrbassanoCalcio",
-  twitter: "https://twitter.com/orbassanocalcio",
+  youtube: "https://www.youtube.com/@OrbassanoCalcio/playlists",
   tiktok: "https://www.tiktok.com/@asdorbassanocalcio",
+  threads: "https://www.threads.net/@asdorbassanocalcio",
 };
 
 export function SidebarRight({
@@ -31,10 +30,14 @@ export function SidebarRight({
   return (
     <aside
       aria-label="Social del club"
-      className="bg-surface-0/55 fixed top-0 right-0 hidden h-screen w-[80px] flex-col items-center pt-[210px] pb-6 backdrop-blur-md lg:flex"
+      className="bg-surface-0/55 fixed top-0 right-0 hidden h-screen w-[80px] flex-col items-center pt-[175px] pb-6 backdrop-blur-md lg:flex"
       style={{ zIndex: Z.sidebar }}
     >
-      <SocialIcons links={links} className="flex-col gap-3.5" />
+      {/* pt-[175px] = SidebarLeft pt-[60px] + logo (79px) + gap-9 (36px):
+          la prima icona social (Instagram) si allinea verticalmente
+          alla prima voce di menu sinistra (NEWS). Le successive
+          seguono col loro gap-9, mirroring del ritmo del menu sx. */}
+      <SocialIcons links={links} className="flex-col gap-9" />
     </aside>
   );
 }

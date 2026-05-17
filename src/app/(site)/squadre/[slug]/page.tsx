@@ -8,7 +8,6 @@ import { PlayerCard } from "@/components/squadre/PlayerCard";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
-import { Section } from "@/components/ui/Section";
 import {
   buildBreadcrumbLd,
   buildSportsTeamLd,
@@ -16,10 +15,95 @@ import {
 import {
   fetchTeamBySlug,
   fetchTeamsByCategory,
+  type PlayerSummary,
+  type StaffMember,
   type TeamCategory,
   type TeamDetail,
   type TeamSummary,
 } from "@/sanity/fetchers";
+
+/**
+ * Classificazione ruoli player in 4 gruppi GK/DF/MF/FW (pattern
+ * juventus.com). Il campo `role` su Sanity e' free-text in italiano
+ * (es. "Portiere", "Difensore centrale", "Terzino", "Centrocampista",
+ * "Trequartista", "Attaccante", "Ala destra"). Pattern matching
+ * keyword in lowercase, fallback "OTHER" per ruoli non classificati.
+ */
+type RoleGroup = "GK" | "DF" | "MF" | "FW" | "OTHER";
+
+const ROLE_GROUP_ORDER: RoleGroup[] = ["GK", "DF", "MF", "FW", "OTHER"];
+
+const ROLE_GROUP_LABEL: Record<RoleGroup, string> = {
+  GK: "Portieri",
+  DF: "Difensori",
+  MF: "Centrocampisti",
+  FW: "Attaccanti",
+  OTHER: "Altri ruoli",
+};
+
+function classifyRole(role: string | null): RoleGroup {
+  if (!role) return "OTHER";
+  const r = role.toLowerCase();
+  if (r.includes("port")) return "GK";
+  if (
+    r.includes("dif") ||
+    r.includes("terz") ||
+    r.includes("later") ||
+    r.includes("libero")
+  ) {
+    return "DF";
+  }
+  if (
+    r.includes("cent") ||
+    r.includes("med") ||
+    r.includes("mez") ||
+    r.includes("regista") ||
+    r.includes("trequart") ||
+    r.includes("interno")
+  ) {
+    return "MF";
+  }
+  if (
+    r.includes("att") ||
+    r.includes("ala") ||
+    r.includes("punt") ||
+    r.includes("ester") ||
+    r.includes("seconda")
+  ) {
+    return "FW";
+  }
+  return "OTHER";
+}
+
+function groupPlayersByRole(
+  players: PlayerSummary[],
+): Record<RoleGroup, PlayerSummary[]> {
+  const groups: Record<RoleGroup, PlayerSummary[]> = {
+    GK: [],
+    DF: [],
+    MF: [],
+    FW: [],
+    OTHER: [],
+  };
+  for (const p of players) {
+    groups[classifyRole(p.role)].push(p);
+  }
+  return groups;
+}
+
+function findHeadCoach(staff: StaffMember[] | null): StaffMember | null {
+  if (!staff || staff.length === 0) return null;
+  const head = staff.find((s) => {
+    const r = s.role.toLowerCase();
+    return (
+      r.includes("allenatore") ||
+      r === "mister" ||
+      r.startsWith("mister ") ||
+      r.includes("head coach")
+    );
+  });
+  return head ?? null;
+}
 
 /**
  * Pagina /squadre/[slug]:
@@ -119,13 +203,15 @@ function CategoryView({
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-20" size="wide">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {teams.map((t) => (
-            <TeamCard key={t._id} team={t} />
-          ))}
-        </div>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-20" size="wide">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {teams.map((t) => (
+              <TeamCard key={t._id} team={t} />
+            ))}
+          </div>
+        </Container>
+      </section>
     </>
   );
 }
@@ -233,92 +319,10 @@ function TeamView({ team }: { team: TeamDetail }) {
         </Container>
       )}
 
-      {/* ROSA */}
-      {team.players.length > 0 ? (
-        <Container className="py-16 lg:py-20" size="wide">
-          <Section
-            eyebrow="Rosa"
-            title="I giocatori"
-            subtitle={
-              team.season
-                ? `Atleti tesserati per la stagione ${team.season}.`
-                : undefined
-            }
-          >
-            <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {team.players.map((p) => (
-                <PlayerCard key={p._id} player={p} teamSlug={team.slug} />
-              ))}
-            </div>
-          </Section>
-        </Container>
-      ) : (
-        <Container className="py-16" size="wide">
-          <div className="border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center">
-            <p className="text-ink-hi text-lg font-semibold">
-              Rosa in aggiornamento
-            </p>
-            <p className="text-ink-mid mt-2 text-sm leading-relaxed">
-              I tesseramenti{team.season ? ` ${team.season}` : ""} non sono
-              ancora stati pubblicati. Torna presto.
-            </p>
-          </div>
-        </Container>
-      )}
-
-      {/* STAFF */}
-      {team.staff && team.staff.length > 0 && (
-        <Container className="border-border/50 border-t py-16 lg:py-20" size="wide">
-          <Section eyebrow="Staff tecnico" title="Chi guida la squadra">
-            <ul className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {team.staff.map((s, i) => (
-                <li
-                  key={`${s.role}-${s.name}-${i}`}
-                  className="border-border bg-surface-1 flex items-center gap-4 rounded-2xl border p-5"
-                >
-                  {s.photo ? (
-                    <Image
-                      src={s.photo}
-                      alt={s.name}
-                      width={64}
-                      height={64}
-                      className="h-16 w-16 shrink-0 rounded-full object-cover"
-                      placeholder={s.photoLqip ? "blur" : "empty"}
-                      blurDataURL={s.photoLqip ?? undefined}
-                    />
-                  ) : (
-                    <div
-                      aria-hidden
-                      className="from-surface-2 to-surface-3 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br"
-                    >
-                      <span className="font-display text-brand-gold text-base font-black tracking-[0.04em]">
-                        {s.name
-                          .split(" ")
-                          .map((p) => p.charAt(0))
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .join("")
-                          .toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex flex-col">
-                    <span className="text-ink-low font-mono text-[11px] tracking-[0.12em] uppercase">
-                      {s.role}
-                    </span>
-                    <span className="font-display text-ink-hi text-base font-bold tracking-[0.01em] uppercase">
-                      {s.name}
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Section>
-        </Container>
-      )}
+      <RosterStaff team={team} />
 
       {/* BACK LINK */}
-      <Container className="pb-16" size="wide">
+      <Container className="pb-16 pt-12" size="wide">
         <Link
           href="/squadre"
           className="text-ink-mid hover:text-brand-gold inline-flex items-center gap-2 text-sm transition-colors"
@@ -392,5 +396,155 @@ function Breadcrumb({
         </ol>
       </Container>
     </nav>
+  );
+}
+
+// ---------- ROSA + STAFF: layout juventus.com (per tutte le squadre) ---------------
+
+function RosterStaff({ team }: { team: TeamDetail }) {
+  const grouped = groupPlayersByRole(team.players);
+  const coach = findHeadCoach(team.staff);
+  const otherStaff = (team.staff ?? []).filter((s) => s !== coach);
+
+  // Prima Squadra: lista atleti come PlayerCard (foto verticale +
+  // numero/capitano badge + nome). Altre squadre giovanili: lista
+  // testuale juventus-style (nome piccolo gold + cognome bianco
+  // grande, niente foto perche' i tesseramenti dei giovani non
+  // hanno scatti dedicati). In entrambi i casi i giocatori sono
+  // raggruppati per ruolo (Portieri/Difensori/Centrocampisti/Attaccanti).
+  const usePhotoCards = team.category === "Prima Squadra";
+
+  // Struttura juventus.com sempre presente per coerenza tra squadre:
+  // se almeno un ruolo ha tesserati, mostro le sezioni popolate.
+  // Se TUTTA la rosa e' vuota, mostro un blocco "ROSA" placeholder
+  // con stesso watermark stile, cosi' la pagina mantiene la stessa
+  // gerarchia visiva delle squadre popolate.
+  const hasAnyPlayer = team.players.length > 0;
+
+  return (
+    <Container className="flex flex-col gap-16 py-16 lg:gap-24 lg:py-24" size="wide">
+      {hasAnyPlayer ? (
+        ROLE_GROUP_ORDER.map((g) => {
+          const items = grouped[g];
+          if (items.length === 0) return null;
+          return (
+            <RosterRoleSection
+              key={g}
+              label={ROLE_GROUP_LABEL[g]}
+              players={items}
+              teamSlug={team.slug}
+              usePhotoCards={usePhotoCards}
+            />
+          );
+        })
+      ) : (
+        <RosterEmptyPlaceholder season={team.season} />
+      )}
+
+      {coach && <YouthCoachSection coach={coach} />}
+
+      {otherStaff.length > 0 && <YouthStaffSection staff={otherStaff} />}
+    </Container>
+  );
+}
+
+function RosterEmptyPlaceholder({ season }: { season: string | null }) {
+  return (
+    <section className="flex flex-col gap-6">
+      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+        Rosa
+      </h2>
+      <p className="text-ink-mid max-w-xl text-base leading-relaxed">
+        I tesseramenti{season ? ` ${season}` : ""} non sono ancora stati
+        pubblicati. Torna presto.
+      </p>
+    </section>
+  );
+}
+
+function RosterRoleSection({
+  label,
+  players,
+  teamSlug,
+  usePhotoCards,
+}: {
+  label: string;
+  players: PlayerSummary[];
+  teamSlug: string;
+  usePhotoCards: boolean;
+}) {
+  return (
+    <section className="flex flex-col gap-6">
+      {/* Titolo gigante watermark oro (pattern juventus.com): semi
+          trasparente sopra la lista atleti, scala fluida col viewport. */}
+      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+        {label}
+      </h2>
+      {usePhotoCards ? (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {players.map((p) => (
+            <PlayerCard key={p._id} player={p} teamSlug={teamSlug} />
+          ))}
+        </div>
+      ) : (
+        <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+          {players.map((p) => (
+            <li key={p._id}>
+              <Link
+                href={`/squadre/${teamSlug}/${p.slug}`}
+                className="border-border/40 hover:border-brand-gold/60 focus-visible:outline-brand-gold group flex flex-col gap-1 border-b pb-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+                  {p.firstName}
+                </span>
+                <span className="font-display text-ink-hi group-hover:text-brand-gold text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase transition-colors md:text-4xl">
+                  {p.lastName}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function YouthCoachSection({ coach }: { coach: StaffMember }) {
+  return (
+    <section className="flex flex-col gap-6">
+      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+        Allenatore
+      </h2>
+      <div className="flex flex-col gap-2">
+        <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+          {coach.role}
+        </span>
+        <span className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-4xl">
+          {coach.name}
+        </span>
+      </div>
+    </section>
+  );
+}
+
+function YouthStaffSection({ staff }: { staff: StaffMember[] }) {
+  return (
+    <section className="flex flex-col gap-6">
+      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+        Staff
+      </h2>
+      <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+        {staff.map((s, i) => (
+          <li key={`${s.role}-${s.name}-${i}`} className="flex flex-col gap-1 border-border/40 border-b pb-4">
+            <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+              {s.role}
+            </span>
+            <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl">
+              {s.name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

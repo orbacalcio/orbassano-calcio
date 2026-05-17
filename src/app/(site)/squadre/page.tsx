@@ -69,28 +69,37 @@ export default async function SquadrePage() {
         </Container>
       </header>
 
-      <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
-        {SECTIONS.map(({ category, eyebrow, cols }) => {
-          const items = teams.filter((t) => t.category === category);
-          if (items.length === 0) return null;
-          return (
-            <Section key={category} eyebrow={eyebrow} title={category}>
-              <div className={`mt-2 grid grid-cols-1 gap-4 ${cols}`}>
-                {items.map((t) => (
-                  <TeamCard key={t._id} team={t} />
-                ))}
-              </div>
-            </Section>
-          );
-        })}
+      {/* Banda chiara con sezioni Section tone="light": titoli navy,
+          card squadre interne scure (bg-surface-1) — pattern home. */}
+      <section className="bg-light-bg-0">
+        <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
+          {SECTIONS.map(({ category, eyebrow, cols }) => {
+            const items = teams.filter((t) => t.category === category);
+            if (items.length === 0) return null;
+            return (
+              <Section
+                key={category}
+                tone="light"
+                eyebrow={eyebrow}
+                title={category}
+              >
+                <div className={`mt-2 grid grid-cols-1 gap-4 ${cols}`}>
+                  {items.map((t) => (
+                    <TeamCard key={t._id} team={t} />
+                  ))}
+                </div>
+              </Section>
+            );
+          })}
 
-        {teams.length === 0 && (
-          <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
-            Le squadre non sono ancora pubblicate. Controlla che il CMS sia
-            popolato e i webhook revalidate configurati.
-          </p>
-        )}
-      </Container>
+          {teams.length === 0 && (
+            <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
+              Le squadre non sono ancora pubblicate. Controlla che il CMS sia
+              popolato e i webhook revalidate configurati.
+            </p>
+          )}
+        </Container>
+      </section>
     </>
   );
 }

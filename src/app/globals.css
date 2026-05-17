@@ -27,6 +27,18 @@
   --color-ink-mid: #a8b5cc;
   --color-ink-low: #6b7a99;
 
+  /* Isole chiare invarianti — pattern juventus.com a bande:
+     alcune sezioni della home (NewsGrid, StoryNumbersGrid, sponsor)
+     hanno banda chiara come "interruzione" del body navy. Tile e
+     testi navy scuro per garantire contrasto WCAG AA su off-white.
+     Body resta navy (token surface-* sopra). */
+  --color-light-bg-0: #f2f4f8;
+  --color-light-bg-1: #fdfdfd;
+  --color-light-border: #c9d2e0;
+  --color-light-ink-hi: #0a1428;
+  --color-light-ink-mid: #3d4f73;
+  --color-light-ink-low: #7a8aa8;
+
   /* Famiglie tipografiche (vedi docs/TYPOGRAPHY.md).
      I CSS custom property con il vero font sono iniettati da next/font
      sull'elemento <html> (variable: --font-display / --font-body / --font-mono).
@@ -73,6 +85,110 @@ body {
 /* Scrollbar discreta sul navy */
 * {
   scrollbar-color: var(--color-surface-3) var(--color-surface-0);
+}
+
+/**
+ * Sotto hero: ClientShell aggiunge la classe `past-hero` su <html>.
+ * Azzero il padding-left/right lg del main e del wrapper Footer
+ * (riservato sopra hero alle sidebar verticali 88+80px).
+ *
+ * Transizione CSS 450ms cubic-bezier sincrona col fade-out delle
+ * sidebar (ClientShell.tsx → sidebarFade): il padding del main
+ * "scivola" insieme alle sidebar che escono dai bordi, niente
+ * scatto. Stessa identica curva del topbar morph per coreografia
+ * coerente.
+ */
+@media (min-width: 1024px) {
+  #main-content,
+  #main-content + div {
+    transition:
+      padding-left 450ms cubic-bezier(0.4, 0, 0.2, 1),
+      padding-right 450ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+html.past-hero #main-content,
+html.past-hero #main-content + div {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #main-content,
+  #main-content + div {
+    transition: none !important;
+  }
+}
+
+/**
+ * Hero text "anti-shift": quando le sidebar si ritirano (past-hero),
+ * il main perde il padding-left lg:88px e tutto il contenuto al suo
+ * interno (incluso l'hero) si sposta a sinistra di 88px. Il testo
+ * dell'hero (eyebrow + headline + subhead + CTA) farebbe uno
+ * "scivolamento" laterale durante la transizione, fastidioso.
+ *
+ * Fix: compensiamo aggiungendo 88px di padding-left al .hero-slide-text
+ * QUANDO past-hero e' attivo. Il main perde 88px, il testo ne guadagna
+ * 88px → posizione visiva del testo costante per tutta la transizione.
+ * Stessa identica curva 450ms cubic-bezier delle altre transizioni del
+ * shell → tutto in sincrono.
+ *
+ * Solo su lg+: sotto md non ci sono sidebar laterali quindi niente
+ * shift da compensare.
+ */
+@media (min-width: 1024px) {
+  .hero-slide-text {
+    transition: padding-left 450ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html.past-hero .hero-slide-text {
+    padding-left: calc(48px + 88px); /* lg:px-12 base + 88px compensazione */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-text {
+    transition: none !important;
+  }
+}
+
+/**
+ * Brand-gold scuro per sfondo chiaro: il brand-gold standard (#dfb16c)
+ * e' tarato sul navy del body e su sfondo bianco-navy chiaro
+ * (light-bg-0/1) ha contrasto insufficiente — i testi e gli eyebrow
+ * gold "scompaiono" sul chiaro. Override automatico via cascade:
+ * dentro `.bg-light-bg-0` / `.bg-light-bg-1` qualsiasi `.text-brand-gold`
+ * diventa #a87938 (oro caldo scuro, contrasto ~4.8:1 = WCAG AA su
+ * 16px+). Le sub-card scure annidate (`.bg-surface-0/1/2`) ripristinano
+ * il gold originale chiaro perche' al loro interno torna lo sfondo navy.
+ */
+.bg-light-bg-0 .text-brand-gold,
+.bg-light-bg-1 .text-brand-gold {
+  color: #a87938;
+}
+.bg-light-bg-0 .bg-surface-0 .text-brand-gold,
+.bg-light-bg-0 .bg-surface-1 .text-brand-gold,
+.bg-light-bg-0 .bg-surface-2 .text-brand-gold,
+.bg-light-bg-1 .bg-surface-0 .text-brand-gold,
+.bg-light-bg-1 .bg-surface-1 .text-brand-gold,
+.bg-light-bg-1 .bg-surface-2 .text-brand-gold {
+  color: var(--color-brand-gold);
+}
+
+/**
+ * Manifesto "NEVER GIVE UP SINCE 1930": loop hover delle strisce
+ * rossoblu' che scorrono dentro le glifi. 44px = un ciclo completo
+ * del repeating-linear-gradient (22px rosso + 22px blu). 0.6s linear
+ * = scorrimento veloce ma fluido. Attivata via Tailwind arbitrary
+ * value `hover:[animation:manifesto-stripes-loop_0.6s_linear_infinite]`
+ * nel componente Manifesto.tsx.
+ */
+@keyframes manifesto-stripes-loop {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: -44px;
+  }
 }
 
 /* Riduzione movimento: rispettiamo prefers-reduced-motion ovunque */

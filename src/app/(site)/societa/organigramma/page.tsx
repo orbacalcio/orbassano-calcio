@@ -91,33 +91,35 @@ export default async function OrganigrammaPage() {
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-24" size="wide">
-        <RevealOnScroll>
-          {officials.length > 0 ? (
-            <div className="flex flex-col gap-12">
-              {groupOfficials(officials).map((group) => (
-                <section key={group.key} className="flex flex-col gap-6">
-                  {group.title && (
-                    <h2 className="text-brand-gold font-display text-4xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
-                      {group.title}
-                    </h2>
-                  )}
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {group.items.map((o) => (
-                      <OfficialCard key={o._id} official={o} />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-          ) : (
-            <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
-              L&apos;organigramma non &egrave; ancora popolato. Controlla che il CMS
-              contenga i dirigenti e i webhook revalidate siano attivi.
-            </p>
-          )}
-        </RevealOnScroll>
-      </Container>
+      <section className="bg-light-bg-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <RevealOnScroll>
+            {officials.length > 0 ? (
+              <div className="flex flex-col gap-12">
+                {groupOfficials(officials).map((group) => (
+                  <section key={group.key} className="flex flex-col gap-6">
+                    {group.title && (
+                      <h2 className="text-brand-gold font-display text-4xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
+                        {group.title}
+                      </h2>
+                    )}
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                      {group.items.map((o) => (
+                        <OfficialCard key={o._id} official={o} />
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            ) : (
+              <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
+                L&apos;organigramma non &egrave; ancora popolato. Controlla che il CMS
+                contenga i dirigenti e i webhook revalidate siano attivi.
+              </p>
+            )}
+          </RevealOnScroll>
+        </Container>
+      </section>
 
       <section
         aria-labelledby="contatti-segreteria"

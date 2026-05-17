@@ -112,10 +112,9 @@ function buildSections(opts: {
 const FALLBACK_LINKS: SocialLinks = {
   instagram: "https://www.instagram.com/asdorbassanocalcio/",
   facebook: "https://facebook.com/asdorbassanocalcio",
-  threads: "https://www.threads.net/@asdorbassanocalcio",
-  youtube: "https://www.youtube.com/@OrbassanoCalcio",
-  twitter: "https://twitter.com/orbassanocalcio",
+  youtube: "https://www.youtube.com/@OrbassanoCalcio/playlists",
   tiktok: "https://www.tiktok.com/@asdorbassanocalcio",
+  threads: "https://www.threads.net/@asdorbassanocalcio",
 };
 
 export function NavigationDrawer({
