@@ -177,18 +177,25 @@ export default async function NewsDetailPage(props: {
         </div>
       )}
 
-      <Container className="py-16 lg:py-20" size="narrow">
-        {news.body ? (
-          <PortableTextBody
-            value={news.body}
-            className="text-base lg:text-lg"
-          />
-        ) : (
-          <p className="text-ink-mid italic">
-            Articolo senza corpo testuale.
-          </p>
-        )}
-      </Container>
+      {/* Banda chiara dedicata al corpo articolo: leggibilita' superiore
+          per testi lunghi, stacco editoriale dal navy del resto della
+          pagina. Titolo, video e galleria restano su navy: solo il
+          blocco testo passa a light-bg-0 con i token light-ink-*. */}
+      <div className="bg-light-bg-0">
+        <Container className="py-16 lg:py-20" size="narrow">
+          {news.body ? (
+            <PortableTextBody
+              value={news.body}
+              variant="light"
+              className="text-base lg:text-lg"
+            />
+          ) : (
+            <p className="text-light-ink-mid italic">
+              Articolo senza corpo testuale.
+            </p>
+          )}
+        </Container>
+      </div>
 
       {/* Video YouTube/Vimeo opzionale: renderizzato SOPRA la
           galleria foto se presente nel CMS. Se l'URL non e' un
