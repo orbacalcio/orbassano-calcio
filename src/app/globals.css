@@ -69,6 +69,12 @@ html {
      Il blocco prefers-reduced-motion in fondo lo riporta a 'auto'
      per chi richiede meno movimento. */
   scroll-behavior: smooth;
+  /* overflow-x: clip impedisce scrollbar orizzontale generata dalle
+     SidebarLeft/Right fixed traslate fuori viewport (translateX
+     -88/+80 al fade-out post-hero). clip e' preferibile a hidden:
+     non crea un nuovo scroll context, position:fixed e
+     scroll-behavior continuano a funzionare. */
+  overflow-x: clip;
 }
 
 body {
@@ -82,9 +88,30 @@ body {
   color: var(--color-brand-white);
 }
 
-/* Scrollbar discreta sul navy */
+/* Scrollbar visibile sul navy: thumb ink-low (grigio-blu chiaro,
+   visibile ma non aggressivo), track surface-1 (canale leggermente
+   piu' chiaro del bg). Hover thumb → brand-gold per affordance.
+   Doppia implementazione: standard `scrollbar-color` (Firefox + tutti
+   i moderni) + webkit pseudo-elements (Chrome/Edge/Safari per uno
+   styling piu' fine, soprattutto larghezza e radius). */
 * {
-  scrollbar-color: var(--color-surface-3) var(--color-surface-0);
+  scrollbar-color: var(--color-ink-low) var(--color-surface-1);
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--color-surface-1);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-low);
+  border-radius: 5px;
+  border: 2px solid var(--color-surface-1);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-gold);
 }
 
 /**
