@@ -300,8 +300,8 @@ export async function Footer() {
           className="flex items-center justify-center py-6"
           size="wide"
         >
-          <span className="text-brand-white font-mono text-center text-[12px] tracking-normal">
-            <span className="text-[13px]">©</span> {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
+          <span className="text-brand-white font-mono text-center text-[10px] tracking-normal sm:text-[11px] lg:text-[12px]">
+            <span className="text-[11px] sm:text-[12px] lg:text-[13px]">©</span> {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
           </span>
         </Container>
       </div>

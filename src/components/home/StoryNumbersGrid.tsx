@@ -79,22 +79,29 @@ export function StoryNumbersGrid({ items }: Props) {
                 initial={{ opacity: 0, y: 24 }}
                 animate={gridRevealed ? { opacity: 1, y: 0 } : undefined}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-surface-2 flex flex-col items-start gap-3 p-8 lg:p-10"
+                className="bg-surface-2 flex flex-col items-start gap-3 p-5 sm:p-7 lg:p-10"
               >
-                <span className="font-display text-brand-gold flex items-baseline gap-1 text-6xl leading-none font-black tracking-[0.005em] sm:text-7xl">
+                {/* Su mobile (320–375px) con grid 2 colonne, il numero
+                    deve restare contenuto: numeri a 4 cifre tipo "1930"
+                    a text-6xl overflow-erebbero. Scaling text-4xl → 6xl. */}
+                <span className="font-display text-brand-gold flex items-baseline gap-1 text-4xl leading-none font-black tracking-[0.005em] sm:text-5xl lg:text-6xl">
                   {s.prefix && (
-                    <span className="text-4xl sm:text-5xl">{s.prefix}</span>
+                    <span className="text-2xl sm:text-3xl lg:text-4xl">
+                      {s.prefix}
+                    </span>
                   )}
                   <Counter end={s.value} />
                   {s.suffix && (
-                    <span className="text-4xl sm:text-5xl">{s.suffix}</span>
+                    <span className="text-2xl sm:text-3xl lg:text-4xl">
+                      {s.suffix}
+                    </span>
                   )}
                 </span>
-                <span className="font-display text-ink-hi text-lg font-bold tracking-[0.01em] uppercase">
+                <span className="font-display text-ink-hi text-sm font-bold tracking-[0.01em] uppercase sm:text-base lg:text-lg">
                   {s.label}
                 </span>
                 {s.caption && (
-                  <span className="text-ink-mid text-sm leading-relaxed">
+                  <span className="text-ink-mid text-xs leading-relaxed sm:text-sm">
                     {s.caption}
                   </span>
                 )}

@@ -27,10 +27,10 @@ export function SocietaHubCard({ number, title, description, href }: Props) {
       href={href}
       className="group border-border bg-surface-1 hover:border-brand-gold/40 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex flex-col gap-6 overflow-hidden border p-8 transition-all focus-visible:outline-2 focus-visible:outline-offset-4 lg:p-10"
     >
-      <span className="font-display text-brand-gold/40 group-hover:text-brand-gold text-7xl leading-none font-black transition-colors lg:text-8xl">
+      <span className="font-display text-brand-gold/40 group-hover:text-brand-gold text-5xl leading-none font-black transition-colors sm:text-6xl lg:text-8xl">
         {number}
       </span>
-      <h3 className="font-display text-ink-hi text-3xl font-extrabold tracking-[0.01em] uppercase lg:text-4xl">
+      <h3 className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.01em] uppercase sm:text-3xl lg:text-4xl">
         {title}
       </h3>
       <p className="text-ink-mid text-sm leading-relaxed lg:text-base">

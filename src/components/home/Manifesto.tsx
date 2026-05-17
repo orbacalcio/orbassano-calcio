@@ -69,9 +69,10 @@ export function Manifesto() {
             ease: [0.215, 0.61, 0.355, 1],
           }}
           style={{
-            // Dimensione fluida con clamp: 320px iPhone SE → 3rem,
+            // Dimensione fluida con clamp: 320px iPhone SE → 2.5rem
+            // (40px, 12 char "Never give up" wrappa pulito su 1 riga),
             // 1280px desktop → ~11rem, >=1486px max 13rem.
-            fontSize: "clamp(3rem, 14vw, 13rem)",
+            fontSize: "clamp(2.5rem, 12vw, 13rem)",
             backgroundImage:
               "repeating-linear-gradient(to right, #e91f22 0, #e91f22 22px, #213f8c 22px, #213f8c 44px)",
             backgroundClip: "text",

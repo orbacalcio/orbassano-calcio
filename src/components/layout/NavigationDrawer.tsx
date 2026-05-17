@@ -252,7 +252,7 @@ export function NavigationDrawer({
                     }
                     aria-expanded={isOpen}
                     aria-controls={`drawer-section-${section.href.replace(/\//g, "-")}`}
-                    className={cn(rowClass, "py-1 text-left")}
+                    className={cn(rowClass, "min-h-[44px] py-2 text-left")}
                   >
                     <span>{section.label}</span>
                     <ChevronRight
@@ -271,7 +271,7 @@ export function NavigationDrawer({
                   <Link
                     href={section.href}
                     onClick={onClose}
-                    className={cn(rowClass, "py-1")}
+                    className={cn(rowClass, "min-h-[44px] py-2")}
                   >
                     <span>{section.label}</span>
                   </Link>
@@ -287,7 +287,7 @@ export function NavigationDrawer({
                         <Link
                           href={child.href}
                           onClick={onClose}
-                          className="text-ink-mid hover:text-ink-hi block py-1.5 text-base transition-colors"
+                          className="text-ink-mid hover:text-ink-hi flex min-h-[44px] items-center py-2 text-base transition-colors"
                         >
                           {child.label}
                         </Link>
