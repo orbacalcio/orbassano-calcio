@@ -192,6 +192,21 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                               { field: "order", direction: "asc" },
                             ]),
                         ),
+                      // Staff tecnico club-wide (direttore sportivo,
+                      // direttore tecnico, etc.) renderizzato in fondo
+                      // alla pagina /squadre con la stessa grafica
+                      // della YouthStaffSection (watermark gold +
+                      // griglia ruolo/nome).
+                      S.listItem()
+                        .title("Staff tecnico")
+                        .icon(Briefcase)
+                        .child(
+                          S.documentTypeList("technicalStaff")
+                            .title("Staff tecnico")
+                            .defaultOrdering([
+                              { field: "order", direction: "asc" },
+                            ]),
+                        ),
                       // Shortcut diretto al fieldset "Pagina /squadre"
                       // del singleton settings: l'utente edita eyebrow
                       // + titolo h2 delle 3 sezioni (Prima Squadra /

@@ -177,6 +177,18 @@ export const settingsQuery = defineQuery(`
   }
 `);
 
+// Staff tecnico club-wide (direttore sportivo / tecnico / responsabile
+// settore giovanile, etc.) per la sezione finale di /squadre. Filtra
+// isActive != false, ordina per `order` ascendente.
+export const technicalStaffQuery = defineQuery(`
+  *[_type == "technicalStaff" && isActive != false]
+  | order(coalesce(order, 999) asc){
+    _id,
+    name,
+    role
+  }
+`);
+
 // Main sponsor attivi per la topbar (1-5 elementi dinamici)
 export const mainSponsorsQuery = defineQuery(`
   *[_type == "sponsor" && tier == "Main Sponsor" && isActive == true]

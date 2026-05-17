@@ -16,6 +16,7 @@ import {
   allGallerySlugsQuery,
   lastMatchesByTeamSlugsQuery,
   mainSponsorsQuery,
+  technicalStaffQuery,
   matchesByTeamSlugQuery,
   nextMatchesByTeamSlugsQuery,
   newsBySlugQuery,
@@ -56,6 +57,27 @@ export async function fetchMainSponsors(): Promise<MainSponsor[]> {
       { next: { tags: ["sponsor"] } },
     );
     return (data ?? []) as MainSponsor[];
+  } catch {
+    return [];
+  }
+}
+
+// ---------- Staff tecnico club-wide -------------------------------------------------
+
+export type TechnicalStaffMember = {
+  _id: string;
+  name: string;
+  role: string;
+};
+
+export async function fetchTechnicalStaff(): Promise<TechnicalStaffMember[]> {
+  try {
+    const data = await sanityClient.fetch(
+      technicalStaffQuery,
+      {},
+      { next: { tags: ["technicalStaff"] } },
+    );
+    return (data ?? []) as TechnicalStaffMember[];
   } catch {
     return [];
   }

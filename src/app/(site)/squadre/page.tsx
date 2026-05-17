@@ -4,7 +4,12 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
-import { fetchTeamsList, type TeamSummary } from "@/sanity/fetchers";
+import {
+  fetchTeamsList,
+  fetchTechnicalStaff,
+  type TeamSummary,
+  type TechnicalStaffMember,
+} from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
   title: "Squadre",
@@ -73,9 +78,10 @@ async function fetchSquadrePageSettings(): Promise<SquadrePageSettings> {
 }
 
 export default async function SquadrePage() {
-  const [teams, settings] = await Promise.all([
+  const [teams, settings, technicalStaff] = await Promise.all([
     fetchTeamsList(),
     fetchSquadrePageSettings(),
+    fetchTechnicalStaff(),
   ]);
   const cmsSections = settings.squadrePageSections ?? [];
   const sections = SECTIONS.map((s) => {
@@ -143,6 +149,49 @@ export default async function SquadrePage() {
           )}
         </Container>
       </section>
+
+      {/* Staff tecnico club-wide (Direttore sportivo, Direttore
+          tecnico, etc.) in fondo alla pagina su navy del body, stessa
+          grafica della YouthStaffSection di /squadre/[slug]: watermark
+          gold gigante + griglia ruolo mono / nome display. Renderizzata
+          solo se almeno un membro attivo nel CMS. */}
+      {technicalStaff.length > 0 && (
+        <Container className="py-16 lg:py-24" size="wide">
+          <TechnicalStaffSection staff={technicalStaff} />
+        </Container>
+      )}
     </>
+  );
+}
+
+function TechnicalStaffSection({
+  staff,
+}: {
+  staff: TechnicalStaffMember[];
+}) {
+  return (
+    <section
+      aria-label="Staff tecnico"
+      className="flex flex-col gap-6"
+    >
+      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+        Staff tecnico
+      </h2>
+      <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+        {staff.map((s) => (
+          <li
+            key={s._id}
+            className="border-border/40 flex flex-col gap-1 border-b pb-4"
+          >
+            <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+              {s.role}
+            </span>
+            <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl">
+              {s.name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

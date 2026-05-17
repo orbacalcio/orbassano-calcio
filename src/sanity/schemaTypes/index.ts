@@ -15,6 +15,7 @@ import { segnalazione } from "./segnalazione";
 import { settings } from "./settings";
 import { sponsor } from "./sponsor";
 import { staffMember, team } from "./team";
+import { technicalStaff } from "./technicalStaff";
 import { timelineEvent } from "./timelineEvent";
 import { tournament } from "./tournament";
 import { trasparenza5x1000 } from "./trasparenza5x1000";
@@ -29,6 +30,7 @@ export const schemaTypes = [
   team,
   player,
   clubOfficial,
+  technicalStaff,
   news,
   // Calendario / risultati: club anagrafica → competition → opponent (join) → match
   club,
