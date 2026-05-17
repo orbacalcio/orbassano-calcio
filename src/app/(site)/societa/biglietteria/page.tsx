@@ -55,7 +55,7 @@ export default function BiglietteriaPage() {
               </p>
 
               <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
                   Biglietti — Tariffe giorno gara
                 </h2>
                 <ul className="text-light-ink-mid flex flex-col gap-2 text-base leading-relaxed lg:text-lg">
@@ -75,7 +75,7 @@ export default function BiglietteriaPage() {
               </section>
 
               <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
                   Biglietteria fisica
                 </h2>
                 <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
@@ -88,7 +88,7 @@ export default function BiglietteriaPage() {
               </section>
 
               <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
                   Agevolazioni
                 </h2>
                 <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
@@ -108,7 +108,7 @@ export default function BiglietteriaPage() {
               </section>
 
               <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-red text-sm font-bold tracking-[0.2em] uppercase md:text-base">
+                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
                   Accrediti stampa
                 </h2>
                 <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
