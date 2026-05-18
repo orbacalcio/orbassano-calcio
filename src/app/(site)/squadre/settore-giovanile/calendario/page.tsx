@@ -283,6 +283,10 @@ function MatchRow({ match }: { match: MatchAggregated }) {
   const awayLogo = match.home ? opponentLogo : OUR_LOGO_SRC;
   const showScore =
     typeof match.scoreHome === "number" && typeof match.scoreAway === "number";
+  // Colori: Orbassano sempre brand-white, avversario sempre ink-low
+  // (richiesta utente 2026-05-18). Vale per nome squadre + numero gol.
+  const homeTextClass = match.home ? "text-brand-white" : "text-ink-low";
+  const awayTextClass = match.home ? "text-ink-low" : "text-brand-white";
 
   return (
     <li className="grid grid-cols-1 items-center gap-3 py-4 md:grid-cols-[7rem_10rem_1fr_5rem] md:gap-x-4">
@@ -292,8 +296,8 @@ function MatchRow({ match }: { match: MatchAggregated }) {
       <span className="text-ink-mid font-mono text-[11px] tracking-wide uppercase">
         {match.isDateTbd ? "Data TBD" : formatItalianDateTime(match.date)}
       </span>
-      <div className="text-ink-hi flex items-center gap-2 text-sm md:gap-3">
-        <span className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
+      <div className="flex items-center gap-2 text-sm md:gap-3">
+        <span className={`flex min-w-0 flex-1 items-center justify-end gap-2 text-right ${homeTextClass}`}>
           <span className="truncate">{homeName}</span>
           <TeamLogo
             src={homeLogo}
@@ -305,7 +309,7 @@ function MatchRow({ match }: { match: MatchAggregated }) {
         <span className="text-ink-low shrink-0 font-mono text-[11px] tracking-wide uppercase">
           vs
         </span>
-        <span className="flex min-w-0 flex-1 items-center gap-2">
+        <span className={`flex min-w-0 flex-1 items-center gap-2 ${awayTextClass}`}>
           <TeamLogo
             src={awayLogo}
             name={awayName}
@@ -315,8 +319,16 @@ function MatchRow({ match }: { match: MatchAggregated }) {
           <span className="truncate">{awayName}</span>
         </span>
       </div>
-      <span className="text-ink-hi text-right font-mono text-base font-semibold tabular-nums sm:text-lg">
-        {showScore ? `${match.scoreHome}-${match.scoreAway}` : "—"}
+      <span className="text-right font-mono text-base font-semibold tabular-nums sm:text-lg">
+        {showScore ? (
+          <>
+            <span className={homeTextClass}>{match.scoreHome}</span>
+            <span className="text-ink-low">-</span>
+            <span className={awayTextClass}>{match.scoreAway}</span>
+          </>
+        ) : (
+          <span className="text-ink-low">—</span>
+        )}
       </span>
     </li>
   );

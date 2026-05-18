@@ -62,19 +62,6 @@ function formatTime(iso: string): string {
   });
 }
 
-function getResultTag(
-  home: boolean,
-  scoreHome: number | null,
-  scoreAway: number | null,
-): "V" | "P" | "X" | null {
-  if (typeof scoreHome !== "number" || typeof scoreAway !== "number") return null;
-  const ourScore = home ? scoreHome : scoreAway;
-  const oppScore = home ? scoreAway : scoreHome;
-  if (ourScore > oppScore) return "V";
-  if (ourScore < oppScore) return "P";
-  return "X";
-}
-
 function StatusBadge({ status }: { status: MatchSummary["status"] }) {
   if (status === "live") {
     return (
@@ -102,40 +89,13 @@ function StatusBadge({ status }: { status: MatchSummary["status"] }) {
   return null;
 }
 
-function ResultTag({ tag }: { tag: "V" | "P" | "X" }) {
-  // Tag V/X/P (italiano: Vittoria / pareggio / Persa) — colori semantici
-  // coordinati col nome Orbassano nella stessa card:
-  // - V verde (emerald-300), - X grigio neutro, - P rosso (brand-red).
-  const map = {
-    V: "border-brand-gold/40 bg-brand-gold/20 text-brand-gold",
-    X: "border-border/40 bg-surface-2 text-ink-mid",
-    P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
-  } as const;
-  return (
-    <span
-      className={cn(
-        "font-mono inline-flex h-5 min-w-5 items-center justify-center rounded-sm border px-1 text-[11px] font-bold",
-        map[tag],
-      )}
-      aria-label={tag === "V" ? "Vittoria" : tag === "P" ? "Sconfitta" : "Pareggio"}
-    >
-      {tag}
-    </span>
-  );
-}
-
-// Colore del nome squadra: SOLO sul nostro nome (Orbassano), niente
-// effetto sull'avversario. V → oro, X → grigio, P → rosso. Match futuri
-// (resultTag null): ink-hi default.
-function teamNameColor(
-  isOurs: boolean,
-  tag: "V" | "P" | "X" | null,
-): string {
-  if (!isOurs) return "text-ink-hi";
-  if (tag === "V") return "text-brand-gold";
-  if (tag === "P") return "text-brand-red";
-  if (tag === "X") return "text-ink-mid";
-  return "text-ink-hi";
+// Colore nome squadra: regola unica, indipendente dall'esito (richiesta
+// utente 2026-05-18 — niente piu' verde/oro/rosso V/X/P).
+//   - Orbassano: sempre brand-white (#fefdfd)
+//   - Avversario: sempre ink-low (#6b7a99)
+// Vale anche per il punteggio numerico (vedi rendering score sotto).
+function teamNameColor(isOurs: boolean): string {
+  return isOurs ? "text-brand-white" : "text-ink-low";
 }
 
 type MatchCardProps = {
@@ -180,9 +140,13 @@ export function MatchCard({
     typeof match.scoreHome === "number" &&
     typeof match.scoreAway === "number";
 
-  const resultTag = match.status === "finished"
-    ? getResultTag(match.home, match.scoreHome, match.scoreAway)
-    : null;
+  // Score split: il nostro punteggio sempre brand-white, quello
+  // avversario sempre ink-low. Posizione (sinistra/destra) determinata
+  // da `home`: la card mostra sempre "Casa  -  Trasferta", il nostro
+  // numero sta a sinistra o destra a seconda che giochiamo in casa o
+  // fuori. Niente piu' colore basato su esito (vedi teamNameColor).
+  const homeScoreClass = match.home ? "text-brand-white" : "text-ink-low";
+  const awayScoreClass = match.home ? "text-ink-low" : "text-brand-white";
 
   const competitionLabel = match.competition?.shortName ?? "";
 
@@ -213,15 +177,16 @@ export function MatchCard({
             />
           </div>
           <div className="flex shrink-0 flex-col items-center gap-1 px-2 md:px-3">
-            <div
-              className={cn(
-                "font-display text-4xl font-extrabold tracking-[0.005em] md:text-5xl",
-                hasScore ? "text-brand-red" : "text-ink-hi",
+            <div className="font-display text-4xl font-extrabold tracking-[0.005em] md:text-5xl">
+              {hasScore ? (
+                <>
+                  <span className={homeScoreClass}>{match.scoreHome}</span>
+                  <span className="text-ink-low">{"  -  "}</span>
+                  <span className={awayScoreClass}>{match.scoreAway}</span>
+                </>
+              ) : (
+                <span className="text-ink-hi">vs</span>
               )}
-            >
-              {hasScore
-                ? `${match.scoreHome}  -  ${match.scoreAway}`
-                : "vs"}
             </div>
             {match.status === "finished" && reportHref && (
               <a
@@ -303,11 +268,10 @@ export function MatchCard({
 
       {/* Squadra di casa */}
       <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
-        {resultTag && match.home && <ResultTag tag={resultTag} />}
         <span
           className={cn(
             "font-display truncate text-base font-extrabold tracking-[0.005em] uppercase md:text-lg",
-            teamNameColor(match.home, resultTag),
+            teamNameColor(match.home),
           )}
         >
           {match.home ? ourTeamName : opponentName}
@@ -325,10 +289,10 @@ export function MatchCard({
       {/* Centro: score o orario */}
       <div className="font-display text-ink-hi flex shrink-0 items-center justify-center font-extrabold tracking-[0.005em] md:w-32 md:text-2xl">
         {hasScore ? (
-          <span className="text-brand-red text-3xl">
-            {match.scoreHome}
-            {"  -  "}
-            {match.scoreAway}
+          <span className="text-3xl">
+            <span className={homeScoreClass}>{match.scoreHome}</span>
+            <span className="text-ink-low">{"  -  "}</span>
+            <span className={awayScoreClass}>{match.scoreAway}</span>
           </span>
         ) : match.status === "postponed" || match.status === "cancelled" ? (
           <span className="text-ink-low text-2xl">{"  -  "}</span>
@@ -359,12 +323,11 @@ export function MatchCard({
         <span
           className={cn(
             "font-display truncate text-base font-extrabold tracking-[0.005em] uppercase md:text-lg",
-            teamNameColor(!match.home, resultTag),
+            teamNameColor(!match.home),
           )}
         >
           {match.home ? opponentName : ourTeamName}
         </span>
-        {resultTag && !match.home && <ResultTag tag={resultTag} />}
       </div>
 
       {/* Azioni / venue extras */}
