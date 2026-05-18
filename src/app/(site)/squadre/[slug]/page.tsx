@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarCheck,
+  ChevronRight,
+  Trophy,
+} from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { RegistrationPaymentBlock } from "@/components/settore-giovanile/RegistrationPaymentBlock";
 import { PlayerCard } from "@/components/squadre/PlayerCard";
@@ -247,14 +253,79 @@ async function CategoryView({
             ))}
           </div>
 
+          {/* Settore Giovanile: in fondo alla vista categoria
+              compaiono in ordine:
+              1. Card "Open Days" + "Tornei" (eventi del SGS che
+                 ora vivono solo qui, niente piu' hub
+                 /settore-giovanile separato).
+              2. Blocco "Modulo iscrizione + Bonifico" condiviso.
+              Pagina /settore-giovanile e' stata accorpata qui:
+              redirect 301 lato next.config.ts. */}
           {showRegBlock && (
-            <div className="mt-12 lg:mt-16">
-              <RegistrationPaymentBlock
-                moduleUrl={moduleUrl}
-                iban={iban}
-                phone={phone}
-              />
-            </div>
+            <>
+              <div className="mt-12 grid gap-4 md:grid-cols-2 lg:mt-16">
+                <Link
+                  href="/settore-giovanile/open-days"
+                  className="group border-border bg-surface-1 hover:border-brand-gold/40 focus-visible:outline-brand-gold flex flex-col gap-4 rounded-2xl border p-8 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  <CalendarCheck
+                    size={36}
+                    strokeWidth={1.5}
+                    className="text-brand-gold"
+                    aria-hidden
+                  />
+                  <h2 className="font-display text-ink-hi group-hover:text-brand-gold text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase transition-colors">
+                    Open Days
+                  </h2>
+                  <p className="text-ink-mid text-sm leading-relaxed">
+                    Sessioni di prova aperte. Vieni a conoscerci,
+                    porta un amico, scarica il modulo iscrizione.
+                  </p>
+                  <span className="text-brand-gold inline-flex items-center gap-2 text-xs font-semibold tracking-[0.1em] uppercase">
+                    Vai al calendario
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                      aria-hidden
+                    />
+                  </span>
+                </Link>
+                <Link
+                  href="/tornei"
+                  className="group border-border bg-surface-1 hover:border-brand-gold/40 focus-visible:outline-brand-gold flex flex-col gap-4 rounded-2xl border p-8 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  <Trophy
+                    size={36}
+                    strokeWidth={1.5}
+                    className="text-brand-gold"
+                    aria-hidden
+                  />
+                  <h2 className="font-display text-ink-hi group-hover:text-brand-gold text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase transition-colors">
+                    Tornei
+                  </h2>
+                  <p className="text-ink-mid text-sm leading-relaxed">
+                    Memorial, triangolari, manifestazioni: tutte le
+                    date dei tornei a cui partecipa il Settore Giovanile.
+                  </p>
+                  <span className="text-brand-gold inline-flex items-center gap-2 text-xs font-semibold tracking-[0.1em] uppercase">
+                    Vai al calendario
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                      aria-hidden
+                    />
+                  </span>
+                </Link>
+              </div>
+
+              <div className="mt-8 lg:mt-10">
+                <RegistrationPaymentBlock
+                  moduleUrl={moduleUrl}
+                  iban={iban}
+                  phone={phone}
+                />
+              </div>
+            </>
           )}
         </Container>
       </section>

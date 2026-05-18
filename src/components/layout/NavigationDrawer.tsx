@@ -67,14 +67,13 @@ function buildSections(opts: {
   // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
   // sono di fatto eventi a calendario, non sezioni squadre.
 
-  // Accordion Calendario: primo child = pagina hub /calendario con
-  // tutti i box squadre. Sub-link successivi = calendario di ogni
-  // squadra attiva (Prima Squadra / Juniores puntano al calendario
-  // singolo; Settore Giovanile punta alla pagina aggregata). In coda
-  // Open Days + Tornei (eventi extra-campionato).
-  const calendarioChildren: DrawerSection["children"] = [
-    { href: "/calendario", label: "Tutti i calendari" },
-  ];
+  // Accordion Calendario: sub-link per categoria. "Tutti i calendari"
+  // (pagina hub /calendario) e' stata rimossa 2026-05-17 su richiesta
+  // utente — la pagina /calendario esiste ancora come URL diretto ma
+  // non e' piu' linkata da nessuna parte. Sub-link puntano direttamente
+  // al calendario della categoria, in coda Open Days + Tornei (eventi
+  // extra-campionato).
+  const calendarioChildren: DrawerSection["children"] = [];
   if (teamSlugs.has("prima-squadra")) {
     calendarioChildren.push({
       href: "/squadre/prima-squadra/calendario",

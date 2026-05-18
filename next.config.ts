@@ -140,14 +140,23 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    // Redirect interno: /settore-giovanile/tornei → /tornei (top-level
-    // multi-categoria, supporta anche Prima Squadra/Juniores). 301 per
-    // non perdere il PageRank dei link esterni che puntano al vecchio
-    // path. Lasciato qui in coda agli redirect Wix legacy.
+    // Redirect interni 301 per pagine spostate/accorpate: preservano
+    // il PageRank dei link esterni che puntano al vecchio path.
+    // - /settore-giovanile/tornei → /tornei (top-level multi-categoria
+    //   2026-05-17, supporta anche Prima Squadra/Juniores).
+    // - /settore-giovanile → /squadre/settore-giovanile (la hub page
+    //   con sezioni Open Days+Tornei e' stata accorpata nella vista
+    //   categoria /squadre/settore-giovanile 2026-05-17; lo stesso
+    //   path /settore-giovanile/open-days resta su sentiero originale).
     const internalRedirects = [
       {
         source: "/settore-giovanile/tornei",
         destination: "/tornei",
+        permanent: true,
+      },
+      {
+        source: "/settore-giovanile",
+        destination: "/squadre/settore-giovanile",
         permanent: true,
       },
     ];

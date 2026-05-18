@@ -177,11 +177,11 @@ export default async function CalendarioSettoreGiovanilePage() {
         <Container className="relative py-14 lg:py-20" size="wide">
           <div className="flex max-w-3xl flex-col gap-3">
             <Link
-              href="/calendario"
+              href="/squadre/settore-giovanile"
               className="text-ink-mid hover:text-brand-gold inline-flex items-center gap-1.5 self-start font-mono text-xs tracking-wide transition-colors"
             >
               <ArrowLeft size={12} aria-hidden />
-              Torna a tutti i calendari
+              Torna al Settore Giovanile
             </Link>
             <span className="text-brand-gold font-display text-sm font-extrabold tracking-[0.15em] uppercase md:text-base">
               Settore Giovanile · {season}

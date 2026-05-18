@@ -90,16 +90,11 @@ const STATIC_PAGES: StaticPage[] = [
   // indicizzata dal sito. Il box newsletter in fondo a ogni pagina e'
   // il canale principale di iscrizione.
 
-  // Calendario hub: pagina che raggruppa tutti i calendari delle
-  // squadre (Prima Squadra, Juniores, Settore Giovanile, ecc.).
-  {
-    id: "calendario",
-    title: "Calendari",
-    path: "/calendario",
-    keywords:
-      "calendario calendari partite match prossime gare campionato hub agenda turno giornata",
-    section: "Squadre",
-  },
+  // Calendario hub /calendario rimosso dall'indice 2026-05-17
+  // (richiesta utente): pagina esiste ancora come URL diretto ma
+  // non viene linkata o indicizzata dal sito. Le ricerche per
+  // "calendario" matchano le pagine calendario delle singole
+  // categorie via gli altri entry (squadre, settore giovanile).
 
   // Squadre / Settore Giovanile
   {

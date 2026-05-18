@@ -38,7 +38,9 @@ const STATIC_ROUTES: Array<{
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
   { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
   { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/calendario", changeFrequency: "weekly", priority: 0.8 },
+  // /calendario esiste ma rimossa dal sitemap 2026-05-17 (richiesta
+  // utente): hub aggregato non utile, gli accordion drawer linkano
+  // direttamente ai calendari per categoria.
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
