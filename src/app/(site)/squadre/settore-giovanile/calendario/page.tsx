@@ -35,9 +35,15 @@ const ITALIAN_MONTHS = [
 const ITALIAN_DAYS_SHORT = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
 
 export const metadata: Metadata = {
-  title: "Calendario Settore Giovanile",
+  title: "Calendario Settore Giovanile Scolastico",
   description:
-    "Tutti i calendari del Settore Giovanile ASD Orbassano Calcio (Allievi U17/U16, Giovanissimi U15/U14) raccolti in un'unica vista cronologica della stagione.",
+    "Tutti i calendari del Settore Giovanile Scolastico ASD Orbassano Calcio (Allievi U17/U16, Giovanissimi U15/U14) raccolti in un'unica vista cronologica della stagione.",
+  // Canonical fisso: la query string ?season= e' UX-utility, non
+  // SEO-valuabile. Evita duplicate content fra ?season=2024/2025 e
+  // ?season=2025/2026.
+  alternates: {
+    canonical: "/squadre/settore-giovanile/calendario",
+  },
 };
 
 /**

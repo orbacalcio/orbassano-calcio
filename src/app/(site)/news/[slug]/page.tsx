@@ -147,7 +147,7 @@ export default async function NewsDetailPage(props: {
                 rel="noopener noreferrer"
                 className="bg-brand-red btn-wow-sweep text-brand-white font-display hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-bold tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 md:text-base"
               >
-                Per leggere l&apos;articolo originale clicca qui
+                Leggi l&apos;articolo originale
                 <ExternalLink size={16} aria-hidden />
               </a>
             </div>

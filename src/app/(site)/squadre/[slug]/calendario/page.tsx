@@ -29,6 +29,12 @@ export async function generateMetadata({
   return {
     title: `Calendario & Risultati ${team.name}`,
     description: `Tutte le partite di ${team.name} ASD Orbassano Calcio nella stagione ${team.season ?? FALLBACK_SEASON}: prossime gare, risultati, classifica.`,
+    // Canonical fisso (no query string): le varianti ?season=YYYY/YYYY
+    // sono UX-utility, non SEO-valuabili. Evita duplicate content fra
+    // /squadre/prima-squadra/calendario e /squadre/prima-squadra/calendario?season=2024/2025.
+    alternates: {
+      canonical: `/squadre/${slug}/calendario`,
+    },
     openGraph: team.heroImage
       ? { images: [{ url: team.heroImage, alt: team.name }] }
       : undefined,
