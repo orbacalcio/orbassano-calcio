@@ -140,11 +140,23 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return wixRedirects.map((r) => ({
+    // Redirect interno: /settore-giovanile/tornei → /tornei (top-level
+    // multi-categoria, supporta anche Prima Squadra/Juniores). 301 per
+    // non perdere il PageRank dei link esterni che puntano al vecchio
+    // path. Lasciato qui in coda agli redirect Wix legacy.
+    const internalRedirects = [
+      {
+        source: "/settore-giovanile/tornei",
+        destination: "/tornei",
+        permanent: true,
+      },
+    ];
+    const wixMapped = wixRedirects.map((r) => ({
       source: r.source,
       destination: r.destination,
       permanent: true,
     }));
+    return [...wixMapped, ...internalRedirects];
   },
   async headers() {
     return [

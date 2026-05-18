@@ -1,7 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, GraduationCap, Trophy } from "lucide-react";
+import { RegistrationPaymentBlock } from "@/components/settore-giovanile/RegistrationPaymentBlock";
 import { Container } from "@/components/ui/Container";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
+
+const FALLBACK_IBAN = "IT93H0853030680000000002547";
+const FALLBACK_PHONE = "+39 327 779 3326";
+
+type RegistrationSettings = {
+  registrationFormUrl?: string | null;
+  legalInfo?: { iban?: string | null } | null;
+  contactInfo?: { phone?: string | null } | null;
+};
+
+async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
+  try {
+    const data = await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    return (data ?? {}) as RegistrationSettings;
+  } catch {
+    return {};
+  }
+}
 
 export const metadata: Metadata = {
   title: "Settore Giovanile",
@@ -18,7 +43,7 @@ const SECTIONS = [
       "Sessioni di prova aperte. Vieni a conoscerci, porta un amico, scarica il modulo iscrizione.",
   },
   {
-    href: "/settore-giovanile/tornei",
+    href: "/tornei",
     icon: Trophy,
     label: "Tornei",
     description:
@@ -26,7 +51,11 @@ const SECTIONS = [
   },
 ] as const;
 
-export default function SettoreGiovanilePage() {
+export default async function SettoreGiovanilePage() {
+  const settings = await fetchRegistrationSettings();
+  const moduleUrl = settings.registrationFormUrl ?? null;
+  const iban = settings.legalInfo?.iban ?? FALLBACK_IBAN;
+  const phone = settings.contactInfo?.phone ?? FALLBACK_PHONE;
   return (
     <>
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -85,6 +114,19 @@ export default function SettoreGiovanilePage() {
             </li>
           ))}
           </ul>
+
+          {/* Modulo iscrizione + bonifico in fondo alla pagina (stesso
+              blocco usato in /settore-giovanile/open-days): chi atterra
+              qui per orientarsi sul Settore Giovanile trova subito la
+              call-to-subscribe + le info bonifico senza dover scendere
+              fino agli Open Days. */}
+          <div className="mt-12 lg:mt-16">
+            <RegistrationPaymentBlock
+              moduleUrl={moduleUrl}
+              iban={iban}
+              phone={phone}
+            />
+          </div>
         </Container>
       </section>
     </>

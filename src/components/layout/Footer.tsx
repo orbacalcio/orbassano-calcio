@@ -103,7 +103,7 @@ function buildSections(opts: {
     label: "Open Days",
   });
   squadreItems.push({
-    href: "/settore-giovanile/tornei",
+    href: "/tornei",
     label: "Tornei",
   });
 

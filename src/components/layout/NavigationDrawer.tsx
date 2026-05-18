@@ -70,7 +70,7 @@ function buildSections(opts: {
     label: "Open Days",
   });
   teamsChildren.push({
-    href: "/settore-giovanile/tornei",
+    href: "/tornei",
     label: "Tornei",
   });
 

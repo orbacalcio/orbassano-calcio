@@ -121,10 +121,10 @@ const STATIC_PAGES: StaticPage[] = [
   {
     id: "tornei",
     title: "Tornei",
-    path: "/settore-giovanile/tornei",
+    path: "/tornei",
     keywords:
-      "tornei competizioni settore giovanile sgs gare appuntamenti manifestazioni",
-    section: "Settore Giovanile",
+      "tornei competizioni gare appuntamenti manifestazioni memorial triangolari prima squadra juniores settore giovanile",
+    section: "Squadre",
   },
   // Società
   {

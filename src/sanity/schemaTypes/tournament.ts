@@ -2,10 +2,13 @@ import { Trophy } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Torneo del Settore Giovanile — manifestazioni single-day o
- * multi-day organizzate o ospitate dal club. Visibile sulla pagina
- * /settore-giovanile/tornei raggruppate per categoria e ordinate
- * per data.
+ * Torneo del club — manifestazioni single-day o multi-day organizzate
+ * o ospitate dal club. Visibile sulla pagina /tornei raggruppate per
+ * categoria e ordinate per data.
+ *
+ * Categoria: ammette Prima Squadra (amichevoli pre-stagione, memorial),
+ * Juniores Under 19 e le 4 categorie del Settore Giovanile Scolastico
+ * (U14-U17). Per tornei multi-categoria, crea un evento per ciascuna.
  *
  * Separato da `openDay` per accomodare campi specifici (format,
  * gironi, premio) senza appesantire la UI degli Open Day.
@@ -28,10 +31,11 @@ export const tournament = defineType({
       name: "category",
       title: "Categoria",
       description:
-        "Categoria del Settore Giovanile a cui e' rivolto. Per tornei multi-categoria, crea un evento per ciascuna.",
+        "Categoria/squadra a cui e' rivolto il torneo. Per tornei multi-categoria, crea un evento per ciascuna.",
       type: "string",
       options: {
         list: [
+          { title: "Prima Squadra", value: "Prima Squadra" },
           { title: "Juniores Under 19", value: "Juniores Under 19" },
           { title: "Allievi Under 17", value: "Allievi Under 17" },
           { title: "Allievi Under 16", value: "Allievi Under 16" },

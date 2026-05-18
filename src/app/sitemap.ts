@@ -39,6 +39,7 @@ const STATIC_ROUTES: Array<{
   { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
   { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
   { path: "/calendario", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/organigramma", changeFrequency: "monthly", priority: 0.6 },
