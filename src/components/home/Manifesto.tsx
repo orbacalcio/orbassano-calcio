@@ -88,7 +88,7 @@ export function Manifesto() {
 
         <Link
           href="/societa/storia"
-          className="bg-brand-blue text-brand-white hover:bg-brand-red hover:text-brand-white focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           La nostra storia
           <ArrowRight size={14} aria-hidden />
