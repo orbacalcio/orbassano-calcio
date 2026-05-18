@@ -364,22 +364,33 @@ function TeamView({ team }: { team: TeamDetail }) {
       <Breadcrumb items={breadcrumbItems} current={team.name} />
 
       {/* HERO */}
-      <header className="border-border/50 relative overflow-hidden border-b">
+      <header className="border-border/50 bg-surface-0 relative overflow-hidden border-b">
         {team.heroImage ? (
           <>
+            {/* object-contain (era object-cover): mostra l'intera
+                foto 16:9 senza ritagliarla. Lo spazio residuo del
+                container (header e' piu' alto di un'immagine 16:9)
+                viene coperto dal bg-surface-0 della <header>. */}
             <Image
               src={team.heroImage}
               alt={team.name}
               fill
               priority
-              className="object-cover"
+              className="object-contain"
               sizes="100vw"
               placeholder={team.heroImageLqip ? "blur" : "empty"}
               blurDataURL={team.heroImageLqip ?? undefined}
             />
+            {/* Vignette radiale attenuata: ellisse trasparente al
+                centro che sfuma in surface-0 verso i 4 angoli.
+                Sostituisce il vecchio gradient sx→dx (troppo
+                aggressivo). 50% inner radius = foto pulita al
+                centro; 95% outer = bordi sfumati ma non neri pieni.
+                bg-[radial-gradient(...)] e' Tailwind arbitrary value:
+                richiede underscore al posto degli spazi. */}
             <div
               aria-hidden
-              className="from-surface-0 via-surface-0/85 absolute inset-0 bg-gradient-to-r to-transparent"
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_50%,_var(--color-surface-0)_95%)]"
             />
           </>
         ) : (
