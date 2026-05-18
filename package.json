@@ -11,6 +11,8 @@
     "disable-features": "tsx --env-file=.env.local scripts/disable-features.ts",
     "players-template": "tsx scripts/generate-players-template.ts",
     "import-players": "tsx --env-file=.env.local scripts/import-players.ts",
+    "matches-template": "tsx scripts/generate-matches-template.ts",
+    "import-matches": "tsx --env-file=.env.local scripts/import-matches.ts",
     "compress": "node scripts/compress-photos.mjs",
     "typecheck": "tsc --noEmit"
   },

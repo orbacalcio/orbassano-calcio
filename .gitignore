@@ -58,6 +58,12 @@ __pycache__/
 /players-template.xlsx
 /players-*.xlsx
 
+# Template Excel per import calendario partite. Generato on-demand con
+# `pnpm matches-template`. Stesso pattern di players-template: binario
+# .xlsx fuori dal repo, generator dentro.
+/matches-template.xlsx
+/matches-*.xlsx
+
 # vercel
 .vercel
 
