@@ -58,11 +58,6 @@ export function NewsCard({ news, variant = "default" }: Props) {
             In evidenza
           </span>
         )}
-        {news.category && (
-          <span className="font-display text-white absolute top-4 left-4 text-[10px] font-bold tracking-[0.2em] uppercase">
-            {news.category}
-          </span>
-        )}
       </div>
 
       <div
@@ -71,6 +66,11 @@ export function NewsCard({ news, variant = "default" }: Props) {
           isFeatured ? "lg:p-10" : "",
         )}
       >
+        {news.category && (
+          <span className="font-display text-brand-gold text-[10px] font-bold tracking-[0.2em] uppercase">
+            {news.category}
+          </span>
+        )}
         <span className="text-ink-low font-mono text-[11px] tracking-wide uppercase">
           {news.publishedAt ? formatItalianDate(news.publishedAt) : "Senza data"}
         </span>
