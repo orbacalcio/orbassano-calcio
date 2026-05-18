@@ -370,3 +370,127 @@ export function buildPersonLd(opts: {
     memberOf: { "@id": `${SITE_URL}#org` },
   };
 }
+
+/**
+ * Person schema per i dirigenti/staff club mostrati su
+ * /societa/organigramma. A differenza di buildPersonLd (calciatori,
+ * con URL slug-based), qui le persone non hanno una pagina dedicata:
+ * il loro `@id` e' un anchor sulla pagina organigramma.
+ *
+ * `role` corrisponde al titolo ufficiale (es. "Presidente",
+ * "Direttore Generale"). Schema.org Person.jobTitle accetta stringa
+ * libera.
+ *
+ * Renderizzato come array sulla pagina organigramma per dare a
+ * Google una mappa "people behind the org" — utile per knowledge
+ * graph e per disambiguare ricerche tipo "presidente Orbassano Calcio".
+ */
+export function buildClubOfficialLd(opts: {
+  fullName: string;
+  role: string;
+  title?: string | null;
+}) {
+  const anchor = opts.role
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const url = `${SITE_URL}/societa/organigramma`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${url}#${anchor}`,
+    name: opts.fullName,
+    jobTitle: opts.title ?? opts.role,
+    memberOf: { "@id": `${SITE_URL}#org` },
+    worksFor: { "@id": `${SITE_URL}#org` },
+    url,
+  };
+}
+
+/**
+ * SportsActivityLocation (sotto-tipo di Place + LocalBusiness) per
+ * gli impianti sportivi del club. Renderizzato su
+ * /societa/impianti — un JSON-LD per ogni Facility attiva.
+ *
+ * Schema critico per la SEO locale: Google lo usa per mostrare la
+ * card "Centro Sportivo Aldo Porta" in Maps e nelle SERP locali
+ * tipo "campo da calcio Orbassano". Senza questo schema, l'impianto
+ * non e' geo-indicizzato.
+ *
+ * NB: le coordinate (geo) NON sono in CMS oggi. Per ora il club
+ * principale "Aldo Porta" si appoggia all'address postale + mapsUrl;
+ * Google e' bravo a risolvere coordinate dall'indirizzo. Se in
+ * futuro servisse precisione (es. campo Mazzola con stesso indirizzo
+ * civico ma corte diversa), aggiungere `latitude`/`longitude` allo
+ * schema facility.
+ */
+export function buildSportsActivityLocationLd(opts: {
+  name: string;
+  address: string | null;
+  mapsUrl: string | null;
+  image: string | null;
+  description: string | null;
+  slug: string | null;
+}) {
+  // Parse address (es. "Via Ignazio Silone 4, 10043 Orbassano (TO)")
+  // in PostalAddress strutturato. Fallback: address completo come
+  // streetAddress se il parsing non e' affidabile.
+  const parsed = parseItalianAddress(opts.address);
+  const anchor = opts.slug ?? "impianto";
+  const url = `${SITE_URL}/societa/impianti#${anchor}`;
+  const sameAs: string[] = [];
+  if (opts.mapsUrl) sameAs.push(opts.mapsUrl);
+  return {
+    "@context": "https://schema.org",
+    "@type": "SportsActivityLocation",
+    "@id": url,
+    name: opts.name,
+    description: opts.description ?? undefined,
+    url,
+    image: opts.image ?? `${SITE_URL}/Logo_Orbassano_2K.png`,
+    address: parsed ?? {
+      "@type": "PostalAddress",
+      streetAddress: opts.address ?? "Via Ignazio Silone, 4",
+      addressLocality: "Orbassano",
+      postalCode: "10043",
+      addressRegion: "TO",
+      addressCountry: "IT",
+    },
+    telephone: "+39 327 779 3326",
+    sport: "Calcio",
+    parentOrganization: { "@id": `${SITE_URL}#org` },
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
+  };
+}
+
+/**
+ * Parser greedy per indirizzi italiani nel formato
+ * "Via Foo 4, 10043 Orbassano (TO)" → PostalAddress strutturato.
+ * Robusto su varianti comuni ma fallback a null se non matcha.
+ */
+function parseItalianAddress(addr: string | null): {
+  "@type": "PostalAddress";
+  streetAddress: string;
+  addressLocality: string;
+  postalCode: string;
+  addressRegion: string;
+  addressCountry: "IT";
+} | null {
+  if (!addr) return null;
+  // Pattern: <street>, <cap> <city> (<region>)
+  const m = addr.match(
+    /^(.+?),\s*(\d{5})\s+(.+?)\s*\(([A-Z]{2})\)\s*$/,
+  );
+  if (!m) return null;
+  const [, street, cap, city, region] = m;
+  return {
+    "@type": "PostalAddress",
+    streetAddress: street!.trim(),
+    postalCode: cap!,
+    addressLocality: city!.trim(),
+    addressRegion: region!,
+    addressCountry: "IT",
+  };
+}

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Mail, Phone } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { OfficialCard } from "@/components/societa/OfficialCard";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { buildClubOfficialLd } from "@/lib/json-ld";
 import { fetchClubOfficials, type ClubOfficial } from "@/sanity/fetchers";
 
 /**
@@ -66,8 +68,20 @@ export const metadata: Metadata = {
 export default async function OrganigrammaPage() {
   const officials = await fetchClubOfficials();
 
+  // Person JSON-LD per ogni dirigente (audit fix #2): da' a Google
+  // una mappa "chi e' chi" del club, utile per knowledge graph e
+  // disambiguazione ricerche tipo "presidente Orbassano Calcio".
+  const peopleLd = officials.map((o) =>
+    buildClubOfficialLd({
+      fullName: o.fullName,
+      role: o.role,
+      title: o.title,
+    }),
+  );
+
   return (
     <>
+      {peopleLd.length > 0 && <JsonLd data={peopleLd} />}
       <header className="border-border/50 relative overflow-hidden border-b">
         <div
           aria-hidden

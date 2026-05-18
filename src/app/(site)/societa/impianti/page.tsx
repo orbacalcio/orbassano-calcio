@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { FacilityCard } from "@/components/societa/FacilityCard";
 import { MazzolaImpiantiBox } from "@/components/societa/MazzolaImpiantiBox";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { buildSportsActivityLocationLd } from "@/lib/json-ld";
 import { fetchFacilities } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
@@ -14,8 +16,23 @@ export const metadata: Metadata = {
 export default async function ImpiantiPage() {
   const facilities = await fetchFacilities();
 
+  // SportsActivityLocation JSON-LD per ogni impianto (audit fix #1):
+  // priorita' SEO locale — senza questo schema, Google non geo-
+  // indicizza "Centro Sportivo Aldo Porta" nelle SERP di Maps.
+  const facilitiesLd = facilities.map((f) =>
+    buildSportsActivityLocationLd({
+      name: f.name,
+      address: f.address,
+      mapsUrl: f.mapsUrl,
+      image: f.gallery?.[0]?.url ?? null,
+      description: null,
+      slug: f.slug,
+    }),
+  );
+
   return (
     <>
+      {facilitiesLd.length > 0 && <JsonLd data={facilitiesLd} />}
       <header className="border-border/50 relative overflow-hidden border-b">
         <div
           aria-hidden
