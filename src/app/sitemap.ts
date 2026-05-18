@@ -38,9 +38,19 @@ const STATIC_ROUTES: Array<{
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
   { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
   { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
+  // /squadre/settore-giovanile e' una vista categoria (hub SGS con
+  // 4 card U14-U17 + Open Days/Tornei + modulo iscrizione), non
+  // mappata da teamSlugs (non corrisponde a uno slug team).
+  { path: "/squadre/settore-giovanile", changeFrequency: "weekly", priority: 0.8 },
+  // Calendario aggregato Settore Giovanile (raggruppa match U14-U17).
+  // Le pagine /squadre/under-XX/calendario singole esistono ancora ma
+  // sono ESCLUSE dal calendarEntries dinamico sotto (richiesta utente
+  // 2026-05-17: il calendario SG vive solo sulla pagina aggregata).
+  { path: "/squadre/settore-giovanile/calendario", changeFrequency: "weekly", priority: 0.7 },
   // /calendario esiste ma rimossa dal sitemap 2026-05-17 (richiesta
   // utente): hub aggregato non utile, gli accordion drawer linkano
   // direttamente ai calendari per categoria.
+  { path: "/settore-giovanile/open-days", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
@@ -104,12 +114,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /squadre/[slug]/calendario per ogni squadra attiva. Crawler-friendly:
   // anche se la lista match e' vuota, la pagina renderizza l'empty state
   // editoriale, niente 404.
-  const calendarEntries: MetadataRoute.Sitemap = teamSlugs.map((slug) => ({
-    url: `${SITE_URL}/squadre/${slug}/calendario`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }));
+  // Eccezione: le squadre del Settore Giovanile (under-XX) NON vengono
+  // pubblicate qui — il calendario SG vive nella pagina aggregata
+  // /squadre/settore-giovanile/calendario (gia' inclusa in STATIC_ROUTES).
+  const SG_TEAM_SLUGS = new Set([
+    "under-14",
+    "under-15",
+    "under-16",
+    "under-17",
+  ]);
+  const calendarEntries: MetadataRoute.Sitemap = teamSlugs
+    .filter((slug) => !SG_TEAM_SLUGS.has(slug))
+    .map((slug) => ({
+      url: `${SITE_URL}/squadre/${slug}/calendario`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.6,
+    }));
 
   const playerEntries: MetadataRoute.Sitemap = players.map((p) => ({
     url: `${SITE_URL}/squadre/${p.teamSlug}/${p.slug}`,

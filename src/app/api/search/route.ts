@@ -114,6 +114,14 @@ const STATIC_PAGES: StaticPage[] = [
     section: "Settore Giovanile",
   },
   {
+    id: "calendario-settore-giovanile",
+    title: "Calendario Settore Giovanile",
+    path: "/squadre/settore-giovanile/calendario",
+    keywords:
+      "calendario settore giovanile sgs aggregato under 14 15 16 17 allievi giovanissimi partite gare match",
+    section: "Squadre",
+  },
+  {
     id: "tornei",
     title: "Tornei",
     path: "/tornei",

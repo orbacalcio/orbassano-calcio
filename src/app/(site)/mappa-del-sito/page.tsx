@@ -45,6 +45,11 @@ export default async function MappaDelSitoPage() {
     playersByTeam.set(p.teamSlug, list);
   }
 
+  // Mappa allineata alla struttura del sito al 2026-05-17.
+  // NB: pagine deliberatamente NASCOSTE dal sito (URL diretto OK ma
+  // nessun link interno) NON compaiono qui: /calendario hub
+  // ("Tutti i calendari"), /newsletter, /ricerca. Stessa logica
+  // applicata in sitemap.xml e search index.
   const sections: Section[] = [
     {
       title: "Pagine principali",
@@ -71,11 +76,28 @@ export default async function MappaDelSitoPage() {
     {
       title: "Squadre",
       links: [
-        { href: "/squadre", label: "Hub squadre" },
+        { href: "/squadre", label: "Tutte le squadre" },
+        // /squadre/settore-giovanile e' una vista categoria (4 card
+        // U14-U17 + Open Days + Tornei + modulo iscrizione) — non
+        // corrisponde a uno slug team, va inserita manualmente.
+        { href: "/squadre/settore-giovanile", label: "Settore Giovanile (hub)" },
         ...teamSlugs.map((slug) => ({
           href: `/squadre/${slug}`,
           label: humanizeSlug(slug),
         })),
+      ],
+    },
+    {
+      title: "Calendari & eventi",
+      links: [
+        { href: "/squadre/prima-squadra/calendario", label: "Calendario Prima Squadra" },
+        { href: "/squadre/juniores/calendario", label: "Calendario Juniores" },
+        {
+          href: "/squadre/settore-giovanile/calendario",
+          label: "Calendario Settore Giovanile (aggregato)",
+        },
+        { href: "/settore-giovanile/open-days", label: "Open Days" },
+        { href: "/tornei", label: "Tornei" },
       ],
     },
     {
