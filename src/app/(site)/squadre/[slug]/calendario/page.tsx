@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { CalendarioClient } from "@/components/calendario/CalendarioClient";
 import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
@@ -132,9 +131,9 @@ export default async function CalendarioPage({
               Calendario &amp; Risultati
             </h1>
             <p className="text-ink-mid text-sm leading-relaxed lg:text-base">
-              Tutte le partite di {team.name} stagione {season}: prossime
-              gare, risultati, tabellini ufficiali e tag V/X/P per ogni
-              incontro disputato.
+              Tutte le partite di {team.name} stagione {season} in
+              ordine cronologico: prossime gare, risultati e tabellini
+              ufficiali.
             </p>
           </div>
         </Container>
@@ -189,26 +188,15 @@ export default async function CalendarioPage({
           );
         })()}
 
-        {/* Prima Squadra: CalendarioClient con tab Prossime/Risultati/
-            Tutte (volumi alti, l'utente cerca tipicamente "prossima
-            partita" o "ultimo risultato" separatamente). Tutte le
-            altre categorie (Juniores, Settore Giovanile, Scuola
-            Calcio): lista flat cronologica ascendente raggruppata per
-            mese, niente tab — richiesta utente 2026-05-18. */}
-        {team.category === "Prima Squadra" ? (
-          <CalendarioClient
-            matches={matches}
-            ourTeamSlug={slug}
-            ourTeamName={team.displayName || "Orbassano Calcio"}
-            defaultTab={season === teamCurrentSeason ? "prossime" : "risultati"}
-          />
-        ) : (
-          <CalendarioFlatList
-            matches={matches}
-            ourTeamSlug={slug}
-            ourTeamName={team.displayName || "Orbassano Calcio"}
-          />
-        )}
+        {/* Tutte le categorie (Prima Squadra inclusa, richiesta utente
+            2026-05-18): lista flat cronologica ascendente raggruppata
+            per mese, niente tab Prossime/Risultati/Tutte. La logica
+            "data presente" e' implicita nella sequenza temporale. */}
+        <CalendarioFlatList
+          matches={matches}
+          ourTeamSlug={slug}
+          ourTeamName={team.displayName || "Orbassano Calcio"}
+        />
       </Container>
     </>
   );
