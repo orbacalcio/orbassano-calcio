@@ -114,7 +114,7 @@ export default async function CodiceEticoPage() {
               Orbassano Calcio è giuridicamente vincolante per tutti i
               tesserati e i collaboratori della Società.
             </p>
-            <DownloadCTA pdfUrl={riferimenti?.codiceEticoPdfUrl ?? null} />
+            <DownloadCTA />
           </div>
         </Container>
       </header>
@@ -293,16 +293,10 @@ export default async function CodiceEticoPage() {
                                 </span>
                               )}
                             </div>
-                            {v.pdf && (
-                              <a
-                                href={v.pdf}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-brand-gold hover:text-brand-white text-xs font-semibold transition-colors"
-                              >
-                                Scarica PDF
-                              </a>
-                            )}
+                            {/* Link "Scarica PDF" rimosso 2026-05-17
+                                su richiesta utente: niente esportazione
+                                PDF su pagina Codice Etico. Per riabilitare
+                                ripristina il blocco <a href={v.pdf}>. */}
                           </li>
                         ))}
                       </ul>
