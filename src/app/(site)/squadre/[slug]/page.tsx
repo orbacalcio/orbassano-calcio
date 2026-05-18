@@ -231,7 +231,7 @@ async function CategoryView({
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Settore Giovanile
+              Settore Giovanile Scolastico
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Da qui passa il futuro

@@ -193,7 +193,7 @@ export default async function CalendarioSettoreGiovanilePage({
               Torna al Settore Giovanile
             </Link>
             <span className="text-brand-gold font-display text-sm font-extrabold tracking-[0.15em] uppercase md:text-base">
-              Settore Giovanile · {selectedSeason}
+              Settore Giovanile Scolastico · {selectedSeason}
             </span>
             <h1 className="font-display text-ink-hi text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase md:text-5xl lg:text-6xl">
               Calendario &amp; Risultati
