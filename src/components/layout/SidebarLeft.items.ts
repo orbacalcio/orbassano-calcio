@@ -57,7 +57,15 @@ export const sidebarMainItems: SidebarItem[] = [
  * Privacy & Cookie NON e' qui: vive solo in footer.
  */
 export const sidebarOverflowItems: SidebarItem[] = [
-  { href: "/squadre", label: "Calendario", icon: CalendarDays },
+  // Calendario punta al calendario completo della Prima Squadra
+  // (l'unica route /calendario esistente e' figlia di /squadre/[slug]).
+  // Per il calendario delle squadre giovanili l'utente passa da
+  // /squadre → singola squadra → calendario.
+  {
+    href: "/squadre/prima-squadra/calendario",
+    label: "Calendario",
+    icon: CalendarDays,
+  },
   { href: "/sponsor", label: "Sponsor", icon: Handshake },
   { href: "/societa/biglietteria", label: "Biglietteria", icon: Ticket },
   { href: "/newsletter", label: "Newsletter", icon: NewsletterIcon },

@@ -127,7 +127,7 @@ export default function BiglietteriaPage() {
                   web) e, per i giornalisti, allegare copia della
                   tessera dell&apos;Ordine dei Giornalisti in corso di
                   validità. Le richieste dovranno pervenire entro e non
-                  oltre le ore 12.00 del giorno prima della partita.
+                  oltre le ore 12.00 del giorno precedente alla partita.
                 </p>
               </section>
             </div>

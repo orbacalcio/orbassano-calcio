@@ -734,6 +734,7 @@ export const facilitiesQuery = defineQuery(`
   *[_type == "facility" && isActive != false] | order(coalesce(order, 99) asc){
     _id,
     name,
+    eyebrow,
     "slug": slug.current,
     address,
     mapsUrl,

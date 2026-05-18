@@ -53,7 +53,8 @@ export function FacilityCard({ facility, index }: Props) {
       <div className="flex flex-col gap-5 p-8">
         <div className="flex flex-col gap-2">
           <span className="text-brand-gold font-mono text-[11px] tracking-[0.15em] uppercase">
-            Impianto {String(index + 1).padStart(2, "0")}
+            {facility.eyebrow?.trim() ||
+              `Impianto ${String(index + 1).padStart(2, "0")}`}
           </span>
           <h2 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-3xl">
             {facility.name}

@@ -394,6 +394,7 @@ export type FacilityImage = {
 export type Facility = {
   _id: string;
   name: string;
+  eyebrow: string | null;
   slug: string | null;
   address: string | null;
   mapsUrl: string | null;
