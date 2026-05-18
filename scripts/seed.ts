@@ -505,7 +505,7 @@ const facilities = [
     fields: [
       "2 campi a 11 regolamentari (uno omologato Serie D)",
       "Campi a 5, 7 e 8 in erba naturale e sintetica",
-      "Tribune, aree verdi, spogliatoi, uffici",
+      "Tribuna, bar, area parcheggio, uffici",
     ],
     order: 0,
   },
