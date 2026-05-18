@@ -203,8 +203,8 @@ const teams: TeamSeed[] = [
     staff: [],
   },
   {
-    slugSrc: "under-17",
-    name: "Under 17",
+    slugSrc: "allievi-under-17",
+    name: "Allievi Under 17",
     category: "Settore Giovanile",
     subcategory: "Allievi U17",
     season: "2026/2027",
@@ -217,8 +217,8 @@ const teams: TeamSeed[] = [
     ],
   },
   {
-    slugSrc: "under-16",
-    name: "Under 16",
+    slugSrc: "allievi-under-16",
+    name: "Allievi Under 16",
     category: "Settore Giovanile",
     subcategory: "Allievi U16",
     season: "2026/2027",
@@ -230,8 +230,8 @@ const teams: TeamSeed[] = [
     ],
   },
   {
-    slugSrc: "under-15",
-    name: "Under 15",
+    slugSrc: "giovanissimi-under-15",
+    name: "Giovanissimi Under 15",
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U15",
     season: "2026/2027",
@@ -245,8 +245,8 @@ const teams: TeamSeed[] = [
     ],
   },
   {
-    slugSrc: "under-14",
-    name: "Under 14",
+    slugSrc: "giovanissimi-under-14",
+    name: "Giovanissimi Under 14",
     category: "Settore Giovanile",
     subcategory: "Giovanissimi U14",
     season: "2026/2027",

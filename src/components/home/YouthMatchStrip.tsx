@@ -53,10 +53,10 @@ const JUNIORES_TEAMS: TeamRow[] = [
 ];
 
 const SCOLASTICO_TEAMS: TeamRow[] = [
-  { slug: "under-17", label: "Under 17" },
-  { slug: "under-16", label: "Under 16" },
-  { slug: "under-15", label: "Under 15" },
-  { slug: "under-14", label: "Under 14" },
+  { slug: "allievi-under-17", label: "Under 17" },
+  { slug: "allievi-under-16", label: "Under 16" },
+  { slug: "giovanissimi-under-15", label: "Under 15" },
+  { slug: "giovanissimi-under-14", label: "Under 14" },
 ];
 
 const ALL_TEAMS: TeamRow[] = [...JUNIORES_TEAMS, ...SCOLASTICO_TEAMS];

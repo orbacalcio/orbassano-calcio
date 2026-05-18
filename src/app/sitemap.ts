@@ -121,14 +121,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /squadre/[slug]/calendario per ogni squadra attiva. Crawler-friendly:
   // anche se la lista match e' vuota, la pagina renderizza l'empty state
   // editoriale, niente 404.
-  // Eccezione: le squadre del Settore Giovanile (under-XX) NON vengono
-  // pubblicate qui — il calendario SG vive nella pagina aggregata
+  // Eccezione: le squadre del Settore Giovanile NON vengono pubblicate
+  // qui — il calendario SG vive nella pagina aggregata
   // /squadre/settore-giovanile/calendario (gia' inclusa in STATIC_ROUTES).
+  // Slug coerenti con team.slug.current su Sanity (vedi structure.ts).
   const SG_TEAM_SLUGS = new Set([
-    "under-14",
-    "under-15",
-    "under-16",
-    "under-17",
+    "allievi-under-17",
+    "allievi-under-16",
+    "giovanissimi-under-15",
+    "giovanissimi-under-14",
   ]);
   const calendarEntries: MetadataRoute.Sitemap = teamSlugs
     .filter((slug) => !SG_TEAM_SLUGS.has(slug))

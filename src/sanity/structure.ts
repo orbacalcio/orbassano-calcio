@@ -47,17 +47,21 @@ import type { StructureBuilder, StructureResolver } from "sanity/structure";
 // Quando cambia, basta aggiornare questa costante (es. ad agosto 2027).
 const CURRENT_SEASON = "2026/2027";
 
-// Squadre attive (slug + label) per le viste filtrate "Partite per
-// squadra" e "Avversari per squadra". L'ordine determina l'elenco.
-// Macro-categorie: Prima Squadra (Prima Categoria) → Juniores (U19) →
-// Settore Giovanile (U17/U16/U15/U14) → Scuola Calcio.
+// Squadre (slug + label) per le viste filtrate "Partite per squadra",
+// "Partite archiviate per squadra" e "Avversari per squadra". L'ordine
+// determina l'elenco. Macro-categorie: Prima Squadra → Juniores (U19) →
+// Settore Giovanile (Allievi U17/U16 + Giovanissimi U15/U14) → Scuola
+// Calcio. SLUG devono coincidere con team.slug.current su Sanity:
+// in caso contrario le liste filtrate appaiono vuote (bug 2026-05-18,
+// quando "under-17" generico fu rinominato in "allievi-under-17" lato
+// CMS ma non qui).
 const TEAM_ITEMS: Array<{ slug: string; label: string }> = [
   { slug: "prima-squadra", label: "Prima Squadra" },
   { slug: "juniores", label: "Juniores" },
-  { slug: "under-17", label: "Under 17" },
-  { slug: "under-16", label: "Under 16" },
-  { slug: "under-15", label: "Under 15" },
-  { slug: "under-14", label: "Under 14" },
+  { slug: "allievi-under-17", label: "Allievi Under 17" },
+  { slug: "allievi-under-16", label: "Allievi Under 16" },
+  { slug: "giovanissimi-under-15", label: "Giovanissimi Under 15" },
+  { slug: "giovanissimi-under-14", label: "Giovanissimi Under 14" },
   { slug: "scuola-calcio", label: "Scuola Calcio" },
 ];
 
