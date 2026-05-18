@@ -61,6 +61,11 @@ export default async function PlayerPage({
   const player = await fetchPlayerBySlug(playerSlug);
   if (!player) notFound();
   if (!player.team || player.team.slug !== slug) notFound();
+  // Le schede atleta esistono SOLO per la Prima Squadra (foto, bio,
+  // statistiche complete). Le giovanili (Juniores + Settore Giovanile
+  // + Scuola Calcio) restano sull'elenco rosa della pagina squadra,
+  // niente pagina per giocatore. Richiesta utente 2026-05-18.
+  if (player.team.category !== "Prima Squadra") notFound();
   return <PlayerView player={player} />;
 }
 

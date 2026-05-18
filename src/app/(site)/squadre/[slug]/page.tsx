@@ -640,20 +640,23 @@ function RosterRoleSection({
           ))}
         </div>
       ) : (
+        // Squadre giovanili / Juniores: lista testuale NON cliccabile
+        // (richiesta utente 2026-05-18). Le pagine player singole
+        // esistono ancora come URL diretto ma non vengono linkate
+        // dal sito — per le giovanili l'elenco rosa e' la vista
+        // canonica, niente scheda atleta dedicata.
         <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
           {players.map((p) => (
-            <li key={p._id}>
-              <Link
-                href={`/squadre/${teamSlug}/${p.slug}`}
-                className="border-border/40 hover:border-brand-gold/60 focus-visible:outline-brand-gold group flex flex-col gap-1 border-b pb-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
-              >
-                <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
-                  {p.firstName}
-                </span>
-                <span className="font-display text-ink-hi group-hover:text-brand-gold text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase transition-colors md:text-4xl">
-                  {p.lastName}
-                </span>
-              </Link>
+            <li
+              key={p._id}
+              className="border-border/40 flex flex-col gap-1 border-b pb-4"
+            >
+              <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+                {p.firstName}
+              </span>
+              <span className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-4xl">
+                {p.lastName}
+              </span>
             </li>
           ))}
         </ul>

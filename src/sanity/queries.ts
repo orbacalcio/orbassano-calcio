@@ -643,8 +643,16 @@ export const activeFacilitySlugsQuery = defineQuery(`
 // Tutti i giocatori con riferimento alla loro squadra (per sitemap
 // /squadre/[teamSlug]/[playerSlug]). Filtra fuori i record privi di
 // slug o di reference team.
+// Filtro team->category == "Prima Squadra": le pagine scheda atleta
+// vivono SOLO per la Prima Squadra (richiesta utente 2026-05-18).
+// I player delle giovanili (Juniores + Settore Giovanile + Scuola
+// Calcio) restano nel CMS ma le loro URL /squadre/[slug]/[playerSlug]
+// ritornano 404 — niente bisogno di indicizzarle nel sitemap.
 export const allPlayersForSitemapQuery = defineQuery(`
-  *[_type == "player" && defined(slug.current) && defined(team->slug.current)]{
+  *[_type == "player"
+    && defined(slug.current)
+    && defined(team->slug.current)
+    && team->category == "Prima Squadra"]{
     "slug": slug.current,
     "teamSlug": team->slug.current,
     _updatedAt
