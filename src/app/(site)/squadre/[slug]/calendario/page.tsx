@@ -199,14 +199,14 @@ export default async function CalendarioPage({
           <CalendarioClient
             matches={matches}
             ourTeamSlug={slug}
-            ourTeamName={team.name}
+            ourTeamName={team.displayName || "Orbassano Calcio"}
             defaultTab={season === teamCurrentSeason ? "prossime" : "risultati"}
           />
         ) : (
           <CalendarioFlatList
             matches={matches}
             ourTeamSlug={slug}
-            ourTeamName={team.name}
+            ourTeamName={team.displayName || "Orbassano Calcio"}
           />
         )}
       </Container>

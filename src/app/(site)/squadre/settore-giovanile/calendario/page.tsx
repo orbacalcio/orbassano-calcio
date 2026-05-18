@@ -301,9 +301,15 @@ function MatchRow({ match }: { match: MatchAggregated }) {
     match.opponent?.club?.name ??
     (match.isOpponentTbd ? "Avversario TBD" : "—");
   const opponentLogo = match.opponent?.club?.logo ?? null;
-  const homeName = match.home ? match.teamName : opponentName;
+  // Il BADGE squadra usa match.teamName (descrittivo: "Allievi U17",
+  // "Giovanissimi U15"), e' l'unico discriminante visivo della vista
+  // aggregata. Il nome mostrato accanto al logo Orbassano (home/away)
+  // usa invece team.displayName con fallback "Orbassano Calcio"
+  // (richiesta utente 2026-05-18: nome MatchCard uniforme).
+  const ourName = match.teamDisplayName || "Orbassano Calcio";
+  const homeName = match.home ? ourName : opponentName;
   const homeLogo = match.home ? OUR_LOGO_SRC : opponentLogo;
-  const awayName = match.home ? opponentName : match.teamName;
+  const awayName = match.home ? opponentName : ourName;
   const awayLogo = match.home ? opponentLogo : OUR_LOGO_SRC;
   const showScore =
     typeof match.scoreHome === "number" && typeof match.scoreAway === "number";

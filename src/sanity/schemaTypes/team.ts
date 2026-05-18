@@ -38,9 +38,19 @@ export const team = defineType({
   fields: [
     defineField({
       name: "name",
-      title: "Nome",
+      title: "Nome (anagrafica interna)",
+      description:
+        "Nome usato in Studio e nelle pagine squadra (es. 'Allievi Under 17'). Per il nome mostrato nelle MatchCard usa 'Nome mostrato (MatchCard)' qui sotto.",
       type: "string",
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: "displayName",
+      title: "Nome mostrato (MatchCard)",
+      description:
+        "Nome della squadra come compare nelle MatchCard (homepage strip + pagina calendario). Default 'Orbassano Calcio' se vuoto: nelle card del calendario quasi sempre si scrive 'Orbassano Calcio' al posto del nome di categoria, per uniformita' grafica.",
+      type: "string",
+      initialValue: "Orbassano Calcio",
     }),
     defineField({
       name: "slug",

@@ -43,7 +43,11 @@ type Settings = {
   } | null;
 };
 
-const PRIMA_SQUADRA_NAME = "Prima Squadra";
+// Fallback se team.displayName non e' valorizzato: ogni MatchCard
+// del MatchStrip mostra "Orbassano Calcio" come ourTeamName (richiesta
+// utente 2026-05-18). Il valore vero arriva da match.ourTeamDisplayName
+// proiettato lato Sanity (vedi nextMatchQuery / lastMatchQuery).
+const PRIMA_SQUADRA_DISPLAY_FALLBACK = "Orbassano Calcio";
 const PRIMA_SQUADRA_SLUG = "prima-squadra";
 
 async function fetchData() {
@@ -157,7 +161,9 @@ export async function MatchStrip() {
                 <MatchCard
                   match={lastMatch}
                   ourTeamSlug={PRIMA_SQUADRA_SLUG}
-                  ourTeamName={PRIMA_SQUADRA_NAME}
+                  ourTeamName={
+                    lastMatch.ourTeamDisplayName ?? PRIMA_SQUADRA_DISPLAY_FALLBACK
+                  }
                   variant="compact"
                 />
               ) : (
@@ -192,7 +198,9 @@ export async function MatchStrip() {
                 <MatchCard
                   match={nextMatch}
                   ourTeamSlug={PRIMA_SQUADRA_SLUG}
-                  ourTeamName={PRIMA_SQUADRA_NAME}
+                  ourTeamName={
+                    nextMatch.ourTeamDisplayName ?? PRIMA_SQUADRA_DISPLAY_FALLBACK
+                  }
                   variant="compact"
                 />
               ) : (

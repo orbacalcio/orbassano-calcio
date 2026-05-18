@@ -111,7 +111,10 @@ function buildScoreboardLogos(
     : opp?.shortName ?? opp?.name ?? "—";
   const ourLogo: LogoSide = {
     logoSrc: OUR_LOGO_SRC,
-    logoName: OUR_LOGO_NAME,
+    // team.displayName (proiettato da nextMatchesByTeamSlugsQuery /
+    // lastMatchesByTeamSlugsQuery come ourTeamDisplayName) con fallback
+    // a "Orbassano Calcio" (richiesta utente 2026-05-18).
+    logoName: match.ourTeamDisplayName || OUR_LOGO_NAME,
     color: null,
   };
   const oppLogo: LogoSide = {

@@ -134,6 +134,9 @@ export type PlayerSummary = {
 export type TeamDetail = {
   _id: string;
   name: string;
+  /** Nome usato nelle MatchCard (homepage strip + pagina calendario).
+   *  Default 'Orbassano Calcio' se vuoto. */
+  displayName: string | null;
   slug: string;
   category: TeamCategory;
   subcategory: string | null;
@@ -854,19 +857,27 @@ export type MatchSummary = {
   isClosedDoors: boolean | null;
   isDateTbd: boolean | null;
   notes: string | null;
+  /** Nome della NOSTRA squadra come va mostrato nella MatchCard
+   *  (di solito 'Orbassano Calcio', vedi team.displayName). Null
+   *  se la query non lo proietta — fallback a 'Orbassano Calcio'
+   *  lato consumer. */
+  ourTeamDisplayName: string | null;
   competition: MatchCompetition | null;
   opponent: { club: MatchOpponentClub | null } | null;
 };
 
 /**
- * Estende MatchSummary con teamSlug + teamName, per le viste
- * aggregate multi-team (es. calendario Settore Giovanile che combina
- * U14/U15/U16/U17). I match con teamSlug diverso vengono renderizzati
- * con badge squadra (es. "U17", "U15") accanto a data/avversario.
+ * Estende MatchSummary con teamSlug + teamName + teamDisplayName, per
+ * le viste aggregate multi-team (es. calendario Settore Giovanile che
+ * combina U14/U15/U16/U17). I match con teamSlug diverso vengono
+ * renderizzati con badge squadra (es. "Allievi U17") accanto a
+ * data/avversario; teamDisplayName e' il nome esteso usato come
+ * "ourTeamName" nei loghi home/away.
  */
 export type MatchAggregated = MatchSummary & {
   teamSlug: string;
   teamName: string;
+  teamDisplayName: string | null;
 };
 
 /**
@@ -1184,6 +1195,9 @@ export type YouthNextMatch = {
   isOpponentTbd: boolean | null;
   isDateTbd: boolean | null;
   teamSlug: string | null;
+  /** team.displayName per il nome mostrato accanto al logo Orbassano
+   *  (default "Orbassano Calcio" lato consumer se null). */
+  ourTeamDisplayName: string | null;
   competition: {
     shortName: string | null;
     name: string | null;

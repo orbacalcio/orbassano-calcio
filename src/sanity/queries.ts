@@ -326,6 +326,7 @@ export const matchesBySettoreGiovanileQuery = defineQuery(`
     notes,
     "teamSlug": team->slug.current,
     "teamName": team->name,
+    "teamDisplayName": team->displayName,
     "competition": competition->{
       "slug": slug.current,
       shortName,
@@ -371,6 +372,7 @@ export const matchesByTeamSlugQuery = defineQuery(`
     isClosedDoors,
     isDateTbd,
     notes,
+    "ourTeamDisplayName": team->displayName,
     "competition": competition->{
       "slug": slug.current,
       shortName,
@@ -415,6 +417,7 @@ export const nextMatchesByTeamSlugsQuery = defineQuery(`
     isOpponentTbd,
     isDateTbd,
     "teamSlug": team->slug.current,
+    "ourTeamDisplayName": team->displayName,
     "competition": competition->{
       shortName,
       name,
@@ -455,6 +458,7 @@ export const lastMatchesByTeamSlugsQuery = defineQuery(`
     scoreAway,
     reportLink,
     "teamSlug": team->slug.current,
+    "ourTeamDisplayName": team->displayName,
     "competition": competition->{
       shortName,
       name,
@@ -499,6 +503,7 @@ export const nextMatchQuery = defineQuery(`
     isClosedDoors,
     isDateTbd,
     notes,
+    "ourTeamDisplayName": team->displayName,
     "competition": competition->{
       "slug": slug.current,
       shortName,
@@ -547,6 +552,7 @@ export const lastMatchQuery = defineQuery(`
     isClosedDoors,
     isDateTbd,
     notes,
+    "ourTeamDisplayName": team->displayName,
     "competition": competition->{
       "slug": slug.current,
       shortName,
@@ -750,6 +756,7 @@ export const teamBySlugQuery = defineQuery(`
   *[_type == "team" && slug.current == $slug && isActive != false][0]{
     _id,
     name,
+    displayName,
     "slug": slug.current,
     category,
     subcategory,
