@@ -63,23 +63,15 @@ function buildSections(opts: {
   if (teamSlugs.has("scuola-calcio")) {
     teamsChildren.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
   }
-  // Sezione dedicata Settore Giovanile (calendari Open Days + Tornei):
-  // separata dalle pagine team perche' raggruppa eventi extra-campionato.
-  teamsChildren.push({
-    href: "/settore-giovanile/open-days",
-    label: "Open Days",
-  });
-  teamsChildren.push({
-    href: "/tornei",
-    label: "Tornei",
-  });
+  // NB: Open Days + Tornei NON sono piu' qui (richiesta utente
+  // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
+  // sono di fatto eventi a calendario, non sezioni squadre.
 
   // Accordion Calendario: primo child = pagina hub /calendario con
   // tutti i box squadre. Sub-link successivi = calendario di ogni
-  // squadra attiva (Prima Squadra / Juniores / Scuola Calcio puntano
-  // direttamente al calendario singolo; Settore Giovanile punta alla
-  // categoria hub perche' SG raggruppa 4 squadre con calendari
-  // distinti — l'utente sceglie poi la squadra).
+  // squadra attiva (Prima Squadra / Juniores puntano al calendario
+  // singolo; Settore Giovanile punta alla pagina aggregata). In coda
+  // Open Days + Tornei (eventi extra-campionato).
   const calendarioChildren: DrawerSection["children"] = [
     { href: "/calendario", label: "Tutti i calendari" },
   ];
@@ -103,6 +95,14 @@ function buildSections(opts: {
   calendarioChildren.push({
     href: "/squadre/settore-giovanile/calendario",
     label: "Settore Giovanile",
+  });
+  calendarioChildren.push({
+    href: "/settore-giovanile/open-days",
+    label: "Open Days",
+  });
+  calendarioChildren.push({
+    href: "/tornei",
+    label: "Tornei",
   });
 
   // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·

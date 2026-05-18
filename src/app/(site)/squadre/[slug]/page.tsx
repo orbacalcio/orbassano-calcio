@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { RegistrationPaymentBlock } from "@/components/settore-giovanile/RegistrationPaymentBlock";
 import { PlayerCard } from "@/components/squadre/PlayerCard";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
@@ -12,6 +13,8 @@ import {
   buildBreadcrumbLd,
   buildSportsTeamLd,
 } from "@/lib/json-ld";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
 import {
   fetchTeamBySlug,
   fetchTeamsByCategory,
@@ -21,6 +24,28 @@ import {
   type TeamDetail,
   type TeamSummary,
 } from "@/sanity/fetchers";
+
+const FALLBACK_IBAN = "IT93H0853030680000000002547";
+const FALLBACK_PHONE = "+39 327 779 3326";
+
+type RegistrationSettings = {
+  registrationFormUrl?: string | null;
+  legalInfo?: { iban?: string | null } | null;
+  contactInfo?: { phone?: string | null } | null;
+};
+
+async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
+  try {
+    const data = await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    return (data ?? {}) as RegistrationSettings;
+  } catch {
+    return {};
+  }
+}
 
 /**
  * Classificazione ruoli player in 4 gruppi GK/DF/MF/FW (pattern
@@ -163,13 +188,24 @@ export default async function TeamOrCategoryPage({
 
 // ---------- VISTA CATEGORIA (slug "settore-giovanile") -------------------------------
 
-function CategoryView({
+async function CategoryView({
   category,
   teams,
 }: {
   category: TeamCategory;
   teams: TeamSummary[];
 }) {
+  // Solo per Settore Giovanile: in fondo alla pagina compare il
+  // blocco "Modulo iscrizione + bonifico" (shared con /settore-giovanile
+  // e /settore-giovanile/open-days). Fetch on-demand: per le altre
+  // categorie skip.
+  const showRegBlock = category === "Settore Giovanile";
+  const regSettings = showRegBlock
+    ? await fetchRegistrationSettings()
+    : null;
+  const moduleUrl = regSettings?.registrationFormUrl ?? null;
+  const iban = regSettings?.legalInfo?.iban ?? FALLBACK_IBAN;
+  const phone = regSettings?.contactInfo?.phone ?? FALLBACK_PHONE;
   return (
     <>
       <JsonLd
@@ -210,6 +246,16 @@ function CategoryView({
               <TeamCard key={t._id} team={t} />
             ))}
           </div>
+
+          {showRegBlock && (
+            <div className="mt-12 lg:mt-16">
+              <RegistrationPaymentBlock
+                moduleUrl={moduleUrl}
+                iban={iban}
+                phone={phone}
+              />
+            </div>
+          )}
         </Container>
       </section>
     </>
