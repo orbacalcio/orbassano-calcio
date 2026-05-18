@@ -46,7 +46,9 @@ const STATIC_ROUTES: Array<{
   { path: "/sponsor", changeFrequency: "monthly", priority: 0.7 },
   { path: "/sponsor/opportunita", changeFrequency: "monthly", priority: 0.7 },
   { path: "/5x1000", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/newsletter", changeFrequency: "yearly", priority: 0.5 },
+  // /newsletter esiste ancora ma rimossa dal sitemap 2026-05-17
+  // (richiesta utente): non vogliamo indicizzarla, il box newsletter
+  // in fondo a ogni pagina copre la subscription.
   { path: "/contatti", changeFrequency: "yearly", priority: 0.6 },
   { path: "/legal/privacy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/cookie", changeFrequency: "yearly", priority: 0.3 },

@@ -85,14 +85,11 @@ const STATIC_PAGES: StaticPage[] = [
       "5x1000 5×1000 cinque per mille cinquepermille donazione donare codice fiscale CF beneficio fiscale dichiarazione redditi sostieni vivaio",
     section: "Sostieni il club",
   },
-  {
-    id: "newsletter",
-    title: "Newsletter",
-    path: "/newsletter",
-    keywords:
-      "newsletter iscrizione email mail aggiornamenti comunicazioni novita registrazione",
-    section: "Comunicazioni",
-  },
+  // Newsletter rimossa dall'indice ricerca 2026-05-17 (richiesta utente):
+  // la pagina /newsletter esiste ancora ma non viene piu' linkata o
+  // indicizzata dal sito. Il box newsletter in fondo a ogni pagina e'
+  // il canale principale di iscrizione.
+
   // Squadre / Settore Giovanile
   {
     id: "settore-giovanile",

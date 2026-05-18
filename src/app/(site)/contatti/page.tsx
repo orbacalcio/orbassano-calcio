@@ -150,14 +150,8 @@ export default function ContattiPage() {
                     >
                       /sponsor/opportunit&agrave;
                     </a>
-                    , per la newsletter c&apos;&egrave; il form{" "}
-                    <a
-                      href="/newsletter"
-                      className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
-                    >
-                      /newsletter
-                    </a>
-                    .
+                    , per la newsletter c&apos;&egrave; il form in fondo
+                    a ogni pagina del sito.
                   </p>
                 </div>
                 <ContactForm />

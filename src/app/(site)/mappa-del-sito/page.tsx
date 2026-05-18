@@ -92,7 +92,6 @@ export default async function MappaDelSitoPage() {
       title: "Sostieni il club",
       links: [
         { href: "/5x1000", label: "5×1000" },
-        { href: "/newsletter", label: "Newsletter" },
       ],
     },
     {

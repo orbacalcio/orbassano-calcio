@@ -7,7 +7,6 @@ import {
   Mail,
   MoreHorizontal,
   Newspaper,
-  Newspaper as NewsletterIcon,
   Ticket,
   Users,
   type LucideIcon,
@@ -48,9 +47,11 @@ export const sidebarMainItems: SidebarItem[] = [
  * Voci secondarie quick-link mostrate in fondo al NavigationDrawer
  * (drawer hamburger aperto da SidebarLeft "ALTRO" o da MobileTopbar).
  *
- * Ordine: Calendario → Sponsor → Biglietteria → Newsletter → 5×1000 →
- * Contatti. Calendario e Sponsor sono usciti dalle 4 voci main e
- * vivono qui come quick-link top-level.
+ * Ordine: Calendario → Sponsor → Biglietteria → 5×1000 → Contatti.
+ * Calendario e Sponsor sono usciti dalle 4 voci main e vivono qui
+ * come quick-link top-level. La voce Newsletter e' stata rimossa
+ * 2026-05-17 (richiesta utente): il box newsletter in fondo a ogni
+ * pagina basta come call-to-subscribe, niente link extra al form.
  *
  * Impianti sportivi NON e' qui: vive solo dentro l'accordion Societa'
  * del drawer (e' un sotto-link logico della sezione).
@@ -68,7 +69,6 @@ export const sidebarOverflowItems: SidebarItem[] = [
   },
   { href: "/sponsor", label: "Sponsor", icon: Handshake },
   { href: "/societa/biglietteria", label: "Biglietteria", icon: Ticket },
-  { href: "/newsletter", label: "Newsletter", icon: NewsletterIcon },
   { href: "/5x1000", label: "5×1000", icon: HeartHandshake },
   { href: "/contatti", label: "Contatti", icon: Mail },
 ];

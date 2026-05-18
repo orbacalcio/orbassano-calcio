@@ -141,7 +141,6 @@ function buildSections(opts: {
           : []),
         { href: "/sponsor/opportunita", label: "Diventa sponsor" },
         { href: "/5x1000", label: "5×1000" },
-        { href: "/newsletter", label: "Newsletter" },
       ],
     },
     {
