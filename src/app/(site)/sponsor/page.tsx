@@ -47,7 +47,7 @@ export default async function SponsorPage() {
               )}
               <Link
                 href="/sponsor/opportunita"
-                className="bg-brand-red text-brand-white hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="bg-brand-red text-brand-white hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 Diventa sponsor
                 <ArrowRight size={14} aria-hidden />

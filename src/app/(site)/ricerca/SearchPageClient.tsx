@@ -175,7 +175,7 @@ export function SearchPageClient() {
             type="submit"
             aria-label="Avvia ricerca"
             disabled={inputValue.trim().length < 2}
-            className="bg-brand-red text-brand-white hover:bg-brand-red/90 focus-visible:outline-brand-gold shrink-0 rounded-full px-5 py-2 text-xs font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-brand-red text-brand-white hover:bg-brand-blue focus-visible:outline-brand-gold shrink-0 rounded-full px-5 py-2 text-xs font-bold tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cerca
           </button>

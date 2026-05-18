@@ -79,7 +79,7 @@ export function HeroOverlay({ season, league, group }: Props) {
       <motion.div variants={item} className="flex flex-wrap items-center gap-3">
         <Link
           href="/societa/storia"
-          className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="bg-brand-red text-brand-white font-display hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           Scopri la storia
           <ArrowRight size={16} />

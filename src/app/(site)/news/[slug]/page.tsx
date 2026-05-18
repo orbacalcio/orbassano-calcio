@@ -145,7 +145,7 @@ export default async function NewsDetailPage(props: {
                 href={news.originalArticleUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-brand-red text-brand-white font-display hover:bg-brand-red/90 focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 md:text-base"
+                className="bg-brand-red text-brand-white font-display hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-bold tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 md:text-base"
               >
                 Per leggere l&apos;articolo originale clicca qui
                 <ExternalLink size={16} aria-hidden />
