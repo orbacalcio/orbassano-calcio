@@ -52,6 +52,12 @@ __pycache__/
 /photos-in/
 /photos-out/
 
+# Template Excel per import giocatori. Generato on-demand con
+# `pnpm players-template`. Lo script generator vive in repo
+# (scripts/generate-players-template.ts), il binario .xlsx no.
+/players-template.xlsx
+/players-*.xlsx
+
 # vercel
 .vercel
 

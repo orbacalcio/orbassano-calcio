@@ -9,6 +9,8 @@
     "lint": "eslint",
     "seed": "tsx --env-file=.env.local scripts/seed.ts",
     "disable-features": "tsx --env-file=.env.local scripts/disable-features.ts",
+    "players-template": "tsx scripts/generate-players-template.ts",
+    "import-players": "tsx --env-file=.env.local scripts/import-players.ts",
     "compress": "node scripts/compress-photos.mjs",
     "typecheck": "tsc --noEmit"
   },
@@ -42,6 +44,7 @@
     "eslint-config-next": "16.2.5",
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "xlsx": "^0.18.5"
   }
 }
