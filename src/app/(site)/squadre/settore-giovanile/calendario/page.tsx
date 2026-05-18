@@ -199,9 +199,10 @@ export default async function CalendarioSettoreGiovanilePage({
               Calendario &amp; Risultati
             </h1>
             <p className="text-ink-mid text-sm leading-relaxed lg:text-base">
-              Tutte le partite delle squadre del Settore Giovanile in
-              un&apos;unica vista cronologica della stagione. Il badge oro
-              accanto a ogni partita indica la squadra.
+              Tutte le partite delle squadre del Settore Giovanile
+              Scolastico in un&apos;unica vista cronologica della
+              stagione. Il badge oro accanto a ogni partita indica la
+              squadra.
             </p>
           </div>
         </Container>
