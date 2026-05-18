@@ -24,6 +24,7 @@ Prima di scrivere codice nuovo, leggi sempre **in quest'ordine**:
 2. `docs/TYPOGRAPHY.md` — addendum sistema tipografico a 3 famiglie. **Sovrascrive** ogni riferimento a Bebas Neue del brief originale.
 3. `docs/LAYOUT_NAVIGATION.md` — addendum layout/navigation pattern juventus.com per M2. **Sovrascrive** la specifica generica del brief.
 4. `docs/DATA_ORBASSANO.md` — contenuti reali (rosa, organigramma, sponsor, storia, dati legali, redirect 301). Fonte di verità per il seed Sanity.
+5. `docs/TERMINOLOGY.md` — glossario ufficiale delle nomenclature squadre/categorie (Settore Giovanile Scolastico vs SGS vs U17 vs Allievi U17). Da leggere PRIMA di toccare label/eyebrow/metadata.
 
 ## Sistema tipografico (3 famiglie, vedi `docs/TYPOGRAPHY.md`)
 
