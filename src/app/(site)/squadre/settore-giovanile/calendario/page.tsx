@@ -4,11 +4,13 @@ import { ArrowLeft } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
+import { cn } from "@/lib/cn";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
 import {
   fetchMatchesBySettoreGiovanile,
+  fetchSettoreGiovanileSeasons,
   type MatchAggregated,
 } from "@/sanity/fetchers";
 
@@ -35,22 +37,26 @@ const ITALIAN_DAYS_SHORT = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
 export const metadata: Metadata = {
   title: "Calendario Settore Giovanile",
   description:
-    "Tutti i calendari del Settore Giovanile ASD Orbassano Calcio (Under 14, Under 15, Under 16, Under 17) raccolti in un'unica vista cronologica: prossime gare e risultati di ogni squadra giovanile.",
+    "Tutti i calendari del Settore Giovanile ASD Orbassano Calcio (Allievi U17/U16, Giovanissimi U15/U14) raccolti in un'unica vista cronologica della stagione.",
 };
 
 /**
  * Pagina aggregata calendario Settore Giovanile.
  *
- * Mostra TUTTI i match delle squadre del Settore Giovanile (U14-U17 +
- * Scuola Calcio se attiva) in 2 sezioni: "Prossime partite" + "Risultati".
- * Ogni match riporta un badge gold con il nome della squadra accanto
- * a data, avversario e score: cosi' un'unica pagina copre tutto il
- * settore senza dover navigare team-per-team.
+ * Mostra TUTTI i match delle squadre del Settore Giovanile in un'UNICA
+ * lista cronologica ascendente raggruppata per mese (richiesta utente
+ * 2026-05-18: rimosse le 2 sezioni Prossime/Risultati). Ogni match porta
+ * un badge oro con il nome della squadra accanto a data, avversario e
+ * score, per distinguere a colpo d'occhio U17 / U16 / U15 / U14.
  *
- * Le singole pagine /squadre/[slug]/calendario delle squadre SG
- * restano accessibili via URL diretto ma nessun link del sito le
- * richiama (vedi NavigationDrawer accordion Calendario → tutto va a
- * /squadre/settore-giovanile/calendario).
+ * Selezione stagione via query string `?season=`. Se piu' stagioni
+ * disponibili, default = settings.currentSeason; se quella stagione
+ * non ha competition SG (es. inizio anno, ancora vuoto), fallback alla
+ * piu' recente fra le disponibili.
+ *
+ * Le singole pagine /squadre/[slug]/calendario delle squadre SG restano
+ * accessibili via URL diretto ma nessun link del sito le richiama
+ * (NavigationDrawer accordion Calendario → tutto va qui).
  */
 type CurrentSeasonSettings = { currentSeason?: string | null };
 
@@ -65,12 +71,6 @@ async function fetchCurrentSeason(): Promise<string> {
   } catch {
     return FALLBACK_SEASON;
   }
-}
-
-function isPast(m: MatchAggregated, now: number): boolean {
-  if (m.status === "finished") return true;
-  if (m.status === "cancelled") return true;
-  return new Date(m.date).getTime() < now;
 }
 
 function formatItalianDateTime(iso: string): string {
@@ -93,22 +93,6 @@ function monthGroupLabel(iso: string): string {
   return `${ITALIAN_MONTHS[d.getMonth()] ?? "—"} ${d.getFullYear()}`;
 }
 
-/**
- * Partiziona match in upcoming/past usando Date.now(). Extracted in
- * funzione esterna (non body component) per non triggerare il check
- * react-hooks/purity di React 19 sui server component.
- */
-function partitionMatches(matches: MatchAggregated[]): {
-  upcoming: MatchAggregated[];
-  past: MatchAggregated[];
-} {
-  const now = Date.now();
-  return {
-    upcoming: matches.filter((m) => !isPast(m, now)),
-    past: matches.filter((m) => isPast(m, now)).reverse(),
-  };
-}
-
 function groupByMonth(
   matches: MatchAggregated[],
 ): Array<{ key: string; label: string; items: MatchAggregated[] }> {
@@ -118,23 +102,43 @@ function groupByMonth(
     if (!map.has(k)) map.set(k, []);
     map.get(k)!.push(m);
   }
-  return Array.from(map.entries()).map(([key, items]) => ({
+  const entries = Array.from(map.entries()).map(([key, items]) => ({
     key,
     label: monthGroupLabel(items[0]!.date),
     items,
   }));
+  // Ordine asc cronologico (gennaio → dicembre) — richiesta utente
+  // 2026-05-18: niente piu' partizione Prossime/Risultati, lista unica
+  // cronologica.
+  entries.sort((a, b) => a.key.localeCompare(b.key));
+  return entries;
 }
 
-export default async function CalendarioSettoreGiovanilePage() {
-  const season = await fetchCurrentSeason();
-  const matches = await fetchMatchesBySettoreGiovanile(season);
+type Search = { season?: string };
 
-  // partitionMatches isola Date.now() in funzione esterna per
-  // bypassare il check react-hooks/purity di React 19.
-  const { upcoming, past } = partitionMatches(matches);
+export default async function CalendarioSettoreGiovanilePage({
+  searchParams,
+}: {
+  searchParams: Promise<Search>;
+}) {
+  const { season: querySeason } = await searchParams;
+  const currentSeason = await fetchCurrentSeason();
+  const availableSeasons = await fetchSettoreGiovanileSeasons();
 
-  const upcomingByMonth = groupByMonth(upcoming);
-  const pastByMonth = groupByMonth(past);
+  // Default = currentSeason se presente fra le disponibili; altrimenti
+  // piu' recente fra quelle che hanno almeno una competition. Se
+  // availableSeasons vuoto (inizio anno, niente competition SG caricate),
+  // mostriamo comunque currentSeason col placeholder.
+  const fallbackSeason = availableSeasons[0] ?? currentSeason;
+  const selectedSeason =
+    querySeason && availableSeasons.includes(querySeason)
+      ? querySeason
+      : availableSeasons.includes(currentSeason)
+        ? currentSeason
+        : fallbackSeason;
+
+  const matches = await fetchMatchesBySettoreGiovanile(selectedSeason);
+  const groups = groupByMonth(matches);
 
   const eventsLd = buildSportsEventListLd(
     matches.map((m) => ({
@@ -165,6 +169,11 @@ export default async function CalendarioSettoreGiovanilePage() {
     })),
   );
 
+  // Lista pill: se ho stagioni disponibili uso quelle; se vuoto, mostro
+  // l'unica pill = selectedSeason (currentSeason) come stato attivo.
+  const displaySeasons =
+    availableSeasons.length > 0 ? availableSeasons : [selectedSeason];
+
   return (
     <>
       {eventsLd.length > 0 && <JsonLd data={eventsLd} />}
@@ -184,36 +193,63 @@ export default async function CalendarioSettoreGiovanilePage() {
               Torna al Settore Giovanile
             </Link>
             <span className="text-brand-gold font-display text-sm font-extrabold tracking-[0.15em] uppercase md:text-base">
-              Settore Giovanile · {season}
+              Settore Giovanile · {selectedSeason}
             </span>
             <h1 className="font-display text-ink-hi text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase md:text-5xl lg:text-6xl">
               Calendario &amp; Risultati
             </h1>
             <p className="text-ink-mid text-sm leading-relaxed lg:text-base">
-              Tutte le partite delle squadre del Settore Giovanile
-              (U14-U17) in un&apos;unica vista cronologica. Il badge oro
+              Tutte le partite delle squadre del Settore Giovanile in
+              un&apos;unica vista cronologica della stagione. Il badge oro
               accanto a ogni partita indica la squadra.
             </p>
           </div>
         </Container>
       </header>
 
-      <Container className="flex flex-col gap-16 py-12 lg:py-16" size="wide">
+      <Container className="py-12 lg:py-16" size="wide">
+        {/* Pill switcher stagioni: sempre visibile per coerenza UI con
+            la pagina calendario per-squadra. Selezione tramite query
+            string ?season=, niente client state — funziona con JS off. */}
+        <nav
+          aria-label="Scegli stagione"
+          className="border-border/40 mb-8 flex flex-wrap items-center gap-2 border-b pb-4"
+        >
+          <span className="font-mono text-ink-mid mr-2 text-[11px] tracking-[0.15em] uppercase">
+            Stagione:
+          </span>
+          {displaySeasons.map((s) => {
+            const isActive = s === selectedSeason;
+            const isCurrent = s === currentSeason;
+            return (
+              <Link
+                key={s}
+                href={
+                  isCurrent
+                    ? `/squadre/settore-giovanile/calendario`
+                    : `/squadre/settore-giovanile/calendario?season=${encodeURIComponent(s)}`
+                }
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "rounded-full border px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors",
+                  isActive
+                    ? "border-brand-gold bg-brand-gold text-surface-0"
+                    : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
+                )}
+              >
+                {s}
+                {isCurrent && !isActive && (
+                  <span className="ml-1.5 opacity-60">· in corso</span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
         {matches.length === 0 ? (
           <EmptyPlaceholder />
         ) : (
-          <>
-            <MatchSection
-              title="Prossime partite"
-              emptyLabel="Nessuna partita in programma."
-              groups={upcomingByMonth}
-            />
-            <MatchSection
-              title="Risultati"
-              emptyLabel="Nessuna partita ancora giocata."
-              groups={pastByMonth}
-            />
-          </>
+          <MatchList groups={groups} />
         )}
       </Container>
     </>
@@ -224,45 +260,33 @@ function EmptyPlaceholder() {
   return (
     <p className="border-border/40 bg-surface-1/40 text-ink-mid rounded-2xl border border-dashed p-10 text-center text-base leading-relaxed">
       Il calendario delle squadre del Settore Giovanile non è ancora
-      stato pubblicato. Torna presto: le partite verranno aggiunte mano
-      a mano che la federazione comunica i gironi.
+      stato pubblicato per questa stagione. Torna presto: le partite
+      verranno aggiunte mano a mano che la federazione comunica i
+      gironi.
     </p>
   );
 }
 
-function MatchSection({
-  title,
-  emptyLabel,
+function MatchList({
   groups,
 }: {
-  title: string;
-  emptyLabel: string;
   groups: Array<{ key: string; label: string; items: MatchAggregated[] }>;
 }) {
   return (
-    <section className="flex flex-col gap-6">
-      <h2 className="font-display text-ink-hi text-2xl font-extrabold tracking-[0.005em] uppercase sm:text-3xl">
-        {title}
-      </h2>
-      {groups.length === 0 ? (
-        <p className="text-ink-mid text-sm italic">{emptyLabel}</p>
-      ) : (
-        <div className="flex flex-col gap-10">
-          {groups.map((g) => (
-            <div key={g.key} className="flex flex-col gap-3">
-              <h3 className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
-                {g.label}
-              </h3>
-              <ul className="divide-border/40 border-border/40 flex flex-col divide-y border-y">
-                {g.items.map((m) => (
-                  <MatchRow key={m._id} match={m} />
-                ))}
-              </ul>
-            </div>
-          ))}
+    <div className="flex flex-col gap-10">
+      {groups.map((g) => (
+        <div key={g.key} className="flex flex-col gap-3">
+          <h3 className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
+            {g.label}
+          </h3>
+          <ul className="divide-border/40 border-border/40 flex flex-col divide-y border-y">
+            {g.items.map((m) => (
+              <MatchRow key={m._id} match={m} />
+            ))}
+          </ul>
         </div>
-      )}
-    </section>
+      ))}
+    </div>
   );
 }
 
@@ -297,7 +321,9 @@ function MatchRow({ match }: { match: MatchAggregated }) {
         {match.isDateTbd ? "Data TBD" : formatItalianDateTime(match.date)}
       </span>
       <div className="flex items-center gap-2 text-sm md:gap-3">
-        <span className={`flex min-w-0 flex-1 items-center justify-end gap-2 text-right ${homeTextClass}`}>
+        <span
+          className={`flex min-w-0 flex-1 items-center justify-end gap-2 text-right ${homeTextClass}`}
+        >
           <span className="truncate">{homeName}</span>
           <TeamLogo
             src={homeLogo}
@@ -309,7 +335,9 @@ function MatchRow({ match }: { match: MatchAggregated }) {
         <span className="text-ink-low shrink-0 font-mono text-[11px] tracking-wide uppercase">
           vs
         </span>
-        <span className={`flex min-w-0 flex-1 items-center gap-2 ${awayTextClass}`}>
+        <span
+          className={`flex min-w-0 flex-1 items-center gap-2 ${awayTextClass}`}
+        >
           <TeamLogo
             src={awayLogo}
             name={awayName}

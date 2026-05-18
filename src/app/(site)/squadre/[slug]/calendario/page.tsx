@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { CalendarioClient } from "@/components/calendario/CalendarioClient";
+import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
@@ -188,12 +189,26 @@ export default async function CalendarioPage({
           );
         })()}
 
-        <CalendarioClient
-          matches={matches}
-          ourTeamSlug={slug}
-          ourTeamName={team.name}
-          defaultTab={season === teamCurrentSeason ? "prossime" : "risultati"}
-        />
+        {/* Prima Squadra: CalendarioClient con tab Prossime/Risultati/
+            Tutte (volumi alti, l'utente cerca tipicamente "prossima
+            partita" o "ultimo risultato" separatamente). Tutte le
+            altre categorie (Juniores, Settore Giovanile, Scuola
+            Calcio): lista flat cronologica ascendente raggruppata per
+            mese, niente tab — richiesta utente 2026-05-18. */}
+        {team.category === "Prima Squadra" ? (
+          <CalendarioClient
+            matches={matches}
+            ourTeamSlug={slug}
+            ourTeamName={team.name}
+            defaultTab={season === teamCurrentSeason ? "prossime" : "risultati"}
+          />
+        ) : (
+          <CalendarioFlatList
+            matches={matches}
+            ourTeamSlug={slug}
+            ourTeamName={team.name}
+          />
+        )}
       </Container>
     </>
   );

@@ -26,6 +26,7 @@ import {
   riferimentiOperativiQuery,
   settingsQuery,
   archivePastMatchesByTeamQuery,
+  settoreGiovanileSeasonsQuery,
   teamBySlugQuery,
   teamSeasonsListQuery,
   teamsByCategoryQuery,
@@ -892,6 +893,26 @@ export async function fetchTeamSeasons(slug: string): Promise<string[]> {
     return Array.isArray(data) ? (data as string[]) : [];
   } catch (err) {
     console.error("[fetchTeamSeasons]", { slug }, err);
+    return [];
+  }
+}
+
+/**
+ * Stagioni distinct per cui esistono competition di una squadra del
+ * Settore Giovanile (qualsiasi). Ordinate desc. Usato dalla pagina
+ * aggregata /squadre/settore-giovanile/calendario per costruire il
+ * pill switcher stagioni.
+ */
+export async function fetchSettoreGiovanileSeasons(): Promise<string[]> {
+  try {
+    const data = await sanityClient.fetch(
+      settoreGiovanileSeasonsQuery,
+      {},
+      { next: { tags: ["competition"] } },
+    );
+    return Array.isArray(data) ? (data as string[]) : [];
+  } catch (err) {
+    console.error("[fetchSettoreGiovanileSeasons]", err);
     return [];
   }
 }

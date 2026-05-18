@@ -264,6 +264,16 @@ export const teamSeasonsListQuery = defineQuery(`
   )
 `);
 
+// Stagioni disponibili per il Settore Giovanile aggregato. Stessa idea di
+// teamSeasonsListQuery ma filtra le competition con targetTeam.category
+// = "Settore Giovanile" (qualsiasi squadra SG). Ordinate desc.
+export const settoreGiovanileSeasonsQuery = defineQuery(`
+  array::unique(
+    *[_type == "competition" && targetTeam->category == "Settore Giovanile" && defined(season)]
+    | order(season desc).season
+  )
+`);
+
 // Elenco team-season raw per la pagina /archivio (hub stagioni passate).
 // Restituisce una riga per ogni partita di stagioni != currentSeason,
 // con season + team meta. La deduplicazione (season, teamSlug) e il
