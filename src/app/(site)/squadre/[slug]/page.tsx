@@ -363,34 +363,45 @@ function TeamView({ team }: { team: TeamDetail }) {
       <JsonLd data={buildBreadcrumbLd(breadcrumbItemsLd)} />
       <Breadcrumb items={breadcrumbItems} current={team.name} />
 
-      {/* HERO */}
+      {/* HERO con pattern "ambient backdrop" (Apple TV / Netflix):
+          1. Layer 1: stessa foto in versione blurred + scaled, fa
+             da bg che riempie l'intero container — niente piu'
+             bordi navy vuoti.
+          2. Layer 2: foto principale object-contain, mostrata per
+             intero (16:9, niente tagli). Sovrapposta al backdrop
+             blurred.
+          3. Layer 3: gradient bottom-to-top morbido per la
+             leggibilita' del testo "Categoria + Nome squadra" che
+             vive in basso. */}
       <header className="border-border/50 bg-surface-0 relative overflow-hidden border-b">
         {team.heroImage ? (
           <>
-            {/* object-contain (era object-cover): mostra l'intera
-                foto 16:9 senza ritagliarla. Lo spazio residuo del
-                container (header e' piu' alto di un'immagine 16:9)
-                viene coperto dal bg-surface-0 della <header>. */}
+            {/* Layer 1: backdrop blurred (decorativo) */}
+            <Image
+              src={team.heroImage}
+              alt=""
+              fill
+              priority
+              aria-hidden
+              className="scale-110 object-cover opacity-60 blur-3xl"
+              sizes="100vw"
+            />
+            {/* Layer 2: foto principale, intera, niente tagli */}
             <Image
               src={team.heroImage}
               alt={team.name}
               fill
               priority
-              className="object-contain"
+              className="relative object-contain"
               sizes="100vw"
               placeholder={team.heroImageLqip ? "blur" : "empty"}
               blurDataURL={team.heroImageLqip ?? undefined}
             />
-            {/* Vignette radiale attenuata: ellisse trasparente al
-                centro che sfuma in surface-0 verso i 4 angoli.
-                Sostituisce il vecchio gradient sx→dx (troppo
-                aggressivo). 50% inner radius = foto pulita al
-                centro; 95% outer = bordi sfumati ma non neri pieni.
-                bg-[radial-gradient(...)] e' Tailwind arbitrary value:
-                richiede underscore al posto degli spazi. */}
+            {/* Layer 3: gradient legibility — scurisce il basso per
+                il testo, lascia il centro/alto pulito. */}
             <div
               aria-hidden
-              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_50%,_var(--color-surface-0)_95%)]"
+              className="from-surface-0/85 absolute inset-0 bg-gradient-to-t via-transparent to-transparent"
             />
           </>
         ) : (
