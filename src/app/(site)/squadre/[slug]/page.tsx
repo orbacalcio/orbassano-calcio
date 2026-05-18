@@ -435,7 +435,6 @@ function TeamView({ team }: { team: TeamDetail }) {
             <InfoCell
               label="Girone"
               value={team.group && team.group.length > 0 ? team.group : null}
-              fallback="In attesa LND"
             />
             <InfoCell
               label="Atleti"
@@ -559,23 +558,30 @@ function RosterStaff({ team }: { team: TeamDetail }) {
   // con stesso watermark stile, cosi' la pagina mantiene la stessa
   // gerarchia visiva delle squadre popolate.
   const hasAnyPlayer = team.players.length > 0;
+  // Se i giocatori non hanno mai il campo `role` valorizzato (caso
+  // tipico Settore Giovanile e Juniores subito dopo import in bulk),
+  // tutti finiscono nel gruppo OTHER. In quel caso il watermark
+  // "ALTRI RUOLI" e' fuorviante: lo nascondiamo e mostriamo solo
+  // l'elenco giocatori. Richiesta utente 2026-05-18.
+  const populatedGroups = ROLE_GROUP_ORDER.filter(
+    (g) => grouped[g].length > 0,
+  );
+  const onlyOther =
+    populatedGroups.length === 1 && populatedGroups[0] === "OTHER";
 
   return (
     <Container className="flex flex-col gap-16 py-16 lg:gap-24 lg:py-24" size="wide">
       {hasAnyPlayer ? (
-        ROLE_GROUP_ORDER.map((g) => {
-          const items = grouped[g];
-          if (items.length === 0) return null;
-          return (
-            <RosterRoleSection
-              key={g}
-              label={ROLE_GROUP_LABEL[g]}
-              players={items}
-              teamSlug={team.slug}
-              usePhotoCards={usePhotoCards}
-            />
-          );
-        })
+        populatedGroups.map((g) => (
+          <RosterRoleSection
+            key={g}
+            label={ROLE_GROUP_LABEL[g]}
+            hideLabel={onlyOther && g === "OTHER"}
+            players={grouped[g]}
+            teamSlug={team.slug}
+            usePhotoCards={usePhotoCards}
+          />
+        ))
       ) : (
         <RosterEmptyPlaceholder season={team.season} />
       )}
@@ -603,11 +609,13 @@ function RosterEmptyPlaceholder({ season }: { season: string | null }) {
 
 function RosterRoleSection({
   label,
+  hideLabel = false,
   players,
   teamSlug,
   usePhotoCards,
 }: {
   label: string;
+  hideLabel?: boolean;
   players: PlayerSummary[];
   teamSlug: string;
   usePhotoCards: boolean;
@@ -615,10 +623,16 @@ function RosterRoleSection({
   return (
     <section className="flex flex-col gap-6">
       {/* Titolo gigante watermark oro (pattern juventus.com): semi
-          trasparente sopra la lista atleti, scala fluida col viewport. */}
-      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
-        {label}
-      </h2>
+          trasparente sopra la lista atleti, scala fluida col viewport.
+          hideLabel = true quando il gruppo e' OTHER ed e' l'unico
+          popolato (squadre giovanili senza role valorizzato): mostro
+          solo l'elenco giocatori, niente watermark "ALTRI RUOLI"
+          fuorviante. */}
+      {!hideLabel && (
+        <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+          {label}
+        </h2>
+      )}
       {usePhotoCards ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {players.map((p) => (
