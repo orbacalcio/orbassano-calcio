@@ -109,7 +109,7 @@ export function Capitolo05() {
         </Article>
 
         <Article number="5.11">
-          È <strong>vietato</strong> ai tesserati dell&apos;A.S.D. Orbassano
+          È <strong>vietato</strong>{" "}ai tesserati dell&apos;A.S.D. Orbassano
           Calcio:
           <ArticleList>
             <ArticleListItem>

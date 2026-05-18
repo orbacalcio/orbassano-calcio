@@ -25,7 +25,7 @@ export function Capitolo11() {
 
         <Article number="11.2">
           I Destinatari del Codice Etico hanno, oltre al diritto, il{" "}
-          <strong>dovere</strong> di segnalare violazioni di cui siano venuti
+          <strong>dovere</strong>{" "}di segnalare violazioni di cui siano venuti
           a conoscenza nell&apos;esercizio del proprio ruolo, in particolare
           quando riguardano la tutela dei minori, l&apos;integrità delle
           competizioni sportive, la corretta gestione delle risorse della
@@ -88,7 +88,7 @@ export function Capitolo11() {
       <Section title="Tutela del segnalante">
         <Article number="11.6">
           L&apos;A.S.D. Orbassano Calcio garantisce la{" "}
-          <strong>massima riservatezza</strong> sull&apos;identità del
+          <strong>massima riservatezza</strong>{" "}sull&apos;identità del
           segnalante. I dati relativi alla segnalazione sono trattati
           esclusivamente da chi è incaricato dell&apos;istruttoria, e non
           sono comunicati a terzi salvo obblighi di legge o esigenze di

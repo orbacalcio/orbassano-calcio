@@ -15,8 +15,8 @@ export function Capitolo01() {
     <Chapter number="01" title="Guida all'uso del Codice">
       <Section title="Destinatari">
         <Article number="1.1">
-          Sono <strong>Destinatari</strong> del presente Codice Etico tutte
-          le persone che operano nell&apos;ambito dell&apos;A.S.D. Orbassano
+          Sono <strong>Destinatari</strong>{" "}del presente Codice Etico
+          tutte le persone che operano nell&apos;ambito dell&apos;A.S.D. Orbassano
           Calcio, a qualunque titolo:
           <ArticleList>
             <ArticleListItem>
