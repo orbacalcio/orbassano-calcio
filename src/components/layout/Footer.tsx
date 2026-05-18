@@ -111,14 +111,17 @@ function buildSections(opts: {
   // Sostieni, Legale). Storia / Organigramma / Impianti / Codice Etico
   // tolti dal footer per evitare cascate verticali diverse tra colonne
   // — restano linkati dal NavigationDrawer hamburger.
-  // Voce "Società" → /societa rimossa 2026-05-17: la pagina hub e'
-  // nascosta (pattern juventus.com).
+  // Voce "Società" → /societa ripristinata 2026-05-17 nel footer
+  // (richiesta utente): la pagina hub resta nascosta da
+  // sitemap/mappa/search ma viene esposta dal footer come entry
+  // point per chi cerca una vista panoramica del club.
   // Segnalazioni: NON viene inclusa nel footer anche con flag
   // governance ON (richiesta utente 2026-05-17). Resta accessibile
   // dal Drawer hamburger.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
     { href: "/gallery", label: "Gallery" },
+    { href: "/societa", label: "Società" },
     { href: "/societa/storia", label: "Storia" },
     { href: "/societa/biglietteria", label: "Biglietteria" },
   ];

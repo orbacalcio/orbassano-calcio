@@ -50,9 +50,8 @@ export default function PrivacyPage() {
               richiesta di sponsorizzazione.
             </>,
             <>
-              <strong className="text-ink-hi">Newsletter</strong>: nome
-              (opzionale) ed email per l&apos;invio della comunicazione
-              periodica del club.
+              <strong className="text-ink-hi">Newsletter</strong>: email
+              per l&apos;invio della comunicazione periodica del club.
             </>,
             <>
               <strong className="text-ink-hi">Cookie tecnici e di
@@ -174,8 +173,7 @@ export default function PrivacyPage() {
         <p>
           Aggiorniamo questa informativa quando cambiano le finalit&agrave;
           del trattamento o i fornitori coinvolti. La data dell&apos;ultima
-          modifica &egrave; in cima alla pagina. Per modifiche sostanziali ti
-          informeremo via email se sei iscritto alla newsletter.
+          modifica &egrave; in cima alla pagina.
         </p>
       </LegalSection>
     </LegalLayout>
