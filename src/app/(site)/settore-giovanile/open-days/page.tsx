@@ -34,10 +34,9 @@ const CATEGORY_ORDER = [
 // modulo di iscrizione PDF stagione 2026/2027 fornito dal club.
 const FALLBACK_IBAN = "IT93H0853030680000000002547";
 const FALLBACK_PHONE = "+39 327 779 3326";
-// Email dedicata Settore Giovanile Scolastico: hardcoded nel
-// RegistrationPaymentBlock (non legata al contactInfo.email
-// generale del club).
-const SGS_EMAIL = "sgs@orbassanocalcio.com";
+// Email dedicata Settore Giovanile Scolastico (sgs@orbassanocalcio.com):
+// hardcoded nel RegistrationPaymentBlock, non piu' referenziata in
+// questa pagina dopo la rimozione del paragrafo "Iscriviti ora" header.
 
 type RegistrationSettings = {
   registrationFormUrl?: string | null;
@@ -123,18 +122,10 @@ export default async function OpenDaysPage() {
               trovi le date degli Open Day per ogni categoria: vieni a
               provare con noi.
             </p>
-            <p className="text-ink-mid border-brand-gold border-l-2 pl-4 text-sm leading-relaxed">
-              <strong className="text-ink-hi">Iscriviti ora</strong>:
-              compila e firma il modulo scaricabile dal pulsante &laquo;Scarica
-              modulo&raquo; nella tua categoria, poi invialo via mail a{" "}
-              <a
-                href={`mailto:${SGS_EMAIL}`}
-                className="text-brand-gold hover:underline"
-              >
-                {SGS_EMAIL}
-              </a>
-              .
-            </p>
+            {/* Paragrafo "Iscriviti ora..." rimosso 2026-05-17 (richiesta
+                utente): le stesse informazioni vivono nel box "Modulo
+                iscrizione" del RegistrationPaymentBlock in fondo alla
+                pagina, niente bisogno di duplicarle nell'header. */}
           </div>
         </Container>
       </header>

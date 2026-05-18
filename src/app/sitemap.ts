@@ -37,7 +37,8 @@ const STATIC_ROUTES: Array<{
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
   { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/squadre", changeFrequency: "weekly", priority: 0.9 },
+  // /squadre hub rimossa 2026-05-17 (pattern juventus.com: niente
+  // landing generica). Esiste ancora come URL ma non indicizzata.
   // /squadre/settore-giovanile e' una vista categoria (hub SGS con
   // 4 card U14-U17 + Open Days/Tornei + modulo iscrizione), non
   // mappata da teamSlugs (non corrisponde a uno slug team).
@@ -52,7 +53,8 @@ const STATIC_ROUTES: Array<{
   // direttamente ai calendari per categoria.
   { path: "/settore-giovanile/open-days", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
+  // /societa hub rimossa 2026-05-17 stesso pattern di /squadre.
+  // Le sotto-pagine /societa/storia, /organigramma, etc. restano qui.
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/organigramma", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa/impianti", changeFrequency: "monthly", priority: 0.6 },

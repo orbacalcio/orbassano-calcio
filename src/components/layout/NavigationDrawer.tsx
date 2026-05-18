@@ -6,6 +6,7 @@ import { ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SocialIcons, type SocialLinks } from "@/components/social/SocialIcons";
 import { cn } from "@/lib/cn";
+import { FEATURES } from "@/lib/features";
 import { Z } from "@/lib/z-indexes";
 import { sidebarOverflowItems } from "./SidebarLeft.items";
 
@@ -41,9 +42,11 @@ function buildSections(opts: {
 
   // /squadre/settore-giovanile è una vista categoria, non una squadra
   // singola: mostrato sempre se almeno una squadra del settore è attiva.
-  const teamsChildren: DrawerSection["children"] = [
-    { href: "/squadre", label: "Tutte le squadre" },
-  ];
+  // NB: voce "Tutte le squadre" → /squadre rimossa 2026-05-17 (pattern
+  // juventus.com: il menu navega direttamente alla squadra, niente
+  // landing page hub generica). La pagina /squadre esiste ancora come
+  // URL diretto ma non e' linkata dal menu/sitemap/mappa.
+  const teamsChildren: DrawerSection["children"] = [];
   if (teamSlugs.has("prima-squadra")) {
     teamsChildren.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
   }
@@ -135,12 +138,23 @@ function buildSections(opts: {
     {
       href: "/societa",
       label: "Società",
+      // Voce "Panoramica" → /societa rimossa 2026-05-17 (pattern
+      // juventus.com: niente landing hub, naviga direttamente alle
+      // sotto-pagine). /societa esiste ancora come URL diretto ma
+      // non e' linkata dal menu/sitemap/mappa.
+      // Codice Etico + Segnalazioni mostrati solo se governance flag
+      // attivo (vedi src/lib/features.ts).
       children: [
-        { href: "/societa", label: "Panoramica" },
         { href: "/societa/storia", label: "Storia" },
         { href: "/societa/organigramma", label: "Organigramma" },
         { href: "/societa/impianti", label: "Impianti sportivi" },
         { href: "/societa/biglietteria", label: "Biglietteria" },
+        ...(FEATURES.governanceSection
+          ? [
+              { href: "/societa/codice-etico", label: "Codice Etico" },
+              { href: "/societa/segnalazioni", label: "Segnalazioni" },
+            ]
+          : []),
       ],
     },
   ];

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { FEATURES } from "@/lib/features";
 import {
-  fetchAllNewsSlugs,
   fetchAllPlayersForSitemap,
   fetchAllTeamSlugs,
   fetchHasActivePartners,
@@ -31,8 +31,7 @@ type Section = {
 };
 
 export default async function MappaDelSitoPage() {
-  const [newsSlugs, teamSlugs, players, hasPartners] = await Promise.all([
-    fetchAllNewsSlugs(),
+  const [teamSlugs, players, hasPartners] = await Promise.all([
     fetchAllTeamSlugs(),
     fetchAllPlayersForSitemap(),
     fetchHasActivePartners(),
@@ -48,17 +47,16 @@ export default async function MappaDelSitoPage() {
   // Mappa allineata alla struttura del sito al 2026-05-17.
   // NB: pagine deliberatamente NASCOSTE dal sito (URL diretto OK ma
   // nessun link interno) NON compaiono qui: /calendario hub
-  // ("Tutti i calendari"), /newsletter, /ricerca. Stessa logica
-  // applicata in sitemap.xml e search index.
+  // ("Tutti i calendari"), /newsletter, /ricerca, /squadre (hub
+  // generico), /societa (hub generico). Pattern juventus.com: niente
+  // landing intermedia, naviga dal menu direttamente alla pagina.
   const sections: Section[] = [
     {
       title: "Pagine principali",
       links: [
         { href: "/", label: "Home" },
         { href: "/news", label: "Archivio news" },
-        { href: "/squadre", label: "Squadre" },
         { href: "/gallery", label: "Gallery" },
-        { href: "/societa", label: "Società" },
         { href: "/sponsor", label: "Sponsor" },
         { href: "/contatti", label: "Contatti" },
       ],
@@ -66,17 +64,21 @@ export default async function MappaDelSitoPage() {
     {
       title: "Società",
       links: [
-        { href: "/societa", label: "Panoramica" },
         { href: "/societa/storia", label: "Storia" },
         { href: "/societa/organigramma", label: "Organigramma" },
         { href: "/societa/impianti", label: "Impianti sportivi" },
         { href: "/societa/biglietteria", label: "Biglietteria" },
+        ...(FEATURES.governanceSection
+          ? [
+              { href: "/societa/codice-etico", label: "Codice Etico" },
+              { href: "/societa/segnalazioni", label: "Segnalazioni" },
+            ]
+          : []),
       ],
     },
     {
       title: "Squadre",
       links: [
-        { href: "/squadre", label: "Tutte le squadre" },
         // /squadre/settore-giovanile e' una vista categoria (4 card
         // U14-U17 + Open Days + Tornei + modulo iscrizione) — non
         // corrisponde a uno slug team, va inserita manualmente.
@@ -190,27 +192,11 @@ export default async function MappaDelSitoPage() {
           </div>
         </RevealOnScroll>
 
-        {newsSlugs.length > 0 && (
-          <RevealOnScroll>
-            <section className="border-border/40 mt-16 flex flex-col gap-4 border-t pt-10">
-              <h2 className="font-display text-brand-gold text-lg font-bold tracking-[0.15em] uppercase">
-                News pubblicate
-              </h2>
-              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {newsSlugs.map((slug) => (
-                  <li key={slug}>
-                    <Link
-                      href={`/news/${slug}`}
-                      className="text-ink-mid hover:text-ink-hi text-sm transition-colors"
-                    >
-                      {humanizeSlug(slug)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          </RevealOnScroll>
-        )}
+        {/* Sezione "News pubblicate" rimossa 2026-05-17 (richiesta
+            utente): le news sono navigabili dalla /news archive +
+            dalla ricerca; elencarle ad una a una nella mappa rendeva
+            la pagina inutilmente lunga. Le news restano in sitemap.xml
+            per i crawler search engine. */}
 
         {playersByTeam.size > 0 &&
           Array.from(playersByTeam.entries()).map(([teamSlug, list]) => (

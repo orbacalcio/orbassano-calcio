@@ -107,18 +107,18 @@ function buildSections(opts: {
     label: "Tornei",
   });
 
-  // Sezioni: lista compatta a 5 voci uniforme con le altre colonne
-  // (Squadre, Sostieni, Legale). Storia / Organigramma / Impianti /
-  // Codice Etico tolti dal footer per evitare cascate verticali
-  // diverse tra colonne — restano linkati internamente da /societa
-  // (hub cards) e dal NavigationDrawer hamburger.
-  // Segnalazioni: NON viene piu' inclusa nel footer anche con flag
+  // Sezioni: lista compatta uniforme con le altre colonne (Squadre,
+  // Sostieni, Legale). Storia / Organigramma / Impianti / Codice Etico
+  // tolti dal footer per evitare cascate verticali diverse tra colonne
+  // — restano linkati dal NavigationDrawer hamburger.
+  // Voce "Società" → /societa rimossa 2026-05-17: la pagina hub e'
+  // nascosta (pattern juventus.com).
+  // Segnalazioni: NON viene inclusa nel footer anche con flag
   // governance ON (richiesta utente 2026-05-17). Resta accessibile
-  // dalla pagina /societa hub e dal Drawer hamburger.
+  // dal Drawer hamburger.
   const sezioniItems: Array<{ href: string; label: string }> = [
     { href: "/news", label: "News" },
     { href: "/gallery", label: "Gallery" },
-    { href: "/societa", label: "Società" },
     { href: "/societa/storia", label: "Storia" },
     { href: "/societa/biglietteria", label: "Biglietteria" },
   ];
