@@ -59,13 +59,14 @@ const SCROLLED_RIGHT = 0;
 const SURFACE_0_RGB = "10, 20, 40";
 const BORDER_RGB = "31, 47, 77";
 
-const HERO_TILE_W = 196;
+// Tile sponsor: dimensione FISSA in entrambi gli stati (HERO e SCROLLED)
+// — richiesta utente 2026-05-17. Niente piu' animazione width/height
+// allo scroll: solo bg/border cambiano (trasparenti → opachi). Valori
+// allineati allo stato "menu hamburger" (scrolled): 168×78, logo
+// max-h 72px.
+const HERO_TILE_W = 168;
 const HERO_TILE_H = 78;
 const HERO_LOGO_MAX_H = 72;
-// SCROLLED: stessa altezza del tile HERO (78px) per non far "crescere"
-// la fascia navy percepita tra i due stati. Solo bg/border cambiano
-// (trasparenti → opachi). Larghezza orizzontale ridotta a 168 per
-// compattare la barra in scroll mode.
 const SCROLLED_TILE_W = 168;
 const SCROLLED_TILE_H = 78;
 const SCROLLED_LOGO_MAX_H = 72;
