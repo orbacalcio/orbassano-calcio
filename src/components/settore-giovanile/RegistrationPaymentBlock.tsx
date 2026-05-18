@@ -65,7 +65,7 @@ export function RegistrationPaymentBlock({ moduleUrl, iban, phone }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             download
-            className="bg-brand-red text-brand-white font-display hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-bold tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="bg-brand-red btn-wow-sweep text-brand-white font-display hover:bg-brand-blue focus-visible:outline-brand-gold inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-bold tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <Download size={16} aria-hidden />
             Scarica modulo

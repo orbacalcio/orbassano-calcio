@@ -87,7 +87,7 @@ function NewsCard({ news }: { news: News }) {
         </h3>
         <span
           aria-hidden
-          className="bg-brand-red text-brand-white font-display group-hover:bg-brand-blue inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors duration-300 md:text-xs"
+          className="bg-brand-red btn-wow-sweep text-brand-white font-display group-hover:bg-brand-blue inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors duration-300 md:text-xs"
         >
           Leggi l&apos;articolo
           <ArrowRight size={14} aria-hidden />

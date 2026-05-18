@@ -40,7 +40,7 @@ export function SubmitButton({
       className={cn(
         "font-display focus-visible:outline-brand-gold inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-not-allowed disabled:opacity-60",
         isPrimary
-          ? "bg-brand-red text-brand-white hover:bg-brand-blue"
+          ? "bg-brand-red btn-wow-sweep text-brand-white hover:bg-brand-blue"
           : "border-brand-gold text-brand-gold hover:bg-brand-gold/10 border",
         className,
       )}
