@@ -64,6 +64,12 @@ __pycache__/
 /matches-template.xlsx
 /matches-*.xlsx
 
+# Slide deck per presentazione al Direttivo. Generato on-demand con
+# `python scripts/generate-deck-direttivo.py`. Lo script (.py) vive in
+# repo, il binario .pptx no.
+/presentazione-direttivo.pptx
+/presentazione-*.pptx
+
 # vercel
 .vercel
 
