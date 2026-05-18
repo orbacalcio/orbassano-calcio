@@ -100,6 +100,7 @@ export default async function MappaDelSitoPage() {
         },
         { href: "/settore-giovanile/open-days", label: "Open Days" },
         { href: "/tornei", label: "Tornei" },
+        { href: "/archivio", label: "Archivio stagioni passate" },
       ],
     },
     {

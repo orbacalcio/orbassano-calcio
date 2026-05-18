@@ -264,6 +264,25 @@ export const teamSeasonsListQuery = defineQuery(`
   )
 `);
 
+// Elenco team-season raw per la pagina /archivio (hub stagioni passate).
+// Restituisce una riga per ogni partita di stagioni != currentSeason,
+// con season + team meta. La deduplicazione (season, teamSlug) e il
+// conteggio match avvengono lato server in fetcher per semplicita'
+// di query. Filtra anche match con status finished/cancelled per
+// evitare di mostrare stagioni passate "vuote" di soli scheduled.
+export const archivePastMatchesByTeamQuery = defineQuery(`
+  *[_type == "match"
+    && defined(competition->season)
+    && competition->season != $currentSeason
+    && defined(team->slug.current)]{
+    "season": competition->season,
+    "teamSlug": team->slug.current,
+    "teamName": team->name,
+    "teamCategory": team->category,
+    status,
+  }
+`);
+
 // Tutte le partite di una squadra in una stagione, ordinate cronologicamente.
 // Filtro `competition->season` (post-refactor m5a la stagione vive su
 // competition, non sul match). Cache tag "match": webhook revalidate

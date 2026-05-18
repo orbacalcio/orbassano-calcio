@@ -106,6 +106,13 @@ function buildSections(opts: {
     href: "/tornei",
     label: "Tornei",
   });
+  // Archivio storico: hub /archivio con le stagioni passate. Linkato in
+  // coda all'accordion Calendario perche' e' il complemento naturale
+  // dei calendari delle stagioni correnti (richiesta utente 2026-05-18).
+  calendarioChildren.push({
+    href: "/archivio",
+    label: "Archivio stagioni",
+  });
 
   // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·
   // Società. Sponsor vive nelle voci secondarie (sidebarOverflowItems).

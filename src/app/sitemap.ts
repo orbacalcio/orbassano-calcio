@@ -53,6 +53,11 @@ const STATIC_ROUTES: Array<{
   // direttamente ai calendari per categoria.
   { path: "/settore-giovanile/open-days", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
+  // Hub archivio stagioni passate. Sezione di puro discovery: le pagine
+  // di dettaglio sono /squadre/[slug]/calendario?season=X, gia' coperte
+  // da calendarEntries dinamico sotto (la query string non ha bisogno
+  // di entry sitemap dedicate).
+  { path: "/archivio", changeFrequency: "monthly", priority: 0.5 },
   // /societa hub rimossa 2026-05-17 stesso pattern di /squadre.
   // Le sotto-pagine /societa/storia, /organigramma, etc. restano qui.
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },

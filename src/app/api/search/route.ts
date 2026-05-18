@@ -129,6 +129,14 @@ const STATIC_PAGES: StaticPage[] = [
       "tornei competizioni gare appuntamenti manifestazioni memorial triangolari prima squadra juniores settore giovanile",
     section: "Squadre",
   },
+  {
+    id: "archivio",
+    title: "Archivio stagioni",
+    path: "/archivio",
+    keywords:
+      "archivio storico stagioni passate vecchie precedenti annate calendario risultati storia partite gare match prima squadra juniores settore giovanile",
+    section: "Squadre",
+  },
   // Società — entry hub /societa rimossa 2026-05-17 (pagina hub
   // nascosta, pattern juventus.com). Le sotto-pagine restano qui.
   {

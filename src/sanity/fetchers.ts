@@ -25,6 +25,7 @@ import {
   playerBySlugQuery,
   riferimentiOperativiQuery,
   settingsQuery,
+  archivePastMatchesByTeamQuery,
   teamBySlugQuery,
   teamSeasonsListQuery,
   teamsByCategoryQuery,
@@ -929,6 +930,73 @@ export async function fetchMatchesByTeam(
     return (data ?? []) as MatchSummary[];
   } catch (err) {
     console.error("[fetchMatchesByTeam]", { slug, season }, err);
+    return [];
+  }
+}
+
+// ---------- Archivio stagioni passate (hub /archivio) -----------------------
+
+/**
+ * Voce dell'archivio: una squadra che ha disputato match in una stagione
+ * != quella corrente. Una riga per (season, teamSlug). matchCount conta
+ * solo match con status finished/cancelled (ovvero "gia' chiusi"), per
+ * non sporcare l'archivio con match programmati di stagioni future
+ * erroneamente caricate.
+ */
+export type ArchiveTeamSeasonEntry = {
+  season: string;
+  teamSlug: string;
+  teamName: string;
+  teamCategory: string;
+  matchCount: number;
+};
+
+type RawArchiveRow = {
+  season: string;
+  teamSlug: string;
+  teamName: string;
+  teamCategory: string | null;
+  status: MatchStatus | null;
+};
+
+/**
+ * Lista deduplicata di (season, team) per il hub /archivio. Solo stagioni
+ * diverse dalla `currentSeason`. Dedup + count avviene in JS: la query
+ * GROQ restituisce una riga per match (filtrato per status), poi
+ * raggruppiamo per chiave composta `season::teamSlug`.
+ */
+export async function fetchArchiveTeamSeasons(
+  currentSeason: string,
+): Promise<ArchiveTeamSeasonEntry[]> {
+  try {
+    const rows = (await sanityClient.fetch(
+      archivePastMatchesByTeamQuery,
+      { currentSeason },
+      { next: { tags: ["match", "competition"] } },
+    )) as RawArchiveRow[];
+
+    const counts = new Map<string, ArchiveTeamSeasonEntry>();
+    for (const r of rows) {
+      // Conta solo match storicamente "chiusi". scheduled/postponed di
+      // stagioni passate sono dati incompleti, niente badge per quelli.
+      if (r.status !== "finished" && r.status !== "cancelled") continue;
+      const key = `${r.season}::${r.teamSlug}`;
+      const existing = counts.get(key);
+      if (existing) {
+        existing.matchCount += 1;
+      } else {
+        counts.set(key, {
+          season: r.season,
+          teamSlug: r.teamSlug,
+          teamName: r.teamName,
+          teamCategory: r.teamCategory ?? "—",
+          matchCount: 1,
+        });
+      }
+    }
+    return Array.from(counts.values());
+  } catch (err) {
+    console.error("[fetchArchiveTeamSeasons]", { currentSeason }, err);
     return [];
   }
 }
