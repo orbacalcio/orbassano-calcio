@@ -151,7 +151,14 @@ export async function Hero() {
       // min-h-screen = 100vh: hero occupa l'intera viewport altezza
       // (Y=0 → Y=100vh), il prossimo blocco (NewsGrid) parte subito
       // sotto al viewport edge — niente "preview" gap come prima.
-      className="relative -mt-[84px] flex min-h-screen flex-col justify-center overflow-hidden lg:-mt-[78px]"
+      // lg:-ml-[88px] lg:-mr-[80px]: annulla il padding-left/right del
+      // main (lg:pl-[88px] lg:pr-[80px], spazio riservato alle sidebar)
+      // cosi' l'hero e' full-bleed orizzontale anche sotto le sidebar
+      // trasparenti. Senza questi, la zona destra/sinistra mostrerebbe
+      // il bg body navy "dietro" le sidebar e l'effetto "sidebar
+      // trasparente" andrebbe perso (la foto hero finirebbe alle x=88
+      // / right-80, non a x=0/right-0).
+      className="relative -mt-[84px] flex min-h-screen flex-col justify-center overflow-hidden lg:-mt-[78px] lg:-ml-[88px] lg:-mr-[80px]"
     >
       {hasSlides ? (
         <HeroCarousel slides={resolvedSlides} config={config} />
