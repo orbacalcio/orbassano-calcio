@@ -221,6 +221,19 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                             .schemaType("settings")
                             .documentId("settings"),
                         ),
+                      // Stessa scorciatoia per la pagina /calendario
+                      // (hub con 3 box che linkano ai calendari per
+                      // categoria). Header + 3 card editabili dal
+                      // fieldset "Pagina /calendario" del singleton.
+                      S.listItem()
+                        .title("Impostazioni pagina /calendario")
+                        .icon(Cog)
+                        .child(
+                          S.editor()
+                            .id("settings-calendario-page")
+                            .schemaType("settings")
+                            .documentId("settings"),
+                        ),
                     ]),
                 ),
               S.listItem()

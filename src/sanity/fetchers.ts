@@ -17,6 +17,7 @@ import {
   lastMatchesByTeamSlugsQuery,
   mainSponsorsQuery,
   technicalStaffQuery,
+  matchesBySettoreGiovanileQuery,
   matchesByTeamSlugQuery,
   nextMatchesByTeamSlugsQuery,
   newsBySlugQuery,
@@ -856,6 +857,17 @@ export type MatchSummary = {
 };
 
 /**
+ * Estende MatchSummary con teamSlug + teamName, per le viste
+ * aggregate multi-team (es. calendario Settore Giovanile che combina
+ * U14/U15/U16/U17). I match con teamSlug diverso vengono renderizzati
+ * con badge squadra (es. "U17", "U15") accanto a data/avversario.
+ */
+export type MatchAggregated = MatchSummary & {
+  teamSlug: string;
+  teamName: string;
+};
+
+/**
  * Tutte le partite di una squadra in una stagione, ordinate per data
  * ascendente. La pagina /squadre/[slug]/calendario filtra poi
  * client-side per tab (Prossime / Risultati / Tutte) + competition.
@@ -879,6 +891,27 @@ export async function fetchTeamSeasons(slug: string): Promise<string[]> {
     return Array.isArray(data) ? (data as string[]) : [];
   } catch (err) {
     console.error("[fetchTeamSeasons]", { slug }, err);
+    return [];
+  }
+}
+
+/**
+ * Match aggregati di tutte le squadre del Settore Giovanile, ordinati
+ * per data ascendente. Ogni match porta teamSlug+teamName per il
+ * badge squadra nella vista combinata (/squadre/settore-giovanile/calendario).
+ */
+export async function fetchMatchesBySettoreGiovanile(
+  season: string,
+): Promise<MatchAggregated[]> {
+  try {
+    const data = await sanityClient.fetch(
+      matchesBySettoreGiovanileQuery,
+      { season },
+      { next: { tags: ["match"] } },
+    );
+    return (data ?? []) as MatchAggregated[];
+  } catch (err) {
+    console.error("[fetchMatchesBySettoreGiovanile]", { season }, err);
     return [];
   }
 }

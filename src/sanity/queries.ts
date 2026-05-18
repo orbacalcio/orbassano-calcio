@@ -168,6 +168,12 @@ export const settingsQuery = defineQuery(`
     "squadrePageSections": squadrePageSections[]{
       category, eyebrow, title
     },
+    calendarioPageEyebrow,
+    calendarioPageTitle,
+    calendarioPageSubtitle,
+    "calendarioPageSections": calendarioPageSections[]{
+      category, eyebrow, title, description
+    },
     mazzolaEyebrow,
     mazzolaTitle,
     mazzolaBody,
@@ -266,6 +272,57 @@ export const teamSeasonsListQuery = defineQuery(`
 // Payload completo per MatchCard: data/status/score/flag + dereferenza
 // competition (per badge tab + categoria + defaultReportLink fallback) +
 // dereferenza opponent.club (logo, sito ufficiale, hyperlink card).
+// Match aggregati di tutte le squadre del Settore Giovanile (U14-U17 +
+// Scuola Calcio se attiva). Usata da /squadre/settore-giovanile/calendario
+// per la vista unificata: ogni match porta `teamSlug`+`teamName` per
+// distinguere la squadra a fianco di data/avversario.
+export const matchesBySettoreGiovanileQuery = defineQuery(`
+  *[_type == "match"
+    && team->category == "Settore Giovanile"
+    && competition->season == $season]
+  | order(date asc){
+    _id,
+    date,
+    matchday,
+    home,
+    venue,
+    status,
+    scoreHome,
+    scoreAway,
+    reportLink,
+    highlightsUrl,
+    isOpponentTbd,
+    isClosedDoors,
+    isDateTbd,
+    notes,
+    "teamSlug": team->slug.current,
+    "teamName": team->name,
+    "competition": competition->{
+      "slug": slug.current,
+      shortName,
+      name,
+      season,
+      group,
+      category,
+      defaultReportLink,
+      externalRankingUrl,
+      externalStatisticheUrl,
+      "logo": logo.asset->url
+    },
+    "opponent": opponent->{
+      "club": club->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current,
+        "logo": logo.asset->url,
+        primaryColor,
+        websiteUrl
+      }
+    }
+  }
+`);
+
 export const matchesByTeamSlugQuery = defineQuery(`
   *[_type == "match"
     && team->slug.current == $slug

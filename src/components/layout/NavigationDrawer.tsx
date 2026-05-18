@@ -95,19 +95,15 @@ function buildSections(opts: {
       label: "Juniores",
     });
   }
-  // Settore Giovanile: link alla categoria hub (4 box U14/U15/U16/U17).
-  // Mostrato sempre: se nessuna squadra attiva, la pagina mostra il
-  // fallback "le squadre non sono ancora pubblicate".
+  // Settore Giovanile: link alla PAGINA AGGREGATA che combina
+  // U14/U15/U16/U17 in lista cronologica unica (richiesta utente
+  // 2026-05-17). Le singole pagine calendario per ogni squadra
+  // giovanile restano accessibili via URL diretto ma non vengono
+  // piu' linkate dal sito.
   calendarioChildren.push({
-    href: "/squadre/settore-giovanile",
+    href: "/squadre/settore-giovanile/calendario",
     label: "Settore Giovanile",
   });
-  if (teamSlugs.has("scuola-calcio")) {
-    calendarioChildren.push({
-      href: "/squadre/scuola-calcio/calendario",
-      label: "Scuola Calcio",
-    });
-  }
 
   // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·
   // Società. Sponsor vive nelle voci secondarie (sidebarOverflowItems).

@@ -42,6 +42,13 @@ export const settings = defineType({
         "Per ciascuna delle 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile) imposta l'eyebrow numerato (es. '01 — La punta di diamante') e il titolo h2 della sezione. Le card squadre dentro ogni sezione restano popolate dai documenti 'team'.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "calendarioPage",
+      title: "Pagina /calendario — header e 3 box",
+      description:
+        "Header della pagina (eyebrow, titolo h1, sottotitolo) + le 3 card numerate (Prima Squadra · Juniores · Settore Giovanile) che linkano ai rispettivi calendari. Pattern visivo identico al box 'Le squadre' della homepage.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -292,6 +299,89 @@ export const settings = defineType({
           .warning(
             "La pagina /squadre e' tarata su 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile).",
           ),
+    }),
+    // --- Pagina /calendario — header e 3 box --------------------------------
+    defineField({
+      name: "calendarioPageEyebrow",
+      title: "Eyebrow",
+      description: "Testo piccolo gold sopra il titolo (es. 'Calendari').",
+      type: "string",
+      fieldset: "calendarioPage",
+    }),
+    defineField({
+      name: "calendarioPageTitle",
+      title: "Titolo h1",
+      description: "Titolone gigante della pagina (es. 'Tutte le partite di tutte le squadre').",
+      type: "string",
+      fieldset: "calendarioPage",
+    }),
+    defineField({
+      name: "calendarioPageSubtitle",
+      title: "Sottotitolo",
+      description: "1-3 righe sotto il titolo. Inviata sul motivo della pagina.",
+      type: "text",
+      rows: 3,
+      fieldset: "calendarioPage",
+    }),
+    defineField({
+      name: "calendarioPageSections",
+      title: "Card calendari (3 voci: Prima Squadra · Juniores · Settore Giovanile)",
+      description:
+        "Le 3 card numerate 01/02/03 della pagina. Per ognuna scegli la 'Categoria' (determina il link) e popola eyebrow + titolo + descrizione. Riordinabili con drag-and-drop. Lasciare vuoto = uso fallback hardcoded.",
+      type: "array",
+      fieldset: "calendarioPage",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "calendarioPageSection",
+          title: "Card calendario",
+          fields: [
+            defineField({
+              name: "category",
+              title: "Categoria",
+              description:
+                "Determina il link della card. Prima Squadra → calendario Prima Squadra · Juniores → calendario Juniores · Settore Giovanile → pagina aggregata con tutti i calendari del settore giovanile.",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Prima Squadra", value: "Prima Squadra" },
+                  { title: "Juniores", value: "Juniores" },
+                  { title: "Settore Giovanile", value: "Settore Giovanile" },
+                ],
+              },
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "eyebrow",
+              title: "Eyebrow numerato",
+              description:
+                "Es. '01 — Calendario senior' / '02 — Juniores Under 19' / '03 — Settore Giovanile U14-U17'.",
+              type: "string",
+              validation: (r) => r.required().max(80),
+            }),
+            defineField({
+              name: "title",
+              title: "Titolo card (h3)",
+              description: "Es. 'Prima Squadra'.",
+              type: "string",
+              validation: (r) => r.required().max(60),
+            }),
+            defineField({
+              name: "description",
+              title: "Descrizione",
+              description: "1-3 righe sotto il titolo della card.",
+              type: "text",
+              rows: 3,
+              validation: (r) => r.required().max(280),
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "eyebrow" },
+          },
+        }),
+      ],
+      validation: (r) =>
+        r.max(3).warning("La pagina /calendario e' tarata su 3 card."),
     }),
     // --- Box "Il Mazzola" (pagina Impianti) ---------------------------------
     defineField({

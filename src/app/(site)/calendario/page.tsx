@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRight, CalendarDays } from "lucide-react";
+import { SocietaHubCard } from "@/components/societa/SocietaHubCard";
 import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
-import { fetchTeamsList, type TeamSummary } from "@/sanity/fetchers";
+import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Calendari",
@@ -13,42 +12,115 @@ export const metadata: Metadata = {
 };
 
 /**
- * Pagina hub /calendario: elenco di tutte le squadre divise per
- * categoria, ognuna con un box che porta al calendario completo
- * /squadre/[slug]/calendario.
+ * Pagina hub /calendario: 3 card numerate stile TeamsCards homepage
+ * (numero gigante gold/40 + titolo + descrizione + CTA "Esplora" al
+ * hover). Ogni card linka al rispettivo calendario:
+ *  - Prima Squadra → /squadre/prima-squadra/calendario
+ *  - Juniores → /squadre/juniores/calendario
+ *  - Settore Giovanile → /squadre/settore-giovanile/calendario
+ *    (pagina aggregata con tutti i match U14-U17 in unica lista)
  *
- * Pattern visivo allineato a /squadre (banda chiara, 3 sezioni
- * Prima Squadra · Juniores · Settore Giovanile) ma con card
- * dedicate al calendario (icona + nome + stagione + CTA).
+ * Header + 3 card sono completamente editabili da Studio: Stagione
+ * corrente → Squadre → Impostazioni pagina /calendario → fieldset
+ * "Pagina /calendario". Fallback hardcoded se CMS non popolato.
  */
-const SECTIONS: Array<{
-  category: TeamSummary["category"];
+type CalendarioCategory = "Prima Squadra" | "Juniores" | "Settore Giovanile";
+
+type CalendarioPageSection = {
+  category?: string | null;
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+};
+
+type CalendarioPageSettings = {
+  calendarioPageEyebrow?: string | null;
+  calendarioPageTitle?: string | null;
+  calendarioPageSubtitle?: string | null;
+  calendarioPageSections?: CalendarioPageSection[] | null;
+};
+
+const FALLBACK_HEADER = {
+  eyebrow: "Calendari",
+  title: "Tutte le partite di tutte le squadre",
+  subtitle:
+    "Scegli una squadra per accedere al calendario completo del campionato, alle amichevoli e ai risultati. Dalla Prima Squadra al Settore Giovanile, ogni gruppo ha la sua agenda aggiornata.",
+};
+
+const CARD_SLOTS: Array<{
+  number: string;
+  category: CalendarioCategory;
+  href: string;
   fallbackEyebrow: string;
   fallbackTitle: string;
-  cols: string;
+  fallbackDescription: string;
 }> = [
   {
+    number: "01",
     category: "Prima Squadra",
+    href: "/squadre/prima-squadra/calendario",
     fallbackEyebrow: "01 — Calendario senior",
     fallbackTitle: "Prima Squadra",
-    cols: "lg:grid-cols-3",
+    fallbackDescription:
+      "Prima Categoria Piemonte VdA. Tutte le partite di campionato, amichevoli, risultati e tabellini ufficiali.",
   },
   {
+    number: "02",
     category: "Juniores",
+    href: "/squadre/juniores/calendario",
     fallbackEyebrow: "02 — Calendario Juniores",
     fallbackTitle: "Juniores",
-    cols: "lg:grid-cols-3",
+    fallbackDescription:
+      "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra.",
   },
   {
+    number: "03",
     category: "Settore Giovanile",
-    fallbackEyebrow: "03 — Calendari Settore Giovanile",
+    href: "/squadre/settore-giovanile/calendario",
+    fallbackEyebrow: "03 — Settore Giovanile U14-U17",
     fallbackTitle: "Settore Giovanile",
-    cols: "sm:grid-cols-2 lg:grid-cols-4",
+    fallbackDescription:
+      "Tutti i calendari Under 17, Under 16, Under 15 e Under 14 raccolti in un'unica vista cronologica.",
   },
 ];
 
+async function fetchCalendarioPageSettings(): Promise<CalendarioPageSettings> {
+  try {
+    const data = await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    return (data ?? {}) as CalendarioPageSettings;
+  } catch {
+    return {};
+  }
+}
+
 export default async function CalendarioPage() {
-  const teams = await fetchTeamsList();
+  const settings = await fetchCalendarioPageSettings();
+  const cmsSections = settings.calendarioPageSections ?? [];
+
+  const header = {
+    eyebrow:
+      settings.calendarioPageEyebrow?.trim() || FALLBACK_HEADER.eyebrow,
+    title: settings.calendarioPageTitle?.trim() || FALLBACK_HEADER.title,
+    subtitle:
+      settings.calendarioPageSubtitle?.trim() || FALLBACK_HEADER.subtitle,
+  };
+
+  const cards = CARD_SLOTS.map((slot) => {
+    const cms = cmsSections.find((c) => c.category === slot.category);
+    return {
+      number: slot.number,
+      title: cms?.title?.trim() || slot.fallbackTitle,
+      description: cms?.description?.trim() || slot.fallbackDescription,
+      href: slot.href,
+      // L'eyebrow numerato CMS-driven NON viene mostrato nelle card
+      // (SocietaHubCard mostra solo number+title+description+CTA).
+      // Resta come label gestionale Studio per identificare la card.
+    };
+  });
 
   return (
     <>
@@ -60,111 +132,29 @@ export default async function CalendarioPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Calendari
+              {header.eyebrow}
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-              Tutte le partite di tutte le squadre
+              {header.title}
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Scegli una squadra per accedere al calendario completo del
-              campionato, alle amichevoli e ai risultati. Dalla Prima Squadra
-              al Settore Giovanile, ogni gruppo ha la sua agenda
-              aggiornata.
+              {header.subtitle}
             </p>
           </div>
         </Container>
       </header>
 
       <section className="bg-light-bg-0">
-        <Container className="flex flex-col gap-20 py-16 lg:py-20" size="wide">
-          {SECTIONS.map(({ category, fallbackEyebrow, fallbackTitle, cols }) => {
-            const items = teams.filter((t) => t.category === category);
-            if (items.length === 0) return null;
-            return (
-              <Section
-                key={category}
-                tone="light"
-                eyebrow={fallbackEyebrow}
-                title={fallbackTitle}
-              >
-                <div className={`mt-2 grid grid-cols-1 gap-4 ${cols}`}>
-                  {items.map((t) => (
-                    <CalendarioTeamCard key={t._id} team={t} />
-                  ))}
-                </div>
-              </Section>
-            );
-          })}
-
-          {teams.length === 0 && (
-            <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
-              Le squadre non sono ancora pubblicate: nessun calendario
-              disponibile.
-            </p>
-          )}
+        <Container className="py-16 lg:py-20" size="wide">
+          <RevealOnScroll>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {cards.map((card) => (
+                <SocietaHubCard key={card.number} {...card} />
+              ))}
+            </div>
+          </RevealOnScroll>
         </Container>
       </section>
     </>
-  );
-}
-
-/**
- * Card di una squadra che porta al suo calendario. Layout identico a
- * TeamCard di /squadre ma href = /squadre/[slug]/calendario e CTA
- * "Vedi calendario →" invece di "Pagina {team}".
- */
-function CalendarioTeamCard({ team }: { team: TeamSummary }) {
-  const subtitle =
-    team.subcategory && team.subcategory !== team.name ? team.subcategory : null;
-  return (
-    <Link
-      href={`/squadre/${team.slug}/calendario`}
-      aria-label={`Calendario ${team.name}`}
-      className="group border-border bg-surface-1 hover:border-brand-gold/40 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex flex-col overflow-hidden rounded-2xl border transition-all focus-visible:outline-2 focus-visible:outline-offset-4"
-    >
-      <div className="relative aspect-[4/3] overflow-hidden">
-        {team.heroImage ? (
-          <Image
-            src={team.heroImage}
-            alt={team.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            sizes="(max-width: 1024px) 100vw, 33vw"
-            placeholder={team.heroImageLqip ? "blur" : "empty"}
-            blurDataURL={team.heroImageLqip ?? undefined}
-          />
-        ) : (
-          <div
-            aria-hidden
-            className="from-surface-2 via-surface-1 to-brand-blue/40 absolute inset-0 flex items-end bg-gradient-to-br p-6"
-          >
-            <CalendarDays
-              size={56}
-              className="text-surface-3/70"
-              aria-hidden
-            />
-          </div>
-        )}
-        <div
-          aria-hidden
-          className="from-surface-0/85 absolute inset-0 bg-gradient-to-t to-transparent"
-        />
-      </div>
-      <div className="flex flex-col gap-2 p-6">
-        <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-          {team.name}
-        </h3>
-        {subtitle && <span className="text-ink-mid text-sm">{subtitle}</span>}
-        <div className="text-ink-low mt-2 flex items-center justify-between text-xs">
-          <span className="font-mono tracking-wide">
-            {team.season ?? "—"}
-          </span>
-          <span className="text-brand-gold inline-flex items-center gap-1 text-[11px] font-semibold tracking-[0.1em] uppercase">
-            Vedi calendario
-            <ArrowUpRight size={14} aria-hidden />
-          </span>
-        </div>
-      </div>
-    </Link>
   );
 }
