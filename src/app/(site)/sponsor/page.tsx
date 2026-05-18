@@ -68,7 +68,7 @@ export default async function SponsorPage() {
                   Main Sponsor
                 </span>
                 <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl">
-                  In maglia con noi ogni domenica
+                  In campo con noi ogni domenica
                 </h2>
               </div>
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
