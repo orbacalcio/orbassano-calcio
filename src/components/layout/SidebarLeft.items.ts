@@ -1,6 +1,5 @@
 import {
   Building2,
-  CalendarDays,
   Handshake,
   HeartHandshake,
   Images,
@@ -47,26 +46,17 @@ export const sidebarMainItems: SidebarItem[] = [
  * Voci secondarie quick-link mostrate in fondo al NavigationDrawer
  * (drawer hamburger aperto da SidebarLeft "ALTRO" o da MobileTopbar).
  *
- * Ordine: Calendario → Sponsor → Biglietteria → 5×1000 → Contatti.
- * Calendario e Sponsor sono usciti dalle 4 voci main e vivono qui
- * come quick-link top-level. La voce Newsletter e' stata rimossa
- * 2026-05-17 (richiesta utente): il box newsletter in fondo a ogni
- * pagina basta come call-to-subscribe, niente link extra al form.
+ * Ordine: Sponsor → Biglietteria → 5×1000 → Contatti. Calendario e'
+ * stata promossa a main accordion del drawer (con sottomenu per
+ * categoria) 2026-05-17, quindi qui non c'e' piu'. Newsletter idem
+ * rimossa (richiesta utente): il box newsletter in fondo a ogni
+ * pagina basta come call-to-subscribe.
  *
  * Impianti sportivi NON e' qui: vive solo dentro l'accordion Societa'
  * del drawer (e' un sotto-link logico della sezione).
  * Privacy & Cookie NON e' qui: vive solo in footer.
  */
 export const sidebarOverflowItems: SidebarItem[] = [
-  // Calendario punta al calendario completo della Prima Squadra
-  // (l'unica route /calendario esistente e' figlia di /squadre/[slug]).
-  // Per il calendario delle squadre giovanili l'utente passa da
-  // /squadre → singola squadra → calendario.
-  {
-    href: "/squadre/prima-squadra/calendario",
-    label: "Calendario",
-    icon: CalendarDays,
-  },
   { href: "/sponsor", label: "Sponsor", icon: Handshake },
   { href: "/societa/biglietteria", label: "Biglietteria", icon: Ticket },
   { href: "/5x1000", label: "5×1000", icon: HeartHandshake },

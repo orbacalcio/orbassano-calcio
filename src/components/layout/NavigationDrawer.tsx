@@ -74,10 +74,46 @@ function buildSections(opts: {
     label: "Tornei",
   });
 
-  // 4 voci main in ordine fisso: News · Squadre · Gallery · Società.
-  // Sponsor + Calendario sono usciti dalle main e vivono ora nei
-  // quick-link overflow (vedi sidebarOverflowItems in SidebarLeft.items.ts).
-  // Gallery promossa a top-level (era /news/gallery sotto News).
+  // Accordion Calendario: primo child = pagina hub /calendario con
+  // tutti i box squadre. Sub-link successivi = calendario di ogni
+  // squadra attiva (Prima Squadra / Juniores / Scuola Calcio puntano
+  // direttamente al calendario singolo; Settore Giovanile punta alla
+  // categoria hub perche' SG raggruppa 4 squadre con calendari
+  // distinti — l'utente sceglie poi la squadra).
+  const calendarioChildren: DrawerSection["children"] = [
+    { href: "/calendario", label: "Tutti i calendari" },
+  ];
+  if (teamSlugs.has("prima-squadra")) {
+    calendarioChildren.push({
+      href: "/squadre/prima-squadra/calendario",
+      label: "Prima Squadra",
+    });
+  }
+  if (teamSlugs.has("juniores")) {
+    calendarioChildren.push({
+      href: "/squadre/juniores/calendario",
+      label: "Juniores",
+    });
+  }
+  // Settore Giovanile: link alla categoria hub (4 box U14/U15/U16/U17).
+  // Mostrato sempre: se nessuna squadra attiva, la pagina mostra il
+  // fallback "le squadre non sono ancora pubblicate".
+  calendarioChildren.push({
+    href: "/squadre/settore-giovanile",
+    label: "Settore Giovanile",
+  });
+  if (teamSlugs.has("scuola-calcio")) {
+    calendarioChildren.push({
+      href: "/squadre/scuola-calcio/calendario",
+      label: "Scuola Calcio",
+    });
+  }
+
+  // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·
+  // Società. Sponsor vive nelle voci secondarie (sidebarOverflowItems).
+  // Calendario promossa a main 2026-05-17 con sottomenu accordion per
+  // categoria (richiesta utente). Gallery promossa a top-level (era
+  // /news/gallery sotto News).
   return [
     {
       href: "/news",
@@ -90,6 +126,11 @@ function buildSections(opts: {
       href: "/squadre",
       label: "Squadre",
       children: teamsChildren,
+    },
+    {
+      href: "/calendario",
+      label: "Calendario",
+      children: calendarioChildren,
     },
     {
       href: "/gallery",
