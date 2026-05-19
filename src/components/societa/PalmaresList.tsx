@@ -32,10 +32,6 @@ const TITLES: PalmaresEntry[] = [
     count: 2,
     details: "2000-2001 girone D · 1979-1980 girone B · promosse in Eccellenza e Serie D",
   },
-  {
-    competition: "Prima Categoria (promozione di girone)",
-    details: "1977-1978 · promossa in Promozione",
-  },
 ];
 
 const PLACEMENTS: PalmaresEntry[] = [
