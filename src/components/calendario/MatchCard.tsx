@@ -224,13 +224,16 @@ export function MatchCard({
 
   const inner = (
     <>
-      {/* Box data sx */}
+      {/* Box data sx — bg-brand-blue allineato a MatchDatePill
+          (richiesta utente 2026-05-19). Variante postponed/cancelled
+          mantiene bg surface-2/40 + border orange come stato di alert
+          operativo (la partita non e' nella sua data programmata). */}
       <div
         className={cn(
           "border-l-2 flex shrink-0 flex-col items-center justify-center rounded-md py-2 px-3 md:w-20 md:py-3",
           match.status === "postponed" || match.status === "cancelled"
             ? "border-orange-500/60 bg-surface-2/40"
-            : "border-brand-gold bg-surface-2/60",
+            : "border-brand-gold bg-brand-blue",
         )}
       >
         <span
