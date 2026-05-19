@@ -56,7 +56,7 @@ export function MatchDatePill({
   className?: string;
 }) {
   const box = cn(
-    "border-brand-gold bg-surface-0 flex w-12 shrink-0 flex-col items-center justify-center gap-1 self-stretch border-l-2 py-4",
+    "border-brand-gold bg-brand-blue flex w-12 shrink-0 flex-col items-center justify-center gap-1 self-stretch border-l-2 py-4",
     className,
   );
   if (isDateTbd) {
