@@ -70,9 +70,13 @@ function NewsCard({ news }: { news: News }) {
         className="from-surface-0/95 via-surface-0/55 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
-      {/* Categoria top-left (gold piccolo uppercase) */}
+      {/* Categoria top-left: pill oro allineata al badge "In evidenza"
+          dell'archivio /news (NewsCard.tsx). Stesso bg-brand-gold +
+          text-surface-0 navy → identita' visiva coerente fra homepage e
+          archivio. Su sfondo immagine il pill ha lettura forte anche
+          quando la foto e' chiara. */}
       {news.category && (
-        <span className="font-display text-white absolute top-5 left-5 text-xs font-bold tracking-[0.2em] uppercase md:top-7 md:left-7 md:text-sm">
+        <span className="bg-brand-gold text-surface-0 font-display absolute top-5 left-5 rounded-full px-3 py-1 text-[10px] font-bold tracking-[0.15em] uppercase md:top-7 md:left-7 md:px-3.5 md:py-1.5 md:text-xs">
           {news.category}
         </span>
       )}
