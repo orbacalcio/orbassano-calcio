@@ -31,7 +31,7 @@ export const tournament = defineType({
       name: "category",
       title: "Categoria",
       description:
-        "Categoria/squadra a cui e' rivolto il torneo. Per tornei multi-categoria, crea un evento per ciascuna.",
+        "Categoria/squadra a cui è rivolto il torneo. Per tornei multi-categoria, crea un evento per ciascuna.",
       type: "string",
       options: {
         list: [

@@ -10,11 +10,11 @@ import { defineField, defineType } from "sanity";
  * - Pattern editoriale juventus.com: ogni slide porta il proprio set
  *   testuale (eyebrow / headline / subhead / cta) sincronizzato con
  *   l'immagine. Il rendering nasconde i sotto-elementi vuoti, quindi
- *   solo headline e' obbligatorio (ma una slide minimal con sola
- *   headline e' un caso valido).
+ *   solo headline è obbligatorio (ma una slide minimal con sola
+ *   headline è un caso valido).
  *
- * Ordine dei campi: i campi testuali vengono PRIMA di image perche'
- * editorialmente e' il messaggio a guidare la scelta della foto, non
+ * Ordine dei campi: i campi testuali vengono PRIMA di image perché
+ * editorialmente è il messaggio a guidare la scelta della foto, non
  * il contrario.
  */
 export const heroSlide = defineType({
@@ -67,7 +67,7 @@ export const heroSlide = defineType({
       name: "ctaLink",
       title: "Link CTA",
       description:
-        "URL relativo (es. /societa/storia) o assoluto. Richiesto se 'Testo bottone CTA' e' compilato.",
+        "URL relativo (es. /societa/storia) o assoluto. Richiesto se 'Testo bottone CTA' è compilato.",
       type: "string",
     }),
     defineField({

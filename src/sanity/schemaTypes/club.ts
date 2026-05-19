@@ -3,7 +3,7 @@ import { defineField, defineType } from "sanity";
 
 /**
  * Anagrafica madre dei club avversari (e teoricamente del nostro club
- * stesso, anche se per Orbassano usiamo gia' siteSettings + team).
+ * stesso, anche se per Orbassano usiamo già siteSettings + team).
  *
  * Un club esiste UNA SOLA VOLTA nel CMS. Quando la stessa "ASD Esempio"
  * incontra Prima Squadra, Juniores e U17 in tre competition diverse,
@@ -27,7 +27,7 @@ export const club = defineType({
       name: "shortName",
       title: "Nome breve",
       description:
-        "Visualizzato nelle MatchCard quando lo spazio e' ridotto. Es. 'Esempio'.",
+        "Visualizzato nelle MatchCard quando lo spazio è ridotto. Es. 'Esempio'.",
       type: "string",
       validation: (r) => r.required().max(20),
     }),

@@ -48,7 +48,7 @@ export const team = defineType({
       name: "displayName",
       title: "Nome mostrato (MatchCard)",
       description:
-        "Nome della squadra come compare nelle MatchCard (homepage strip + pagina calendario). Default 'Orbassano Calcio' se vuoto: nelle card del calendario quasi sempre si scrive 'Orbassano Calcio' al posto del nome di categoria, per uniformita' grafica.",
+        "Nome della squadra come compare nelle MatchCard (homepage strip + pagina calendario). Default 'Orbassano Calcio' se vuoto: nelle card del calendario quasi sempre si scrive 'Orbassano Calcio' al posto del nome di categoria, per uniformità grafica.",
       type: "string",
       initialValue: "Orbassano Calcio",
     }),
@@ -87,7 +87,7 @@ export const team = defineType({
       title: "Stagione",
       type: "string",
       description:
-        "Default fallback per UI. La verita' vive su Competition.season. Es. '2026/2027'.",
+        "Default fallback per UI. La verità vive su Competition.season. Es. '2026/2027'.",
     }),
     defineField({
       name: "currentMainCompetition",

@@ -88,7 +88,7 @@ export const facility = defineType({
       name: "gallery",
       title: "Foto dell'impianto",
       description:
-        "La PRIMA foto e' usata come hero della card (16:9). Le successive vengono mostrate come strip 4-up sotto la card. Se nessuna foto e' caricata, viene generato un placeholder gradient col numero dell'impianto.",
+        "La PRIMA foto è usata come hero della card (16:9). Le successive vengono mostrate come strip 4-up sotto la card. Se nessuna foto è caricata, viene generato un placeholder gradient col numero dell'impianto.",
       type: "array",
       group: "media",
       options: { layout: "grid" },
@@ -120,7 +120,7 @@ export const facility = defineType({
       name: "isActive",
       title: "Visibile sul sito",
       description:
-        "Disattiva per nascondere l'impianto dalla pagina /societa/impianti senza cancellarlo. Riattivabile in qualsiasi momento (utile per impianti in ristrutturazione, in stand-by, o non piu' usati).",
+        "Disattiva per nascondere l'impianto dalla pagina /societa/impianti senza cancellarlo. Riattivabile in qualsiasi momento (utile per impianti in ristrutturazione, in stand-by, o non più usati).",
       type: "boolean",
       group: "config",
       initialValue: true,

@@ -163,7 +163,7 @@ export function Capitolo03() {
         </Article>
       </Section>
 
-      <Section title="Comunicazione tra adulti tesserati e atleti minori">
+      <Section title="Comunicazione tra adulti tesserati e atleti minorenni">
         <Article number="3.12">
           La comunicazione tra tecnici, dirigenti, collaboratori e atleti
           minori avviene esclusivamente attraverso canali ufficiali della
@@ -186,7 +186,7 @@ export function Capitolo03() {
 
         <Article number="3.13">
           Sono <strong>vietate</strong> comunicazioni private uno-a-uno tra
-          adulti tesserati e atleti minori al di fuori dei canali ufficiali,
+          adulti tesserati e atleti minorenni al di fuori dei canali ufficiali,
           salvo autorizzazione esplicita del genitore comunicata alla Società.
           Il principio è semplice: se una conversazione tra un adulto della
           Società e un giovane atleta non può essere vista da un terzo adulto,
@@ -228,7 +228,7 @@ export function Capitolo03() {
 
         <Article number="3.16">
           Durante le trasferte, gli adulti accompagnatori non entrano nelle
-          camere degli atleti minori se non per ragioni urgenti e mai da soli.
+          camere degli atleti minorenni se non per ragioni urgenti e mai da soli.
           Eventuali necessità di assistenza notturna sono gestite con la
           presenza di almeno due adulti.
         </Article>
@@ -247,13 +247,13 @@ export function Capitolo03() {
           L&apos;A.S.D. Orbassano Calcio raccoglie all&apos;atto del
           tesseramento il{" "}
           <strong>consenso informato dei genitori</strong> per la realizzazione
-          e la pubblicazione di foto e video degli atleti minori sui canali
+          e la pubblicazione di foto e video degli atleti minorenni sui canali
           ufficiali della Società (sito, Instagram, Facebook, YouTube, TikTok,
           materiale stampa).
         </Article>
 
         <Article number="3.19">
-          Le foto e i video pubblicati ritraggono gli atleti minori in contesti
+          Le foto e i video pubblicati ritraggono gli atleti minorenni in contesti
           sportivi (allenamenti, partite, premiazioni, eventi sociali della
           Società) e mai in situazioni che possano comprometterne dignità,
           riservatezza o sicurezza. Sono vietate immagini negli spogliatoi,
@@ -262,7 +262,7 @@ export function Capitolo03() {
 
         <Article number="3.20">
           I tecnici, i dirigenti e i collaboratori non pubblicano sui propri
-          profili social personali foto o video di atleti minori riconoscibili
+          profili social personali foto o video di atleti minorenni riconoscibili
           senza autorizzazione preventiva della Società e dei genitori. Le
           immagini ufficiali sono pubblicate dai canali della Società.
         </Article>

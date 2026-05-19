@@ -8,15 +8,15 @@ import { defineField, defineType, type Reference } from "sanity";
  *   Filtro Studio: solo competition attive con targetTeam == match.team.
  * - `opponent` (reference, required UNLESS isOpponentTbd): join club +
  *   competition. Filtro Studio: solo opponent attivi della stessa
- *   competition gia' selezionata.
+ *   competition già selezionata.
  * - `team` (reference): ridondante con competition.targetTeam ma utile
  *   per query veloci. Validazione async cross-field assicura coerenza.
  * - status: aggiunto `cancelled` (annullata, non recuperabile, distinta
- *   da `postponed` che e' rinviata).
+ *   da `postponed` che è rinviata).
  * - flag: isOpponentTbd (sorteggio coppa non avvenuto), isDateTbd (data
  *   da definire), isClosedDoors (porte chiuse).
  * - legacyOpponent / legacyOpponentLogo: hidden + readOnly. Servono solo
- *   come safety net per eventuali doc gia' in CMS prima di questo
+ *   come safety net per eventuali doc già in CMS prima di questo
  *   refactor (in produzione non ce ne sono — verificato pre-merge).
  */
 export const match = defineType({
@@ -86,7 +86,7 @@ export const match = defineType({
             { id: ref },
           );
           if (comp?.targetTeamRef && comp.targetTeamRef !== teamRef) {
-            return "La competizione selezionata e' di un'altra squadra.";
+            return "La competizione selezionata è di un'altra squadra.";
           }
           return true;
         }),
@@ -101,7 +101,7 @@ export const match = defineType({
       name: "date",
       title: "Data e ora",
       description:
-        "Se la data esatta e' incerta, valorizza una data nominale e attiva 'Data da definire' qui sotto.",
+        "Se la data esatta è incerta, valorizza una data nominale e attiva 'Data da definire' qui sotto.",
       type: "datetime",
       fieldset: "details",
       validation: (r) => r.required(),

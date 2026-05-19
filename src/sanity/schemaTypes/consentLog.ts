@@ -6,7 +6,7 @@ import { defineField, defineType } from "sanity";
  * genera un record qui per audit. Il banner cookie chiama un'API
  * server che scrive in Sanity con il write token.
  *
- * In Studio sara' read-only: i record arrivano da scritture server
+ * In Studio sarà read-only: i record arrivano da scritture server
  * automatizzate, non da edit manuale.
  */
 export const consentLog = defineType({

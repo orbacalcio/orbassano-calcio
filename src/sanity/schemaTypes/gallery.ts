@@ -5,12 +5,12 @@ import { defineField, defineType } from "sanity";
  * Galleria fotografica (album) — pagina /gallery (index mosaic)
  * + /gallery/[slug] (viewer dell'album).
  *
- * Pattern juventus.com: ogni album e' un evento/momento (es. "Gallery
+ * Pattern juventus.com: ogni album è un evento/momento (es. "Gallery
  * | Prima Squadra | Juventus-Lecce", "Allenamento pre-partita") con
  * cover dedicata e dentro N foto. Mostriamo 20 album per batch
  * nell'index, pulsante "Carica altri" per il batch successivo.
  *
- * Ordinamento di default per `uploadedAt` discendente (gallerie piu'
+ * Ordinamento di default per `uploadedAt` discendente (gallerie più
  * recenti in alto). Campo `ordering` (number, opzionale) per pin
  * manuale di un album in cima (es. galleria storica, evento speciale).
  *
@@ -65,7 +65,7 @@ export const gallery = defineType({
       name: "uploadedAt",
       title: "Data e ora di caricamento",
       description:
-        "Default: data e ora attuali. Modificabile per riposizionare un album piu' vecchio o per data storica. L'ordinamento gallery si basa su questo campo (desc).",
+        "Default: data e ora attuali. Modificabile per riposizionare un album più vecchio o per data storica. L'ordinamento gallery si basa su questo campo (desc).",
       type: "datetime",
       fieldset: "meta",
       validation: (r) => r.required(),
@@ -75,7 +75,7 @@ export const gallery = defineType({
       name: "coverImage",
       title: "Cover (immagine di copertina)",
       description:
-        "L'immagine che rappresenta l'album nel mosaic /gallery. Scegli quella piu' forte/iconica del set.",
+        "L'immagine che rappresenta l'album nel mosaic /gallery. Scegli quella più forte/iconica del set.",
       type: "image",
       fieldset: "contenuto",
       options: { hotspot: true, accept: "image/*" },
@@ -85,7 +85,7 @@ export const gallery = defineType({
       name: "coverAlt",
       title: "Testo alternativo della cover (opzionale)",
       description:
-        "Frase breve che descrive cosa si vede nella cover. La leggono screen reader (utenti non vedenti) e Google per indicizzare l'immagine. Se lasciato vuoto, il sito usa automaticamente il TITOLO dell'album come alt: nella maggior parte dei casi va benissimo cosi'. Compilalo solo se vuoi qualcosa di piu' descrittivo del titolo (es. titolo='Allenamento pre-Pinerolo' → alt='Squadra in cerchio sul campo principale del Centro Sportivo Aldo Porta durante il riscaldamento').",
+        "Frase breve che descrive cosa si vede nella cover. La leggono screen reader (utenti non vedenti) e Google per indicizzare l'immagine. Se lasciato vuoto, il sito usa automaticamente il TITOLO dell'album come alt: nella maggior parte dei casi va benissimo così. Compilalo solo se vuoi qualcosa di più descrittivo del titolo (es. titolo='Allenamento pre-Pinerolo' → alt='Squadra in cerchio sul campo principale del Centro Sportivo Aldo Porta durante il riscaldamento').",
       type: "string",
       fieldset: "contenuto",
       validation: (r) =>
@@ -100,11 +100,11 @@ export const gallery = defineType({
       name: "cloudinaryImages",
       title: "Immagini dell'album (Cloudinary — consigliato)",
       description:
-        "Storage esterno Cloudinary (25 GB free vs 5 GB Sanity). Per ogni nuova foto: clicca 'Add item', poi 'Browse Cloudinary library' nel popup, e nel widget Cloudinary fai bulk upload trascinando N foto. Limite Cloudinary widget: max 20 foto selezionabili per click — per album piu' grandi ripeti 'Add multiple' a batch da 20. Le foto vivono su cdn Cloudinary, il sito le serve direttamente da li' senza pesare sullo storage Sanity. Per le foto vecchie caricate prima della migrazione resta disponibile il campo 'Immagini dell'album (Sanity — legacy)' qui sotto: il sito renderizza entrambi indistintamente. Da preferire SEMPRE Cloudinary per i nuovi album.",
+        "Storage esterno Cloudinary (25 GB free vs 5 GB Sanity). Per ogni nuova foto: clicca 'Add item', poi 'Browse Cloudinary library' nel popup, e nel widget Cloudinary fai bulk upload trascinando N foto. Limite Cloudinary widget: max 20 foto selezionabili per click — per album più grandi ripeti 'Add multiple' a batch da 20. Le foto vivono su cdn Cloudinary, il sito le serve direttamente da li' senza pesare sullo storage Sanity. Per le foto vecchie caricate prima della migrazione resta disponibile il campo 'Immagini dell'album (Sanity — legacy)' qui sotto: il sito renderizza entrambi indistintamente. Da preferire SEMPRE Cloudinary per i nuovi album.",
       type: "array",
       fieldset: "contenuto",
       // layout:'grid' rende le miniature come griglia visuale invece
-      // di lista verticale di default. Il numero di item per riga e'
+      // di lista verticale di default. Il numero di item per riga è
       // auto-fit in base alla larghezza disponibile del campo: tipico
       // 4-6 per riga su pannello document standard, 6-8 su pannello
       // wide. Su mobile/pannello stretto si compatta a 2-3.
@@ -115,7 +115,7 @@ export const gallery = defineType({
       name: "images",
       title: "Immagini dell'album (Sanity — legacy)",
       description:
-        "Storage interno Sanity (5 GB free, condivisi con altri asset del sito). Da utilizzare SOLO se non si vuole/può usare Cloudinary. Trascina N foto in quest'area per caricarle in blocco. L'ordine di visualizzazione nel viewer pubblico segue la DATA DI SCATTO (EXIF DateTimeOriginal) in ordine crescente, con fallback sulla data di caricamento se l'EXIF manca. Le foto gia' caricate qui prima della migrazione Cloudinary restano e funzionano regolarmente.",
+        "Storage interno Sanity (5 GB free, condivisi con altri asset del sito). Da utilizzare SOLO se non si vuole/può usare Cloudinary. Trascina N foto in quest'area per caricarle in blocco. L'ordine di visualizzazione nel viewer pubblico segue la DATA DI SCATTO (EXIF DateTimeOriginal) in ordine crescente, con fallback sulla data di caricamento se l'EXIF manca. Le foto già caricate qui prima della migrazione Cloudinary restano e funzionano regolarmente.",
       type: "array",
       fieldset: "contenuto",
       // layout:'grid' mostra le miniature come griglia visuale invece
@@ -130,7 +130,7 @@ export const gallery = defineType({
           //   crescente nel viewer pubblico.
           // - 'lqip' → base64 placeholder per blur-up sotto Image
           //   next/image.
-          // Niente 'palette' (colori dominanti, non usati) ne'
+          // Niente 'palette' (colori dominanti, non usati) né
           // 'dimensions' (sempre estratto da Sanity di default).
           // Minimizzare la lista riduce significativamente il tempo
           // di processing post-upload (~30%).
@@ -161,7 +161,7 @@ export const gallery = defineType({
           preview: {
             // Preview del singolo item nell'array: invece di mostrare
             // "Untitled" quando alt e caption sono vuoti, usa il nome
-            // originale del file (es. IMG_2845.jpg). Cosi' l'utente puo'
+            // originale del file (es. IMG_2845.jpg). Cosi' l'utente può
             // identificare visivamente le foto senza dover scrivere
             // titoli a mano.
             select: {
@@ -209,7 +209,7 @@ export const gallery = defineType({
       name: "ordering",
       title: "Pin order (opzionale)",
       description:
-        "Numero piu' alto = piu' in alto. Lascialo vuoto, l'album va in ordine cronologico. Usa solo per pinnare un album in cima (es. evento speciale).",
+        "Numero più alto = più in alto. Lascialo vuoto, l'album va in ordine cronologico. Usa solo per pinnare un album in cima (es. evento speciale).",
       type: "number",
       fieldset: "extra",
     }),

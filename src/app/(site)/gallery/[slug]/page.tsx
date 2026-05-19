@@ -180,7 +180,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
               <span aria-hidden className="bg-border h-4 w-px" />
               <span className="inline-flex items-center gap-2">
                 <ImagesIcon size={14} aria-hidden />
-                {photoCount} {photoCount === 1 ? "foto" : "foto"}
+                {photoCount} foto
               </span>
             </div>
           </div>

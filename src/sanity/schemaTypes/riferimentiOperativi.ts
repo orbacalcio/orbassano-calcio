@@ -11,13 +11,13 @@ import { defineField, defineType } from "sanity";
  *
  * Singleton: un solo documento con _id "riferimentiOperativi".
  * Gestito via desk structure (S.editor().documentId(...)) come
- * gia' fatto per "settings".
+ * già fatto per "settings".
  *
  * Aggiornamento via Sanity senza nuova revisione del Codice (art. 12.8).
  *
  * Architettura: i dati del Direttivo vivono qui (non come reference a
- * `clubOfficial`) per separazione semantica — il Direttivo e' organo
- * statutario, l'organigramma operativo e' altra cosa. Il campo
+ * `clubOfficial`) per separazione semantica — il Direttivo è organo
+ * statutario, l'organigramma operativo è altra cosa. Il campo
  * opzionale `clubOfficialRef` su ogni membro permette in futuro (M9+)
  * di linkare le card "ricche" dell'organigramma senza migrazione.
  */
@@ -64,7 +64,7 @@ export const riferimentiOperativi = defineType({
       name: "sedeLegale",
       title: "Sede legale",
       description:
-        "Indirizzo completo: via, numero civico, CAP, citta' (es. 'Via Ignazio Silone 4, 10043 Orbassano TO').",
+        "Indirizzo completo: via, numero civico, CAP, città (es. 'Via Ignazio Silone 4, 10043 Orbassano TO').",
       type: "string",
       fieldset: "istituzionali",
     }),
@@ -174,7 +174,7 @@ export const riferimentiOperativi = defineType({
           name: "inCarica",
           title: "Posizione coperta",
           description:
-            "Disattiva se la posizione e' vacante: la pagina mostra il messaggio di transizione e indirizza al Direttivo.",
+            "Disattiva se la posizione è vacante: la pagina mostra il messaggio di transizione e indirizza al Direttivo.",
           type: "boolean",
           initialValue: false,
         }),
@@ -327,7 +327,7 @@ export const riferimentiOperativi = defineType({
             }),
             defineField({
               name: "note",
-              title: "Cosa e' cambiato vs precedente",
+              title: "Cosa è cambiato vs precedente",
               type: "string",
             }),
           ],

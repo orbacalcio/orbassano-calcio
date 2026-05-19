@@ -239,7 +239,7 @@ export const settings = defineType({
         r
           .max(3)
           .warning(
-            "Il layout TeamsCards e' progettato per 3 card. Aggiungerne di piu' rompe la grid.",
+            "Il layout TeamsCards è progettato per 3 card. Aggiungerne di più rompe la grid.",
           ),
     }),
     // --- Pagina /squadre — eyebrow e titoli sezioni -------------------------
@@ -297,7 +297,7 @@ export const settings = defineType({
         r
           .max(3)
           .warning(
-            "La pagina /squadre e' tarata su 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile).",
+            "La pagina /squadre è tarata su 3 macro-categorie (Prima Squadra · Juniores · Settore Giovanile).",
           ),
     }),
     // --- Pagina /calendario — header e 3 box --------------------------------
@@ -381,7 +381,7 @@ export const settings = defineType({
         }),
       ],
       validation: (r) =>
-        r.max(3).warning("La pagina /calendario e' tarata su 3 card."),
+        r.max(3).warning("La pagina /calendario è tarata su 3 card."),
     }),
     // --- Box "Il Mazzola" (pagina Impianti) ---------------------------------
     defineField({
@@ -441,7 +441,7 @@ export const settings = defineType({
       name: "social",
       title: "Social media",
       description:
-        "X / Twitter rimosso 2026-05-17 (il club non presidia piu' la piattaforma). I documenti gia' salvati potrebbero ancora avere il campo `twitter`: viene ignorato dal sito ma puoi pulirlo dal dataset con uno sweep di sanity exec.",
+        "X / Twitter rimosso 2026-05-17 (il club non presidia più la piattaforma). I documenti già salvati potrebbero ancora avere il campo `twitter`: viene ignorato dal sito ma puoi pulirlo dal dataset con uno sweep di sanity exec.",
       type: "object",
       fields: [
         defineField({ name: "instagram", type: "url" }),

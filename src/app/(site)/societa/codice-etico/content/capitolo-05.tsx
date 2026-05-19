@@ -15,10 +15,10 @@ export function Capitolo05() {
     <Chapter number="05" title="Calciatori e tesserati">
       <Section title="Probità e lealtà sportiva">
         <Article number="5.1">
-          Tutti i calciatori e le calciatrici tesserati con l&apos;A.S.D.
-          Orbassano Calcio, dalla Prima Squadra al Settore Giovanile, sono
-          tenuti a comportarsi secondo i principi di lealtà, correttezza e
-          probità in ogni rapporto e attività riferibili allo sport.
+          Tutti i tesserati dell&apos;A.S.D. Orbassano Calcio, dalla Prima
+          Squadra al Settore Giovanile, sono tenuti a comportarsi secondo i
+          principi di lealtà, correttezza e probità in ogni rapporto e
+          attività riferibili allo sport.
         </Article>
 
         <Article number="5.2">

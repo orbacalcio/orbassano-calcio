@@ -2,7 +2,7 @@ import { Trophy } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Una competizione e' specifica per (squadra nostra, stagione). La
+ * Una competizione è specifica per (squadra nostra, stagione). La
  * Prima Squadra 2026/27 ha 1-2 competition: Prima Categoria + eventuale
  * Coppa. Le amichevoli pre-stagione sono una sola competition con
  * `category: 'friendly'` che raccoglie tutti gli incontri.
@@ -127,7 +127,7 @@ export const competition = defineType({
       name: "externalStatisticheUrl",
       title: "Statistiche esterne",
       description:
-        "URL statistiche del campionato (Sprintsport, Tuttocampo). Mostrato come link 'Statistiche' nelle strip homepage accanto a Classifica. Per la Prima Squadra c'e' anche il fallback singleton settings.sprintsportLinks.statistiche.",
+        "URL statistiche del campionato (Sprintsport, Tuttocampo). Mostrato come link 'Statistiche' nelle strip homepage accanto a Classifica. Per la Prima Squadra c'è anche il fallback singleton settings.sprintsportLinks.statistiche.",
       type: "url",
     }),
     defineField({

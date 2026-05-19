@@ -23,7 +23,7 @@ import { defineField, defineType } from "sanity";
  *
  * RETENTION:
  * Le segnalazioni archiviate restano in CMS come traccia istruttoria
- * (audit-friendly). L'eventuale cancellazione e' decisione del
+ * (audit-friendly). L'eventuale cancellazione è decisione del
  * Direttivo + Responsabile Privacy in base a tempistiche GDPR (di
  * norma 5-10 anni dall'archiviazione, ma dipende dalla materia).
  */
@@ -114,7 +114,7 @@ export const segnalazione = defineType({
       name: "segnalante",
       title: "Identità segnalante",
       description:
-        "Compilato solo se isAnonimo == false. I campi sono ricevuti dal form, ma resta facolta' del Direttivo oscurarli internamente al Responsabile Safeguarding (art. 11.6).",
+        "Compilato solo se isAnonimo == false. I campi sono ricevuti dal form, ma resta facoltà del Direttivo oscurarli internamente al Responsabile Safeguarding (art. 11.6).",
       type: "object",
       fieldset: "segnalanteFs",
       fields: [
@@ -155,7 +155,7 @@ export const segnalazione = defineType({
           name: "consensoRicontatto",
           title: "Consenso al ricontatto",
           description:
-            "Se true, il Direttivo puo' ricontattare il segnalante per chiarimenti / esito istruttoria.",
+            "Se true, il Direttivo può ricontattare il segnalante per chiarimenti / esito istruttoria.",
           type: "boolean",
           initialValue: false,
         }),
@@ -224,7 +224,7 @@ export const segnalazione = defineType({
       name: "personeCoinvolte",
       title: "Persone coinvolte",
       description:
-        "Nomi (o iniziali se l'anonimato e' parziale) delle persone coinvolte. Resta riservato al Direttivo.",
+        "Nomi (o iniziali se l'anonimato è parziale) delle persone coinvolte. Resta riservato al Direttivo.",
       type: "text",
       rows: 3,
       fieldset: "fatti",

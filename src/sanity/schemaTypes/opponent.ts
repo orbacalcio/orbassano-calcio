@@ -3,7 +3,7 @@ import { defineField, defineType, type Reference } from "sanity";
 
 /**
  * Join tra `club` e `competition`. Indica che un dato club partecipa a
- * una data competizione (e quindi puo' essere selezionato come avversario
+ * una data competizione (e quindi può essere selezionato come avversario
  * dei match in quella competition).
  *
  * Targeting (squadra nostra) e stagione sono derivati da `competition`,
@@ -23,7 +23,7 @@ export const opponent = defineType({
       name: "club",
       title: "Club",
       description:
-        "Anagrafica del club avversario (logo, sito, social). Il dropdown nasconde i club gia' registrati come avversari della stessa competizione, per evitare duplicati.",
+        "Anagrafica del club avversario (logo, sito, social). Il dropdown nasconde i club già registrati come avversari della stessa competizione, per evitare duplicati.",
       type: "reference",
       to: [{ type: "club" }],
       options: {
@@ -31,7 +31,7 @@ export const opponent = defineType({
           const compRef = (document as { competition?: Reference })?.competition
             ?._ref;
           if (!compRef) return { filter: "isActive == true" };
-          // Escludi i club gia' presi da altri opponent per la stessa
+          // Escludi i club già presi da altri opponent per la stessa
           // competition. `selfPub`/`selfDraft` escludono il documento
           // corrente (sia che lo stiamo modificando come draft sia come
           // published), altrimenti l'opponent corrente toglierebbe dalla
@@ -72,7 +72,7 @@ export const opponent = defineType({
       name: "isActive",
       title: "Attivo",
       description:
-        "Disattiva se la squadra si e' ritirata o squalificata. I match esistenti restano, ma la voce non e' piu' selezionabile per nuovi match.",
+        "Disattiva se la squadra si è ritirata o squalificata. I match esistenti restano, ma la voce non è più selezionabile per nuovi match.",
       type: "boolean",
       initialValue: true,
     }),

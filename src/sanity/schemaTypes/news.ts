@@ -10,9 +10,9 @@ import { slugifyTitle } from "@/sanity/lib/slugify";
  * - `slug` con custom input `AutoSlugInput`: auto-popola dal titolo
  *   in real-time mentre l'utente scrive, senza bisogno di premere
  *   "Genera". Resta sempre il bottone manuale come fallback. Il
- *   slugify e' centralizzato in `sanity/lib/slugify.ts`.
+ *   slugify è centralizzato in `sanity/lib/slugify.ts`.
  * - `author` initialValue "Orbassano Calcio": ogni nuova news parte
- *   con questo valore, l'admin puo' cambiarlo per pezzi firmati.
+ *   con questo valore, l'admin può cambiarlo per pezzi firmati.
  * - `body` con annotation `link` esplicita: gli hyperlink inseriti
  *   nello Studio sono cliccabili lato sito (renderer in
  *   `PortableTextBody`).
@@ -95,7 +95,7 @@ export const news = defineType({
       name: "originalArticleUrl",
       title: "Link articolo originale",
       description:
-        "URL all'articolo originale su una testata esterna (es. sprintesport.it). Se valorizzato, sotto il corpo dell'articolo appare il CTA \"LEGGI L'ARTICOLO ORIGINALE\". Lascia vuoto se la news e' nativa del sito.",
+        "URL all'articolo originale su una testata esterna (es. sprintesport.it). Se valorizzato, sotto il corpo dell'articolo appare il CTA \"LEGGI L'ARTICOLO ORIGINALE\". Lascia vuoto se la news è nativa del sito.",
       type: "url",
       validation: (r) =>
         r.uri({ scheme: ["http", "https"], allowRelative: false }),
@@ -152,7 +152,7 @@ export const news = defineType({
       name: "video",
       title: "Video (Cloudinary)",
       description:
-        "Carica un video su Cloudinary cliccando 'Browse Cloudinary library' (mp4, mov, webm). LIMITE FREE TIER: 100 MB per file. Se il video supera il limite, comprimilo prima con HandBrake (preset 'Web → Vimeo YouTube HQ 1080p60', bitrate ~5000 kbps) o con ffmpeg ('ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4'). Una partita di 30 min in 1080p sta tipicamente sotto 80 MB con questa compressione. Il video viene mostrato nella pagina news SOPRA la galleria foto, con player HTML5 nativo (controls, autoplay disattivato, poster auto-generato). Lascia vuoto se non c'e' video.",
+        "Carica un video su Cloudinary cliccando 'Browse Cloudinary library' (mp4, mov, webm). LIMITE FREE TIER: 100 MB per file. Se il video supera il limite, comprimilo prima con HandBrake (preset 'Web → Vimeo YouTube HQ 1080p60', bitrate ~5000 kbps) o con ffmpeg ('ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4'). Una partita di 30 min in 1080p sta tipicamente sotto 80 MB con questa compressione. Il video viene mostrato nella pagina news SOPRA la galleria foto, con player HTML5 nativo (controls, autoplay disattivato, poster auto-generato). Lascia vuoto se non c'è video.",
       type: "cloudinary.asset",
     }),
     defineField({

@@ -62,7 +62,7 @@ export const clubOfficial = defineType({
       isActive: "isActive",
     },
     prepare({ title, subtitle, isActive }) {
-      // Disattivato esplicito: prefisso visivo nella lista Studio cosi'
+      // Disattivato esplicito: prefisso visivo nella lista Studio così
       // l'admin distingue al volo le card live dalle archiviate.
       const active = isActive !== false;
       return {

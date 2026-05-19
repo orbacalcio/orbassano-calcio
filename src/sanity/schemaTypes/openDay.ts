@@ -8,7 +8,7 @@ import { defineField, defineType } from "sanity";
  * data ascendente, mostrando solo gli eventi futuri (date >= oggi)
  * o flaggati come isActive=true.
  *
- * Lo schema e' separato da `tournament` perche' i campi divergono nel
+ * Lo schema è separato da `tournament` perché i campi divergono nel
  * tempo: gli Open Day vivono pre-stagione (giugno-luglio) con
  * informazioni standard, i Tornei girano tutto l'anno con format,
  * gironi, premi. Tenerli distinti evita di appesantire l'UI Studio
@@ -32,7 +32,7 @@ export const openDay = defineType({
       name: "category",
       title: "Categoria",
       description:
-        "Categoria del Settore Giovanile a cui e' rivolto questo Open Day. Una sola categoria per evento; se serve un evento multi-categoria, crea un evento per ciascuna.",
+        "Categoria del Settore Giovanile a cui è rivolto questo Open Day. Una sola categoria per evento; se serve un evento multi-categoria, crea un evento per ciascuna.",
       type: "string",
       options: {
         list: [
@@ -66,7 +66,7 @@ export const openDay = defineType({
       name: "endTime",
       title: "Ora di fine",
       description:
-        "Es. '19:30'. Solo l'ora, niente data (la data e' presa dal campo Data). Lascia vuoto se non specificato.",
+        "Es. '19:30'. Solo l'ora, niente data (la data è presa dal campo Data). Lascia vuoto se non specificato.",
       type: "string",
       validation: (r) =>
         r.regex(/^\d{1,2}[:.]\d{2}$/, {
@@ -88,7 +88,7 @@ export const openDay = defineType({
       name: "notes",
       title: "Note (opzionali)",
       description:
-        "Indicazioni extra: 'portare scarpini', 'modulo da firmare', 'attivita' adatta a tesserati di altri club', ecc.",
+        "Indicazioni extra: 'portare scarpini', 'modulo da firmare', 'attività adatta a tesserati di altri club', ecc.",
       type: "text",
       rows: 3,
     }),

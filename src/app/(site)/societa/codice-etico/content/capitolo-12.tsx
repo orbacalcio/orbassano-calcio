@@ -17,7 +17,7 @@ export function Capitolo12() {
         <Article number="12.1">
           Il presente Codice Etico è stato approvato dal Direttivo
           dell&apos;A.S.D. Orbassano Calcio nella riunione del{" "}
-          <strong>10 maggio 2026</strong>, con verbale conservato negli atti
+          <strong>10/05/2026</strong>, con verbale conservato negli atti
           della Società.
         </Article>
 

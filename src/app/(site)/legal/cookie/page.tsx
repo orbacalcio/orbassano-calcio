@@ -6,7 +6,7 @@ import { LegalLayout } from "@/components/legal/LegalLayout";
 export const metadata: Metadata = {
   title: "Cookie policy",
   description:
-    "Cookie utilizzati da orbassanocalcio.com: tecnici sempre attivi, analytics e widget esterni solo con consenso. Conforme GDPR + Garante 10/06/2021.",
+    "Cookie utilizzati da orbassanocalcio.com: tecnici sempre attivi, analytics e widget esterni solo con consenso. Conforme GDPR + Garante 10 giugno 2021.",
 };
 
 const LAST_UPDATE = "9 maggio 2026";

@@ -78,7 +78,7 @@ export function Timeline({ events }: Props) {
   if (events.length === 0) {
     return (
       <p className="text-ink-mid border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center text-base">
-        La timeline non &egrave; ancora popolata. Controlla che il CMS contenga
+        La timeline non è ancora popolata. Controlla che il CMS contenga
         eventi storici e i webhook revalidate siano attivi.
       </p>
     );
