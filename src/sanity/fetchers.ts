@@ -969,18 +969,25 @@ export async function fetchMatchesByTeam(
 // ---------- Archivio stagioni passate (hub /archivio) -----------------------
 
 /**
- * Voce dell'archivio: una squadra che ha disputato match in una stagione
- * != quella corrente. Una riga per (season, teamSlug). matchCount conta
- * solo match "chiusi" (finished/cancelled). wins/draws/losses sono
- * calcolati SOLO sui match finished con score valido (cancelled e
- * finished senza score vengono esclusi dal record V/N/P ma restano
- * nel matchCount totale).
+ * Voce dell'archivio: una squadra che ha disputato una specifica
+ * competizione in una stagione != quella corrente. Una riga per
+ * (season, teamSlug, competitionSlug) — split per competizione, cosi'
+ * una stagione con Campionato + Coppa Italia genera 2 card distinte
+ * con record V/N/P specifico per ciascuna (richiesta utente 2026-05-18).
+ *
+ * matchCount conta solo match "chiusi" (finished/cancelled).
+ * wins/draws/losses sono calcolati SOLO sui match finished con score
+ * valido (cancelled e finished senza score vengono esclusi dal record
+ * V/N/P ma restano nel matchCount totale).
  */
 export type ArchiveTeamSeasonEntry = {
   season: string;
   teamSlug: string;
   teamName: string;
   teamCategory: string;
+  competitionSlug: string;
+  competitionName: string;
+  competitionFullName: string;
   matchCount: number;
   wins: number;
   draws: number;
@@ -992,6 +999,9 @@ type RawArchiveRow = {
   teamSlug: string;
   teamName: string;
   teamCategory: string | null;
+  competitionSlug: string;
+  competitionName: string | null;
+  competitionFullName: string | null;
   status: MatchStatus | null;
   home: boolean | null;
   scoreHome: number | null;
@@ -1025,7 +1035,9 @@ export async function fetchArchiveTeamSeasons(
       // Conta solo match storicamente "chiusi". scheduled/postponed di
       // stagioni passate sono dati incompleti, niente badge per quelli.
       if (r.status !== "finished" && r.status !== "cancelled") continue;
-      const key = `${r.season}::${r.teamSlug}`;
+      // Chiave triplicata: split per competizione (es. Campionato +
+      // Coppa Italia in stessa stagione → 2 card distinte).
+      const key = `${r.season}::${r.teamSlug}::${r.competitionSlug}`;
       let entry = counts.get(key);
       if (!entry) {
         entry = {
@@ -1033,6 +1045,10 @@ export async function fetchArchiveTeamSeasons(
           teamSlug: r.teamSlug,
           teamName: r.teamName,
           teamCategory: r.teamCategory ?? "—",
+          competitionSlug: r.competitionSlug,
+          competitionName: r.competitionName ?? r.competitionFullName ?? "—",
+          competitionFullName:
+            r.competitionFullName ?? r.competitionName ?? "—",
           matchCount: 0,
           wins: 0,
           draws: 0,

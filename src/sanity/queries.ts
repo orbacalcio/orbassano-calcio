@@ -283,11 +283,15 @@ export const archivePastMatchesByTeamQuery = defineQuery(`
   *[_type == "match"
     && defined(competition->season)
     && competition->season != $currentSeason
-    && defined(team->slug.current)]{
+    && defined(team->slug.current)
+    && defined(competition->slug.current)]{
     "season": competition->season,
     "teamSlug": team->slug.current,
     "teamName": team->name,
     "teamCategory": team->category,
+    "competitionSlug": competition->slug.current,
+    "competitionName": competition->shortName,
+    "competitionFullName": competition->name,
     status,
     home,
     scoreHome,

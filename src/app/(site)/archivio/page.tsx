@@ -89,10 +89,17 @@ function groupBySeason(entries: ArchiveTeamSeasonEntry[]): SeasonGroup[] {
   const sorted = Array.from(groups.values()).sort((a, b) =>
     b.season.localeCompare(a.season),
   );
-  // All'interno di ciascun gruppo, ordina i team per nome (A→Z)
+  // Ordinamento card: prima per team (A→Z) poi per nome competizione
+  // (A→Z), cosi' una squadra che ha disputato Campionato + Coppa nella
+  // stessa stagione vede le due card una accanto all'altra in ordine
+  // alfabetico di denominazione.
   for (const g of sorted) {
     for (const [, list] of g.byCategory) {
-      list.sort((a, b) => a.teamName.localeCompare(b.teamName, "it"));
+      list.sort((a, b) => {
+        const teamCmp = a.teamName.localeCompare(b.teamName, "it");
+        if (teamCmp !== 0) return teamCmp;
+        return a.competitionName.localeCompare(b.competitionName, "it");
+      });
     }
   }
   return sorted;
@@ -167,7 +174,9 @@ function SeasonSection({ group }: { group: SeasonGroup }) {
               </h3>
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {list.map((entry) => (
-                  <li key={`${entry.season}-${entry.teamSlug}`}>
+                  <li
+                    key={`${entry.season}-${entry.teamSlug}-${entry.competitionSlug}`}
+                  >
                     <TeamSeasonCard entry={entry} />
                   </li>
                 ))}
@@ -191,8 +200,15 @@ function TeamSeasonCard({ entry }: { entry: ArchiveTeamSeasonEntry }) {
       href={href}
       className="group bg-surface-1 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl p-6 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
     >
-      <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
-        {entry.season}
+      {/* Eyebrow: denominazione competizione (richiesta utente
+          2026-05-18, sostituisce la stagione che resta visibile come
+          intestazione di sezione "2024/2025"). Title attribute con
+          full name competition come fallback per nomi troncati. */}
+      <span
+        className="text-brand-gold font-mono text-[10px] tracking-[0.15em] uppercase line-clamp-2"
+        title={entry.competitionFullName}
+      >
+        {entry.competitionName}
       </span>
       <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase">
         {entry.teamName}
