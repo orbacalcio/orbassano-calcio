@@ -153,7 +153,7 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
     : "—";
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
-      <MatchDatePill iso={match.date} />
+      <MatchDatePill iso={match.date} size="md" />
       <div className="flex min-w-0 flex-1 items-center">
         {/* Scoreboard row centrata. Tabellino vive DENTRO la col del score
             (flex-col items-center) — cosi' resta sempre allineato sotto
@@ -228,7 +228,7 @@ function FutureMatchCell({ match }: { match: YouthNextMatch | null }) {
   const timeStr = match.isDateTbd ? null : formatTimeOnly(match.date);
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
-      <MatchDatePill iso={match.date} isDateTbd={match.isDateTbd} />
+      <MatchDatePill iso={match.date} isDateTbd={match.isDateTbd} size="md" />
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <div className="flex w-full items-center justify-center gap-4 md:gap-6">
           <TeamLogo

@@ -47,12 +47,29 @@ const ITALIAN_MONTHS_SHORT = [
   "DIC",
 ];
 
+// 0=Dom ... 6=Sab (allineato a Date#getDay()). Vedi MatchDatePill.tsx
+// per la stessa convenzione: tenuto duplicato qui per evitare cross-
+// import e mantenere MatchCard standalone.
+const ITALIAN_DAYS_SHORT = [
+  "DOM",
+  "LUN",
+  "MAR",
+  "MER",
+  "GIO",
+  "VEN",
+  "SAB",
+];
+
 function formatDay(iso: string): string {
   return String(new Date(iso).getDate()).padStart(2, "0");
 }
 
 function formatMonthShort(iso: string): string {
   return ITALIAN_MONTHS_SHORT[new Date(iso).getMonth()] ?? "—";
+}
+
+function formatDayOfWeek(iso: string): string {
+  return ITALIAN_DAYS_SHORT[new Date(iso).getDay()] ?? "—";
 }
 
 function formatTime(iso: string): string {
@@ -227,15 +244,26 @@ export function MatchCard({
       {/* Box data sx — bg-brand-blue allineato a MatchDatePill
           (richiesta utente 2026-05-19). Variante postponed/cancelled
           mantiene bg surface-2/40 + border orange come stato di alert
-          operativo (la partita non e' nella sua data programmata). */}
+          operativo (la partita non e' nella sua data programmata).
+          Layout 3-righe: DoW eyebrow + numero giorno + mese gold. */}
       <div
         className={cn(
-          "border-l-2 flex shrink-0 flex-col items-center justify-center rounded-md py-2 px-3 md:w-20 md:py-3",
+          "border-l-2 flex shrink-0 flex-col items-center justify-center rounded-md gap-0.5 py-2 px-3 md:w-20 md:py-3",
           match.status === "postponed" || match.status === "cancelled"
             ? "border-orange-500/60 bg-surface-2/40"
             : "border-brand-gold bg-brand-blue",
         )}
       >
+        <span
+          className={cn(
+            "font-mono text-[10px] leading-none tracking-[0.12em]",
+            match.status === "postponed" || match.status === "cancelled"
+              ? "text-ink-low"
+              : "text-ink-mid",
+          )}
+        >
+          {formatDayOfWeek(match.date)}
+        </span>
         <span
           className={cn(
             "font-display text-3xl font-extrabold leading-none",
@@ -246,7 +274,7 @@ export function MatchCard({
         >
           {formatDay(match.date)}
         </span>
-        <span className="font-mono text-brand-gold text-[10px] tracking-[0.15em] uppercase">
+        <span className="font-mono text-brand-gold text-[10px] leading-none tracking-[0.15em] uppercase">
           {formatMonthShort(match.date)}
         </span>
       </div>

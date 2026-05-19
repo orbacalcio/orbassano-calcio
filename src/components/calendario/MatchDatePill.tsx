@@ -62,23 +62,47 @@ function formatDayOfWeek(iso: string): string {
  * card con overflow-hidden, quindi gli angoli vengono mascherati
  * dalla card stessa. Se serve, il consumer override via className.
  */
+type MatchDatePillSize = "sm" | "md";
+
 export function MatchDatePill({
   iso,
   isDateTbd,
   className,
+  size = "sm",
 }: {
   iso: string;
   isDateTbd?: boolean | null;
   className?: string;
+  /**
+   * "sm" (default): w-12, font giorno 2xl. Usata dalla MatchCard variant
+   * compact (Prima Squadra MatchStrip homepage).
+   * "md": w-20, font giorno 3xl. Usata dalla YouthMatchStrip homepage
+   * per allinearsi alla grandezza del date box delle pagine calendario.
+   */
+  size?: MatchDatePillSize;
 }) {
+  const isMd = size === "md";
   const box = cn(
-    "border-brand-gold bg-brand-blue flex w-12 shrink-0 flex-col items-center justify-center gap-0.5 self-stretch border-l-2 py-3",
+    "border-brand-gold bg-brand-blue flex shrink-0 flex-col items-center justify-center self-stretch border-l-2",
+    isMd ? "w-20 gap-1 py-3" : "w-12 gap-0.5 py-3",
     className,
   );
+  const dayClass = isMd
+    ? "font-display text-ink-hi text-3xl leading-none font-extrabold"
+    : "font-display text-ink-hi text-2xl leading-none font-extrabold";
+  const eyebrowClass = isMd
+    ? "font-mono text-ink-mid text-[10px] leading-none tracking-[0.12em]"
+    : "font-mono text-ink-mid text-[9px] leading-none tracking-[0.1em]";
+
   if (isDateTbd) {
     return (
       <div className={box} aria-label="Data da definire">
-        <span className="font-display text-ink-mid text-lg leading-none font-extrabold uppercase">
+        <span
+          className={cn(
+            "font-display text-ink-mid leading-none font-extrabold uppercase",
+            isMd ? "text-xl" : "text-lg",
+          )}
+        >
           TBD
         </span>
       </div>
@@ -92,15 +116,9 @@ export function MatchDatePill({
       className={box}
       aria-label={`${formatDayOfWeek(iso)} ${formatDay(iso)} ${formatMonthShort(iso)}`}
     >
-      <span className="font-mono text-ink-mid text-[9px] leading-none tracking-[0.1em]">
-        {formatDayOfWeek(iso)}
-      </span>
-      <span className="font-display text-ink-hi text-2xl leading-none font-extrabold">
-        {formatDay(iso)}
-      </span>
-      <span className="font-mono text-ink-mid text-[9px] leading-none tracking-[0.1em]">
-        {formatMonthShort(iso)}
-      </span>
+      <span className={eyebrowClass}>{formatDayOfWeek(iso)}</span>
+      <span className={dayClass}>{formatDay(iso)}</span>
+      <span className={eyebrowClass}>{formatMonthShort(iso)}</span>
     </div>
   );
 }
