@@ -276,10 +276,9 @@ export const settoreGiovanileSeasonsQuery = defineQuery(`
 
 // Elenco team-season raw per la pagina /archivio (hub stagioni passate).
 // Restituisce una riga per ogni partita di stagioni != currentSeason,
-// con season + team meta. La deduplicazione (season, teamSlug) e il
-// conteggio match avvengono lato server in fetcher per semplicita'
-// di query. Filtra anche match con status finished/cancelled per
-// evitare di mostrare stagioni passate "vuote" di soli scheduled.
+// con season + team meta + outcome data (home/score) per calcolare
+// V/N/P lato server in fetcher. La deduplicazione (season, teamSlug)
+// e il conteggio match avvengono in JS per semplicita' di query.
 export const archivePastMatchesByTeamQuery = defineQuery(`
   *[_type == "match"
     && defined(competition->season)
@@ -290,6 +289,9 @@ export const archivePastMatchesByTeamQuery = defineQuery(`
     "teamName": team->name,
     "teamCategory": team->category,
     status,
+    home,
+    scoreHome,
+    scoreAway,
   }
 `);
 

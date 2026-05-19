@@ -182,6 +182,10 @@ function SeasonSection({ group }: { group: SeasonGroup }) {
 
 function TeamSeasonCard({ entry }: { entry: ArchiveTeamSeasonEntry }) {
   const href = `/squadre/${entry.teamSlug}/calendario?season=${encodeURIComponent(entry.season)}`;
+  // Record V/N/P: mostrato come 3 mini-stat affiancate. Visibile solo
+  // se c'e' almeno un match con score (cancelled-only → nascondi
+  // record e mostra solo il totale partite).
+  const hasRecord = entry.wins + entry.draws + entry.losses > 0;
   return (
     <Link
       href={href}
@@ -193,6 +197,13 @@ function TeamSeasonCard({ entry }: { entry: ArchiveTeamSeasonEntry }) {
       <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase">
         {entry.teamName}
       </span>
+      {hasRecord && (
+        <div className="border-border/40 mt-2 flex items-stretch gap-px overflow-hidden rounded-lg border">
+          <StatCell label="V" value={entry.wins} />
+          <StatCell label="N" value={entry.draws} />
+          <StatCell label="P" value={entry.losses} />
+        </div>
+      )}
       <div className="text-ink-mid border-border/40 mt-auto flex items-center justify-between border-t pt-4 text-xs">
         <span className="font-mono tracking-wide uppercase">
           {entry.matchCount}{" "}
@@ -204,6 +215,25 @@ function TeamSeasonCard({ entry }: { entry: ArchiveTeamSeasonEntry }) {
         />
       </div>
     </Link>
+  );
+}
+
+/**
+ * Mini-stat cell V/N/P nella card archivio. Layout 3-up affiancato:
+ * numero grande sopra (font-display extrabold), label uppercase
+ * sotto (font-mono ink-mid). Neutrale per coerenza con la regola
+ * "no colori semantici basati su esito" (commit 5bb4351).
+ */
+function StatCell({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="bg-surface-2/40 flex flex-1 flex-col items-center justify-center gap-0.5 py-2">
+      <span className="font-display text-ink-hi text-lg font-extrabold leading-none tabular-nums">
+        {value}
+      </span>
+      <span className="text-ink-mid font-mono text-[9px] tracking-[0.15em] uppercase">
+        {label}
+      </span>
+    </div>
   );
 }
 

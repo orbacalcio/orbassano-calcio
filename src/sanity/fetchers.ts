@@ -971,9 +971,10 @@ export async function fetchMatchesByTeam(
 /**
  * Voce dell'archivio: una squadra che ha disputato match in una stagione
  * != quella corrente. Una riga per (season, teamSlug). matchCount conta
- * solo match con status finished/cancelled (ovvero "gia' chiusi"), per
- * non sporcare l'archivio con match programmati di stagioni future
- * erroneamente caricate.
+ * solo match "chiusi" (finished/cancelled). wins/draws/losses sono
+ * calcolati SOLO sui match finished con score valido (cancelled e
+ * finished senza score vengono esclusi dal record V/N/P ma restano
+ * nel matchCount totale).
  */
 export type ArchiveTeamSeasonEntry = {
   season: string;
@@ -981,6 +982,9 @@ export type ArchiveTeamSeasonEntry = {
   teamName: string;
   teamCategory: string;
   matchCount: number;
+  wins: number;
+  draws: number;
+  losses: number;
 };
 
 type RawArchiveRow = {
@@ -989,13 +993,22 @@ type RawArchiveRow = {
   teamName: string;
   teamCategory: string | null;
   status: MatchStatus | null;
+  home: boolean | null;
+  scoreHome: number | null;
+  scoreAway: number | null;
 };
 
 /**
  * Lista deduplicata di (season, team) per il hub /archivio. Solo stagioni
- * diverse dalla `currentSeason`. Dedup + count avviene in JS: la query
- * GROQ restituisce una riga per match (filtrato per status), poi
- * raggruppiamo per chiave composta `season::teamSlug`.
+ * diverse dalla `currentSeason`. Dedup + count + record V/N/P avvengono
+ * in JS: la query GROQ restituisce una riga per match (filtrato per
+ * status), poi raggruppiamo per chiave composta `season::teamSlug`.
+ *
+ * Calcolo record:
+ *   - V (vittoria): match.finished + (home ? scoreHome > scoreAway : scoreAway > scoreHome)
+ *   - N (pareggio): match.finished + scoreHome === scoreAway
+ *   - P (sconfitta): match.finished + (home ? scoreHome < scoreAway : scoreAway < scoreHome)
+ *   - cancelled o finished senza score → niente record (ma conta in matchCount)
  */
 export async function fetchArchiveTeamSeasons(
   currentSeason: string,
@@ -1013,17 +1026,34 @@ export async function fetchArchiveTeamSeasons(
       // stagioni passate sono dati incompleti, niente badge per quelli.
       if (r.status !== "finished" && r.status !== "cancelled") continue;
       const key = `${r.season}::${r.teamSlug}`;
-      const existing = counts.get(key);
-      if (existing) {
-        existing.matchCount += 1;
-      } else {
-        counts.set(key, {
+      let entry = counts.get(key);
+      if (!entry) {
+        entry = {
           season: r.season,
           teamSlug: r.teamSlug,
           teamName: r.teamName,
           teamCategory: r.teamCategory ?? "—",
-          matchCount: 1,
-        });
+          matchCount: 0,
+          wins: 0,
+          draws: 0,
+          losses: 0,
+        };
+        counts.set(key, entry);
+      }
+      entry.matchCount += 1;
+
+      // V/N/P: solo finished con entrambi gli score numerici. Cancelled
+      // e finished senza score contano in matchCount ma non in record.
+      if (
+        r.status === "finished" &&
+        typeof r.scoreHome === "number" &&
+        typeof r.scoreAway === "number"
+      ) {
+        const ourScore = r.home ? r.scoreHome : r.scoreAway;
+        const oppScore = r.home ? r.scoreAway : r.scoreHome;
+        if (ourScore > oppScore) entry.wins += 1;
+        else if (ourScore < oppScore) entry.losses += 1;
+        else entry.draws += 1;
       }
     }
     return Array.from(counts.values());
