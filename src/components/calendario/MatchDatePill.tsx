@@ -15,12 +15,28 @@ const ITALIAN_MONTHS_SHORT = [
   "DIC",
 ];
 
+// Date#getDay() ritorna 0=Dom ... 6=Sab. Array indicizzato di
+// conseguenza, 3 lettere uppercase per coerenza col formato mesi.
+const ITALIAN_DAYS_SHORT = [
+  "DOM",
+  "LUN",
+  "MAR",
+  "MER",
+  "GIO",
+  "VEN",
+  "SAB",
+];
+
 function formatDay(iso: string): string {
   return String(new Date(iso).getDate()).padStart(2, "0");
 }
 
 function formatMonthShort(iso: string): string {
   return ITALIAN_MONTHS_SHORT[new Date(iso).getMonth()] ?? "—";
+}
+
+function formatDayOfWeek(iso: string): string {
+  return ITALIAN_DAYS_SHORT[new Date(iso).getDay()] ?? "—";
 }
 
 /**
@@ -56,7 +72,7 @@ export function MatchDatePill({
   className?: string;
 }) {
   const box = cn(
-    "border-brand-gold bg-brand-blue flex w-12 shrink-0 flex-col items-center justify-center gap-1 self-stretch border-l-2 py-4",
+    "border-brand-gold bg-brand-blue flex w-12 shrink-0 flex-col items-center justify-center gap-0.5 self-stretch border-l-2 py-3",
     className,
   );
   if (isDateTbd) {
@@ -68,12 +84,21 @@ export function MatchDatePill({
       </div>
     );
   }
+  // Layout 3-righe: giorno della settimana (top, eyebrow) + numero giorno
+  // (centro, prominente) + mese abbreviato (bottom). DoW in alto offre
+  // info utile a colpo d'occhio ("ah, e' un sabato pomeriggio").
   return (
-    <div className={box} aria-label={`${formatDay(iso)} ${formatMonthShort(iso)}`}>
+    <div
+      className={box}
+      aria-label={`${formatDayOfWeek(iso)} ${formatDay(iso)} ${formatMonthShort(iso)}`}
+    >
+      <span className="font-mono text-ink-mid text-[9px] leading-none tracking-[0.1em]">
+        {formatDayOfWeek(iso)}
+      </span>
       <span className="font-display text-ink-hi text-2xl leading-none font-extrabold">
         {formatDay(iso)}
       </span>
-      <span className="font-mono text-ink-mid text-[10px] leading-none tracking-[0.1em]">
+      <span className="font-mono text-ink-mid text-[9px] leading-none tracking-[0.1em]">
         {formatMonthShort(iso)}
       </span>
     </div>
