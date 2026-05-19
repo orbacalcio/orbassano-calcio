@@ -81,7 +81,7 @@ export function ChapterNav() {
                 className={`block border-l-2 py-1.5 pl-3 text-sm transition-colors ${
                   isActive
                     ? "border-brand-gold text-brand-gold font-semibold"
-                    : "border-border/40 text-ink-mid hover:text-ink-hi"
+                    : "border-light-border/40 text-light-ink-mid hover:text-light-ink-hi"
                 }`}
               >
                 {it.label}

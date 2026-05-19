@@ -28,7 +28,7 @@ export function Article({
       >
         {number}
       </span>
-      <div className="text-ink-mid hyphens-auto text-justify text-[0.95rem] leading-relaxed [&_strong]:text-ink-hi [&_strong]:font-semibold">
+      <div className="text-light-ink-mid hyphens-auto text-justify text-[0.95rem] leading-relaxed [&_strong]:text-light-ink-hi [&_strong]:font-semibold">
         <span className="sr-only">Articolo {number}: </span>
         {children}
       </div>
@@ -83,7 +83,7 @@ export function Section({
 }) {
   return (
     <section className={`flex flex-col gap-5 ${className ?? ""}`}>
-      <h3 className="font-display text-ink-hi text-xl font-bold tracking-[0.005em] uppercase sm:text-2xl">
+      <h3 className="font-display text-light-ink-hi text-xl font-bold tracking-[0.005em] uppercase sm:text-2xl">
         {title}
       </h3>
       <div className="flex flex-col gap-4">{children}</div>
@@ -106,13 +106,13 @@ export function Chapter({
   return (
     <section
       id={`cap-${parseInt(number, 10)}`}
-      className="scroll-mt-24 flex flex-col gap-8 border-t border-border/40 pt-12 first-of-type:border-0 first-of-type:pt-0"
+      className="scroll-mt-24 flex flex-col gap-8 border-t border-light-border/40 pt-12 first-of-type:border-0 first-of-type:pt-0"
     >
       <header className="flex flex-col gap-2">
         <span className="font-mono text-brand-gold text-xs font-bold tracking-[0.25em] uppercase">
           Capitolo {number}
         </span>
-        <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl">
+        <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl">
           {title}
         </h2>
       </header>

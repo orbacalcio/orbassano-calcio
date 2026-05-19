@@ -119,194 +119,202 @@ export default async function CodiceEticoPage() {
         </Container>
       </header>
 
-      {/* CORPO 2-col */}
-      <Container className="py-12 lg:py-16" size="wide">
-        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16">
-          <aside>
-            <ChapterNav />
-          </aside>
+      {/* CORPO — light theme (cream parchment) per leggibilita' lunga
+          editoriale dei 12 capitoli. Hero sopra resta dark per
+          contrasto editoriale; il body si stacca chiaro come una
+          stampa di documento ufficiale. Allineato al pattern light
+          gia' usato su Manifesto, /squadre vista categoria, sezione
+          impianti. Token light-ink-* + light-border configurati in
+          globals.css (@theme). */}
+      <section className="bg-light-bg-0 py-12 lg:py-16">
+        <Container size="wide">
+          <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16">
+            <aside>
+              <ChapterNav />
+            </aside>
 
-          <main className="flex max-w-3xl flex-col gap-16">
-            <Premessa />
-            <Capitolo01 />
-            <Capitolo02 />
-            <Capitolo03 />
-            <Capitolo04 />
-            <Capitolo05 />
-            <Capitolo06 />
-            <Capitolo07 />
-            <Capitolo08 />
-            <Capitolo09 />
-            <Capitolo10 />
-            <Capitolo11 />
-            <Capitolo12 />
+            <main className="flex max-w-3xl flex-col gap-16">
+              <Premessa />
+              <Capitolo01 />
+              <Capitolo02 />
+              <Capitolo03 />
+              <Capitolo04 />
+              <Capitolo05 />
+              <Capitolo06 />
+              <Capitolo07 />
+              <Capitolo08 />
+              <Capitolo09 />
+              <Capitolo10 />
+              <Capitolo11 />
+              <Capitolo12 />
 
-            {/* RIFERIMENTI OPERATIVI (Allegato B) */}
-            {riferimenti && (
-              <section
-                id="riferimenti-operativi"
-                className="border-border/40 scroll-mt-24 flex flex-col gap-8 border-t pt-12"
-              >
-                <header className="flex flex-col gap-2">
-                  <span className="font-mono text-brand-gold text-xs font-bold tracking-[0.25em] uppercase">
-                    Allegato B
-                  </span>
-                  <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl">
-                    Riferimenti operativi
-                  </h2>
-                  <p className="text-ink-mid text-sm leading-relaxed">
-                    Dati istituzionali e ruoli operativi del club.
-                    Aggiornabili dallo Studio CMS senza nuova revisione del
-                    Codice (art. 12.8). Per i dettagli completi su
-                    rendicontazione 5×1000 e trasparenza, vedi{" "}
-                    <Link
-                      href="/societa/trasparenza"
-                      className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
-                    >
-                      la pagina trasparenza
-                    </Link>
-                    .
-                  </p>
-                </header>
-
-                {riferimenti.direttivo && riferimenti.direttivo.length > 0 && (
-                  <div>
-                    <h3 className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase">
-                      Direttivo
-                    </h3>
-                    <ul className="border-border/40 mt-3 flex flex-col divide-y rounded-2xl border">
-                      {riferimenti.direttivo.map((m, i) => (
-                        <li
-                          key={`${m.ruolo}-${m.nome}-${i}`}
-                          className="flex flex-col gap-1 p-4"
-                        >
-                          <span className="font-mono text-ink-low text-[11px] tracking-[0.12em] uppercase">
-                            {m.ruolo ?? "—"}
-                          </span>
-                          <span className="font-display text-ink-hi text-base font-bold tracking-[0.005em] uppercase">
-                            {m.nome ?? "—"}
-                          </span>
-                          {m.delega && (
-                            <span className="text-ink-mid text-xs">
-                              {m.delega}
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div>
-                  <h3 className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
-                    <ShieldAlert size={14} aria-hidden />
-                    Responsabile Safeguarding
-                  </h3>
-                  {riferimenti.responsabileSafeguarding?.inCarica ? (
-                    <div className="border-border/40 bg-surface-1 mt-3 flex flex-col gap-1 rounded-2xl border p-4">
-                      <span className="font-display text-ink-hi text-base font-bold tracking-[0.005em] uppercase">
-                        {riferimenti.responsabileSafeguarding.nome ?? "—"}
-                      </span>
-                      {riferimenti.responsabileSafeguarding.email && (
-                        <a
-                          href={`mailto:${riferimenti.responsabileSafeguarding.email}`}
-                          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm transition-colors"
-                        >
-                          <Mail size={14} aria-hidden />
-                          {riferimenti.responsabileSafeguarding.email}
-                        </a>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-ink-mid mt-3 text-sm leading-relaxed">
-                      Posizione attualmente vacante. Le segnalazioni in
-                      materia di Safeguarding sono ricevute dal Direttivo
-                      all&apos;indirizzo{" "}
-                      {riferimenti.emailSegnalazioni ? (
-                        <a
-                          href={`mailto:${riferimenti.emailSegnalazioni}`}
-                          className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
-                        >
-                          {riferimenti.emailSegnalazioni}
-                        </a>
-                      ) : (
-                        "(da configurare)"
-                      )}{" "}
-                      (art. 3.7 del Codice Etico).
-                    </p>
-                  )}
-                </div>
-
-                {riferimenti.emailSegnalazioni && (
-                  <div className="border-brand-gold/30 bg-brand-gold/5 flex flex-col gap-2 rounded-2xl border p-5">
-                    <span className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
-                      <ScrollText size={14} aria-hidden />
-                      Canale segnalazioni
+              {/* RIFERIMENTI OPERATIVI (Allegato B) */}
+              {riferimenti && (
+                <section
+                  id="riferimenti-operativi"
+                  className="border-light-border/40 scroll-mt-24 flex flex-col gap-8 border-t pt-12"
+                >
+                  <header className="flex flex-col gap-2">
+                    <span className="font-mono text-brand-gold text-xs font-bold tracking-[0.25em] uppercase">
+                      Allegato B
                     </span>
-                    <p className="text-ink-mid text-sm leading-relaxed">
-                      Per segnalare violazioni del Codice Etico usa il{" "}
+                    <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl">
+                      Riferimenti operativi
+                    </h2>
+                    <p className="text-light-ink-mid text-sm leading-relaxed">
+                      Dati istituzionali e ruoli operativi del club.
+                      Aggiornabili dallo Studio CMS senza nuova revisione del
+                      Codice (art. 12.8). Per i dettagli completi su
+                      rendicontazione 5×1000 e trasparenza, vedi{" "}
                       <Link
-                        href="/societa/segnalazioni"
-                        className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
+                        href="/societa/trasparenza"
+                        className="text-brand-gold hover:underline underline-offset-2"
                       >
-                        modulo dedicato
-                      </Link>{" "}
-                      oppure scrivi a{" "}
-                      <a
-                        href={`mailto:${riferimenti.emailSegnalazioni}`}
-                        className="text-brand-gold hover:text-brand-white"
-                      >
-                        {riferimenti.emailSegnalazioni}
-                      </a>
-                      . Riservatezza garantita (art. 11.6) e divieto di
-                      ritorsioni (art. 11.7).
+                        la pagina trasparenza
+                      </Link>
+                      .
                     </p>
-                  </div>
-                )}
+                  </header>
 
-                {riferimenti.codiceEticoArchivio &&
-                  riferimenti.codiceEticoArchivio.length > 0 && (
+                  {riferimenti.direttivo && riferimenti.direttivo.length > 0 && (
                     <div>
                       <h3 className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase">
-                        Versioni precedenti
+                        Direttivo
                       </h3>
-                      <ul className="border-border/40 mt-3 flex flex-col divide-y rounded-2xl border">
-                        {riferimenti.codiceEticoArchivio.map((v, i) => (
+                      <ul className="border-light-border/40 bg-light-bg-1 mt-3 flex flex-col divide-y divide-light-border/40 rounded-2xl border">
+                        {riferimenti.direttivo.map((m, i) => (
                           <li
-                            key={`${v.versione}-${i}`}
-                            className="flex flex-wrap items-center justify-between gap-3 p-4"
+                            key={`${m.ruolo}-${m.nome}-${i}`}
+                            className="flex flex-col gap-1 p-4"
                           >
-                            <div className="flex flex-col gap-0.5">
-                              <span className="font-display text-ink-hi text-sm font-bold tracking-[0.005em] uppercase">
-                                Versione {v.versione}
+                            <span className="font-mono text-light-ink-low text-[11px] tracking-[0.12em] uppercase">
+                              {m.ruolo ?? "—"}
+                            </span>
+                            <span className="font-display text-light-ink-hi text-base font-bold tracking-[0.005em] uppercase">
+                              {m.nome ?? "—"}
+                            </span>
+                            {m.delega && (
+                              <span className="text-light-ink-mid text-xs">
+                                {m.delega}
                               </span>
-                              {v.note && (
-                                <span className="text-ink-low text-xs">
-                                  {v.note}
-                                </span>
-                              )}
-                              {v.approvatoIl && (
-                                <span className="text-ink-mid font-mono text-[10px]">
-                                  {new Date(v.approvatoIl).toLocaleDateString("it-IT")}
-                                  {v.sostituitoIl &&
-                                    ` → ${new Date(v.sostituitoIl).toLocaleDateString("it-IT")}`}
-                                </span>
-                              )}
-                            </div>
-                            {/* Link "Scarica PDF" rimosso 2026-05-17
-                                su richiesta utente: niente esportazione
-                                PDF su pagina Codice Etico. Per riabilitare
-                                ripristina il blocco <a href={v.pdf}>. */}
+                            )}
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
-              </section>
-            )}
-          </main>
-        </div>
-      </Container>
+
+                  <div>
+                    <h3 className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
+                      <ShieldAlert size={14} aria-hidden />
+                      Responsabile Safeguarding
+                    </h3>
+                    {riferimenti.responsabileSafeguarding?.inCarica ? (
+                      <div className="border-light-border/40 bg-light-bg-1 mt-3 flex flex-col gap-1 rounded-2xl border p-4">
+                        <span className="font-display text-light-ink-hi text-base font-bold tracking-[0.005em] uppercase">
+                          {riferimenti.responsabileSafeguarding.nome ?? "—"}
+                        </span>
+                        {riferimenti.responsabileSafeguarding.email && (
+                          <a
+                            href={`mailto:${riferimenti.responsabileSafeguarding.email}`}
+                            className="text-brand-gold hover:underline inline-flex items-center gap-2 text-sm"
+                          >
+                            <Mail size={14} aria-hidden />
+                            {riferimenti.responsabileSafeguarding.email}
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-light-ink-mid mt-3 text-sm leading-relaxed">
+                        Posizione attualmente vacante. Le segnalazioni in
+                        materia di Safeguarding sono ricevute dal Direttivo
+                        all&apos;indirizzo{" "}
+                        {riferimenti.emailSegnalazioni ? (
+                          <a
+                            href={`mailto:${riferimenti.emailSegnalazioni}`}
+                            className="text-brand-gold hover:underline underline-offset-2"
+                          >
+                            {riferimenti.emailSegnalazioni}
+                          </a>
+                        ) : (
+                          "(da configurare)"
+                        )}{" "}
+                        (art. 3.7 del Codice Etico).
+                      </p>
+                    )}
+                  </div>
+
+                  {riferimenti.emailSegnalazioni && (
+                    <div className="border-brand-gold/50 bg-brand-gold/10 flex flex-col gap-2 rounded-2xl border p-5">
+                      <span className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
+                        <ScrollText size={14} aria-hidden />
+                        Canale segnalazioni
+                      </span>
+                      <p className="text-light-ink-mid text-sm leading-relaxed">
+                        Per segnalare violazioni del Codice Etico usa il{" "}
+                        <Link
+                          href="/societa/segnalazioni"
+                          className="text-brand-gold hover:underline underline-offset-2"
+                        >
+                          modulo dedicato
+                        </Link>{" "}
+                        oppure scrivi a{" "}
+                        <a
+                          href={`mailto:${riferimenti.emailSegnalazioni}`}
+                          className="text-brand-gold hover:underline"
+                        >
+                          {riferimenti.emailSegnalazioni}
+                        </a>
+                        . Riservatezza garantita (art. 11.6) e divieto di
+                        ritorsioni (art. 11.7).
+                      </p>
+                    </div>
+                  )}
+
+                  {riferimenti.codiceEticoArchivio &&
+                    riferimenti.codiceEticoArchivio.length > 0 && (
+                      <div>
+                        <h3 className="font-display text-brand-gold text-xs font-bold tracking-[0.2em] uppercase">
+                          Versioni precedenti
+                        </h3>
+                        <ul className="border-light-border/40 bg-light-bg-1 mt-3 flex flex-col divide-y divide-light-border/40 rounded-2xl border">
+                          {riferimenti.codiceEticoArchivio.map((v, i) => (
+                            <li
+                              key={`${v.versione}-${i}`}
+                              className="flex flex-wrap items-center justify-between gap-3 p-4"
+                            >
+                              <div className="flex flex-col gap-0.5">
+                                <span className="font-display text-light-ink-hi text-sm font-bold tracking-[0.005em] uppercase">
+                                  Versione {v.versione}
+                                </span>
+                                {v.note && (
+                                  <span className="text-light-ink-low text-xs">
+                                    {v.note}
+                                  </span>
+                                )}
+                                {v.approvatoIl && (
+                                  <span className="text-light-ink-mid font-mono text-[10px]">
+                                    {new Date(v.approvatoIl).toLocaleDateString("it-IT")}
+                                    {v.sostituitoIl &&
+                                      ` → ${new Date(v.sostituitoIl).toLocaleDateString("it-IT")}`}
+                                  </span>
+                                )}
+                              </div>
+                              {/* Link "Scarica PDF" rimosso 2026-05-17
+                                  su richiesta utente: niente esportazione
+                                  PDF su pagina Codice Etico. Per riabilitare
+                                  ripristina il blocco <a href={v.pdf}>. */}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                </section>
+              )}
+            </main>
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

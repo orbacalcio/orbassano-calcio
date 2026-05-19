@@ -14,11 +14,11 @@ export function Premessa() {
         <span className="font-mono text-brand-gold text-xs font-bold tracking-[0.25em] uppercase">
           A.S.D. Orbassano Calcio · 1930
         </span>
-        <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl">
+        <h2 className="font-display text-light-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-4xl lg:text-5xl">
           Premessa
         </h2>
       </header>
-      <div className="text-ink-mid hyphens-auto flex flex-col gap-4 text-justify text-[0.95rem] leading-relaxed [&_strong]:text-ink-hi [&_strong]:font-semibold">
+      <div className="text-light-ink-mid hyphens-auto flex flex-col gap-4 text-justify text-[0.95rem] leading-relaxed [&_strong]:text-light-ink-hi [&_strong]:font-semibold">
         <p>
           L&apos;A.S.D. Orbassano Calcio &egrave; una societ&agrave; sportiva
           dilettantistica fondata nel 1930. In oltre 95 anni di storia ha

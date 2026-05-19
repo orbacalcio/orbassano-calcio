@@ -440,7 +440,7 @@ export async function YouthMatchStrip() {
                 Squadra per coerenza visiva tra i due box navy della home. */}
             <header>
               <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
-                Il vivaio rossoblù
+                I risultati del vivaio rossoblù
               </span>
             </header>
             <StripBlock
