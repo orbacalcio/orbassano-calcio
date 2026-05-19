@@ -165,13 +165,13 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
             name={homeLogo.logoName}
             src={homeLogo.logoSrc}
             primaryColor={homeLogo.color}
-            size={48}
+            size={40}
             interactive={false}
           />
           <div className="flex shrink-0 flex-col items-center gap-1">
             <span
               className={cn(
-                "font-display text-3xl font-extrabold tracking-[0.005em] md:text-4xl",
+                "font-display text-2xl font-extrabold tracking-[0.005em] md:text-3xl",
                 hasScore ? "text-brand-red" : "text-ink-hi",
               )}
             >
@@ -194,7 +194,7 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
             name={awayLogo.logoName}
             src={awayLogo.logoSrc}
             primaryColor={awayLogo.color}
-            size={48}
+            size={40}
             interactive={false}
           />
           {tag && (
@@ -235,17 +235,17 @@ function FutureMatchCell({ match }: { match: YouthNextMatch | null }) {
             name={homeLogo.logoName}
             src={homeLogo.logoSrc}
             primaryColor={homeLogo.color}
-            size={48}
+            size={40}
             interactive={false}
           />
-          <span className="font-display text-ink-mid shrink-0 text-base font-bold tracking-[0.1em] uppercase md:text-lg">
+          <span className="font-display text-ink-mid shrink-0 text-sm font-bold tracking-[0.1em] uppercase md:text-base">
             vs
           </span>
           <TeamLogo
             name={awayLogo.logoName}
             src={awayLogo.logoSrc}
             primaryColor={awayLogo.color}
-            size={48}
+            size={40}
             interactive={false}
           />
         </div>
@@ -290,8 +290,8 @@ function StripBlock({
 
   return (
     <section aria-label={ariaLabel}>
-      <header className="mb-5">
-        <h3 className="font-display text-ink-hi border-brand-red border-l-[6px] pl-4 text-3xl leading-none font-extrabold tracking-[0.04em] uppercase md:pl-5 md:text-4xl lg:text-5xl">
+      <header className="mb-4">
+        <h3 className="font-display text-ink-hi border-brand-red border-l-[5px] pl-3.5 text-2xl leading-none font-extrabold tracking-[0.04em] uppercase md:pl-4 md:text-3xl lg:text-4xl">
           {title}
         </h3>
       </header>
@@ -306,7 +306,7 @@ function StripBlock({
               label di Prima Squadra (font-mono text-[14px] font-semibold
               tracking-[0.12em]). 6 colonne: squadra · past · future ·
               classifica · statistiche · chevron. */}
-          <div className="text-ink-mid border-border/40 mb-2 hidden grid-cols-[8rem_1fr_1fr_8rem_8rem_2.5rem] items-center gap-x-4 gap-y-3 border-b pb-3 font-mono text-[14px] font-semibold tracking-[0.12em] uppercase md:grid">
+          <div className="text-ink-mid border-border/40 mb-1.5 hidden grid-cols-[7rem_1fr_1fr_7rem_7rem_2.25rem] items-center gap-x-4 gap-y-2 border-b pb-2 font-mono text-[12px] font-semibold tracking-[0.12em] uppercase md:grid">
             <span>Squadra</span>
             <span className="text-center">Ultimi risultati</span>
             <span className="text-center">Prossime partite</span>
@@ -336,14 +336,14 @@ function StripBlock({
               return (
                 <li
                   key={slug}
-                  className="grid grid-cols-[8rem_1fr] items-center gap-3 py-4 md:grid-cols-[8rem_1fr_1fr_8rem_8rem_2.5rem] md:gap-x-4 md:gap-y-3 md:py-6"
+                  className="grid grid-cols-[7rem_1fr] items-center gap-3 py-3 md:grid-cols-[7rem_1fr_1fr_7rem_7rem_2.25rem] md:gap-x-4 md:gap-y-2 md:py-4"
                 >
-                  {/* Mini-label squadra: testo only, narrow (~8rem). */}
+                  {/* Mini-label squadra: testo only, narrow (~7rem). */}
                   <Link
                     href={`/squadre/${slug}/calendario`}
                     className="group flex min-w-0 items-center transition-colors"
                   >
-                    <span className="font-display text-ink-hi group-hover:text-brand-gold truncate text-lg font-extrabold tracking-[0.04em] uppercase transition-colors md:text-xl">
+                    <span className="font-display text-ink-hi group-hover:text-brand-gold truncate text-base font-extrabold tracking-[0.04em] uppercase transition-colors md:text-lg">
                       {label}
                     </span>
                   </Link>
@@ -430,16 +430,16 @@ export async function YouthMatchStrip() {
   return (
     <section
       aria-label="Risultati Juniores e Settore Giovanile"
-      className="bg-light-bg-0 py-10 lg:py-14"
+      className="bg-light-bg-0 py-6 lg:py-9"
     >
       <div className="border-border bg-surface-1 relative overflow-hidden border-y">
         <Container className="relative" size="wide">
-          <div className="flex flex-col gap-10 py-8 md:gap-12 md:py-11">
+          <div className="flex flex-col gap-7 py-5 md:gap-8 md:py-7">
             {/* Eyebrow sezione: firma tipografica identica agli eyebrow
                 "Ultimo risultato" / "Prossima partita" del box Prima
                 Squadra per coerenza visiva tra i due box navy della home. */}
             <header>
-              <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
+              <span className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase">
                 Il vivaio rossoblù
               </span>
             </header>
