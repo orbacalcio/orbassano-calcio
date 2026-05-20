@@ -59,7 +59,7 @@ export default function ContattiPage() {
               Contatti
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-              Parlare con l&apos;Orba
+              Parlare con la Società
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
               Per iscrizioni al Settore Giovanile, richieste di gruppi al

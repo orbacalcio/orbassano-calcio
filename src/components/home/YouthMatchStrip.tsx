@@ -90,7 +90,10 @@ const RESULT_TAG_CLASS: Record<ResultTag, string> = {
   P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
 };
 
-const SCORE_SEPARATOR = "  -  ";
+// Separatore score: solo spaziatura, niente trattino (richiesta utente
+// 2026-05-20). Due en-space (U+2002) NON collassano in HTML come gli
+// spazi normali → "3 1" con gap leggibile invece di "3-1".
+const SCORE_SEPARATOR = "  ";
 
 /**
  * Calcola HOME e AWAY logos per una partita. Solo loghi (no nomi

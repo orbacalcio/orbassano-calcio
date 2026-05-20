@@ -360,15 +360,14 @@ function MatchRow({ match }: { match: MatchAggregated }) {
           <span className="truncate">{awayName}</span>
         </span>
       </div>
-      <span className="text-right font-mono text-base font-semibold tabular-nums sm:text-lg">
+      <span className="font-mono text-base font-semibold tabular-nums sm:text-lg">
         {showScore ? (
-          <>
+          <span className="inline-flex items-center justify-end gap-2">
             <span className={homeTextClass}>{match.scoreHome}</span>
-            <span className="text-ink-low">-</span>
             <span className={awayTextClass}>{match.scoreAway}</span>
-          </>
+          </span>
         ) : (
-          <span className="text-ink-low">—</span>
+          <span className="text-ink-low block text-right">—</span>
         )}
       </span>
     </li>
