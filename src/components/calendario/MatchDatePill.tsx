@@ -85,7 +85,7 @@ export function MatchDatePill({
   const isMd = size === "md";
   const box = cn(
     "border-brand-gold bg-brand-blue flex shrink-0 flex-col items-center justify-center self-stretch border-l-2",
-    isMd ? "w-20 gap-1 py-3" : "w-12 gap-0.5 py-3",
+    isMd ? "w-16 gap-1 py-3" : "w-12 gap-0.5 py-3",
     className,
   );
   const dayClass = isMd
