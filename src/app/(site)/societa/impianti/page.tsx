@@ -8,6 +8,7 @@ import { buildSportsActivityLocationLd } from "@/lib/json-ld";
 import { fetchFacilities } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/impianti" },
   title: "Impianti sportivi",
   description:
     "Gli impianti sportivi di ASD Orbassano Calcio: dove si allenano e giocano la Prima Squadra e il Settore Giovanile.",

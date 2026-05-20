@@ -13,6 +13,7 @@ import {
 import { WhistleblowingForm } from "./components/WhistleblowingForm";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/segnalazioni" },
   title: "Segnalazioni",
   description:
     "Canale ufficiale per segnalare violazioni del Codice Etico di A.S.D. Orbassano Calcio. Riservatezza garantita, nessuna ritorsione.",

@@ -6,6 +6,7 @@ import {
 } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/legal/termini" },
   title: "Termini e condizioni",
   description:
     "Termini di utilizzo del sito orbassanocalcio.com: contenuti, proprietà intellettuale, limitazione di responsabilità, foro competente.",

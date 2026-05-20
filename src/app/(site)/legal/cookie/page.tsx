@@ -4,6 +4,7 @@ import { Ban, Eye, Shield } from "lucide-react";
 import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/legal/cookie" },
   title: "Cookie policy",
   description:
     "Cookie utilizzati da orbassanocalcio.com: tecnici sempre attivi, analytics e widget esterni solo con consenso. Conforme GDPR + Garante 10 giugno 2021.",

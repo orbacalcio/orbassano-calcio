@@ -34,7 +34,7 @@ export async function generateMetadata({
 }: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { playerSlug } = await params;
+  const { slug, playerSlug } = await params;
   const player = await fetchPlayerBySlug(playerSlug);
   if (!player) return { title: "Giocatore non trovato" };
   const fullName = `${player.firstName} ${player.lastName}`;
@@ -46,6 +46,7 @@ export async function generateMetadata({
   return {
     title: fullName,
     description: `${fullName}${role} — ${teamName}.`,
+    alternates: { canonical: `/squadre/${slug}/${playerSlug}` },
     openGraph: ogImage
       ? { images: [{ url: ogImage, alt: fullName }] }
       : undefined,

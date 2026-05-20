@@ -7,6 +7,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchTimelineEvents } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/storia" },
   title: "Storia",
   description:
     "Dal 1930 ad oggi: la storia di ASD Orbassano Calcio tra fondazione, promozioni, semifinali playoff Serie D, fusioni e rinascite.",

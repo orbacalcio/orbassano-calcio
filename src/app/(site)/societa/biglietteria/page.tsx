@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/biglietteria" },
   title: "Biglietteria",
   description:
     "Tariffe biglietti, biglietteria fisica, agevolazioni disabilità e accrediti stampa per le partite casalinghe di ASD Orbassano Calcio al Centro Sportivo Aldo Porta.",

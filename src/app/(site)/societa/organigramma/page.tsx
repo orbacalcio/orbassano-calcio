@@ -60,6 +60,7 @@ function groupOfficials(
 }
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/organigramma" },
   title: "Organigramma",
   description:
     "Le persone che guidano oggi ASD Orbassano Calcio: presidente, vice, direttore generale, tesoriere, consigliere e responsabile safeguarding.",

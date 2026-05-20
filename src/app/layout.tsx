@@ -56,7 +56,11 @@ export const metadata: Metadata = {
     "Settore Giovanile Orbassano",
     "Centro Sportivo Aldo Porta",
   ],
-  alternates: { canonical: "/" },
+  // NB: niente `alternates.canonical` qui. Un canonical "/" nel root
+  // layout verrebbe EREDITATO da tutte le pagine figlie che non lo
+  // sovrascrivono → ogni pagina dichiarerebbe canonical = homepage
+  // (duplicate content per Google). Ogni page.tsx setta il proprio
+  // canonical esplicito (relativo, risolto via metadataBase).
   openGraph: {
     type: "website",
     locale: "it_IT",

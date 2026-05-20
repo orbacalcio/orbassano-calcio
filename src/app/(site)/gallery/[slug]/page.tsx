@@ -50,6 +50,7 @@ export async function generateMetadata({
     description:
       gallery.coverAlt ??
       `Galleria fotografica dell'A.S.D. Orbassano Calcio: ${gallery.title}.`,
+    alternates: { canonical: `/gallery/${slug}` },
     openGraph: gallery.coverImage
       ? {
           images: [

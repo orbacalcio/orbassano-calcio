@@ -6,6 +6,7 @@ import {
 } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/legal/privacy" },
   title: "Informativa privacy",
   description:
     "Informativa sul trattamento dei dati personali ai sensi del GDPR (Regolamento UE 2016/679) e del D.lgs. 196/2003 — ASD Orbassano Calcio.",

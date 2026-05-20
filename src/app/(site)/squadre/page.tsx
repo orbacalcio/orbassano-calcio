@@ -12,6 +12,7 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/squadre" },
   title: "Squadre",
   description:
     "Le squadre di ASD Orbassano Calcio: Prima Squadra (Prima Categoria), Juniores Under 19 e Settore Giovanile (U17, U16, U15, U14).",

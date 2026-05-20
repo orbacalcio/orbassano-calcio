@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { fetchTournaments } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/tornei" },
   title: "Tornei",
   description:
     "Calendario dei Tornei di ASD Orbassano Calcio per ogni categoria: dalla Prima Squadra al Settore Giovanile. Manifestazioni organizzate o ospitate dal club al Centro Sportivo Aldo Porta.",

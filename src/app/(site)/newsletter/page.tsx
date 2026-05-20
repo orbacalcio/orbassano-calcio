@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/newsletter" },
   title: "Newsletter",
   description:
     "Iscriviti alla newsletter ufficiale di ASD Orbassano Calcio: risultati, prossime partite e dietro le quinte direttamente nella tua casella, una volta a settimana.",

@@ -12,6 +12,7 @@ import { fetchOpenDays } from "@/sanity/fetchers";
 import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/settore-giovanile/open-days" },
   title: "Open Days Settore Giovanile",
   description:
     "Calendario degli Open Days del Settore Giovanile ASD Orbassano Calcio per ogni categoria: Juniores Under 19, Allievi Under 17 e 16, Giovanissimi Under 15 e 14.",

@@ -12,6 +12,7 @@ import { SearchPageClient } from "./SearchPageClient";
  * Suspense boundary obbligato per useSearchParams() in Next 16.
  */
 export const metadata: Metadata = {
+  alternates: { canonical: "/ricerca" },
   title: "Ricerca · ASD Orbassano Calcio",
   description:
     "Cerca tra news, squadre, giocatori, sponsor e tutte le pagine del sito ufficiale dell'ASD Orbassano Calcio.",

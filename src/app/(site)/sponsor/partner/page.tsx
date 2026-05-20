@@ -8,6 +8,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchActiveSponsors, type PartnerSummary } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/sponsor/partner" },
   title: "Corporate Partner",
   description:
     "I Corporate Partner di ASD Orbassano Calcio: convenzioni e benefit dedicati ai tesserati e alle famiglie del club.",

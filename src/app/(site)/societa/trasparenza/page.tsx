@@ -13,6 +13,7 @@ import {
 import { Year5x1000Card } from "./components/Year5x1000Card";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/trasparenza" },
   title: "Trasparenza",
   description:
     "Rendicontazione 5×1000 e dati di governance di A.S.D. Orbassano Calcio: importi ricevuti, destinazioni delle somme, organi sociali.",

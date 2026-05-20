@@ -32,6 +32,7 @@ const CATEGORY_ORDER = [
 type CategoryName = (typeof CATEGORY_ORDER)[number] | "Altro";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/archivio" },
   title: "Archivio stagioni",
   description:
     "Archivio storico delle stagioni passate di ASD Orbassano Calcio: tutte le partite di Prima Squadra, Juniores, Settore Giovanile e Scuola Calcio raccolte per stagione.",

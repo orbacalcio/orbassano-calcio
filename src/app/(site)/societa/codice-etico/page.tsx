@@ -50,6 +50,7 @@ const PAGE_DESCRIPTION =
   "Il Codice Etico dell'A.S.D. Orbassano Calcio: principi, valori, regole di condotta per dirigenti, tecnici, atleti, sponsor e fornitori.";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa/codice-etico" },
   title: "Codice Etico",
   description: PAGE_DESCRIPTION,
   robots: FEATURES.governanceSection

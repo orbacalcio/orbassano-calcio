@@ -13,6 +13,7 @@ import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/5x1000" },
   title: "5×1000",
   description:
     "Sostieni ASD Orbassano Calcio col 5×1000: una firma nella dichiarazione dei redditi che diventa nuovi materiali per il settore giovanile, manutenzione dei campi, trasferte. Codice fiscale 95634370019.",

@@ -7,6 +7,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchActiveSponsors } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/sponsor" },
   title: "Sponsor",
   description:
     "I Main Sponsor, gli Official Sponsor e i Corporate Partner di ASD Orbassano Calcio. Scopri come diventare parte della famiglia rossoblù.",

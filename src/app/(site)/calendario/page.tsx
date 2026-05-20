@@ -6,6 +6,7 @@ import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/calendario" },
   title: "Calendari",
   description:
     "Tutti i calendari di ASD Orbassano Calcio: Prima Squadra, Juniores e Settore Giovanile (U14-U17). Scegli la squadra e accedi al calendario completo con tutte le partite di campionato e amichevoli.",

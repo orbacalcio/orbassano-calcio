@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contatti" },
   title: "Contatti",
   description:
     "Contatti di ASD Orbassano Calcio: email, PEC, telefono, sede operativa, orari di segreteria. Form per richieste generiche.",

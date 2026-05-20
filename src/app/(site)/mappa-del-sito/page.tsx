@@ -11,6 +11,7 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/mappa-del-sito" },
   title: "Mappa del sito",
   description:
     "Tutte le sezioni del sito ASD Orbassano Calcio: news, squadre, società, sponsor, contatti, legali. Indice navigabile completo.",

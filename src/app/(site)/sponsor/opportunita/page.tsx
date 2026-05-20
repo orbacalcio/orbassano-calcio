@@ -12,6 +12,7 @@ import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/sponsor/opportunita" },
   title: "Diventa sponsor",
   description:
     "Pacchetti sponsorizzazione ASD Orbassano Calcio: Main Sponsor, Official Sponsor, Corporate Partner. Richiedi una proposta su misura per la tua azienda.",

@@ -6,6 +6,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { FEATURES } from "@/lib/features";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/societa" },
   title: "Società",
   description:
     "ASD Orbassano Calcio dal 1930: storia, organigramma, impianti sportivi e informazioni di biglietteria.",

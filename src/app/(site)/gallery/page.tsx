@@ -23,6 +23,7 @@ import { GALLERY_PAGE_SIZE } from "./config";
  * eventuali bookmark / link esterni.
  */
 export const metadata: Metadata = {
+  alternates: { canonical: "/gallery" },
   title: "Gallery",
   description:
     "Foto e video dell'A.S.D. Orbassano Calcio: gallerie fotografiche delle partite, degli allenamenti e degli eventi sociali del club rossoblù.",

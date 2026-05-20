@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Banner5x1000 } from "@/components/home/Banner5x1000";
 import { Hero } from "@/components/home/Hero";
 import { Manifesto } from "@/components/home/Manifesto";
@@ -35,6 +36,14 @@ import { buildSportsTeamLd } from "@/lib/json-ld";
  * l'alto" fastidioso al primo scroll-down. Le sezioni si presentano
  * statiche; i wrapper restano per backward compat / futura riattivazione.
  */
+// Title + description ereditati dal root layout (default homepage).
+// Qui serve SOLO il canonical "/" esplicito, perche' il root layout
+// non setta piu' alternates.canonical (vedi src/app/layout.tsx) per
+// evitare che il default si propaghi a tutte le pagine figlie.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>

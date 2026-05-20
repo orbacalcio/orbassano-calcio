@@ -159,6 +159,7 @@ export async function generateMetadata({
     return {
       title: categoryName,
       description: `Tutte le squadre del ${categoryName.toLowerCase()} di ASD Orbassano Calcio.`,
+      alternates: { canonical: `/squadre/${slug}` },
     };
   }
   const team = await fetchTeamBySlug(slug);
@@ -167,6 +168,7 @@ export async function generateMetadata({
   return {
     title: team.name,
     description: `Rosa, staff e info ${team.name} ASD Orbassano Calcio${seasonSuffix}.`,
+    alternates: { canonical: `/squadre/${slug}` },
     openGraph: team.heroImage
       ? { images: [{ url: team.heroImage, alt: team.name }] }
       : undefined,

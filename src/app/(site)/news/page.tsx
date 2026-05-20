@@ -5,6 +5,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchAllNews } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/news" },
   title: "News",
   description:
     "Risultati, dietro le quinte e comunicati ufficiali di ASD Orbassano Calcio. Filtra l'archivio per categoria: Prima Squadra, Settore Giovanile, Società, Sponsor.",
