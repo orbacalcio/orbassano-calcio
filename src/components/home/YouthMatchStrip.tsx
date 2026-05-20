@@ -90,10 +90,6 @@ const RESULT_TAG_CLASS: Record<ResultTag, string> = {
   P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
 };
 
-// Separatore score: solo spaziatura, niente trattino (richiesta utente
-// 2026-05-20). Due en-space (U+2002) NON collassano in HTML come gli
-// spazi normali → "3 1" con gap leggibile invece di "3-1".
-const SCORE_SEPARATOR = "  ";
 
 /**
  * Calcola HOME e AWAY logos per una partita. Solo loghi (no nomi
@@ -151,9 +147,6 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
   const hasScore =
     typeof match.scoreHome === "number" &&
     typeof match.scoreAway === "number";
-  const scoreText = hasScore
-    ? `${match.scoreHome}${SCORE_SEPARATOR}${match.scoreAway}`
-    : "—";
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
       <MatchDatePill iso={match.date} size="md" />
@@ -178,7 +171,14 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
                 hasScore ? "text-brand-red" : "text-ink-hi",
               )}
             >
-              {scoreText}
+              {hasScore ? (
+                <span className="inline-flex items-center gap-3">
+                  <span>{match.scoreHome}</span>
+                  <span>{match.scoreAway}</span>
+                </span>
+              ) : (
+                "—"
+              )}
             </span>
             {tabellinoHref && (
               <a
