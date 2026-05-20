@@ -31,6 +31,7 @@ export default function AccessibilitaPage() {
       title="Accessibilità del sito"
       intro="Vogliamo che orbassanocalcio.com sia usabile da tutte le persone, comprese quelle che navigano con tastiera, screen reader o impostazioni di accessibilità del browser. Qui spieghiamo a che punto siamo e come segnalarci un problema."
       lastUpdate={LAST_UPDATE}
+      theme="light"
     >
       <LegalSection title="Stato di conformità">
         <p>

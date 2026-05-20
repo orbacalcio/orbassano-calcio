@@ -1,13 +1,23 @@
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/cn";
 
 /**
- * Layout condiviso delle pagine legal (privacy, cookie, termini).
- * Header con eyebrow + title + ultima modifica, body con prose
- * editoriale gold-accent. I children sono scritti come array di
- * sezioni h2 + paragrafi, niente PortableText (questi testi cambiano
+ * Layout condiviso delle pagine legal (privacy, cookie, termini,
+ * accessibilità). Header con eyebrow + title + ultima modifica, body
+ * con prose editoriale gold-accent. I children sono scritti come array
+ * di sezioni h2 + paragrafi, niente PortableText (questi testi cambiano
  * raramente e non vivono in CMS).
+ *
+ * `theme`:
+ *   - "dark" (default): body navy come il resto del sito. Adatto a
+ *     pagine card-based (es. Cookie con le 3 card colorate).
+ *   - "light": body cream (bg-light-bg-0) per pagine text-heavy
+ *     (privacy, termini, accessibilità) — lettura lunga più riposante,
+ *     come una stampa. L'hero resta dark in entrambi i casi.
+ *     I titoli h2 (LegalSection) + <strong> ereditano i token light
+ *     via la classe scope `.legal-light` (vedi globals.css).
  */
 type Props = {
   eyebrow: string;
@@ -15,6 +25,7 @@ type Props = {
   intro: string;
   lastUpdate: string;
   children: React.ReactNode;
+  theme?: "dark" | "light";
 };
 
 export function LegalLayout({
@@ -23,7 +34,9 @@ export function LegalLayout({
   intro,
   lastUpdate,
   children,
+  theme = "dark",
 }: Props) {
+  const isLight = theme === "light";
   return (
     <>
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -57,11 +70,18 @@ export function LegalLayout({
         </Container>
       </header>
 
-      <Container className="py-16 lg:py-20" size="narrow">
-        <div className="text-ink-mid prose-legal flex flex-col gap-10 text-base leading-relaxed">
-          {children}
-        </div>
-      </Container>
+      <section className={isLight ? "bg-light-bg-0" : ""}>
+        <Container className="py-16 lg:py-20" size="narrow">
+          <div
+            className={cn(
+              "flex flex-col gap-10 text-base leading-relaxed",
+              isLight ? "legal-light text-light-ink-mid" : "text-ink-mid",
+            )}
+          >
+            {children}
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

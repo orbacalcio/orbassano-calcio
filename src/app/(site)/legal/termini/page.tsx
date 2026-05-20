@@ -21,6 +21,7 @@ export default function TerminiPage() {
       title="Termini di utilizzo del sito"
       intro="L'utilizzo di orbassanocalcio.com implica l'accettazione integrale di questi termini. Se non sei d'accordo, ti chiediamo di non utilizzare il sito."
       lastUpdate={LAST_UPDATE}
+      theme="light"
     >
       <LegalSection title="1. Identificazione del gestore">
         <p>

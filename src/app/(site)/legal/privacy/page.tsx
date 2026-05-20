@@ -21,6 +21,7 @@ export default function PrivacyPage() {
       title="Informativa sul trattamento dei dati personali"
       intro="ASD Orbassano Calcio (Titolare del trattamento) tutela la tua privacy ai sensi del Regolamento UE 2016/679 (GDPR) e del D.lgs. 196/2003 e ss.mm.ii. Questa informativa spiega quali dati raccogliamo, perché, per quanto tempo li conserviamo e quali sono i tuoi diritti."
       lastUpdate={LAST_UPDATE}
+      theme="light"
     >
       <LegalSection title="1. Titolare del trattamento">
         <p>

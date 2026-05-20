@@ -208,6 +208,25 @@ html.past-hero #main-content + div {
 }
 
 /**
+ * Legal pages in light theme (LegalLayout theme="light"): titoli h2,
+ * <strong> e gli <span class="text-ink-hi"> (es. CF/P.IVA/PEC in mono)
+ * usano la classe Tailwind `text-ink-hi` tarata per il navy. Sullo
+ * sfondo cream vanno scuriti.
+ *  - `.legal-light .text-ink-hi` (specificita' 0,2,0) batte la utility
+ *     `.text-ink-hi` (0,1,0) → copre span e strong con classe esplicita.
+ *  - `.legal-light h2` / `.legal-light strong` coprono gli elementi
+ *     SENZA classe esplicita (LegalSection h2 ce l'ha; gli <strong>
+ *     della pagina accessibilità no).
+ * Scope: solo dentro `.legal-light`, quindi le pagine legali che
+ * restano dark (Cookie) non sono toccate.
+ */
+.legal-light .text-ink-hi,
+.legal-light h2,
+.legal-light strong {
+  color: var(--color-light-ink-hi);
+}
+
+/**
  * Manifesto "NEVER GIVE UP SINCE 1930": loop hover delle strisce
  * rossoblu' che scorrono dentro le glifi. 44px = un ciclo completo
  * del repeating-linear-gradient (22px rosso + 22px blu). 0.6s linear
