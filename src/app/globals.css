@@ -22,10 +22,13 @@
   --color-surface-3: #1f3460;
   --color-border: #1f2f4d;
 
-  /* Inchiostro — testo virato leggermente blu */
+  /* Inchiostro — testo virato leggermente blu.
+     ink-low schiarito da #6b7a99 (4.26:1) a #7280a0 (4.64:1) per
+     superare la soglia WCAG AA 4.5:1 su surface-0 anche per testo
+     piccolo (label/date mono 11px). Vedi audit accessibilità 2026-05-20. */
   --color-ink-hi: #f5f7fa;
   --color-ink-mid: #a8b5cc;
-  --color-ink-low: #6b7a99;
+  --color-ink-low: #7280a0;
 
   /* Isole chiare invarianti — pattern juventus.com a bande:
      alcune sezioni della home (NewsGrid, StoryNumbersGrid, sponsor)
@@ -37,7 +40,10 @@
   --color-light-border: #c9d2e0;
   --color-light-ink-hi: #0a1428;
   --color-light-ink-mid: #3d4f73;
-  --color-light-ink-low: #7a8aa8;
+  /* light-ink-low scurito da #7a8aa8 (3.16:1) a #626f8d per superare
+     WCAG AA 4.5:1 su light-bg-0 (4.56:1) e light-bg-1 (4.94:1). Vedi
+     audit accessibilità 2026-05-20. */
+  --color-light-ink-low: #626f8d;
 
   /* Famiglie tipografiche (vedi docs/TYPOGRAPHY.md).
      I CSS custom property con il vero font sono iniettati da next/font

@@ -74,6 +74,7 @@ const STATIC_ROUTES: Array<{
   { path: "/legal/privacy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/cookie", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/termini", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/legal/accessibilita", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

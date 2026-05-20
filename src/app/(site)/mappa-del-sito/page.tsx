@@ -126,6 +126,7 @@ export default async function MappaDelSitoPage() {
         { href: "/legal/privacy", label: "Informativa privacy" },
         { href: "/legal/cookie", label: "Informativa cookie" },
         { href: "/legal/termini", label: "Termini e condizioni" },
+        { href: "/legal/accessibilita", label: "Dichiarazione di accessibilità" },
       ],
     },
   ];

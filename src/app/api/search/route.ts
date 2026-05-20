@@ -256,6 +256,14 @@ const STATIC_PAGES: StaticPage[] = [
     section: "Legale",
   },
   {
+    id: "accessibilita",
+    title: "Accessibilità",
+    path: "/legal/accessibilita",
+    keywords:
+      "accessibilita accessibilità dichiarazione wcag screen reader tastiera contrasto disabilita ipovedenti barriere",
+    section: "Legale",
+  },
+  {
     id: "termini",
     title: "Termini",
     path: "/legal/termini",

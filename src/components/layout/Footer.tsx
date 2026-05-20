@@ -152,6 +152,7 @@ function buildSections(opts: {
         { href: "/legal/privacy", label: "Privacy Policy" },
         { href: "/legal/cookie", label: "Cookie Policy" },
         { href: "/legal/termini", label: "Termini" },
+        { href: "/legal/accessibilita", label: "Accessibilità" },
         { href: "/mappa-del-sito", label: "Mappa del sito" },
         { href: "/contatti", label: "Contatti" },
       ],
