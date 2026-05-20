@@ -9,6 +9,7 @@ import {
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { buildCloudinaryUrl } from "@/lib/cloudinary";
+import { APP_TIME_ZONE } from "@/lib/date";
 import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchAllGallerySlugs,
@@ -71,6 +72,7 @@ function formatUploadedAt(iso: string): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: APP_TIME_ZONE,
   });
 }
 

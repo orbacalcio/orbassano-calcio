@@ -7,6 +7,7 @@ import {
   Play,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { APP_TIME_ZONE, getRomeDateParts } from "@/lib/date";
 import type { MatchSummary } from "@/sanity/fetchers";
 import { MatchDatePill } from "./MatchDatePill";
 import { TeamLogo } from "./TeamLogo";
@@ -61,21 +62,22 @@ const ITALIAN_DAYS_SHORT = [
 ];
 
 function formatDay(iso: string): string {
-  return String(new Date(iso).getDate()).padStart(2, "0");
+  return String(getRomeDateParts(iso).day).padStart(2, "0");
 }
 
 function formatMonthShort(iso: string): string {
-  return ITALIAN_MONTHS_SHORT[new Date(iso).getMonth()] ?? "—";
+  return ITALIAN_MONTHS_SHORT[getRomeDateParts(iso).month] ?? "—";
 }
 
 function formatDayOfWeek(iso: string): string {
-  return ITALIAN_DAYS_SHORT[new Date(iso).getDay()] ?? "—";
+  return ITALIAN_DAYS_SHORT[getRomeDateParts(iso).weekday] ?? "—";
 }
 
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString("it-IT", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: APP_TIME_ZONE,
   });
 }
 

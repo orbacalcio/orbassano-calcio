@@ -9,6 +9,7 @@ import { MatchDatePill } from "@/components/calendario/MatchDatePill";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
+import { APP_TIME_ZONE } from "@/lib/date";
 import {
   fetchLastMatchesByTeamSlugs,
   fetchNextMatchesByTeamSlugs,
@@ -65,6 +66,7 @@ function formatTimeOnly(iso: string): string {
   return new Date(iso).toLocaleTimeString("it-IT", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: APP_TIME_ZONE,
   });
 }
 

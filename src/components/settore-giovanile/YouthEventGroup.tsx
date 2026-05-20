@@ -1,5 +1,6 @@
 import { CalendarDays, Download, ExternalLink, MapPin } from "lucide-react";
 import { isSafeUrl } from "@/lib/validation";
+import { APP_TIME_ZONE, getRomeDateParts } from "@/lib/date";
 
 /**
  * Gruppo eventi (Open Days o Tornei) di UNA categoria. La pagina
@@ -81,22 +82,23 @@ export function YouthEventGroup({
 }
 
 function EventRowItem({ row }: { row: EventRow }) {
-  const d = new Date(row.date);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  const weekday = ITALIAN_DAYS[d.getDay()] ?? "—";
-  const startTime = d.toLocaleTimeString("it-IT", {
+  const d = getRomeDateParts(row.date);
+  const day = String(d.day).padStart(2, "0");
+  const month = String(d.month + 1).padStart(2, "0");
+  const year = d.year;
+  const weekday = ITALIAN_DAYS[d.weekday] ?? "—";
+  const startTime = new Date(row.date).toLocaleTimeString("it-IT", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: APP_TIME_ZONE,
   });
   // Fine: priorita' a endDate (multi-day torneo), poi endTime (Open Day),
   // poi niente.
   let timeRange = startTime;
   if (row.endDate) {
-    const e = new Date(row.endDate);
-    const ed = String(e.getDate()).padStart(2, "0");
-    const em = String(e.getMonth() + 1).padStart(2, "0");
+    const e = getRomeDateParts(row.endDate);
+    const ed = String(e.day).padStart(2, "0");
+    const em = String(e.month + 1).padStart(2, "0");
     timeRange = `${startTime} → ${ed}/${em}`;
   } else if (row.endTime) {
     timeRange = `${startTime} - ${row.endTime}`;

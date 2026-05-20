@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
 import { cn } from "@/lib/cn";
+import { getRomeDateParts } from "@/lib/date";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
@@ -80,23 +81,23 @@ async function fetchCurrentSeason(): Promise<string> {
 }
 
 function formatItalianDateTime(iso: string): string {
-  const d = new Date(iso);
-  const day = ITALIAN_DAYS_SHORT[d.getDay()] ?? "";
-  const dd = String(d.getDate()).padStart(2, "0");
-  const month = ITALIAN_MONTHS[d.getMonth()] ?? "";
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mm = String(d.getMinutes()).padStart(2, "0");
+  const d = getRomeDateParts(iso);
+  const day = ITALIAN_DAYS_SHORT[d.weekday] ?? "";
+  const dd = String(d.day).padStart(2, "0");
+  const month = ITALIAN_MONTHS[d.month] ?? "";
+  const hh = String(d.hour).padStart(2, "0");
+  const mm = String(d.minute).padStart(2, "0");
   return `${day} ${dd} ${month} · ${hh}:${mm}`;
 }
 
 function monthGroupKey(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, "0")}`;
+  const d = getRomeDateParts(iso);
+  return `${d.year}-${String(d.month).padStart(2, "0")}`;
 }
 
 function monthGroupLabel(iso: string): string {
-  const d = new Date(iso);
-  return `${ITALIAN_MONTHS[d.getMonth()] ?? "—"} ${d.getFullYear()}`;
+  const d = getRomeDateParts(iso);
+  return `${ITALIAN_MONTHS[d.month] ?? "—"} ${d.year}`;
 }
 
 function groupByMonth(

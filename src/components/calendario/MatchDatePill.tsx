@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { getRomeDateParts } from "@/lib/date";
 
 const ITALIAN_MONTHS_SHORT = [
   "GEN",
@@ -28,15 +29,15 @@ const ITALIAN_DAYS_SHORT = [
 ];
 
 function formatDay(iso: string): string {
-  return String(new Date(iso).getDate()).padStart(2, "0");
+  return String(getRomeDateParts(iso).day).padStart(2, "0");
 }
 
 function formatMonthShort(iso: string): string {
-  return ITALIAN_MONTHS_SHORT[new Date(iso).getMonth()] ?? "—";
+  return ITALIAN_MONTHS_SHORT[getRomeDateParts(iso).month] ?? "—";
 }
 
 function formatDayOfWeek(iso: string): string {
-  return ITALIAN_DAYS_SHORT[new Date(iso).getDay()] ?? "—";
+  return ITALIAN_DAYS_SHORT[getRomeDateParts(iso).weekday] ?? "—";
 }
 
 /**

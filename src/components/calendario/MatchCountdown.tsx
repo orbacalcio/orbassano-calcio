@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getRomeDateParts } from "@/lib/date";
 
 const ITALIAN_DAYS = [
   "domenica",
@@ -28,12 +29,12 @@ const ITALIAN_MONTHS = [
 ];
 
 function formatItalianDateTime(iso: string): string {
-  const d = new Date(iso);
-  const day = ITALIAN_DAYS[d.getDay()] ?? "";
-  const dd = d.getDate();
-  const month = ITALIAN_MONTHS[d.getMonth()] ?? "";
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mm = String(d.getMinutes()).padStart(2, "0");
+  const d = getRomeDateParts(iso);
+  const day = ITALIAN_DAYS[d.weekday] ?? "";
+  const dd = d.day;
+  const month = ITALIAN_MONTHS[d.month] ?? "";
+  const hh = String(d.hour).padStart(2, "0");
+  const mm = String(d.minute).padStart(2, "0");
   return `${day}, ${dd} ${month} · ${hh}:${mm}`;
 }
 

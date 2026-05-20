@@ -1,4 +1,5 @@
 import type { MatchSummary } from "@/sanity/fetchers";
+import { getRomeDateParts } from "@/lib/date";
 import { MatchCard } from "./MatchCard";
 
 /**
@@ -29,13 +30,13 @@ const ITALIAN_MONTHS = [
 ];
 
 function monthKey(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, "0")}`;
+  const d = getRomeDateParts(iso);
+  return `${d.year}-${String(d.month).padStart(2, "0")}`;
 }
 
 function monthLabel(iso: string): string {
-  const d = new Date(iso);
-  return `${ITALIAN_MONTHS[d.getMonth()] ?? "—"} ${d.getFullYear()}`;
+  const d = getRomeDateParts(iso);
+  return `${ITALIAN_MONTHS[d.month] ?? "—"} ${d.year}`;
 }
 
 function groupByMonth(
