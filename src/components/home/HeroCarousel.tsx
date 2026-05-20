@@ -332,10 +332,12 @@ export function HeroCarousel({
       </div>
 
       {/* Indicatori slide (pallini) — tappabili, hit-area 44px (h-11).
-          Solo con piu' di una slide: su touch sono l'unico modo per
-          capire che il carosello ha piu' immagini e saltare a una. */}
+          Solo con piu' di una slide e SOLO su mobile/tablet (lg:hidden):
+          su desktop l'hero e' art-directed e bastano autoplay +
+          hover-pausa. Su touch sono l'unico modo per capire che ci
+          sono piu' slide e saltare a una. */}
       {slides.length > 1 && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1 md:bottom-6">
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1 md:bottom-6 lg:hidden">
           {slides.map((s, i) => {
             const isActive = i === index;
             return (
