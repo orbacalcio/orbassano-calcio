@@ -260,7 +260,7 @@ export function SearchDialog({ open, onClose }: Props) {
 
           <div
             className="overflow-y-auto"
-            style={{ height: "calc(100vh - 70px)" }}
+            style={{ height: "calc(100dvh - 70px)" }}
             onClick={(e) => e.stopPropagation()}
           >
             <Container size="wide" className="py-8 lg:py-12">

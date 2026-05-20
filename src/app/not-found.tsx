@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="bg-surface-0 relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-20">
+    <div className="bg-surface-0 relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"

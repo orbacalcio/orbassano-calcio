@@ -101,6 +101,11 @@ export const viewport: Viewport = {
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
+  // viewport-fit=cover: la pagina si estende sotto le safe-area dei
+  // device con notch/home-indicator (iPhone), così gli env(safe-area-
+  // inset-*) usati dal CookieBanner diventano effettivi e il banner
+  // resta sopra l'home-indicator invece di sfiorarlo.
+  viewportFit: "cover",
   // Niente maximumScale ne' userScalable=no: bloccare lo zoom utente
   // viola WCAG 1.4.4 (Resize text). L'utente DEVE poter zoomare.
 };

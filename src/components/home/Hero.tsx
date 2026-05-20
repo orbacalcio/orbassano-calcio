@@ -148,10 +148,12 @@ export async function Hero() {
       // del viewport e la Topbar transparente in HERO mode fluttua
       // SOPRA l'immagine, juventus.com-style. I valori sono in
       // sincrono con AppShell.tsx — se cambi uno cambia anche l'altro.
-      // min-h-screen = 100vh: hero occupa l'intera viewport altezza
-      // (Y=0 → Y=100vh), il prossimo blocco (NewsGrid) parte subito
-      // sotto al viewport edge — niente "preview" gap come prima.
-      className="relative -mt-[84px] flex min-h-screen flex-col justify-center overflow-hidden lg:-mt-[78px]"
+      // min-h-dvh = 100dvh: hero occupa l'intera viewport altezza. dvh
+      // (dynamic viewport height) invece di vh: su iOS Safari / Chrome
+      // Android la barra indirizzi dinamica non taglia piu' il fondo
+      // dell'hero (con 100vh la CTA poteva finire sotto la piega). Il
+      // prossimo blocco (NewsGrid) parte subito sotto al viewport edge.
+      className="relative -mt-[84px] flex min-h-dvh flex-col justify-center overflow-hidden lg:-mt-[78px]"
     >
       {hasSlides ? (
         <HeroCarousel slides={resolvedSlides} config={config} />
