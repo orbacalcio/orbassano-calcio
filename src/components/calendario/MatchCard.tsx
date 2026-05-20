@@ -122,6 +122,11 @@ type MatchCardProps = {
   ourTeamSlug: string;
   ourTeamName: string;
   variant?: Variant;
+  /** Badge categoria (es. "Allievi U17") per le viste aggregate
+   *  multi-squadra (calendario Settore Giovanile). Mostrato in alto
+   *  nella colonna meta del layout default. Omesso = nessun badge
+   *  (pagine calendario per-squadra). */
+  teamBadge?: string | null;
 };
 
 export function MatchCard({
@@ -129,6 +134,7 @@ export function MatchCard({
   ourTeamSlug,
   ourTeamName,
   variant = "default",
+  teamBadge,
 }: MatchCardProps) {
   // Cascata report link: match.reportLink (specifico) > competition.defaultReportLink (fallback)
   const reportHref = match.reportLink ?? match.competition?.defaultReportLink ?? null;
@@ -282,6 +288,11 @@ export function MatchCard({
 
       {/* Meta competition + venue */}
       <div className="flex min-w-0 flex-col gap-1 md:w-52">
+        {teamBadge && (
+          <span className="text-brand-gold border-brand-gold/40 mb-0.5 inline-flex w-fit items-center rounded-full border px-2 py-0.5 font-display text-[10px] font-bold tracking-[0.15em] uppercase">
+            {teamBadge}
+          </span>
+        )}
         <span className="font-display text-ink-mid text-xs font-bold tracking-[0.1em] uppercase truncate">
           {competitionLabel || "—"}
         </span>

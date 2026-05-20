@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
-import { TeamLogo } from "@/components/calendario/TeamLogo";
+import { MatchCard } from "@/components/calendario/MatchCard";
 import { cn } from "@/lib/cn";
 import { getRomeDateParts } from "@/lib/date";
 import { buildSportsEventListLd } from "@/lib/json-ld";
@@ -16,7 +16,6 @@ import {
 } from "@/sanity/fetchers";
 
 const FALLBACK_SEASON = "2026/2027";
-const OUR_LOGO_SRC = "/Logo_Orbassano_2K.png";
 
 const ITALIAN_MONTHS = [
   "Gennaio",
@@ -32,8 +31,6 @@ const ITALIAN_MONTHS = [
   "Novembre",
   "Dicembre",
 ];
-
-const ITALIAN_DAYS_SHORT = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
 
 export const metadata: Metadata = {
   title: "Calendario Settore Giovanile Scolastico",
@@ -78,16 +75,6 @@ async function fetchCurrentSeason(): Promise<string> {
   } catch {
     return FALLBACK_SEASON;
   }
-}
-
-function formatItalianDateTime(iso: string): string {
-  const d = getRomeDateParts(iso);
-  const day = ITALIAN_DAYS_SHORT[d.weekday] ?? "";
-  const dd = String(d.day).padStart(2, "0");
-  const month = ITALIAN_MONTHS[d.month] ?? "";
-  const hh = String(d.hour).padStart(2, "0");
-  const mm = String(d.minute).padStart(2, "0");
-  return `${day} ${dd} ${month} · ${hh}:${mm}`;
 }
 
 function monthGroupKey(iso: string): string {
@@ -281,96 +268,35 @@ function MatchList({
   groups: Array<{ key: string; label: string; items: MatchAggregated[] }>;
 }) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       {groups.map((g) => (
         <div key={g.key} className="flex flex-col gap-3">
-          <h3 className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
+          {/* Header mese + MatchCard allineati alle altre pagine
+              calendario (CalendarioFlatList): grafica uniforme,
+              punteggio al centro, font grande. Il teamBadge mostra la
+              categoria (es. "Allievi U17"), unico discriminante della
+              vista aggregata multi-squadra. */}
+          <h4 className="font-display text-ink-mid sticky top-[84px] z-10 bg-surface-0/95 -mx-1 px-1 text-lg font-bold tracking-[0.1em] uppercase backdrop-blur-md md:text-xl lg:top-[78px]">
             {g.label}
-          </h3>
-          <ul className="divide-border/40 border-border/40 flex flex-col divide-y border-y">
+          </h4>
+          <div className="flex flex-col gap-2">
             {g.items.map((m) => (
-              <MatchRow key={m._id} match={m} />
+              <MatchCard
+                key={m._id}
+                match={m}
+                ourTeamSlug={m.teamSlug}
+                ourTeamName={m.teamDisplayName ?? "Orbassano Calcio"}
+                teamBadge={m.teamName}
+              />
             ))}
-          </ul>
+          </div>
         </div>
       ))}
     </div>
   );
 }
 
-/**
- * Riga sintetica match nella lista aggregata. Layout:
- *   [BADGE SQUADRA] | [DATA/ORA] | [HOME LOGO + NAME] vs [AWAY LOGO + NAME] | [SCORE / "—"]
- * Su mobile collassa a 2 righe (badge+data sopra, match sotto).
- */
-function MatchRow({ match }: { match: MatchAggregated }) {
-  const opponentName =
-    match.opponent?.club?.shortName ??
-    match.opponent?.club?.name ??
-    (match.isOpponentTbd ? "Avversario TBD" : "—");
-  const opponentLogo = match.opponent?.club?.logo ?? null;
-  // Il BADGE squadra usa match.teamName (descrittivo: "Allievi U17",
-  // "Giovanissimi U15"), e' l'unico discriminante visivo della vista
-  // aggregata. Il nome mostrato accanto al logo Orbassano (home/away)
-  // usa invece team.displayName con fallback "Orbassano Calcio"
-  // (richiesta utente 2026-05-18: nome MatchCard uniforme).
-  const ourName = match.teamDisplayName || "Orbassano Calcio";
-  const homeName = match.home ? ourName : opponentName;
-  const homeLogo = match.home ? OUR_LOGO_SRC : opponentLogo;
-  const awayName = match.home ? opponentName : ourName;
-  const awayLogo = match.home ? opponentLogo : OUR_LOGO_SRC;
-  const showScore =
-    typeof match.scoreHome === "number" && typeof match.scoreAway === "number";
-  // Colori: Orbassano sempre brand-white, avversario sempre ink-low
-  // (richiesta utente 2026-05-18). Vale per nome squadre + numero gol.
-  const homeTextClass = match.home ? "text-brand-white" : "text-ink-low";
-  const awayTextClass = match.home ? "text-ink-low" : "text-brand-white";
+// MatchRow rimossa 2026-05-20: la vista aggregata usa ora direttamente
+// MatchCard (vedi MatchList sopra) per uniformita' con le altre pagine
+// calendario.
 
-  return (
-    <li className="grid grid-cols-1 items-center gap-3 py-4 md:grid-cols-[7rem_10rem_1fr_5rem] md:gap-x-4">
-      <span className="text-brand-gold border-brand-gold/40 inline-flex w-fit items-center gap-1 self-start rounded-full border px-2.5 py-1 font-display text-[10px] font-bold tracking-[0.15em] uppercase">
-        {match.teamName}
-      </span>
-      <span className="text-ink-mid font-mono text-[11px] tracking-wide uppercase">
-        {match.isDateTbd ? "Data TBD" : formatItalianDateTime(match.date)}
-      </span>
-      <div className="flex items-center gap-2 text-sm md:gap-3">
-        <span
-          className={`flex min-w-0 flex-1 items-center justify-end gap-2 text-right ${homeTextClass}`}
-        >
-          <span className="truncate">{homeName}</span>
-          <TeamLogo
-            src={homeLogo}
-            name={homeName}
-            size={28}
-            interactive={false}
-          />
-        </span>
-        <span className="text-ink-low shrink-0 font-mono text-[11px] tracking-wide uppercase">
-          vs
-        </span>
-        <span
-          className={`flex min-w-0 flex-1 items-center gap-2 ${awayTextClass}`}
-        >
-          <TeamLogo
-            src={awayLogo}
-            name={awayName}
-            size={28}
-            interactive={false}
-          />
-          <span className="truncate">{awayName}</span>
-        </span>
-      </div>
-      <span className="font-mono text-base font-semibold tabular-nums sm:text-lg">
-        {showScore ? (
-          <span className="inline-flex items-center justify-end gap-2">
-            <span className={homeTextClass}>{match.scoreHome}</span>
-            <span className={awayTextClass}>{match.scoreAway}</span>
-          </span>
-        ) : (
-          <span className="text-ink-low block text-right">—</span>
-        )}
-      </span>
-    </li>
-  );
-}
