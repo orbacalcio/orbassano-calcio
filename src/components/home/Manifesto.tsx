@@ -42,7 +42,7 @@ export function Manifesto() {
   return (
     <section
       aria-labelledby="manifesto-title"
-      className="bg-light-bg-0 relative overflow-hidden py-24 lg:py-32"
+      className="bg-light-bg-0 relative overflow-hidden py-14 sm:py-20 lg:py-32"
     >
       <Container
         size="wide"

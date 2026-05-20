@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { ChevronDown, Mail, MapPin, Phone } from "lucide-react";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
 import {
@@ -205,15 +205,24 @@ export async function Footer() {
 
         {/* CATEGORIE: 6 colonne lg (4 strette + 2 larghe per Contatti/Legali
             che hanno testi più lunghi tipo IBAN/email/PEC) / 3 col md / 2 sm */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-[1fr_1fr_1fr_1fr_2fr_2fr] lg:gap-x-8">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-3 sm:gap-y-10 lg:grid-cols-[1fr_1fr_1fr_1fr_2fr_2fr] lg:gap-x-8">
           {sections.map((section) => (
-            <nav
+            // <details> nativo: su mobile è una fisarmonica (collassata),
+            // da sm in su forzata aperta + toggle disattivato via CSS
+            // (.footer-section in globals.css) → griglia piatta come prima.
+            <details
               key={section.title}
-              aria-label={section.title}
-              className="flex flex-col gap-3"
+              className="footer-section border-ink-mid/15 border-b sm:border-0"
             >
-              <span className={COLUMN_TITLE}>{section.title}</span>
-              <ul className="flex flex-col gap-2">
+              <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 sm:cursor-default sm:py-0">
+                <span className={COLUMN_TITLE}>{section.title}</span>
+                <ChevronDown
+                  size={18}
+                  className="footer-chevron text-ink-mid shrink-0 sm:hidden"
+                  aria-hidden
+                />
+              </summary>
+              <ul className="flex flex-col gap-2 pb-4 sm:pt-3 sm:pb-0">
                 {section.items.map((item) => (
                   <li key={item.href}>
                     <Link
@@ -225,11 +234,11 @@ export async function Footer() {
                   </li>
                 ))}
               </ul>
-            </nav>
+            </details>
           ))}
 
           {/* Contatti */}
-          <div className="flex flex-col gap-3">
+          <div className="flex min-w-0 flex-col gap-3 border-ink-mid/15 border-b py-4 sm:border-0 sm:py-0">
             <span className={COLUMN_TITLE}>Contatti</span>
             <ul className="text-ink-mid flex flex-col gap-2 text-sm">
               {contact.address && (
@@ -270,7 +279,7 @@ export async function Footer() {
           </div>
 
           {/* Dati legali */}
-          <div className="flex flex-col gap-3">
+          <div className="flex min-w-0 flex-col gap-3 border-ink-mid/15 border-b py-4 sm:border-0 sm:py-0">
             <span className={COLUMN_TITLE}>Dati legali</span>
             <ul className="font-mono text-ink-mid flex flex-col gap-1.5 text-xs">
               {legal.fiscalCode && (

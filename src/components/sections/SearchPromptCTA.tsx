@@ -46,7 +46,7 @@ export function SearchPromptCTA() {
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Scrivi qui per iniziare la ricerca"
+          placeholder="Ricerca"
           aria-label="Termine di ricerca"
           autoComplete="off"
           spellCheck={false}

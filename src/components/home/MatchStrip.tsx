@@ -231,7 +231,10 @@ export async function MatchStrip() {
             {/* Slot 4 — CLASSIFICA + STATISTICHE impilate, con
                 attribution sprintesport in fondo. */}
             <div className="flex flex-col">
-              <div className="grid flex-1 grid-rows-2 gap-px">
+              {/* Mobile: classifica + statistiche affiancate e compatte
+                  (grid-cols-2). Su lg tornano impilate nella colonna
+                  stretta dello slot 4 (grid-rows-2). */}
+              <div className="grid flex-1 grid-cols-2 gap-px lg:grid-cols-1 lg:grid-rows-2">
                 <ShortcutTile
                   href={classificaUrl}
                   label="Classifica"
@@ -314,15 +317,14 @@ function ShortcutTile({
     return (
       <div
         aria-label={ariaLabelOff}
-        className="flex flex-col items-center justify-center gap-2.5 p-7 text-center opacity-60"
+        className="flex flex-col items-center justify-center gap-1.5 p-4 text-center opacity-60 lg:gap-2.5 lg:p-7"
       >
         <Icon
-          size={48}
           strokeWidth={1.5}
-          className="text-ink-low opacity-50"
+          className="text-ink-low h-7 w-7 opacity-50 lg:h-12 lg:w-12"
           aria-hidden
         />
-        <span className="font-display text-ink-low text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
+        <span className="font-display text-ink-low text-base leading-tight font-extrabold tracking-[0.01em] uppercase lg:text-2xl">
           {label}
         </span>
       </div>
@@ -334,19 +336,17 @@ function ShortcutTile({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={ariaLabelOn}
-      className="group hover:bg-brand-gold/10 focus-visible:outline-brand-gold flex flex-col items-center justify-center gap-2.5 p-7 text-center transition-colors focus-visible:outline-2 focus-visible:-outline-offset-4"
+      className="group hover:bg-brand-gold/10 focus-visible:outline-brand-gold flex flex-col items-center justify-center gap-1.5 p-4 text-center transition-colors focus-visible:outline-2 focus-visible:-outline-offset-4 lg:gap-2.5 lg:p-7"
     >
       <Icon
-        size={48}
         strokeWidth={1.5}
-        className="text-brand-gold group-hover:text-brand-white transition-colors"
+        className="text-brand-gold group-hover:text-brand-white h-7 w-7 transition-colors lg:h-12 lg:w-12"
         aria-hidden
       />
-      <span className="font-display text-ink-hi group-hover:text-brand-gold text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase transition-colors">
+      <span className="font-display text-ink-hi group-hover:text-brand-gold text-base leading-tight font-extrabold tracking-[0.01em] uppercase transition-colors lg:text-2xl">
         {label}
         <ArrowUpRight
-          size={20}
-          className="text-ink-mid group-hover:text-brand-gold ml-1 -mt-0.5 inline transition-colors"
+          className="text-ink-mid group-hover:text-brand-gold ml-1 -mt-0.5 inline h-3.5 w-3.5 transition-colors lg:h-5 lg:w-5"
           aria-hidden
         />
       </span>

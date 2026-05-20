@@ -341,7 +341,7 @@ function StripBlock({
               return (
                 <li
                   key={slug}
-                  className="grid grid-cols-[7rem_1fr] items-center gap-3 py-3 md:grid-cols-[7rem_1fr_1fr_7rem_7rem_2.25rem] md:gap-x-4 md:gap-y-2 md:py-4"
+                  className="grid grid-cols-1 items-center gap-3 py-4 md:grid-cols-[7rem_1fr_1fr_7rem_7rem_2.25rem] md:gap-x-4 md:gap-y-2 md:py-4"
                 >
                   {/* Mini-label squadra: testo only, narrow (~7rem). */}
                   <Link

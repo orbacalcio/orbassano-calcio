@@ -318,6 +318,34 @@ html.past-hero #main-content + div {
   }
 }
 
+/**
+ * Footer mobile (<sm): le sezioni di link sono <details> nativi
+ * (fisarmonica senza JS) per non rendere il footer enorme su telefono.
+ * Da sm in su le forziamo aperte e disattiviamo il toggle → torna la
+ * griglia piatta multi-colonna del desktop. Marker default nascosto,
+ * chevron custom che ruota all'apertura.
+ */
+.footer-section > summary {
+  list-style: none;
+}
+.footer-section > summary::-webkit-details-marker {
+  display: none;
+}
+.footer-chevron {
+  transition: transform 200ms ease;
+}
+.footer-section[open] > summary .footer-chevron {
+  transform: rotate(180deg);
+}
+@media (min-width: 640px) {
+  .footer-section > ul {
+    display: flex !important;
+  }
+  .footer-section > summary {
+    pointer-events: none;
+  }
+}
+
 /* Riduzione movimento: rispettiamo prefers-reduced-motion ovunque */
 @media (prefers-reduced-motion: reduce) {
   *,

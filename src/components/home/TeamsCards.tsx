@@ -87,7 +87,10 @@ export async function TeamsCards() {
     <section className="bg-light-bg-0">
       <Container className="py-20" size="wide">
       <Section tone="light" eyebrow={eyebrow} title={title} subtitle={subtitle}>
-        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {/* Mobile/tablet (<lg): carosello a swipe come le news (una card
+            con peek della successiva, scroll-snap nativo). Da lg griglia
+            3 colonne. */}
+        <div className="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden">
           {CARD_SLOTS.map((slot, index) => {
             const cms = items[index];
             const title = cms?.title?.trim() || slot.fallbackTitle;
@@ -97,7 +100,7 @@ export async function TeamsCards() {
               <Link
                 key={slot.number}
                 href={slot.href}
-                className="group border-border bg-surface-1 hover:border-brand-gold/40 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex flex-col gap-6 overflow-hidden border p-8 transition-all focus-visible:outline-2 focus-visible:outline-offset-4 lg:p-10"
+                className="group border-border bg-surface-1 hover:border-brand-gold/40 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex w-[85%] shrink-0 snap-center flex-col gap-6 overflow-hidden border p-8 transition-all focus-visible:outline-2 focus-visible:outline-offset-4 lg:w-auto lg:p-10"
               >
                 <span className="font-display text-brand-gold/40 group-hover:text-brand-gold text-5xl leading-none font-black transition-colors sm:text-6xl lg:text-8xl">
                   {slot.number}
