@@ -1,0 +1,26 @@
+# Line endings: il repo viene buildato su Linux/Vercel, LF è canonico.
+# Forziamo LF nel repository per tutti i file di testo, indipendentemente
+# dal core.autocrlf locale di ogni dev (Windows default è true → senza
+# questo file git stampa warning "LF will be replaced by CRLF" ad ogni add).
+* text=auto eol=lf
+
+# File binari: git non deve mai toccarli (niente normalizzazione EOL).
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.pdf   binary
+*.xlsx  binary
+*.xls   binary
+*.zip   binary
+*.mp4   binary
+*.webm  binary
+*.mov   binary
