@@ -172,7 +172,7 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
               )}
             >
               {hasScore ? (
-                <span className="inline-flex items-center gap-3">
+                <span className="inline-flex items-center gap-6">
                   <span>{match.scoreHome}</span>
                   <span>{match.scoreAway}</span>
                 </span>

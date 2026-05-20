@@ -196,7 +196,7 @@ export function MatchCard({
           <div className="flex shrink-0 flex-col items-center gap-1 px-2 md:px-3">
             <div className="font-display text-4xl font-extrabold tracking-[0.005em] md:text-5xl">
               {hasScore ? (
-                <span className="inline-flex items-center gap-3">
+                <span className="inline-flex items-center gap-6">
                   <span className={homeScoreClass}>{match.scoreHome}</span>
                   <span className={awayScoreClass}>{match.scoreAway}</span>
                 </span>
@@ -319,7 +319,7 @@ export function MatchCard({
       {/* Centro: score o orario */}
       <div className="font-display text-ink-hi flex shrink-0 items-center justify-center font-extrabold tracking-[0.005em] md:w-32 md:text-2xl">
         {hasScore ? (
-          <span className="inline-flex items-center gap-3 text-3xl">
+          <span className="inline-flex items-center gap-6 text-3xl">
             <span className={homeScoreClass}>{match.scoreHome}</span>
             <span className={awayScoreClass}>{match.scoreAway}</span>
           </span>
