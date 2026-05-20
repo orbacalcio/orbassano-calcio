@@ -6,6 +6,7 @@ import {
   AnimatePresence,
   motion,
   useReducedMotion,
+  type PanInfo,
   type Variants,
 } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -150,6 +151,10 @@ export function HeroCarousel({
   const current = slides[index];
   if (!current) return null;
 
+  // Navigazione manuale (swipe + dot): normalizza l'indice in [0, n).
+  const goTo = (i: number) =>
+    setIndex(((i % slides.length) + slides.length) % slides.length);
+
   const headlineLines = splitHeadline(current.headline);
   const showCta = !!(current.ctaLabel && current.ctaLink);
   const isOddSlide = index % 2 === 1;
@@ -164,13 +169,26 @@ export function HeroCarousel({
   const totalImageAnimS = enterScaleS + kenBurnsDurS;
 
   return (
-    <div
+    <motion.div
       className={cn(
         "absolute inset-0",
         isTransitioning && "[&_*]:will-change-transform",
       )}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      // Swipe orizzontale su touch: onPanEnd NON muove il layer (il
+      // carosello e' in cross-fade, non a slittamento) e NON blocca lo
+      // scroll verticale della pagina. Soglia 50px + dominanza
+      // orizzontale per non scattare durante uno scroll verticale.
+      onPanEnd={(_event, info: PanInfo) => {
+        if (slides.length < 2) return;
+        if (
+          Math.abs(info.offset.x) < 50 ||
+          Math.abs(info.offset.x) <= Math.abs(info.offset.y)
+        )
+          return;
+        goTo(info.offset.x < 0 ? index + 1 : index - 1);
+      }}
       aria-live="off"
     >
       {/* Layer 1: foto carosello con cross-fade overlap + Ken Burns. */}
@@ -312,7 +330,36 @@ export function HeroCarousel({
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
+
+      {/* Indicatori slide (pallini) — tappabili, hit-area 44px (h-11).
+          Solo con piu' di una slide: su touch sono l'unico modo per
+          capire che il carosello ha piu' immagini e saltare a una. */}
+      {slides.length > 1 && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1 md:bottom-6">
+          {slides.map((s, i) => {
+            const isActive = i === index;
+            return (
+              <button
+                key={`dot-${s._id}`}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Vai alla slide ${i + 1} di ${slides.length}`}
+                aria-current={isActive ? "true" : undefined}
+                className="focus-visible:outline-brand-gold pointer-events-auto flex h-11 w-6 items-center justify-center focus-visible:outline-2"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "block h-1.5 rounded-full transition-all duration-300",
+                    isActive ? "bg-brand-gold w-6" : "bg-ink-hi/40 w-1.5",
+                  )}
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </motion.div>
   );
 }
 

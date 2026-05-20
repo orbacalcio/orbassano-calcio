@@ -82,7 +82,7 @@ export function SocialIcons({
             rel="noopener noreferrer"
             aria-label={`Seguici su ${LABELS[p]} (${handle})`}
             className={cn(
-              "group focus-visible:outline-brand-gold flex h-10 w-10 items-center justify-center rounded-full",
+              "group focus-visible:outline-brand-gold flex h-11 w-11 items-center justify-center rounded-full",
               "border-ink-mid/40 hover:bg-ink-hi hover:border-ink-hi border transition-all duration-300",
               "focus-visible:outline-2 focus-visible:outline-offset-2",
             )}

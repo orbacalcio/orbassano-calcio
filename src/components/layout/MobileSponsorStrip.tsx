@@ -43,6 +43,13 @@ export async function MobileSponsorStrip() {
         zIndex: Z.mobileSponsorStrip,
         scrollSnapType: "x mandatory",
         scrollbarWidth: "none",
+        // Sfumatura sul bordo destro: segnala che la striscia scorre
+        // in orizzontale (niente scrollbar visibile). La label "Main
+        // Sponsor" a sinistra resta nitida.
+        maskImage:
+          "linear-gradient(to right, black calc(100% - 2rem), transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to right, black calc(100% - 2rem), transparent)",
       }}
       role="region"
       aria-label="Sponsor principali"

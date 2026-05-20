@@ -75,6 +75,11 @@ html {
      Il blocco prefers-reduced-motion in fondo lo riporta a 'auto'
      per chi richiede meno movimento. */
   scroll-behavior: smooth;
+  /* Barre fisse in alto (MobileTopbar 44px + MobileSponsorStrip 40px =
+     84px su <lg; Topbar 78px su lg): senza questo, ogni anchor (#id) e
+     lo skip-link atterrerebbero col target nascosto sotto le barre.
+     scroll-padding-top riserva lo spazio. Override 78px su lg sotto. */
+  scroll-padding-top: 84px;
   /* overflow-x: clip impedisce scrollbar orizzontale generata dalle
      SidebarLeft/Right fixed traslate fuori viewport (translateX
      -88/+80 al fade-out post-hero). clip e' preferibile a hidden:
@@ -131,6 +136,13 @@ body {
  * scatto. Stessa identica curva del topbar morph per coreografia
  * coerente.
  */
+@media (min-width: 1024px) {
+  html {
+    /* Su lg le barre mobile spariscono: resta solo la Topbar 78px. */
+    scroll-padding-top: 78px;
+  }
+}
+
 @media (min-width: 1024px) {
   #main-content,
   #main-content + div {
@@ -289,6 +301,21 @@ html.past-hero #main-content + div {
 .group:hover .btn-wow-sweep svg:last-child,
 .group:focus-visible .btn-wow-sweep svg:last-child {
   transform: translateX(3px);
+}
+
+/**
+ * Touch / niente puntatore: gli elementi rivelati solo all'hover
+ * (frecce e CTA `opacity-0 group-hover:opacity-100` sulle card news,
+ * squadre, società) resterebbero INVISIBILI sui dispositivi senza
+ * hover. Su questi li forziamo visibili così l'affordance è sempre
+ * percepibile al tocco. Regola non in @layer → batte le utility
+ * Tailwind (che sono layered) senza !important. I tooltip della
+ * sidebar desktop non sono toccati: la sidebar è hidden sotto lg.
+ */
+@media (hover: none) {
+  .group-hover\:opacity-100 {
+    opacity: 1;
+  }
 }
 
 /* Riduzione movimento: rispettiamo prefers-reduced-motion ovunque */
