@@ -47,7 +47,7 @@ function NewsCard({ news }: { news: News }) {
   return (
     <Link
       href={`/news/${news.slug.current}`}
-      className="group focus-visible:outline-brand-gold relative block aspect-[4/5] overflow-hidden rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-4 lg:rounded-[2.5rem]"
+      className="group focus-visible:outline-brand-gold relative block aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-4 sm:w-auto sm:shrink lg:rounded-[2.5rem]"
     >
       {news.cover ? (
         <Image
@@ -161,7 +161,11 @@ export async function NewsGrid() {
           <EmptyState />
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            {/* Mobile (<sm): carosello a swipe orizzontale — una card a
+                schermo con "peek" della successiva (scroll-snap nativo,
+                niente JS, niente pallini). Da sm in su torna griglia
+                2 colonne, da lg 3 colonne. */}
+            <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-3 lg:gap-6 [&::-webkit-scrollbar]:hidden">
               {news.slice(0, 3).map((n) => (
                 <NewsCard key={n._id} news={n} />
               ))}
