@@ -2,7 +2,7 @@ import { Download, Landmark, Mail, Phone } from "lucide-react";
 
 /**
  * Blocco a 2 colonne (md+) con "Modulo iscrizione" + "Info bonifico"
- * affiancati. Usato in fondo a /settore-giovanile/open-days e in
+ * affiancati. Usato in cima a /settore-giovanile/summer-camp e in
  * fondo a /settore-giovanile come call-to-subscribe coerente.
  *
  * Tutti i dati (URL modulo, IBAN, telefono) arrivano dai props del

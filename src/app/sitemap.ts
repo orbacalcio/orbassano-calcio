@@ -51,7 +51,7 @@ const STATIC_ROUTES: Array<{
   // /calendario esiste ma rimossa dal sitemap 2026-05-17 (richiesta
   // utente): hub aggregato non utile, gli accordion drawer linkano
   // direttamente ai calendari per categoria.
-  { path: "/settore-giovanile/open-days", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/settore-giovanile/summer-camp", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
   // Hub archivio stagioni passate. Sezione di puro discovery: le pagine
   // di dettaglio sono /squadre/[slug]/calendario?season=X, gia' coperte

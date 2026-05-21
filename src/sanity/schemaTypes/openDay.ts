@@ -2,21 +2,26 @@ import { CalendarCheck } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Open Day del Settore Giovanile — sessioni di prova aperte a nuovi
- * iscritti, una per categoria/data. La pagina pubblica
- * /settore-giovanile/open-days raggruppa per categoria e ordina per
- * data ascendente, mostrando solo gli eventi futuri (date >= oggi)
- * o flaggati come isActive=true.
+ * Summer Camp del Settore Giovanile Scolastico — date del camp estivo
+ * (meta' giugno, 2-3 settimane), una per categoria/data. La pagina
+ * pubblica /settore-giovanile/summer-camp raggruppa per categoria e
+ * ordina per data ascendente, mostrando gli eventi con isActive=true.
+ *
+ * NB: l'id schema resta `openDay` (rinominare il tipo orfanerebbe i
+ * documenti esistenti e il filtro del webhook revalidate). Cambia solo
+ * la denominazione utente-facing/Studio: "Summer Camp". Prima si
+ * chiamava "Open Day", rinominato 2026-05-21 perche' da regolamento
+ * FIGC le selezioni/open day non si fanno prima del 1° luglio.
  *
  * Lo schema è separato da `tournament` perché i campi divergono nel
- * tempo: gli Open Day vivono pre-stagione (giugno-luglio) con
- * informazioni standard, i Tornei girano tutto l'anno con format,
- * gironi, premi. Tenerli distinti evita di appesantire l'UI Studio
- * con campi conditionally-visible.
+ * tempo: il Summer Camp vive pre-stagione (giugno) con informazioni
+ * standard, i Tornei girano tutto l'anno con format, gironi, premi.
+ * Tenerli distinti evita di appesantire l'UI Studio con campi
+ * conditionally-visible.
  */
 export const openDay = defineType({
   name: "openDay",
-  title: "Open Day",
+  title: "Summer Camp",
   type: "document",
   icon: CalendarCheck,
   fields: [
@@ -24,7 +29,7 @@ export const openDay = defineType({
       name: "title",
       title: "Titolo interno",
       description:
-        "Solo per identificarlo nello Studio. Es. 'Open Day U17 - 1 luglio'.",
+        "Solo per identificarlo nello Studio. Es. 'Summer Camp U17 - settimana 1'.",
       type: "string",
       validation: (r) => r.required(),
     }),
@@ -32,7 +37,7 @@ export const openDay = defineType({
       name: "category",
       title: "Categoria",
       description:
-        "Categoria del Settore Giovanile a cui è rivolto questo Open Day. Una sola categoria per evento; se serve un evento multi-categoria, crea un evento per ciascuna.",
+        "Categoria del Settore Giovanile Scolastico a cui è rivolta questa data del Summer Camp. Una sola categoria per evento; se serve un evento multi-categoria, crea un evento per ciascuna.",
       type: "string",
       options: {
         list: [
@@ -57,7 +62,7 @@ export const openDay = defineType({
     defineField({
       name: "date",
       title: "Data",
-      description: "Giorno e ora di inizio dell'Open Day.",
+      description: "Giorno e ora di inizio della sessione di Summer Camp.",
       type: "datetime",
       options: { dateFormat: "DD/MM/YYYY", timeFormat: "HH:mm" },
       validation: (r) => r.required(),
@@ -126,7 +131,7 @@ export const openDay = defineType({
           })
         : "—";
       return {
-        title: title || "Open Day senza titolo",
+        title: title || "Summer Camp senza titolo",
         subtitle: `${category ?? "?"} · ${formatted}${isActive === false ? " · NASCOSTO" : ""}`,
       };
     },

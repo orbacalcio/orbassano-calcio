@@ -106,11 +106,11 @@ const STATIC_PAGES: StaticPage[] = [
     section: "Squadre",
   },
   {
-    id: "open-days",
-    title: "Open Days",
-    path: "/settore-giovanile/open-days",
+    id: "summer-camp",
+    title: "Summer Camp",
+    path: "/settore-giovanile/summer-camp",
     keywords:
-      "open days giornate aperte prova iscrizione bambini settore giovanile modulo scuola calcio provini",
+      "summer camp camp estivo open days giornate aperte prova iscrizione bambini settore giovanile scolastico modulo scuola calcio giugno",
     section: "Settore Giovanile",
   },
   {

@@ -489,7 +489,7 @@ export const settings = defineType({
       name: "registrationFormFile",
       title: "Modulo iscrizione Settore Giovanile (PDF)",
       description:
-        "PDF del modulo da scaricare e firmare per iscriversi al Settore Giovanile. Caricalo qui per attivare il pulsante 'Scarica modulo iscrizione' nella pagina /settore-giovanile/open-days. Quando esce la stagione successiva basta sostituirlo: l'URL del file resta dinamico.",
+        "PDF del modulo da scaricare e firmare per iscriversi al Settore Giovanile Scolastico. Caricalo qui per attivare il pulsante 'Scarica modulo iscrizione' nella pagina /settore-giovanile/summer-camp. Quando esce la stagione successiva basta sostituirlo: l'URL del file resta dinamico.",
       type: "file",
       options: { accept: "application/pdf" },
     }),

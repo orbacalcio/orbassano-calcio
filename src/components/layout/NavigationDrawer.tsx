@@ -100,8 +100,8 @@ function buildSections(opts: {
   });
   // Ordine voci Calendario (richiesta utente 2026-05-21): Prima Squadra,
   // Juniores, Settore Giovanile Scolastico, Archivio stagioni, Tornei,
-  // Open Days. Archivio (stagioni passate) sale subito dopo i calendari
-  // delle squadre; gli eventi extra-campionato (Tornei, Open Days) in coda.
+  // Summer Camp. Archivio (stagioni passate) sale subito dopo i calendari
+  // delle squadre; gli eventi extra-campionato (Tornei, Summer Camp) in coda.
   calendarioChildren.push({
     href: "/archivio",
     label: "Archivio stagioni",
@@ -111,8 +111,8 @@ function buildSections(opts: {
     label: "Tornei",
   });
   calendarioChildren.push({
-    href: "/settore-giovanile/open-days",
-    label: "Open Days",
+    href: "/settore-giovanile/summer-camp",
+    label: "Summer Camp",
   });
 
   // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·

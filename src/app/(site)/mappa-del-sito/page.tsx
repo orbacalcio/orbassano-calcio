@@ -104,7 +104,7 @@ export default async function MappaDelSitoPage() {
           href: "/squadre/settore-giovanile/calendario",
           label: "Calendario Settore Giovanile (aggregato)",
         },
-        { href: "/settore-giovanile/open-days", label: "Open Days" },
+        { href: "/settore-giovanile/summer-camp", label: "Summer Camp" },
         { href: "/tornei", label: "Tornei" },
         { href: "/archivio", label: "Archivio stagioni passate" },
       ],

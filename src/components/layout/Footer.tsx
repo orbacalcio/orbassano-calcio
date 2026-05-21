@@ -99,8 +99,8 @@ function buildSections(opts: {
     label: "Settore Giovanile Scolastico",
   });
   squadreItems.push({
-    href: "/settore-giovanile/open-days",
-    label: "Open Days",
+    href: "/settore-giovanile/summer-camp",
+    label: "Summer Camp",
   });
   squadreItems.push({
     href: "/tornei",

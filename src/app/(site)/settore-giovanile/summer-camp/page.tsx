@@ -11,15 +11,28 @@ import { sanityClient } from "@/sanity/client";
 import { fetchOpenDays } from "@/sanity/fetchers";
 import { settingsQuery } from "@/sanity/queries";
 
+/**
+ * Pagina Summer Camp del Settore Giovanile Scolastico.
+ *
+ * Rinominata da "Open Days" a "Summer Camp" 2026-05-21 (richiesta
+ * utente): da regolamento FIGC le selezioni / open day non si possono
+ * tenere prima del 1° luglio, mentre l'attivita' di meta' giugno (2-3
+ * settimane) e' un camp estivo. Il vecchio path /settore-giovanile/
+ * open-days fa 301 verso questo (vedi next.config.ts).
+ *
+ * Internamente i dati arrivano ancora dai documenti Sanity di tipo
+ * `openDay` (id schema invariato per non orfanare i documenti esistenti
+ * / il webhook revalidate): cambia solo la denominazione utente-facing.
+ */
 export const metadata: Metadata = {
-  alternates: { canonical: "/settore-giovanile/open-days" },
-  title: "Open Days Settore Giovanile",
+  alternates: { canonical: "/settore-giovanile/summer-camp" },
+  title: "Summer Camp Settore Giovanile Scolastico",
   description:
-    "Calendario degli Open Days del Settore Giovanile ASD Orbassano Calcio per ogni categoria: Juniores Under 19, Allievi Under 17 e 16, Giovanissimi Under 15 e 14.",
+    "Summer Camp del Settore Giovanile Scolastico ASD Orbassano Calcio: due/tre settimane di calcio, sport e divertimento da metà giugno. Date, info e modulo di iscrizione per ogni categoria, dall'Under 14 alla Juniores.",
 };
 
 // Ordine fisso delle categorie nella pagina: dal piu' grande al piu'
-// piccolo (Juniores → U14). Anche se Sanity ha solo 3 categorie
+// piccolo (Juniores → U14). Anche se Sanity ha solo alcune categorie
 // popolate, l'array intero viene iterato cosi' le sezioni vuote
 // mostrano comunque l'header (utile per dire "in arrivo").
 const CATEGORY_ORDER = [
@@ -35,9 +48,6 @@ const CATEGORY_ORDER = [
 // modulo di iscrizione PDF stagione 2026/2027 fornito dal club.
 const FALLBACK_IBAN = "IT93H0853030680000000002547";
 const FALLBACK_PHONE = "+39 327 779 3326";
-// Email dedicata Settore Giovanile Scolastico (sgs@orbassanocalcio.com):
-// hardcoded nel RegistrationPaymentBlock, non piu' referenziata in
-// questa pagina dopo la rimozione del paragrafo "Iscriviti ora" header.
 
 type RegistrationSettings = {
   registrationFormUrl?: string | null;
@@ -60,7 +70,7 @@ async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
   }
 }
 
-export default async function OpenDaysPage() {
+export default async function SummerCampPage() {
   const [events, settings] = await Promise.all([
     fetchOpenDays(),
     fetchRegistrationSettings(),
@@ -111,22 +121,19 @@ export default async function OpenDaysPage() {
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display inline-flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">
               <GraduationCap size={16} aria-hidden />
-              Settore Giovanile
+              Settore Giovanile Scolastico
             </span>
             <h1 className="font-display text-ink-hi text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase md:text-5xl lg:text-6xl">
-              Open Days
+              Summer Camp
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Sono aperte le iscrizioni al Settore Giovanile Scolastico
-              dell&apos;Orbassano Calcio. Una vera esperienza all&apos;insegna
-              del divertimento, dello sport e dell&apos;amicizia. Qui sotto
-              trovi le date degli Open Day per ogni categoria: vieni a
-              provare con noi.
+              Da metà giugno, due/tre settimane di calcio, sport e
+              divertimento con i tecnici dell&apos;Orbassano Calcio. Il
+              Summer Camp è aperto ai ragazzi del Settore Giovanile
+              Scolastico: un&apos;esperienza all&apos;insegna del gioco e
+              dell&apos;amicizia, in attesa della nuova stagione. Qui sotto
+              trovi le date e il modulo per iscriverti.
             </p>
-            {/* Paragrafo "Iscriviti ora..." rimosso 2026-05-17 (richiesta
-                utente): le stesse informazioni vivono nel box "Modulo
-                iscrizione" del RegistrationPaymentBlock in fondo alla
-                pagina, niente bisogno di duplicarle nell'header. */}
           </div>
         </Container>
       </header>
@@ -134,10 +141,9 @@ export default async function OpenDaysPage() {
       <section className="bg-light-bg-0">
       {/* In alto: blocco unico modulo iscrizione + info pagamento
           (RegistrationPaymentBlock, shared con /settore-giovanile hub).
-          Spostato sopra il calendario 2026-05-21 (richiesta utente):
-          la prima cosa che l'utente vede e' "come iscriversi", il
-          calendario delle date viene subito sotto. Layout 2 colonne
-          md+ (modulo + bonifico), impilato su mobile. */}
+          La prima cosa che l'utente vede e' "come iscriversi", le date
+          del camp vengono subito sotto. Layout 2 colonne md+ (modulo +
+          bonifico), impilato su mobile. */}
       <Container className="pt-12 lg:pt-16" size="wide">
         <RegistrationPaymentBlock
           moduleUrl={moduleUrl}
@@ -146,7 +152,7 @@ export default async function OpenDaysPage() {
         />
       </Container>
 
-      {/* Sotto i box iscrizione: calendario Open Days per categoria. */}
+      {/* Sotto i box iscrizione: date del Summer Camp per categoria. */}
       <Container className="py-12 lg:py-16" size="wide">
         {events.length === 0 ? (
           <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
@@ -156,11 +162,11 @@ export default async function OpenDaysPage() {
               aria-hidden
             />
             <h2 className="font-display text-light-ink-hi text-2xl font-bold tracking-[0.005em] uppercase">
-              Calendario in arrivo
+              Date in arrivo
             </h2>
             <p className="text-light-ink-mid max-w-md text-sm leading-relaxed">
-              Le date degli Open Days per la prossima stagione saranno
-              pubblicate appena confermate dalla Segreteria.
+              Le date del Summer Camp saranno pubblicate appena confermate
+              dalla Segreteria.
             </p>
           </div>
         ) : (

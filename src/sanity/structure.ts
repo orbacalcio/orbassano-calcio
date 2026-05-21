@@ -280,7 +280,7 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         ),
 
       // ----- SETTORE GIOVANILE -----------------------------------------
-      // Open Days (sessioni di prova pre-stagione) + Tornei (eventi
+      // Summer Camp (date camp estivo pre-stagione) + Tornei (eventi
       // organizzati o ospitati). Vivono fuori da "Stagione corrente"
       // perche' la stagione e' un field del singolo documento.
       S.listItem()
@@ -291,7 +291,7 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
             .title("Settore Giovanile")
             .items([
               S.documentTypeListItem("openDay")
-                .title("Open Days")
+                .title("Summer Camp")
                 .icon(CalendarCheck),
               S.documentTypeListItem("tournament")
                 .title("Tornei")

@@ -257,7 +257,7 @@ async function CategoryView({
 
           {/* Settore Giovanile: in fondo alla vista categoria
               compaiono in ordine:
-              1. Card "Open Days" + "Tornei" (eventi del SGS che
+              1. Card "Summer Camp" + "Tornei" (eventi del SGS che
                  ora vivono solo qui, niente piu' hub
                  /settore-giovanile separato).
               2. Blocco "Modulo iscrizione + Bonifico" condiviso.
@@ -267,7 +267,7 @@ async function CategoryView({
             <>
               <div className="mt-12 grid gap-4 md:grid-cols-2 lg:mt-16">
                 <Link
-                  href="/settore-giovanile/open-days"
+                  href="/settore-giovanile/summer-camp"
                   className="group border-border bg-surface-1 hover:border-brand-gold/40 focus-visible:outline-brand-gold flex flex-col gap-4 rounded-2xl border p-8 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
                   <CalendarCheck
@@ -277,11 +277,11 @@ async function CategoryView({
                     aria-hidden
                   />
                   <h2 className="font-display text-ink-hi group-hover:text-brand-gold text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase transition-colors">
-                    Open Days
+                    Summer Camp
                   </h2>
                   <p className="text-ink-mid text-sm leading-relaxed">
-                    Sessioni di prova aperte. Vieni a conoscerci,
-                    porta un amico, scarica il modulo iscrizione.
+                    Due/tre settimane di calcio e divertimento da metà
+                    giugno. Scopri le date e scarica il modulo iscrizione.
                   </p>
                   <span className="text-brand-gold inline-flex items-center gap-2 text-xs font-semibold tracking-[0.1em] uppercase">
                     Vai al calendario

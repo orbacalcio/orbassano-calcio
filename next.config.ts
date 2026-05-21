@@ -151,12 +151,20 @@ const nextConfig: NextConfig = {
     //   2026-05-17, supporta anche Prima Squadra/Juniores).
     // - /settore-giovanile → /squadre/settore-giovanile (la hub page
     //   con sezioni Open Days+Tornei e' stata accorpata nella vista
-    //   categoria /squadre/settore-giovanile 2026-05-17; lo stesso
-    //   path /settore-giovanile/open-days resta su sentiero originale).
+    //   categoria /squadre/settore-giovanile 2026-05-17).
+    // - /settore-giovanile/open-days → /settore-giovanile/summer-camp
+    //   (2026-05-21: rinominata in "Summer Camp" perche' da regolamento
+    //   FIGC le selezioni/open day non si possono fare prima del 1°
+    //   luglio; l'attivita' di meta' giugno e' un camp estivo).
     const internalRedirects = [
       {
         source: "/settore-giovanile/tornei",
         destination: "/tornei",
+        permanent: true,
+      },
+      {
+        source: "/settore-giovanile/open-days",
+        destination: "/settore-giovanile/summer-camp",
         permanent: true,
       },
       {
