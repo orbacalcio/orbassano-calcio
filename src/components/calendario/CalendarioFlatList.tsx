@@ -1,9 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Filter } from "lucide-react";
+import { ChevronDown, Filter } from "lucide-react";
 import type { MatchAggregated, MatchSummary } from "@/sanity/fetchers";
-import { cn } from "@/lib/cn";
 import { getRomeDateParts } from "@/lib/date";
 import { MatchCard } from "./MatchCard";
 
@@ -151,33 +150,36 @@ export function CalendarioFlatList({
   return (
     <div className="flex flex-col gap-8">
       {enableCategoryFilter && categories.length > 1 && (
-        <div className="flex flex-col gap-3">
-          <div className="text-ink-mid flex items-center gap-2 text-xs">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <label
+            htmlFor="categoria-filter"
+            className="text-ink-mid flex items-center gap-2 text-xs"
+          >
             <Filter size={14} aria-hidden />
             <span className="font-mono tracking-[0.12em] uppercase">
               Filtra per categoria
             </span>
-          </div>
-          <ul className="flex flex-wrap gap-2">
-            <li>
-              <CategoryChip
-                active={activeCategory === "all"}
-                onClick={() => handleCategory("all")}
-              >
-                Tutte
-              </CategoryChip>
-            </li>
-            {categories.map((c) => (
-              <li key={c}>
-                <CategoryChip
-                  active={activeCategory === c}
-                  onClick={() => handleCategory(c)}
-                >
+          </label>
+          <div className="relative inline-flex w-full sm:w-auto">
+            <select
+              id="categoria-filter"
+              value={activeCategory}
+              onChange={(e) => handleCategory(e.target.value)}
+              className="border-border bg-surface-1 text-ink-hi hover:border-brand-gold/60 focus-visible:outline-brand-gold w-full appearance-none rounded-full border py-2.5 pr-10 pl-4 font-mono text-xs tracking-[0.05em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto"
+            >
+              <option value="all">Tutte le categorie</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>
                   {c}
-                </CategoryChip>
-              </li>
-            ))}
-          </ul>
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              size={16}
+              aria-hidden
+              className="text-ink-mid pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
+            />
+          </div>
         </div>
       )}
 
@@ -220,28 +222,3 @@ export function CalendarioFlatList({
   );
 }
 
-function CategoryChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        "border focus-visible:outline-brand-gold rounded-full px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
-        active
-          ? "border-brand-gold bg-brand-gold text-surface-0"
-          : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
-      )}
-    >
-      {children}
-    </button>
-  );
-}
