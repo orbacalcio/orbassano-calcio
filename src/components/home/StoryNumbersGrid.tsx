@@ -60,7 +60,7 @@ export function StoryNumbersGrid({ items }: Props) {
   return (
     <section
       aria-label="Storia del club in numeri"
-      className="bg-light-bg-0 relative overflow-hidden py-20"
+      className="bg-light-bg-0 relative overflow-hidden py-10 sm:py-14 lg:py-20"
     >
       {/* Banda navy full-wide che incornicia il gruppo numeri: si
           estende dai limiti pagina e contiene le 4 tile centrate.

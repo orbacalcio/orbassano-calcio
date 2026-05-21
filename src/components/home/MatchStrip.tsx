@@ -143,7 +143,7 @@ export async function MatchStrip() {
         <Container className="relative" size="wide">
           <div className={gridClass}>
             {/* Slot 1 — ULTIMO RISULTATO (40%) */}
-            <div className="flex flex-col gap-4 p-8 md:p-11">
+            <div className="flex flex-col gap-4 px-4 py-8 md:p-11">
               <div className="flex flex-col gap-1.5">
                 <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
                   <History
@@ -180,7 +180,7 @@ export async function MatchStrip() {
             </div>
 
             {/* Slot 2 — PROSSIMA PARTITA (40%) */}
-            <div className="flex flex-col gap-4 p-8 md:p-11">
+            <div className="flex flex-col gap-4 px-4 py-8 md:p-11">
               <div className="flex flex-col gap-1.5">
                 <span className="font-display text-brand-gold text-base font-bold tracking-[0.2em] uppercase">
                   <CalendarDays
