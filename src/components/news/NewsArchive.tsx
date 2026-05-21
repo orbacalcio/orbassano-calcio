@@ -27,10 +27,23 @@ const CATEGORIES: NewsCategory[] = [
   "Sponsor",
 ];
 
+// Quante card mostrare oltre la featured prima del "Carica altro", e
+// di quante crescere ad ogni click. 9 = 3 righe piene su lg (grid-3).
+const REST_STEP = 9;
+
 export function NewsArchive({ news }: Props) {
   const [activeCategory, setActiveCategory] = useState<NewsCategory | "all">(
     "all",
   );
+  const [visibleRest, setVisibleRest] = useState(REST_STEP);
+
+  // Cambiando categoria si riparte dal primo blocco (altrimenti il
+  // "Carica altro" gia' espanso falserebbe il conteggio della nuova
+  // categoria).
+  function selectCategory(cat: NewsCategory | "all") {
+    setActiveCategory(cat);
+    setVisibleRest(REST_STEP);
+  }
 
   const filtered = useMemo(() => {
     if (activeCategory === "all") return news;
@@ -62,6 +75,8 @@ export function NewsArchive({ news }: Props) {
 
   const featured = filtered[0];
   const rest = filtered.slice(1);
+  const visible = rest.slice(0, visibleRest);
+  const hasMore = rest.length > visibleRest;
 
   return (
     <div className="flex flex-col gap-12">
@@ -77,7 +92,7 @@ export function NewsArchive({ news }: Props) {
           <li>
             <CategoryChip
               active={activeCategory === "all"}
-              onClick={() => setActiveCategory("all")}
+              onClick={() => selectCategory("all")}
               count={counts.get("all") ?? 0}
             >
               Tutto
@@ -90,7 +105,7 @@ export function NewsArchive({ news }: Props) {
               <li key={c}>
                 <CategoryChip
                   active={activeCategory === c}
-                  onClick={() => setActiveCategory(c)}
+                  onClick={() => selectCategory(c)}
                   count={count}
                 >
                   {c}
@@ -108,7 +123,7 @@ export function NewsArchive({ news }: Props) {
           </p>
           <button
             type="button"
-            onClick={() => setActiveCategory("all")}
+            onClick={() => selectCategory("all")}
             className="text-brand-gold hover:text-light-ink-hi text-sm font-semibold underline-offset-2 hover:underline"
           >
             Mostra tutto
@@ -119,11 +134,22 @@ export function NewsArchive({ news }: Props) {
           {featured && (
             <NewsCard news={featured} variant="featured" />
           )}
-          {rest.length > 0 && (
+          {visible.length > 0 && (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {rest.map((n) => (
+              {visible.map((n) => (
                 <NewsCard key={n._id} news={n} />
               ))}
+            </div>
+          )}
+          {hasMore && (
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => setVisibleRest((c) => c + REST_STEP)}
+                className="border-light-border text-light-ink-hi hover:border-brand-gold hover:text-brand-gold focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-6 py-3 font-display text-sm font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                Carica altre news
+              </button>
             </div>
           )}
         </div>

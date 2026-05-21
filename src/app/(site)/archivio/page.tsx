@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Archive, ArrowUpRight } from "lucide-react";
+import { Archive } from "lucide-react";
+import {
+  ArchiveSeasonList,
+  type ArchiveSeasonGroup,
+} from "@/components/archivio/ArchiveSeasonList";
 import { Container } from "@/components/ui/Container";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
@@ -66,44 +69,54 @@ function categoryOf(entry: ArchiveTeamSeasonEntry): CategoryName {
   return "Altro";
 }
 
-type SeasonGroup = {
-  season: string;
-  byCategory: Map<CategoryName, ArchiveTeamSeasonEntry[]>;
-  totalMatches: number;
-};
-
-function groupBySeason(entries: ArchiveTeamSeasonEntry[]): SeasonGroup[] {
-  const groups = new Map<string, SeasonGroup>();
+/**
+ * Raggruppa per stagione (desc) e, dentro ogni stagione, per categoria
+ * nell'ordine CATEGORY_ORDER. Restituisce una struttura serializzabile
+ * (array, niente Map) passata al client ArchiveSeasonList per il filtro
+ * stagione.
+ */
+function groupBySeason(
+  entries: ArchiveTeamSeasonEntry[],
+): ArchiveSeasonGroup[] {
+  const byCat = new Map<
+    string,
+    { totalMatches: number; categories: Map<CategoryName, ArchiveTeamSeasonEntry[]> }
+  >();
   for (const e of entries) {
-    let g = groups.get(e.season);
+    let g = byCat.get(e.season);
     if (!g) {
-      g = { season: e.season, byCategory: new Map(), totalMatches: 0 };
-      groups.set(e.season, g);
+      g = { totalMatches: 0, categories: new Map() };
+      byCat.set(e.season, g);
     }
     const cat = categoryOf(e);
-    const list = g.byCategory.get(cat) ?? [];
+    const list = g.categories.get(cat) ?? [];
     list.push(e);
-    g.byCategory.set(cat, list);
+    g.categories.set(cat, list);
     g.totalMatches += e.matchCount;
   }
-  // Ordina stagioni desc
-  const sorted = Array.from(groups.values()).sort((a, b) =>
-    b.season.localeCompare(a.season),
-  );
-  // Ordinamento card: prima per team (A→Z) poi per nome competizione
-  // (A→Z), cosi' una squadra che ha disputato Campionato + Coppa nella
-  // stessa stagione vede le due card una accanto all'altra in ordine
-  // alfabetico di denominazione.
-  for (const g of sorted) {
-    for (const [, list] of g.byCategory) {
-      list.sort((a, b) => {
-        const teamCmp = a.teamName.localeCompare(b.teamName, "it");
-        if (teamCmp !== 0) return teamCmp;
-        return a.competitionName.localeCompare(b.competitionName, "it");
-      });
-    }
-  }
-  return sorted;
+
+  const orderedCategories: CategoryName[] = [...CATEGORY_ORDER, "Altro"];
+
+  return Array.from(byCat.entries())
+    // Stagioni desc
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([season, g]) => ({
+      season,
+      totalMatches: g.totalMatches,
+      categories: orderedCategories
+        .map((cat) => {
+          const list = g.categories.get(cat);
+          if (!list || list.length === 0) return null;
+          // Card ordinate per team (A→Z) poi competizione (A→Z).
+          const entriesSorted = [...list].sort((a, b) => {
+            const teamCmp = a.teamName.localeCompare(b.teamName, "it");
+            if (teamCmp !== 0) return teamCmp;
+            return a.competitionName.localeCompare(b.competitionName, "it");
+          });
+          return { category: cat, entries: entriesSorted };
+        })
+        .filter((c): c is NonNullable<typeof c> => c !== null),
+    }));
 }
 
 export default async function ArchivioPage() {
@@ -140,117 +153,10 @@ export default async function ArchivioPage() {
         {seasons.length === 0 ? (
           <EmptyPlaceholder currentSeason={currentSeason} />
         ) : (
-          <div className="flex flex-col gap-16">
-            {seasons.map((group) => (
-              <SeasonSection key={group.season} group={group} />
-            ))}
-          </div>
+          <ArchiveSeasonList groups={seasons} />
         )}
       </Container>
     </>
-  );
-}
-
-function SeasonSection({ group }: { group: SeasonGroup }) {
-  const orderedCategories: CategoryName[] = [...CATEGORY_ORDER, "Altro"];
-  return (
-    <section className="flex flex-col gap-6">
-      <div className="border-border/40 flex flex-wrap items-baseline justify-between gap-3 border-b pb-3">
-        <h2 className="font-display text-ink-hi text-3xl font-extrabold tracking-[0.005em] uppercase sm:text-4xl">
-          {group.season}
-        </h2>
-        <span className="text-ink-low font-mono text-xs tracking-[0.12em] uppercase">
-          {group.totalMatches}{" "}
-          {group.totalMatches === 1 ? "partita disputata" : "partite disputate"}
-        </span>
-      </div>
-      <div className="flex flex-col gap-10">
-        {orderedCategories.map((cat) => {
-          const list = group.byCategory.get(cat);
-          if (!list || list.length === 0) return null;
-          return (
-            <div key={cat} className="flex flex-col gap-4">
-              <h3 className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
-                {cat}
-              </h3>
-              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {list.map((entry) => (
-                  <li
-                    key={`${entry.season}-${entry.teamSlug}-${entry.competitionSlug}`}
-                  >
-                    <TeamSeasonCard entry={entry} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function TeamSeasonCard({ entry }: { entry: ArchiveTeamSeasonEntry }) {
-  const href = `/squadre/${entry.teamSlug}/calendario?season=${encodeURIComponent(entry.season)}`;
-  // Record V/N/P: mostrato come 3 mini-stat affiancate. Visibile solo
-  // se c'e' almeno un match con score (cancelled-only → nascondi
-  // record e mostra solo il totale partite).
-  const hasRecord = entry.wins + entry.draws + entry.losses > 0;
-  return (
-    <Link
-      href={href}
-      className="group bg-surface-1 hover:bg-surface-2 focus-visible:outline-brand-gold relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl p-6 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
-    >
-      {/* Eyebrow: denominazione competizione (richiesta utente
-          2026-05-18, sostituisce la stagione che resta visibile come
-          intestazione di sezione "2024/2025"). Title attribute con
-          full name competition come fallback per nomi troncati. */}
-      <span
-        className="text-brand-gold font-mono text-[10px] tracking-[0.15em] uppercase line-clamp-2"
-        title={entry.competitionFullName}
-      >
-        {entry.competitionName}
-      </span>
-      <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase">
-        {entry.teamName}
-      </span>
-      {hasRecord && (
-        <div className="border-border/40 mt-2 flex items-stretch gap-px overflow-hidden rounded-lg border">
-          <StatCell label="V" value={entry.wins} />
-          <StatCell label="N" value={entry.draws} />
-          <StatCell label="P" value={entry.losses} />
-        </div>
-      )}
-      <div className="text-ink-mid border-border/40 mt-auto flex items-center justify-between border-t pt-4 text-xs">
-        <span className="font-mono tracking-wide uppercase">
-          {entry.matchCount}{" "}
-          {entry.matchCount === 1 ? "partita" : "partite"}
-        </span>
-        <ArrowUpRight
-          size={14}
-          className="text-brand-gold transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-        />
-      </div>
-    </Link>
-  );
-}
-
-/**
- * Mini-stat cell V/N/P nella card archivio. Layout 3-up affiancato:
- * numero grande sopra (font-display extrabold), label uppercase
- * sotto (font-mono ink-mid). Neutrale per coerenza con la regola
- * "no colori semantici basati su esito" (commit 5bb4351).
- */
-function StatCell({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="bg-surface-2/40 flex flex-1 flex-col items-center justify-center gap-0.5 py-2">
-      <span className="font-display text-ink-hi text-lg font-extrabold leading-none tabular-nums">
-        {value}
-      </span>
-      <span className="text-ink-mid font-mono text-[9px] tracking-[0.15em] uppercase">
-        {label}
-      </span>
-    </div>
   );
 }
 
