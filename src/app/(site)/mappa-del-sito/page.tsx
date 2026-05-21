@@ -38,8 +38,13 @@ export default async function MappaDelSitoPage() {
     fetchHasActivePartners(),
   ]);
 
+  // Rosa Prima Squadra esclusa dall'indice (richiesta utente 2026-05-21):
+  // i singoli giocatori della Prima Squadra non vengono piu' elencati
+  // nella mappa del sito. Le altre rose restano per densita' di link
+  // interni / SEO. Le pagine giocatore restano in sitemap.xml.
   const playersByTeam = new Map<string, typeof players>();
   for (const p of players) {
+    if (p.teamSlug === "prima-squadra") continue;
     const list = playersByTeam.get(p.teamSlug) ?? [];
     list.push(p);
     playersByTeam.set(p.teamSlug, list);

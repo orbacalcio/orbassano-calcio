@@ -80,8 +80,8 @@ export default function CinquePerMillePage() {
           </div>
         </div>
 
-        <Container className="relative grid items-center gap-10 py-20 lg:grid-cols-2 lg:py-28" size="wide">
-          <div className="flex flex-col gap-6">
+        <Container className="relative grid grid-cols-1 items-center gap-10 py-20 lg:grid-cols-2 lg:py-28" size="wide">
+          <div className="flex min-w-0 flex-col gap-6">
             <span className="text-brand-gold font-display flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">
               <Heart size={16} aria-hidden />
               5&times;1000 &middot; senza costi per te
@@ -102,12 +102,12 @@ export default function CinquePerMillePage() {
             </p>
           </div>
 
-          <div className="border-brand-gold/30 bg-surface-1/70 flex flex-col gap-6 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
-            <div className="flex flex-col gap-2">
+          <div className="border-brand-gold/30 bg-surface-1/70 flex min-w-0 flex-col gap-6 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
+            <div className="flex min-w-0 flex-col gap-2">
               <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
                 Codice fiscale
               </span>
-              <span className="text-brand-gold font-mono text-5xl font-medium tracking-[0.05em] sm:text-6xl">
+              <span className="text-brand-gold font-mono text-3xl font-medium tracking-tight break-words sm:text-5xl sm:tracking-[0.05em] md:text-6xl">
                 {FISCAL_CODE}
               </span>
               <span className="text-ink-mid text-sm">

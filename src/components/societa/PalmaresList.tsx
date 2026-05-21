@@ -90,7 +90,7 @@ export function PalmaresList() {
           id="palmares-title"
           className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.01em] uppercase sm:text-4xl"
         >
-          Quasi un secolo di trofei e piazzamenti
+          Trofei vinti e piazzamenti di prestigio
         </h2>
       </header>
 

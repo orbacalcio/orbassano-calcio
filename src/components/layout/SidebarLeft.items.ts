@@ -6,7 +6,6 @@ import {
   Mail,
   MoreHorizontal,
   Newspaper,
-  Ticket,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -46,11 +45,14 @@ export const sidebarMainItems: SidebarItem[] = [
  * Voci secondarie quick-link mostrate in fondo al NavigationDrawer
  * (drawer hamburger aperto da SidebarLeft "ALTRO" o da MobileTopbar).
  *
- * Ordine: Sponsor → Biglietteria → 5×1000 → Contatti. Calendario e'
- * stata promossa a main accordion del drawer (con sottomenu per
- * categoria) 2026-05-17, quindi qui non c'e' piu'. Newsletter idem
- * rimossa (richiesta utente): il box newsletter in fondo a ogni
- * pagina basta come call-to-subscribe.
+ * Ordine: Sponsor → 5×1000 → Contatti. Calendario e' stata promossa a
+ * main accordion del drawer (con sottomenu per categoria) 2026-05-17,
+ * quindi qui non c'e' piu'. Newsletter idem rimossa (richiesta utente):
+ * il box newsletter in fondo a ogni pagina basta come call-to-subscribe.
+ *
+ * Biglietteria rimossa dal main menu 2026-05-21 (richiesta utente):
+ * resta accessibile come sotto-pagina dell'accordion Societa' del
+ * drawer e dalla hub /societa, non piu' come quick-link prominente.
  *
  * Impianti sportivi NON e' qui: vive solo dentro l'accordion Societa'
  * del drawer (e' un sotto-link logico della sezione).
@@ -58,7 +60,6 @@ export const sidebarMainItems: SidebarItem[] = [
  */
 export const sidebarOverflowItems: SidebarItem[] = [
   { href: "/sponsor", label: "Sponsor", icon: Handshake },
-  { href: "/societa/biglietteria", label: "Biglietteria", icon: Ticket },
   { href: "/5x1000", label: "5×1000", icon: HeartHandshake },
   { href: "/contatti", label: "Contatti", icon: Mail },
 ];

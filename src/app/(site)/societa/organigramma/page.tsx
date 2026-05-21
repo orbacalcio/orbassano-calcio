@@ -110,15 +110,15 @@ export default async function OrganigrammaPage() {
         <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
             {officials.length > 0 ? (
-              <div className="flex flex-col gap-12">
+              <div className="flex flex-col gap-8 sm:gap-12">
                 {groupOfficials(officials).map((group) => (
-                  <section key={group.key} className="flex flex-col gap-6">
+                  <section key={group.key} className="flex flex-col gap-4 sm:gap-6">
                     {group.title && (
-                      <h2 className="text-brand-gold font-display text-4xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
+                      <h2 className="text-brand-gold font-display text-2xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
                         {group.title}
                       </h2>
                     )}
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
                       {group.items.map((o) => (
                         <OfficialCard key={o._id} official={o} />
                       ))}

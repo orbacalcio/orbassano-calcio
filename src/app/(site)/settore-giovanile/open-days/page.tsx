@@ -132,6 +132,21 @@ export default async function OpenDaysPage() {
       </header>
 
       <section className="bg-light-bg-0">
+      {/* In alto: blocco unico modulo iscrizione + info pagamento
+          (RegistrationPaymentBlock, shared con /settore-giovanile hub).
+          Spostato sopra il calendario 2026-05-21 (richiesta utente):
+          la prima cosa che l'utente vede e' "come iscriversi", il
+          calendario delle date viene subito sotto. Layout 2 colonne
+          md+ (modulo + bonifico), impilato su mobile. */}
+      <Container className="pt-12 lg:pt-16" size="wide">
+        <RegistrationPaymentBlock
+          moduleUrl={moduleUrl}
+          iban={iban}
+          phone={phone}
+        />
+      </Container>
+
+      {/* Sotto i box iscrizione: calendario Open Days per categoria. */}
       <Container className="py-12 lg:py-16" size="wide">
         {events.length === 0 ? (
           <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
@@ -163,18 +178,6 @@ export default async function OpenDaysPage() {
             })}
           </div>
         )}
-      </Container>
-
-      {/* Sotto il calendario: blocco unico estratto in
-          RegistrationPaymentBlock (shared anche con /settore-giovanile
-          hub page). Layout 2 colonne md+ (modulo iscrizione + bonifico),
-          impilato su mobile. */}
-      <Container className="pb-16 lg:pb-24" size="wide">
-        <RegistrationPaymentBlock
-          moduleUrl={moduleUrl}
-          iban={iban}
-          phone={phone}
-        />
       </Container>
       </section>
     </>
