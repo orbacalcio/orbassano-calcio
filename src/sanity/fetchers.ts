@@ -1315,13 +1315,17 @@ export async function fetchLastMatchesByTeamSlugs(
 
 // ===== Settore Giovanile: Open Days + Tornei =================================
 
+export type OpenDaySession = {
+  date: string;
+  endTime: string | null;
+};
+
 export type OpenDayEntry = {
   _id: string;
   title: string;
-  category: string;
+  categories: string[];
   season: string;
-  date: string;
-  endTime: string | null;
+  sessions: OpenDaySession[];
   venue: string;
   notes: string | null;
   downloadModuleUrl: string | null;
@@ -1343,9 +1347,10 @@ export type TournamentEntry = {
 };
 
 /**
- * Fetch tutti gli Open Day attivi, gia' ordinati per categoria+data
- * dalla query GROQ. Cache tag "openDay" → invalidato dal webhook
- * Sanity quando un Open Day viene creato/modificato.
+ * Fetch tutte le sessioni di Summer Camp attive (isActive!=false). Ogni
+ * record porta categorie multiple + sessioni multiple: il raggruppamento
+ * per categoria e l'ordinamento per data vivono nella pagina. Cache tag
+ * "openDay" (id schema invariato) → invalidato dal webhook Sanity.
  */
 export async function fetchOpenDays(): Promise<OpenDayEntry[]> {
   try {

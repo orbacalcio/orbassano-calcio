@@ -887,18 +887,21 @@ export const playerBySlugQuery = defineQuery(`
   }
 `);
 
-// Settore Giovanile — Open Days. Tutti i record con isActive!=false
-// ordinati per categoria + data crescente. Il filter category-then-date
-// permette al render di raggruppare senza ulteriori passaggi.
+// Settore Giovanile — Summer Camp. Tutti i record con isActive!=false.
+// Ogni record porta una o piu' categorie (multi-selezione) e una o piu'
+// sessioni (giorno + ora di inizio/fine). Il raggruppamento per
+// categoria e l'espansione delle sessioni in righe avvengono lato page.
+// Schema id ancora "openDay" (vedi schemaTypes/openDay.ts).
 export const openDaysQuery = defineQuery(`
-  *[_type == "openDay" && isActive != false]
-  | order(category asc, date asc){
+  *[_type == "openDay" && isActive != false]{
     _id,
     title,
-    category,
+    categories,
     season,
-    date,
-    endTime,
+    sessions[]{
+      date,
+      endTime
+    },
     venue,
     notes,
     downloadModuleUrl

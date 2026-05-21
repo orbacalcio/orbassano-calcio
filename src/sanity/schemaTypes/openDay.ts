@@ -1,5 +1,16 @@
 import { CalendarCheck } from "lucide-react";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
+
+// Categorie del Settore Giovanile Scolastico selezionabili per una
+// sessione di Summer Camp. Riusate sia per i checkbox multi-selezione
+// dello schema sia per l'ordine di rendering in pagina.
+const SGS_CATEGORIES = [
+  "Juniores Under 19",
+  "Allievi Under 17",
+  "Allievi Under 16",
+  "Giovanissimi Under 15",
+  "Giovanissimi Under 14",
+] as const;
 
 /**
  * Summer Camp del Settore Giovanile Scolastico — date del camp estivo
@@ -34,22 +45,17 @@ export const openDay = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: "category",
-      title: "Categoria",
+      name: "categories",
+      title: "Categorie",
       description:
-        "Categoria del Settore Giovanile Scolastico a cui è rivolta questa data del Summer Camp. Una sola categoria per evento; se serve un evento multi-categoria, crea un evento per ciascuna.",
-      type: "string",
+        "Una o più categorie del Settore Giovanile Scolastico a cui è rivolta questa sessione di Summer Camp. Es. spunta sia Allievi U17 sia Allievi U16 se il camp è aperto a entrambe.",
+      type: "array",
+      of: [{ type: "string" }],
       options: {
-        list: [
-          { title: "Juniores Under 19", value: "Juniores Under 19" },
-          { title: "Allievi Under 17", value: "Allievi Under 17" },
-          { title: "Allievi Under 16", value: "Allievi Under 16" },
-          { title: "Giovanissimi Under 15", value: "Giovanissimi Under 15" },
-          { title: "Giovanissimi Under 14", value: "Giovanissimi Under 14" },
-        ],
-        layout: "dropdown",
+        list: SGS_CATEGORIES.map((c) => ({ title: c, value: c })),
+        layout: "grid",
       },
-      validation: (r) => r.required(),
+      validation: (r) => r.required().min(1).unique(),
     }),
     defineField({
       name: "season",
@@ -60,24 +66,60 @@ export const openDay = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: "date",
-      title: "Data",
-      description: "Giorno e ora di inizio della sessione di Summer Camp.",
-      type: "datetime",
-      options: { dateFormat: "DD/MM/YYYY", timeFormat: "HH:mm" },
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "endTime",
-      title: "Ora di fine",
+      name: "sessions",
+      title: "Giorni e orari",
       description:
-        "Es. '19:30'. Solo l'ora, niente data (la data è presa dal campo Data). Lascia vuoto se non specificato.",
-      type: "string",
-      validation: (r) =>
-        r.regex(/^\d{1,2}[:.]\d{2}$/, {
-          name: "ora",
-          invert: false,
-        }).warning("Formato consigliato: HH:mm (es. 19:30)"),
+        "Aggiungi una riga per ogni giorno. Il camp può svolgersi in più giorni e con orari diversi: inserisci una sessione per ciascuno (giorno + ora di inizio e, se vuoi, ora di fine).",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "session",
+          title: "Sessione",
+          fields: [
+            defineField({
+              name: "date",
+              title: "Giorno e ora di inizio",
+              type: "datetime",
+              options: { dateFormat: "DD/MM/YYYY", timeFormat: "HH:mm" },
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "endTime",
+              title: "Ora di fine",
+              description:
+                "Es. '19:30'. Solo l'ora (la data è quella di inizio). Lascia vuoto se non specificato.",
+              type: "string",
+              validation: (r) =>
+                r
+                  .regex(/^\d{1,2}[:.]\d{2}$/, {
+                    name: "ora",
+                    invert: false,
+                  })
+                  .warning("Formato consigliato: HH:mm (es. 19:30)"),
+            }),
+          ],
+          preview: {
+            select: { date: "date", endTime: "endTime" },
+            prepare({ date, endTime }) {
+              const formatted = date
+                ? new Date(date).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "—";
+              return {
+                title: formatted,
+                subtitle: endTime ? `fino alle ${endTime}` : undefined,
+              };
+            },
+          },
+        }),
+      ],
+      validation: (r) => r.required().min(1),
     }),
     defineField({
       name: "venue",
@@ -118,13 +160,20 @@ export const openDay = defineType({
   preview: {
     select: {
       title: "title",
-      category: "category",
-      date: "date",
+      categories: "categories",
+      firstDate: "sessions.0.date",
       isActive: "isActive",
     },
-    prepare({ title, category, date, isActive }) {
-      const formatted = date
-        ? new Date(date).toLocaleDateString("it-IT", {
+    prepare({ title, categories, firstDate, isActive }) {
+      const cats: string[] = Array.isArray(categories) ? categories : [];
+      const catLabel =
+        cats.length === 0
+          ? "?"
+          : cats.length === 1
+            ? cats[0]
+            : `${cats.length} categorie`;
+      const formatted = firstDate
+        ? new Date(firstDate).toLocaleDateString("it-IT", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
@@ -132,22 +181,17 @@ export const openDay = defineType({
         : "—";
       return {
         title: title || "Summer Camp senza titolo",
-        subtitle: `${category ?? "?"} · ${formatted}${isActive === false ? " · NASCOSTO" : ""}`,
+        subtitle: `${catLabel} · dal ${formatted}${isActive === false ? " · NASCOSTO" : ""}`,
       };
     },
   },
   orderings: [
     {
-      title: "Data crescente",
-      name: "dateAsc",
-      by: [{ field: "date", direction: "asc" }],
-    },
-    {
-      title: "Categoria",
-      name: "categoryAsc",
+      title: "Stagione (più recente)",
+      name: "seasonDesc",
       by: [
-        { field: "category", direction: "asc" },
-        { field: "date", direction: "asc" },
+        { field: "season", direction: "desc" },
+        { field: "title", direction: "asc" },
       ],
     },
   ],

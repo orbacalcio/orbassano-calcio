@@ -79,28 +79,42 @@ export default async function SummerCampPage() {
   const iban = settings.legalInfo?.iban ?? FALLBACK_IBAN;
   const phone = settings.contactInfo?.phone ?? FALLBACK_PHONE;
 
-  // Raggruppa per categoria (lookup O(1) per ogni render group)
+  // Raggruppa per categoria espandendo categorie × sessioni in righe:
+  // un evento con categorie [U17, U16] e 2 sessioni produce 2 righe in
+  // OGNI gruppo categoria. Cosi' YouthEventGroup (una riga = un giorno)
+  // resta invariato e gestito anche dai Tornei.
   const byCategory = new Map<string, EventRow[]>();
   for (const cat of CATEGORY_ORDER) byCategory.set(cat, []);
   for (const ev of events) {
-    const row: EventRow = {
-      id: ev._id,
-      title: ev.title,
-      date: ev.date,
-      endTime: ev.endTime,
-      venue: ev.venue,
-      notes: ev.notes,
-      cta: ev.downloadModuleUrl
-        ? {
-            label: "Scarica modulo",
-            href: ev.downloadModuleUrl,
-            icon: "download",
-          }
-        : null,
-    };
-    const list = byCategory.get(ev.category);
-    if (list) list.push(row);
-    else byCategory.set(ev.category, [row]);
+    const cta = ev.downloadModuleUrl
+      ? {
+          label: "Scarica modulo",
+          href: ev.downloadModuleUrl,
+          icon: "download" as const,
+        }
+      : null;
+    for (const cat of ev.categories) {
+      const list = byCategory.get(cat);
+      if (!list) continue; // categoria fuori dall'ordine atteso → ignora
+      ev.sessions.forEach((session, i) => {
+        list.push({
+          id: `${ev._id}-${i}`,
+          title: ev.title,
+          date: session.date,
+          endTime: session.endTime,
+          venue: ev.venue,
+          notes: ev.notes,
+          cta,
+        });
+      });
+    }
+  }
+  // Ordina le righe di ogni categoria per data crescente (le sessioni
+  // di eventi diversi si intrecciano cronologicamente).
+  for (const rows of byCategory.values()) {
+    rows.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
   }
 
   return (
