@@ -293,9 +293,18 @@ export function MatchCard({
             {teamBadge}
           </span>
         )}
-        <span className="font-display text-ink-mid text-xs font-bold tracking-[0.1em] uppercase truncate">
-          {competitionLabel || "—"}
-        </span>
+        {/* Riga competizione: nascosta quando duplica il badge categoria
+            (vista SG aggregata, dove competition.shortName == nome
+            squadra, es. "Allievi Under 16"). Sulla pagina per-squadra
+            (niente badge) resta e mostra il vero campionato. */}
+        {competitionLabel &&
+          (!teamBadge ||
+            competitionLabel.trim().toLowerCase() !==
+              teamBadge.trim().toLowerCase()) && (
+            <span className="font-display text-ink-mid text-xs font-bold tracking-[0.1em] uppercase truncate">
+              {competitionLabel}
+            </span>
+          )}
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="bg-surface-2 text-ink-mid border-border/40 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase">
             {match.home ? "Casa" : "Trasferta"}

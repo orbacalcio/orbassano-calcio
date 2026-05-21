@@ -40,10 +40,7 @@ export function SeasonSelect({
       label="Stagione"
       value={selectedSeason}
       onChange={go}
-      options={seasons.map((s) => ({
-        value: s,
-        label: s === resetSeason ? `${s} · in corso` : s,
-      }))}
+      options={seasons.map((s) => ({ value: s, label: s }))}
     />
   );
 }

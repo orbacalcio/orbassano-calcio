@@ -338,6 +338,15 @@ html.past-hero #main-content + div {
   transform: rotate(180deg);
 }
 @media (min-width: 640px) {
+  /* Chrome/Safari/Firefox recenti nascondono il contenuto di un
+     <details> chiuso via content-visibility sul pseudo-elemento
+     ::details-content: il solo display:flex sull'<ul> non basta piu'
+     (regressione che svuotava le colonne footer su desktop). Va
+     sbloccato anche il pseudo-elemento. I browser senza
+     ::details-content ignorano questa regola e usano quella sotto. */
+  .footer-section::details-content {
+    content-visibility: visible;
+  }
   .footer-section > ul {
     display: flex !important;
   }
