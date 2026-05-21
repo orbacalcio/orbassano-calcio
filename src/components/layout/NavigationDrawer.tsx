@@ -74,8 +74,8 @@ function buildSections(opts: {
   // (pagina hub /calendario) e' stata rimossa 2026-05-17 su richiesta
   // utente — la pagina /calendario esiste ancora come URL diretto ma
   // non e' piu' linkata da nessuna parte. Sub-link puntano direttamente
-  // al calendario della categoria, in coda Open Days + Tornei (eventi
-  // extra-campionato).
+  // al calendario della categoria; in coda Archivio + eventi
+  // extra-campionato (Tornei, Open Days) — vedi ordine sotto.
   const calendarioChildren: DrawerSection["children"] = [];
   if (teamSlugs.has("prima-squadra")) {
     calendarioChildren.push({
@@ -96,22 +96,23 @@ function buildSections(opts: {
   // piu' linkate dal sito.
   calendarioChildren.push({
     href: "/squadre/settore-giovanile/calendario",
-    label: "Settore Giovanile",
+    label: "Settore Giovanile Scolastico",
   });
+  // Ordine voci Calendario (richiesta utente 2026-05-21): Prima Squadra,
+  // Juniores, Settore Giovanile Scolastico, Archivio stagioni, Tornei,
+  // Open Days. Archivio (stagioni passate) sale subito dopo i calendari
+  // delle squadre; gli eventi extra-campionato (Tornei, Open Days) in coda.
   calendarioChildren.push({
-    href: "/settore-giovanile/open-days",
-    label: "Open Days",
+    href: "/archivio",
+    label: "Archivio stagioni",
   });
   calendarioChildren.push({
     href: "/tornei",
     label: "Tornei",
   });
-  // Archivio storico: hub /archivio con le stagioni passate. Linkato in
-  // coda all'accordion Calendario perche' e' il complemento naturale
-  // dei calendari delle stagioni correnti (richiesta utente 2026-05-18).
   calendarioChildren.push({
-    href: "/archivio",
-    label: "Archivio stagioni",
+    href: "/settore-giovanile/open-days",
+    label: "Open Days",
   });
 
   // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·
