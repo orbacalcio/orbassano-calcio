@@ -3,34 +3,17 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
-import { MatchCard } from "@/components/calendario/MatchCard";
+import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
 import { cn } from "@/lib/cn";
-import { getRomeDateParts } from "@/lib/date";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
 import {
   fetchMatchesBySettoreGiovanile,
   fetchSettoreGiovanileSeasons,
-  type MatchAggregated,
 } from "@/sanity/fetchers";
 
 const FALLBACK_SEASON = "2026/2027";
-
-const ITALIAN_MONTHS = [
-  "Gennaio",
-  "Febbraio",
-  "Marzo",
-  "Aprile",
-  "Maggio",
-  "Giugno",
-  "Luglio",
-  "Agosto",
-  "Settembre",
-  "Ottobre",
-  "Novembre",
-  "Dicembre",
-];
 
 export const metadata: Metadata = {
   title: "Calendario Settore Giovanile Scolastico",
@@ -77,37 +60,6 @@ async function fetchCurrentSeason(): Promise<string> {
   }
 }
 
-function monthGroupKey(iso: string): string {
-  const d = getRomeDateParts(iso);
-  return `${d.year}-${String(d.month).padStart(2, "0")}`;
-}
-
-function monthGroupLabel(iso: string): string {
-  const d = getRomeDateParts(iso);
-  return `${ITALIAN_MONTHS[d.month] ?? "—"} ${d.year}`;
-}
-
-function groupByMonth(
-  matches: MatchAggregated[],
-): Array<{ key: string; label: string; items: MatchAggregated[] }> {
-  const map = new Map<string, MatchAggregated[]>();
-  for (const m of matches) {
-    const k = monthGroupKey(m.date);
-    if (!map.has(k)) map.set(k, []);
-    map.get(k)!.push(m);
-  }
-  const entries = Array.from(map.entries()).map(([key, items]) => ({
-    key,
-    label: monthGroupLabel(items[0]!.date),
-    items,
-  }));
-  // Ordine asc cronologico (gennaio → dicembre) — richiesta utente
-  // 2026-05-18: niente piu' partizione Prossime/Risultati, lista unica
-  // cronologica.
-  entries.sort((a, b) => a.key.localeCompare(b.key));
-  return entries;
-}
-
 type Search = { season?: string };
 
 export default async function CalendarioSettoreGiovanilePage({
@@ -132,7 +84,6 @@ export default async function CalendarioSettoreGiovanilePage({
         : fallbackSeason;
 
   const matches = await fetchMatchesBySettoreGiovanile(selectedSeason);
-  const groups = groupByMonth(matches);
 
   const eventsLd = buildSportsEventListLd(
     matches.map((m) => ({
@@ -194,9 +145,9 @@ export default async function CalendarioSettoreGiovanilePage({
             </h1>
             <p className="text-ink-mid text-sm leading-relaxed lg:text-base">
               Tutte le partite delle squadre del Settore Giovanile
-              Scolastico in un&apos;unica vista cronologica della
-              stagione. Il badge oro accanto a ogni partita indica la
-              squadra.
+              Scolastico in un&apos;unica vista, dalla più recente. Filtra
+              per categoria e usa il badge oro accanto a ogni partita per
+              riconoscere la squadra.
             </p>
           </div>
         </Container>
@@ -244,7 +195,16 @@ export default async function CalendarioSettoreGiovanilePage({
         {matches.length === 0 ? (
           <EmptyPlaceholder />
         ) : (
-          <MatchList groups={groups} />
+          // Lista unica condivisa con le altre pagine calendario:
+          // ordinamento decrescente, "Carica altro", filtro per
+          // categoria (U14/U15/U16/U17) e badge squadra su ogni card.
+          <CalendarioFlatList
+            matches={matches}
+            ourTeamSlug=""
+            ourTeamName="Orbassano Calcio"
+            showTeamBadge
+            enableCategoryFilter
+          />
         )}
       </Container>
     </>
@@ -261,42 +221,4 @@ function EmptyPlaceholder() {
     </p>
   );
 }
-
-function MatchList({
-  groups,
-}: {
-  groups: Array<{ key: string; label: string; items: MatchAggregated[] }>;
-}) {
-  return (
-    <div className="flex flex-col gap-8">
-      {groups.map((g) => (
-        <div key={g.key} className="flex flex-col gap-3">
-          {/* Header mese + MatchCard allineati alle altre pagine
-              calendario (CalendarioFlatList): grafica uniforme,
-              punteggio al centro, font grande. Il teamBadge mostra la
-              categoria (es. "Allievi U17"), unico discriminante della
-              vista aggregata multi-squadra. */}
-          <h4 className="font-display text-ink-mid sticky top-[84px] z-10 bg-surface-0/95 -mx-1 px-1 text-lg font-bold tracking-[0.1em] uppercase backdrop-blur-md md:text-xl lg:top-[78px]">
-            {g.label}
-          </h4>
-          <div className="flex flex-col gap-2">
-            {g.items.map((m) => (
-              <MatchCard
-                key={m._id}
-                match={m}
-                ourTeamSlug={m.teamSlug}
-                ourTeamName={m.teamDisplayName ?? "Orbassano Calcio"}
-                teamBadge={m.teamName}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// MatchRow rimossa 2026-05-20: la vista aggregata usa ora direttamente
-// MatchCard (vedi MatchList sopra) per uniformita' con le altre pagine
-// calendario.
 

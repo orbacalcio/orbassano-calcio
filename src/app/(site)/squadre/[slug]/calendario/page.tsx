@@ -137,9 +137,9 @@ export default async function CalendarioPage({
               Calendario &amp; Risultati
             </h1>
             <p className="text-ink-mid text-sm leading-relaxed lg:text-base">
-              Tutte le partite di {team.name} stagione {season} in
-              ordine cronologico: prossime gare, risultati e tabellini
-              ufficiali.
+              Tutte le partite di {team.name} stagione {season}, dalla
+              più recente: risultati, tabellini ufficiali e prossime
+              gare.
             </p>
           </div>
         </Container>
