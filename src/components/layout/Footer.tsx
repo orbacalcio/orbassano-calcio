@@ -96,7 +96,7 @@ function buildSections(opts: {
   }
   squadreItems.push({
     href: "/squadre/settore-giovanile",
-    label: "Settore Giovanile",
+    label: "Settore Giovanile Scolastico",
   });
   squadreItems.push({
     href: "/settore-giovanile/open-days",

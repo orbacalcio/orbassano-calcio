@@ -79,7 +79,7 @@ const CARD_SLOTS: Array<{
     category: "Settore Giovanile",
     href: "/squadre/settore-giovanile/calendario",
     fallbackEyebrow: "03 — Settore Giovanile U14-U17",
-    fallbackTitle: "Settore Giovanile",
+    fallbackTitle: "Settore Giovanile Scolastico",
     fallbackDescription:
       "Tutti i calendari Under 17, Under 16, Under 15 e Under 14 raccolti in un'unica vista cronologica.",
   },

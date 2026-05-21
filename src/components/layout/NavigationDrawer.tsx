@@ -61,7 +61,7 @@ function buildSections(opts: {
   // fallback "le squadre non sono ancora pubblicate".
   teamsChildren.push({
     href: "/squadre/settore-giovanile",
-    label: "Settore Giovanile",
+    label: "Settore Giovanile Scolastico",
   });
   if (teamSlugs.has("scuola-calcio")) {
     teamsChildren.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });

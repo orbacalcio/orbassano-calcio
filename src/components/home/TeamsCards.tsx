@@ -57,7 +57,7 @@ const CARD_SLOTS = [
   {
     number: "03",
     href: "/squadre/settore-giovanile",
-    fallbackTitle: "Settore Giovanile",
+    fallbackTitle: "Settore Giovanile Scolastico",
     fallbackDescription:
       "Quattro categorie, dall'Under 14 all'Under 17. Mister, dirigenti, accompagnatori. Da qui passa il futuro del club.",
   },

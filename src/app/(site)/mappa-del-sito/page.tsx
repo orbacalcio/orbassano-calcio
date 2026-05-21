@@ -88,7 +88,7 @@ export default async function MappaDelSitoPage() {
         // /squadre/settore-giovanile e' una vista categoria (4 card
         // U14-U17 + Open Days + Tornei + modulo iscrizione) — non
         // corrisponde a uno slug team, va inserita manualmente.
-        { href: "/squadre/settore-giovanile", label: "Settore Giovanile (hub)" },
+        { href: "/squadre/settore-giovanile", label: "Settore Giovanile Scolastico (hub)" },
         ...teamSlugs.map((slug) => ({
           href: `/squadre/${slug}`,
           label: humanizeSlug(slug),
