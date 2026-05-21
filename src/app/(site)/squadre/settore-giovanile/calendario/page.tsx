@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
-import { cn } from "@/lib/cn";
+import { SeasonSelect } from "@/components/calendario/SeasonSelect";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
@@ -154,43 +154,19 @@ export default async function CalendarioSettoreGiovanilePage({
       </header>
 
       <Container className="py-12 lg:py-16" size="wide">
-        {/* Pill switcher stagioni: sempre visibile per coerenza UI con
-            la pagina calendario per-squadra. Selezione tramite query
-            string ?season=, niente client state — funziona con JS off. */}
-        <nav
-          aria-label="Scegli stagione"
-          className="border-border/40 mb-8 flex flex-wrap items-center gap-2 border-b pb-4"
-        >
-          <span className="font-mono text-ink-mid mr-2 text-[11px] tracking-[0.15em] uppercase">
-            Stagione:
-          </span>
-          {displaySeasons.map((s) => {
-            const isActive = s === selectedSeason;
-            const isCurrent = s === currentSeason;
-            return (
-              <Link
-                key={s}
-                href={
-                  isCurrent
-                    ? `/squadre/settore-giovanile/calendario`
-                    : `/squadre/settore-giovanile/calendario?season=${encodeURIComponent(s)}`
-                }
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "rounded-full border px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors",
-                  isActive
-                    ? "border-brand-gold bg-brand-gold text-surface-0"
-                    : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
-                )}
-              >
-                {s}
-                {isCurrent && !isActive && (
-                  <span className="ml-1.5 opacity-60">· in corso</span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Selettore stagione a tendina (richiesta utente 2026-05-21:
+            tutti i filtri a tendina). Mostrato solo se c'e' piu' di una
+            stagione disponibile. Naviga via ?season= con router.push. */}
+        {displaySeasons.length > 1 && (
+          <div className="border-border/40 mb-8 border-b pb-4">
+            <SeasonSelect
+              basePath="/squadre/settore-giovanile/calendario"
+              seasons={displaySeasons}
+              selectedSeason={selectedSeason}
+              resetSeason={currentSeason}
+            />
+          </div>
+        )}
 
         {matches.length === 0 ? (
           <EmptyPlaceholder />

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Filter } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useMemo, useState } from "react";
+import { FilterSelect } from "@/components/ui/FilterSelect";
 import type { ArchiveTeamSeasonEntry } from "@/sanity/fetchers";
-import { cn } from "@/lib/cn";
 
 /**
  * Lista archivio stagioni con filtro per stagione (richiesta utente
@@ -35,36 +35,18 @@ export function ArchiveSeasonList({ groups }: Props) {
 
   return (
     <div className="flex flex-col gap-10">
-      {/* Filtro stagione: utile soprattutto su mobile, ma attivo a
-          tutte le risoluzioni. Default "Tutte". */}
-      <div className="flex flex-col gap-3">
-        <div className="text-ink-mid flex items-center gap-2 text-xs">
-          <Filter size={14} aria-hidden />
-          <span className="font-mono tracking-[0.12em] uppercase">
-            Filtra per stagione
-          </span>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          <li>
-            <SeasonChip
-              active={activeSeason === "all"}
-              onClick={() => setActiveSeason("all")}
-            >
-              Tutte
-            </SeasonChip>
-          </li>
-          {seasons.map((s) => (
-            <li key={s}>
-              <SeasonChip
-                active={activeSeason === s}
-                onClick={() => setActiveSeason(s)}
-              >
-                {s}
-              </SeasonChip>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Filtro stagione a tendina: utile soprattutto su mobile, ma
+          attivo a tutte le risoluzioni. Default "Tutte". */}
+      <FilterSelect
+        id="archivio-stagione-filter"
+        label="Filtra per stagione"
+        value={activeSeason}
+        onChange={setActiveSeason}
+        options={[
+          { value: "all", label: "Tutte le stagioni" },
+          ...seasons.map((s) => ({ value: s, label: s })),
+        ]}
+      />
 
       <div className="flex flex-col gap-16">
         {visible.map((group) => (
@@ -72,32 +54,6 @@ export function ArchiveSeasonList({ groups }: Props) {
         ))}
       </div>
     </div>
-  );
-}
-
-function SeasonChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        "border focus-visible:outline-brand-gold rounded-full px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
-        active
-          ? "border-brand-gold bg-brand-gold text-surface-0"
-          : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
-      )}
-    >
-      {children}
-    </button>
   );
 }
 

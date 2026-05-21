@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronDown, Filter } from "lucide-react";
+import { FilterSelect } from "@/components/ui/FilterSelect";
 import type { MatchAggregated, MatchSummary } from "@/sanity/fetchers";
 import { getRomeDateParts } from "@/lib/date";
 import { MatchCard } from "./MatchCard";
@@ -150,37 +150,16 @@ export function CalendarioFlatList({
   return (
     <div className="flex flex-col gap-8">
       {enableCategoryFilter && categories.length > 1 && (
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-          <label
-            htmlFor="categoria-filter"
-            className="text-ink-mid flex items-center gap-2 text-xs"
-          >
-            <Filter size={14} aria-hidden />
-            <span className="font-mono tracking-[0.12em] uppercase">
-              Filtra per categoria
-            </span>
-          </label>
-          <div className="relative inline-flex w-full sm:w-auto">
-            <select
-              id="categoria-filter"
-              value={activeCategory}
-              onChange={(e) => handleCategory(e.target.value)}
-              className="border-border bg-surface-1 text-ink-hi hover:border-brand-gold/60 focus-visible:outline-brand-gold w-full appearance-none rounded-full border py-2.5 pr-10 pl-4 font-mono text-xs tracking-[0.05em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto"
-            >
-              <option value="all">Tutte le categorie</option>
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={16}
-              aria-hidden
-              className="text-ink-mid pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
-            />
-          </div>
-        </div>
+        <FilterSelect
+          id="categoria-filter"
+          label="Filtra per categoria"
+          value={activeCategory}
+          onChange={handleCategory}
+          options={[
+            { value: "all", label: "Tutte le categorie" },
+            ...categories.map((c) => ({ value: c, label: c })),
+          ]}
+        />
       )}
 
       {groups.map((g) => (

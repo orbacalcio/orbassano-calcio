@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Filter } from "lucide-react";
+import { FilterSelect } from "@/components/ui/FilterSelect";
 import { NewsCard } from "@/components/news/NewsCard";
 import type { NewsCategory, NewsSummary } from "@/sanity/fetchers";
-import { cn } from "@/lib/cn";
 
 /**
  * Archivio news con filtro categoria client-side. Mostra una card
@@ -80,41 +79,22 @@ export function NewsArchive({ news }: Props) {
 
   return (
     <div className="flex flex-col gap-12">
-      {/* Filtri categoria (su banda chiara: testi navy per leggibilita') */}
-      <div className="flex flex-col gap-3">
-        <div className="text-light-ink-mid flex items-center gap-2 text-xs">
-          <Filter size={14} aria-hidden />
-          <span className="font-mono tracking-[0.12em] uppercase">
-            Filtra per categoria
-          </span>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          <li>
-            <CategoryChip
-              active={activeCategory === "all"}
-              onClick={() => selectCategory("all")}
-              count={counts.get("all") ?? 0}
-            >
-              Tutto
-            </CategoryChip>
-          </li>
-          {CATEGORIES.map((c) => {
-            const count = counts.get(c) ?? 0;
-            if (count === 0) return null;
-            return (
-              <li key={c}>
-                <CategoryChip
-                  active={activeCategory === c}
-                  onClick={() => selectCategory(c)}
-                  count={count}
-                >
-                  {c}
-                </CategoryChip>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {/* Filtro categoria a tendina (su banda chiara → tone light). Il
+          conteggio per categoria e' nel testo dell'opzione. */}
+      <FilterSelect
+        id="news-categoria-filter"
+        label="Filtra per categoria"
+        tone="light"
+        value={activeCategory}
+        onChange={(v) => selectCategory(v as NewsCategory | "all")}
+        options={[
+          { value: "all", label: `Tutto (${counts.get("all") ?? 0})` },
+          ...CATEGORIES.filter((c) => (counts.get(c) ?? 0) > 0).map((c) => ({
+            value: c,
+            label: `${c} (${counts.get(c) ?? 0})`,
+          })),
+        ]}
+      />
 
       {filtered.length === 0 ? (
         <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-10 text-center">
@@ -155,41 +135,5 @@ export function NewsArchive({ news }: Props) {
         </div>
       )}
     </div>
-  );
-}
-
-function CategoryChip({
-  active,
-  onClick,
-  count,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  count: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        "border-light-border focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
-        active
-          ? "border-brand-gold bg-brand-gold text-surface-0"
-          : "text-light-ink-mid hover:border-brand-gold/50 hover:text-light-ink-hi",
-      )}
-    >
-      <span>{children}</span>
-      <span
-        className={cn(
-          "font-mono text-[10px]",
-          active ? "text-surface-0/70" : "text-light-ink-low",
-        )}
-      >
-        {count}
-      </span>
-    </button>
   );
 }

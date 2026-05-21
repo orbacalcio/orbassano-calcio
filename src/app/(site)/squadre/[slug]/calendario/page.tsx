@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
+import { SeasonSelect } from "@/components/calendario/SeasonSelect";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
-import { cn } from "@/lib/cn";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import {
   fetchMatchesByTeam,
@@ -146,51 +146,24 @@ export default async function CalendarioPage({
       </header>
 
       <Container className="py-12 lg:py-16" size="wide">
-        {/* Tab switcher stagioni: sempre visibile per consistenza UI
-            tra Prima Squadra e Settore Giovanile. Se la squadra ha
-            solo la stagione corrente, mostra l'unica pill come stato
-            "attiva". Selezione tramite query string ?season=, niente
-            client state — funziona anche con JS off. Fallback se
-            fetchTeamSeasons restituisce vuoto (nessuna competition
-            in CMS): usa la stagione corrente del Team doc. */}
+        {/* Selettore stagione a tendina (richiesta utente 2026-05-21:
+            tutti i filtri a tendina). Mostrato solo se esiste piu' di
+            una stagione: con una sola stagione la select sarebbe inutile
+            (l'header riporta gia' la stagione corrente). Naviga via
+            ?season= con router.push (SeasonSelect, client). */}
         {(() => {
           const displaySeasons =
             seasons.length > 0 ? seasons : [teamCurrentSeason];
+          if (displaySeasons.length <= 1) return null;
           return (
-            <nav
-              aria-label="Scegli stagione"
-              className="border-border/40 mb-8 flex flex-wrap items-center gap-2 border-b pb-4"
-            >
-              <span className="font-mono text-ink-mid mr-2 text-[11px] tracking-[0.15em] uppercase">
-                Stagione:
-              </span>
-              {displaySeasons.map((s) => {
-                const isCurrent = s === season;
-                const isOriginal = s === teamCurrentSeason;
-                return (
-                  <Link
-                    key={s}
-                    href={
-                      isOriginal
-                        ? `/squadre/${slug}/calendario`
-                        : `/squadre/${slug}/calendario?season=${encodeURIComponent(s)}`
-                    }
-                    aria-current={isCurrent ? "page" : undefined}
-                    className={cn(
-                      "rounded-full border px-4 py-1.5 font-mono text-xs tracking-[0.05em] transition-colors",
-                      isCurrent
-                        ? "border-brand-gold bg-brand-gold text-surface-0"
-                        : "border-border text-ink-mid hover:border-brand-gold/60 hover:text-ink-hi",
-                    )}
-                  >
-                    {s}
-                    {isOriginal && !isCurrent && (
-                      <span className="ml-1.5 opacity-60">· in corso</span>
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
+            <div className="border-border/40 mb-8 border-b pb-4">
+              <SeasonSelect
+                basePath={`/squadre/${slug}/calendario`}
+                seasons={displaySeasons}
+                selectedSeason={season}
+                resetSeason={teamCurrentSeason}
+              />
+            </div>
           );
         })()}
 
