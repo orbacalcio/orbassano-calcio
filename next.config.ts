@@ -89,7 +89,12 @@ const cspReportOnly = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'self'",
-  "upgrade-insecure-requests",
+  // NB: 'upgrade-insecure-requests' NON e' qui. E' ignorato dal browser
+  // quando consegnato in una policy Report-Only (genera il warning
+  // DevTools "directive ... is ignored when delivered in a report-only
+  // policy"), quindi in questa fase non serve. Va RI-AGGIUNTO al
+  // passaggio a CSP enforcement (Content-Security-Policy, non
+  // -Report-Only), dove invece ha effetto. Vedi commento header sotto.
 ].join("; ");
 
 const securityHeaders = [
