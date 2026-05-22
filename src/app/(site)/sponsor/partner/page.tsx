@@ -157,7 +157,7 @@ function PartnerRow({
               rel="noopener noreferrer sponsored"
               className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold tracking-[0.05em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
             >
-              Visita il sito
+              Scopri di più
               <ExternalLink size={12} aria-hidden />
             </a>
           )}

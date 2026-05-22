@@ -186,7 +186,7 @@ function SponsorTile({
       )}
       {sponsor.website && (
         <span className="text-ink-low group-hover:text-brand-gold mt-auto flex items-center gap-1 text-[11px] font-semibold tracking-[0.05em] uppercase transition-colors">
-          Visita il sito
+          Scopri di più
           <ExternalLink size={11} aria-hidden />
         </span>
       )}
