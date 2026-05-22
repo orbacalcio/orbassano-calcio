@@ -904,6 +904,7 @@ export const openDaysQuery = defineQuery(`
       endTime
     },
     venue,
+    mapsUrl,
     notes,
     downloadModuleUrl
   }

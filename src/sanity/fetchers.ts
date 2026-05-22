@@ -1327,6 +1327,7 @@ export type OpenDayEntry = {
   season: string;
   sessions: OpenDaySession[];
   venue: string;
+  mapsUrl: string | null;
   notes: string | null;
   downloadModuleUrl: string | null;
 };

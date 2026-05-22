@@ -34,6 +34,8 @@ export type EventRow = {
   endTime?: string | null;
   /** Indirizzo completo. */
   venue: string;
+  /** Link Google Maps opzionale: se presente compare "Apri su Google Maps". */
+  mapsUrl?: string | null;
   /** Note libere. Mostrate sotto la riga in italic. */
   notes?: string | null;
   /** Tag opzionali (es. "Triangolare", "Trofeo + medaglie"). */
@@ -107,6 +109,8 @@ function EventRowItem({ row }: { row: EventRow }) {
     (t): t is string => typeof t === "string" && t.trim().length > 0,
   );
   const ctaSafe = row.cta && isSafeUrl(row.cta.href) ? row.cta : null;
+  const mapsSafe =
+    row.mapsUrl && isSafeUrl(row.mapsUrl) ? row.mapsUrl : null;
   return (
     <li className="flex flex-col gap-3 py-4 md:grid md:grid-cols-[7rem_8rem_1fr_auto] md:items-start md:gap-6">
       <div className="flex flex-col gap-0.5">
@@ -138,6 +142,18 @@ function EventRowItem({ row }: { row: EventRow }) {
           />
           {row.venue}
         </span>
+        {mapsSafe && (
+          <a
+            href={mapsSafe}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-gold hover:text-ink-hi inline-flex w-fit items-center gap-1 text-xs font-semibold tracking-[0.02em] transition-colors"
+          >
+            <MapPin size={12} aria-hidden />
+            Apri su Google Maps
+            <ExternalLink size={11} aria-hidden />
+          </a>
+        )}
         {row.notes && (
           <p className="text-ink-mid text-xs italic leading-relaxed">
             {row.notes}

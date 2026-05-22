@@ -132,6 +132,15 @@ export const openDay = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "mapsUrl",
+      title: "Link Google Maps (opzionale)",
+      description:
+        "Link alla posizione su Google Maps. Se valorizzato, accanto all'indirizzo compare il pulsante 'Apri su Google Maps'. Su Maps: condividi → copia link.",
+      type: "url",
+      validation: (r) =>
+        r.uri({ scheme: ["https"], allowRelative: false }),
+    }),
+    defineField({
       name: "notes",
       title: "Note (opzionali)",
       description:

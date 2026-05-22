@@ -104,6 +104,7 @@ export default async function SummerCampPage() {
           date: session.date,
           endTime: session.endTime,
           venue: ev.venue,
+          mapsUrl: ev.mapsUrl,
           notes: ev.notes,
           cta,
         });
