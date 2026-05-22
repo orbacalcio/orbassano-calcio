@@ -3,7 +3,6 @@ import { StoryNumbers } from "@/components/home/StoryNumbers";
 import { SocietaHubCard } from "@/components/societa/SocietaHubCard";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
-import { RevealStagger } from "@/components/ui/Reveal";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { FEATURES } from "@/lib/features";
 
@@ -105,11 +104,13 @@ export default function SocietaPage() {
           Senza flag, 4 card = 1 riga piena + 1 orfana (acceptable). */}
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
-          <RevealStagger className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {HUB_CARDS.map((card) => (
-              <SocietaHubCard key={card.number} {...card} />
-            ))}
-          </RevealStagger>
+          <RevealOnScroll>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {HUB_CARDS.map((card) => (
+                <SocietaHubCard key={card.number} {...card} />
+              ))}
+            </div>
+          </RevealOnScroll>
         </Container>
       </section>
 
