@@ -293,6 +293,13 @@ html.past-hero #main-content + div {
   z-index: -1;
   pointer-events: none;
 }
+/* Variante hover ORO: solo per CTA selezionate ("La nostra storia" del
+   manifesto, "Diventa sponsor del club"). Sostituisce il rosso dello
+   sweep con l'oro brand. Sul markup questi pulsanti aggiungono anche
+   hover:text-surface-0 (testo navy) per contrasto leggibile sull'oro. */
+.btn-wow-sweep.btn-sweep-gold::after {
+  background-color: var(--color-brand-gold);
+}
 .btn-wow-sweep:hover::after,
 .btn-wow-sweep:focus-visible::after,
 .group:hover .btn-wow-sweep::after,

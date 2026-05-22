@@ -164,7 +164,7 @@ export async function SponsorMarquee() {
         </p>
         <Link
           href="/sponsor/opportunita"
-          className="bg-brand-blue btn-wow-sweep text-brand-white font-display hover:bg-brand-red focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           Diventa sponsor del club
           <ArrowUpRight size={14} aria-hidden />
