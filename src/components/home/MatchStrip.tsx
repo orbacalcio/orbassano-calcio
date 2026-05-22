@@ -209,8 +209,8 @@ export async function MatchStrip() {
                     Calendario in arrivo
                   </span>
                   <span className="text-ink-mid text-sm">
-                    Le prossime giornate saranno pubblicate appena la federazione
-                    comunica gli accoppiamenti del girone.
+                    Le prossime giornate saranno pubblicate appena la Lega
+                    Nazionale Dilettanti comunica gli accoppiamenti del girone.
                   </span>
                 </div>
               )}
