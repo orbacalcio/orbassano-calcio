@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { Container } from "@/components/ui/Container";
 
 /**
- * Hub della Prima Squadra: 4 box con foto di sfondo (gestite da Studio →
- * Impostazioni globali → "Pagina Prima Squadra"), titolo in overlay e
- * CTA. Sostituisce la vecchia pagina rosa come landing della voce
+ * Hub della Prima Squadra: 4 box full-bleed (pattern juventus.com) con
+ * foto di sfondo gestite da Studio (Impostazioni globali → "Pagina Prima
+ * Squadra"), eyebrow + titolo grande in overlay e bottone "Scopri di
+ * più". Sostituisce la vecchia pagina rosa come landing della voce
  * Squadre → Prima Squadra (la rosa vive ora su /prima-squadra/rosa).
  *
  * Link:
@@ -66,38 +65,14 @@ export function PrimaSquadraHub({
     },
   ];
 
+  // Griglia full-bleed 2×2 (1 colonna su mobile). gap-px su sfondo rosso
+  // → sottili linee rossoblù tra i box, come il riferimento juventus.com.
   return (
-    <>
-      <header className="border-border/50 relative overflow-hidden border-b">
-        <div
-          aria-hidden
-          className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
-        />
-        <Container className="relative py-14 lg:py-20" size="wide">
-          <div className="flex max-w-3xl flex-col gap-4">
-            <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Prima Squadra
-            </span>
-            <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-              Prima Squadra
-            </h1>
-            <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Tutto sul rossoblù che scende in campo: la rosa, le ultime
-              notizie, il calendario con i risultati e la classifica del
-              campionato.
-            </p>
-          </div>
-        </Container>
-      </header>
-
-      <Container className="py-12 lg:py-16" size="wide">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {boxes.map((box) => (
-            <HubCard key={box.title} box={box} />
-          ))}
-        </div>
-      </Container>
-    </>
+    <div className="bg-brand-red grid grid-cols-1 gap-px sm:grid-cols-2">
+      {boxes.map((box) => (
+        <HubCard key={box.title} box={box} />
+      ))}
+    </div>
   );
 }
 
@@ -110,7 +85,7 @@ function HubCard({ box }: { box: Box }) {
           alt=""
           fill
           aria-hidden
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, 50vw"
         />
       ) : (
@@ -119,26 +94,38 @@ function HubCard({ box }: { box: Box }) {
           className="from-surface-2 via-surface-1 to-brand-blue/40 absolute inset-0 bg-gradient-to-br"
         />
       )}
-      {/* Gradiente per leggibilità del testo in basso. */}
+      {/* Layer navy in "multiply": uniforma foto con colori diversi
+          tirandole verso il navy del brand (effetto duotone). Schiarisce
+          un po' all'hover per dare focus al box puntato. */}
       <div
         aria-hidden
-        className="from-surface-0/90 via-surface-0/30 absolute inset-0 bg-gradient-to-t to-transparent"
+        className="bg-brand-blue absolute inset-0 opacity-55 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-40"
       />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 lg:p-8">
-        <h2 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl lg:text-4xl">
+      {/* Leggero scurimento uniforme + gradiente dal basso per la
+          leggibilità di eyebrow + titolo. */}
+      <div aria-hidden className="bg-surface-0/20 absolute inset-0" />
+      <div
+        aria-hidden
+        className="from-surface-0/90 via-surface-0/20 absolute inset-0 bg-gradient-to-t to-transparent"
+      />
+
+      <div className="relative flex h-full flex-col justify-end px-6 pb-10 sm:px-8 lg:px-12 lg:pb-14">
+        <span className="text-brand-red font-display text-xs font-bold tracking-[0.2em] uppercase md:text-sm">
+          Prima Squadra
+        </span>
+        <h2 className="font-display text-ink-hi mt-2 text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase sm:text-5xl lg:text-6xl">
           {box.title}
         </h2>
-        <ArrowUpRight
-          size={28}
-          className="text-brand-gold mb-1 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-          aria-hidden
-        />
+        <span className="bg-brand-white text-surface-0 font-display group-hover:bg-brand-gold mt-6 inline-flex w-fit items-center rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] uppercase transition-colors duration-300 md:text-sm">
+          Scopri di più
+        </span>
       </div>
     </>
   );
 
+  // Box alti che riempiono la pagina: ~metà viewport ciascuno (2 righe).
   const className =
-    "group focus-visible:outline-brand-gold relative flex aspect-[16/10] overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 sm:aspect-[4/3] lg:aspect-[16/9]";
+    "group focus-visible:outline-brand-gold relative isolate flex min-h-[58vh] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 lg:min-h-[60vh]";
 
   if (box.external) {
     return (
