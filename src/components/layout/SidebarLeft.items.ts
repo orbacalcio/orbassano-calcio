@@ -31,7 +31,16 @@ export type SidebarItem = {
 export const sidebarMainItems: SidebarItem[] = [
   { href: "/", label: "Home", isLogoItem: true },
   { href: "/news", label: "News", microlabel: "NEWS", icon: Newspaper },
-  { href: "/squadre", label: "Squadre", microlabel: "SQUADRE", icon: Users },
+  // "Rosa" → Prima Squadra (richiesta utente 2026-05-22): nella sola
+  // sidebar verticale a icone (desktop, sopra hero) la voce punta
+  // direttamente alla Prima Squadra. Il menu completo (drawer) resta
+  // invariato con l'accordion "Squadre".
+  {
+    href: "/squadre/prima-squadra",
+    label: "Rosa",
+    microlabel: "ROSA",
+    icon: Users,
+  },
   { href: "/gallery", label: "Gallery", microlabel: "GALLERY", icon: Images },
   {
     href: "/societa",
