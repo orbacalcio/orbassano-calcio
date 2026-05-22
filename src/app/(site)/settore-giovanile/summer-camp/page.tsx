@@ -7,7 +7,7 @@ import {
   type EventRow,
 } from "@/components/settore-giovanile/YouthEventGroup";
 import { Container } from "@/components/ui/Container";
-import { PitchLines } from "@/components/ui/PitchLines";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { sanityClient } from "@/sanity/client";
 import { fetchOpenDays } from "@/sanity/fetchers";
 import { settingsQuery } from "@/sanity/queries";
@@ -126,7 +126,7 @@ export default async function SummerCampPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
-        <PitchLines className="text-brand-gold pointer-events-none absolute top-1/2 right-0 hidden h-[170%] w-auto -translate-y-1/2 translate-x-[22%] opacity-[0.07] sm:block" />
+        <HeaderMotif variant="summer-camp" />
         <Container className="relative py-14 lg:py-20" size="wide">
           <Link
             href="/squadre"

@@ -3,7 +3,7 @@ import { Mail, Phone } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { OfficialCard } from "@/components/societa/OfficialCard";
 import { Container } from "@/components/ui/Container";
-import { PitchLines } from "@/components/ui/PitchLines";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { buildClubOfficialLd } from "@/lib/json-ld";
 import { fetchClubOfficials, type ClubOfficial } from "@/sanity/fetchers";
@@ -89,7 +89,7 @@ export default async function OrganigrammaPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
-        <PitchLines className="text-brand-gold pointer-events-none absolute top-1/2 right-0 hidden h-[170%] w-auto -translate-y-1/2 translate-x-[22%] opacity-[0.07] sm:block" />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">

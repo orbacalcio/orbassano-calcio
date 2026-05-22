@@ -5,6 +5,7 @@ import {
   type ArchiveSeasonGroup,
 } from "@/components/archivio/ArchiveSeasonList";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { sanityClient } from "@/sanity/client";
 import { settingsQuery } from "@/sanity/queries";
 import {
@@ -131,6 +132,7 @@ export default async function ArchivioPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-14 lg:py-20" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display inline-flex items-center gap-2 text-sm font-bold tracking-[0.2em] uppercase md:text-base">

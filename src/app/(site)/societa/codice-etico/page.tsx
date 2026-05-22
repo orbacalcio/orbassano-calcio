@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Mail, ScrollText, ShieldAlert } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { FEATURES } from "@/lib/features";
 import { buildArticleLd } from "@/lib/json-ld";
 import { fetchRiferimentiOperativi } from "@/sanity/fetchers";
@@ -96,6 +97,7 @@ export default async function CodiceEticoPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-14 lg:py-20" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">

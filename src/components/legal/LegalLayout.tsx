@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { cn } from "@/lib/cn";
 
 /**
@@ -44,6 +45,7 @@ export function LegalLayout({
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-12 lg:py-16" size="wide">
           <Link
             href="/"

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Crown, ExternalLink, Handshake } from "lucide-react";
 import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchActiveSponsors } from "@/sanity/fetchers";
 
@@ -23,6 +24,7 @@ export default async function SponsorPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">

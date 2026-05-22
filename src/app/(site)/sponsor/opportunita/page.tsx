@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { SponsorLeadForm } from "@/components/forms/SponsorLeadForm";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
@@ -62,6 +63,7 @@ export default function OpportunitaPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-16 lg:py-24" size="wide">
           <Link
             href="/sponsor"

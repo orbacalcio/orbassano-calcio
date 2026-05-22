@@ -150,7 +150,7 @@ function EventRowItem({ row }: { row: EventRow }) {
             className="text-brand-gold hover:text-ink-hi inline-flex w-fit items-center gap-1 text-xs font-semibold tracking-[0.02em] transition-colors"
           >
             <MapPin size={12} aria-hidden />
-            Apri su Google Maps
+            Raggiungi l&apos;impianto sportivo
             <ExternalLink size={11} aria-hidden />
           </a>
         )}

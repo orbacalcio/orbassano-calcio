@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, ExternalLink, Handshake } from "lucide-react";
 import { SponsorLogo } from "@/components/sponsors/SponsorLogo";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { fetchActiveSponsors, type PartnerSummary } from "@/sanity/fetchers";
 
@@ -30,6 +31,7 @@ export default async function PartnerPage() {
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-16 lg:py-24" size="wide">
           <Link
             href="/sponsor"

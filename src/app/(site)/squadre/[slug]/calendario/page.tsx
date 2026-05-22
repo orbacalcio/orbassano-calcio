@@ -6,6 +6,7 @@ import { CalendarioFlatList } from "@/components/calendario/CalendarioFlatList";
 import { SeasonSelect } from "@/components/calendario/SeasonSelect";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { buildSportsEventListLd } from "@/lib/json-ld";
 import {
   fetchMatchesByTeam,
@@ -119,6 +120,7 @@ export default async function CalendarioPage({
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
         />
+        <HeaderMotif variant="pitch" />
         <Container className="relative py-14 lg:py-20" size="wide">
           <div className="flex max-w-3xl flex-col gap-3">
             <Link
