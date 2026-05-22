@@ -204,8 +204,8 @@ export function EmergenzaDisclaimer() {
         >
           112
         </a>
-        . Questo modulo non sostituisce una denuncia formale alle
-        autorità.
+        . Il modulo presente in questa pagina NON sostituisce una
+        denuncia formale alle autorità.
       </p>
     </div>
   );

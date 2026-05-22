@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Heart, MapPin, Mail, Phone } from "lucide-react";
+import {
+  Accessibility,
+  ArrowRight,
+  Clock,
+  Heart,
+  MapPin,
+  Mail,
+  Newspaper,
+  Phone,
+  Ticket,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
@@ -37,100 +47,112 @@ export default function BiglietteriaPage() {
         </Container>
       </header>
 
-      {/* Blocco editoriale tariffe + modalità su banda chiara
-          light-bg-0 (stesso pattern del corpo articolo news). Layout
-          narrow per leggibilità testi lunghi. Le 4 sezioni interne
-          condividono pattern: eyebrow rosso brand + titolo h2 +
-          paragrafo body. Email mailto: in rosso bold (stesso pattern
-          dei link nelle news). */}
+      {/* Blocco info biglietteria su banda chiara light-bg-0. Le 4
+          informazioni (tariffe, biglietteria fisica, agevolazioni,
+          accrediti) sono rese come card a griglia 2×2 (pattern visivo
+          della cookie policy): icona + eyebrow + titolo + contenuto,
+          bordo/accento colorato per scansione rapida. Email mailto: in
+          rosso bold. */}
       <section aria-labelledby="info-biglietti-title" className="bg-light-bg-0">
-        <Container className="py-16 lg:py-24" size="narrow">
+        <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
-            <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-8">
               <p
                 id="info-biglietti-title"
-                className="text-light-ink-mid text-base leading-relaxed lg:text-lg"
+                className="text-light-ink-mid max-w-3xl text-base leading-relaxed lg:text-lg"
               >
                 Orbassano Calcio comunica i prezzi e le modalità di
                 acquisto dei biglietti per i match casalinghi:
               </p>
 
-              <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-                  Biglietti — Tariffe giorno gara
-                </h2>
-                <ul className="text-light-ink-mid flex flex-col gap-2 text-base leading-relaxed lg:text-lg">
-                  <li>
-                    Partite Prima Squadra:{" "}
-                    <strong className="text-light-ink-hi font-semibold">
-                      10€
-                    </strong>
-                  </li>
-                  <li>
-                    Partite Juniores e Settore Giovanile Scolastico:{" "}
-                    <strong className="text-light-ink-hi font-semibold">
-                      7€
-                    </strong>
-                  </li>
-                </ul>
-              </section>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <InfoCard
+                  accent="gold"
+                  icon={<Ticket size={30} aria-hidden />}
+                  subtitle="Giorno gara"
+                  title="Tariffe biglietti"
+                >
+                  <ul className="flex flex-col gap-3">
+                    <li className="border-light-border flex items-center justify-between gap-4 border-b pb-3">
+                      <span className="text-light-ink-hi font-medium">
+                        Prima Squadra
+                      </span>
+                      <span className="font-display text-brand-gold shrink-0 text-2xl leading-none font-extrabold tracking-[0.005em]">
+                        10€
+                      </span>
+                    </li>
+                    <li className="flex items-center justify-between gap-4">
+                      <span className="text-light-ink-hi font-medium">
+                        Juniores e Settore Giovanile Scolastico
+                      </span>
+                      <span className="font-display text-brand-gold shrink-0 text-2xl leading-none font-extrabold tracking-[0.005em]">
+                        7€
+                      </span>
+                    </li>
+                  </ul>
+                </InfoCard>
 
-              <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-                  Biglietteria fisica
-                </h2>
-                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
-                  La biglietteria dello stadio (ingresso principale in
-                  Via Ignazio Silone 4) è sempre aperta il giorno della
-                  partita 1 ora prima del fischio di inizio. La Società
-                  invita i tifosi a recarsi agli sportelli con adeguato
-                  anticipo per facilitare le operazioni di ingresso.
-                </p>
-              </section>
+                <InfoCard
+                  accent="blue"
+                  icon={<Clock size={30} aria-hidden />}
+                  subtitle="Apertura sportelli"
+                  title="Biglietteria fisica"
+                >
+                  <p>
+                    La biglietteria dello stadio (ingresso principale in
+                    Via Ignazio Silone 4) è sempre aperta il giorno della
+                    partita, 1 ora prima del fischio di inizio. Ti
+                    invitiamo a recarti agli sportelli con adeguato
+                    anticipo per facilitare le operazioni di ingresso.
+                  </p>
+                </InfoCard>
 
-              <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-                  Agevolazioni
-                </h2>
-                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
-                  Tifosi con disabilità: ingresso gratuito. Per ottenere
-                  il titolo di accesso, è necessario inviare una mail a{" "}
-                  <a
-                    href="mailto:biglietteria@orbassanocalcio.com"
-                    className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
-                  >
-                    biglietteria@orbassanocalcio.com
-                  </a>{" "}
-                  entro 48 ore dall&apos;evento, allegando i documenti
-                  d&apos;identità dei richiedenti (persona con disabilità
-                  e accompagnatore), oltre al certificato di disabilità.
-                  Anche l&apos;accompagnatore accede gratuitamente.
-                </p>
-              </section>
+                <InfoCard
+                  accent="red"
+                  icon={<Accessibility size={30} aria-hidden />}
+                  subtitle="Ingresso gratuito"
+                  title="Agevolazioni"
+                >
+                  <p>
+                    Tifosi con disabilità: ingresso gratuito, anche per
+                    l&apos;accompagnatore. Per ottenere il titolo di
+                    accesso, invia una mail a{" "}
+                    <a
+                      href="mailto:biglietteria@orbassanocalcio.com"
+                      className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
+                    >
+                      biglietteria@orbassanocalcio.com
+                    </a>{" "}
+                    entro 48 ore dall&apos;evento, allegando i documenti
+                    d&apos;identità dei richiedenti (persona con disabilità
+                    e accompagnatore) e il certificato di disabilità.
+                  </p>
+                </InfoCard>
 
-              <section className="flex flex-col gap-4">
-                <h2 className="font-display text-brand-gold text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-                  Accrediti stampa
-                </h2>
-                <p className="text-light-ink-mid text-base leading-relaxed lg:text-lg">
-                  I giornalisti e gli operatori dell&apos;informazione
-                  (foto e video), senza pass stagionale, possono
-                  richiedere l&apos;accredito alla partita inviando una
-                  mail a{" "}
-                  <a
-                    href="mailto:segreteria@orbassanocalcio.com"
-                    className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
-                  >
-                    segreteria@orbassanocalcio.com
-                  </a>
-                  . La richiesta dovrà indicare il nominativo, il media
-                  di appartenenza (testata giornalistica, agenzia o sito
-                  web) e, per i giornalisti, allegare copia della
-                  tessera dell&apos;Ordine dei Giornalisti in corso di
-                  validità. Le richieste dovranno pervenire entro e non
-                  oltre le ore 12.00 del giorno precedente alla partita.
-                </p>
-              </section>
+                <InfoCard
+                  accent="gold"
+                  icon={<Newspaper size={30} aria-hidden />}
+                  subtitle="Foto e video"
+                  title="Accrediti stampa"
+                >
+                  <p>
+                    Giornalisti e operatori dell&apos;informazione senza
+                    pass stagionale possono richiedere l&apos;accredito
+                    scrivendo a{" "}
+                    <a
+                      href="mailto:segreteria@orbassanocalcio.com"
+                      className="text-brand-red font-semibold hover:underline hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]"
+                    >
+                      segreteria@orbassanocalcio.com
+                    </a>
+                    , indicando nominativo e media di appartenenza
+                    (testata, agenzia o sito web) e — per i giornalisti —
+                    allegando la tessera dell&apos;Ordine in corso di
+                    validità. Richieste entro le ore 12.00 del giorno
+                    precedente alla partita.
+                  </p>
+                </InfoCard>
+              </div>
             </div>
           </RevealOnScroll>
         </Container>
@@ -300,5 +322,70 @@ export default function BiglietteriaPage() {
         </Container>
       </section>
     </>
+  );
+}
+
+/**
+ * Card informativa biglietteria su banda chiara (pattern cookie policy):
+ * bordo + sfondo tenue colorati per accento, icona + eyebrow mono +
+ * titolo display, contenuto libero (lista prezzi o paragrafo). Tre
+ * accenti brand: gold / blue / red.
+ */
+type CardAccent = "gold" | "blue" | "red";
+
+const CARD_ACCENTS: Record<
+  CardAccent,
+  { border: string; bg: string; text: string }
+> = {
+  gold: {
+    border: "border-brand-gold/40",
+    bg: "bg-brand-gold/[0.05]",
+    text: "text-brand-gold",
+  },
+  blue: {
+    border: "border-brand-blue/40",
+    bg: "bg-brand-blue/[0.05]",
+    text: "text-brand-blue",
+  },
+  red: {
+    border: "border-brand-red/40",
+    bg: "bg-brand-red/[0.05]",
+    text: "text-brand-red",
+  },
+};
+
+function InfoCard({
+  accent,
+  icon,
+  subtitle,
+  title,
+  children,
+}: {
+  accent: CardAccent;
+  icon: React.ReactNode;
+  subtitle: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  const a = CARD_ACCENTS[accent];
+  return (
+    <div
+      className={`${a.border} ${a.bg} flex h-full flex-col gap-5 rounded-2xl border p-6 lg:p-8`}
+    >
+      <div className={`${a.text} flex items-center gap-3`}>
+        {icon}
+        <div className="flex flex-col">
+          <span className="text-light-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+            {subtitle}
+          </span>
+          <span className="font-display text-light-ink-hi text-xl leading-tight font-bold tracking-[0.005em] uppercase">
+            {title}
+          </span>
+        </div>
+      </div>
+      <div className="text-light-ink-mid text-sm leading-relaxed lg:text-base">
+        {children}
+      </div>
+    </div>
   );
 }
