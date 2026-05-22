@@ -431,13 +431,10 @@ function TeamView({ team }: { team: TeamDetail }) {
       {/* INFO STRIP */}
       <div className="border-border/50 bg-surface-1 border-b">
         <Container className="py-6" size="wide">
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-4">
-            <InfoCell label="Stagione" value={team.season} mono />
+          {/* Stagione e Girone rimossi 2026-05-22 (richiesta utente):
+              restano solo Categoria e contatore Atleti. */}
+          <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
             <InfoCell label="Categoria" value={team.league} />
-            <InfoCell
-              label="Girone"
-              value={team.group && team.group.length > 0 ? team.group : null}
-            />
             <InfoCell
               label="Atleti"
               value={
