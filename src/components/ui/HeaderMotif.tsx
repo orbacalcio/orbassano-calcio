@@ -39,13 +39,13 @@ const MOTIFS: Record<HeaderMotifVariant, ReactNode> = {
   pitch: (
     <>
       <g {...STROKE}>
-        <line x1="120" y1="20" x2="120" y2="220" />
-        <circle cx="120" cy="120" r="44" />
-        <path d="M196 74 H150 V166 H196" />
-        <path d="M150 98 a36 36 0 0 1 0 44" />
+        <line x1="120" y1="4" x2="120" y2="236" />
+        <circle cx="120" cy="120" r="46" />
+        <path d="M240 68 H182 V172 H240" />
+        <path d="M182 96 a40 40 0 0 1 0 48" />
       </g>
       <circle cx="120" cy="120" r="3.5" fill="currentColor" />
-      <circle cx="164" cy="120" r="2.5" fill="currentColor" />
+      <circle cx="198" cy="120" r="3" fill="currentColor" />
     </>
   ),
   storia: (
@@ -110,13 +110,21 @@ export function HeaderMotif({
 }: {
   variant?: HeaderMotifVariant;
 }) {
+  // Il "campo" è grande e sborda parecchio a destra: ne resta visibile
+  // solo un lembo (cerchio di centrocampo + area), come texture di
+  // sfondo. Le icone-contenuto invece restano quasi interamente
+  // visibili (sbordano appena).
+  const position =
+    variant === "pitch"
+      ? "h-[170%] translate-x-[22%]"
+      : "h-[130%] translate-x-[8%]";
   return (
     <svg
       aria-hidden
       viewBox="0 0 240 240"
       fill="none"
       preserveAspectRatio="xMidYMid meet"
-      className="text-brand-gold pointer-events-none absolute top-1/2 right-0 hidden h-[130%] w-auto -translate-y-1/2 translate-x-[8%] opacity-[0.07] sm:block"
+      className={`text-brand-gold pointer-events-none absolute top-1/2 right-0 hidden w-auto -translate-y-1/2 opacity-[0.07] sm:block ${position}`}
     >
       {MOTIFS[variant]}
     </svg>
