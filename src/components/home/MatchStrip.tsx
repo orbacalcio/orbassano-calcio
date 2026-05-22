@@ -210,7 +210,7 @@ export async function MatchStrip() {
                   </span>
                   <span className="text-ink-mid text-sm">
                     Le prossime giornate saranno pubblicate appena la Lega
-                    Nazionale Dilettanti comunica gli accoppiamenti del girone.
+                    Nazionale Dilettanti comunicherà gli accoppiamenti dei gironi.
                   </span>
                 </div>
               )}
