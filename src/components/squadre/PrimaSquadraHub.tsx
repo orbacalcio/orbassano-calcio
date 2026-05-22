@@ -65,18 +65,20 @@ export function PrimaSquadraHub({
     },
   ];
 
-  // Griglia full-bleed 2×2 (1 colonna su mobile). gap-px su sfondo rosso
-  // → sottili linee rossoblù tra i box, come il riferimento juventus.com.
+  // Griglia full-bleed 2×2 (1 colonna su mobile). Spazio (navy) tra le
+  // righe via gap-y; nessuna linea rossa orizzontale. La linea rossa
+  // verticale (3px) tra le due colonne è un bordo destro sui box di
+  // sinistra (solo da sm+).
   return (
-    <div className="bg-brand-red grid grid-cols-1 gap-px sm:grid-cols-2">
-      {boxes.map((box) => (
-        <HubCard key={box.title} box={box} />
+    <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:gap-y-10">
+      {boxes.map((box, i) => (
+        <HubCard key={box.title} box={box} leftColumn={i % 2 === 0} />
       ))}
     </div>
   );
 }
 
-function HubCard({ box }: { box: Box }) {
+function HubCard({ box, leftColumn }: { box: Box; leftColumn: boolean }) {
   const inner = (
     <>
       {box.image ? (
@@ -124,8 +126,10 @@ function HubCard({ box }: { box: Box }) {
   );
 
   // Box alti che riempiono la pagina: ~metà viewport ciascuno (2 righe).
-  const className =
-    "group focus-visible:outline-brand-gold relative isolate flex min-h-[58vh] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 lg:min-h-[60vh]";
+  // I box di sinistra portano il divisorio verticale rosso 3px (solo sm+).
+  const className = `group focus-visible:outline-brand-gold relative isolate flex min-h-[58vh] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 lg:min-h-[60vh]${
+    leftColumn ? " sm:border-r-[3px] sm:border-brand-red" : ""
+  }`;
 
   if (box.external) {
     return (
