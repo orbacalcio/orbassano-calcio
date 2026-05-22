@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/societa/biglietteria" },
@@ -21,7 +23,36 @@ export const metadata: Metadata = {
     "Tariffe biglietti, biglietteria fisica, agevolazioni disabilità e accrediti stampa per le partite casalinghe di ASD Orbassano Calcio al Centro Sportivo Aldo Porta.",
 };
 
-export default function BiglietteriaPage() {
+type TicketTier = { label: string; price: string };
+
+// Prezzi di default usati se le Impostazioni globali non hanno ancora
+// il campo "Prezzi biglietti" popolato.
+const FALLBACK_TICKET_PRICES: TicketTier[] = [
+  { label: "Prima Squadra", price: "10€" },
+  { label: "Juniores e Settore Giovanile Scolastico", price: "7€" },
+];
+
+async function fetchTicketPrices(): Promise<TicketTier[]> {
+  try {
+    const data = (await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    )) as { ticketPrices?: Array<{ label?: string | null; price?: string | null }> | null } | null;
+    const tiers = (data?.ticketPrices ?? [])
+      .map((t) => ({
+        label: t.label?.trim() ?? "",
+        price: t.price?.trim() ?? "",
+      }))
+      .filter((t): t is TicketTier => t.label !== "" && t.price !== "");
+    return tiers.length > 0 ? tiers : FALLBACK_TICKET_PRICES;
+  } catch {
+    return FALLBACK_TICKET_PRICES;
+  }
+}
+
+export default async function BiglietteriaPage() {
+  const ticketPrices = await fetchTicketPrices();
   return (
     <>
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -73,22 +104,23 @@ export default function BiglietteriaPage() {
                   title="Tariffe biglietti"
                 >
                   <ul className="flex flex-col gap-3">
-                    <li className="border-light-border flex items-center justify-between gap-4 border-b pb-3">
-                      <span className="text-light-ink-hi font-medium">
-                        Prima Squadra
-                      </span>
-                      <span className="font-display text-brand-gold shrink-0 text-2xl leading-none font-extrabold tracking-[0.005em]">
-                        10€
-                      </span>
-                    </li>
-                    <li className="flex items-center justify-between gap-4">
-                      <span className="text-light-ink-hi font-medium">
-                        Juniores e Settore Giovanile Scolastico
-                      </span>
-                      <span className="font-display text-brand-gold shrink-0 text-2xl leading-none font-extrabold tracking-[0.005em]">
-                        7€
-                      </span>
-                    </li>
+                    {ticketPrices.map((tier, i) => (
+                      <li
+                        key={`${tier.label}-${i}`}
+                        className={`flex items-center justify-between gap-4 ${
+                          i < ticketPrices.length - 1
+                            ? "border-light-border border-b pb-3"
+                            : ""
+                        }`}
+                      >
+                        <span className="text-light-ink-hi font-medium">
+                          {tier.label}
+                        </span>
+                        <span className="font-display text-brand-gold shrink-0 text-2xl leading-none font-extrabold tracking-[0.005em]">
+                          {tier.price}
+                        </span>
+                      </li>
+                    ))}
                   </ul>
                 </InfoCard>
 

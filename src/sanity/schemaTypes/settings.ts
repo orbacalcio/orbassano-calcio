@@ -49,6 +49,13 @@ export const settings = defineType({
         "Header della pagina (eyebrow, titolo h1, sottotitolo) + le 3 card numerate (Prima Squadra · Juniores · Settore Giovanile) che linkano ai rispettivi calendari. Pattern visivo identico al box 'Le squadre' della homepage.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "biglietteria",
+      title: "Biglietteria — prezzi",
+      description:
+        "Tariffe dei biglietti mostrate nella card 'Tariffe biglietti' della pagina /societa/biglietteria.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -483,6 +490,40 @@ export const settings = defineType({
         defineField({ name: "fiscalCode", title: "Codice Fiscale", type: "string" }),
         defineField({ name: "iban", type: "string" }),
         defineField({ name: "figcMatricola", type: "string" }),
+      ],
+    }),
+    defineField({
+      name: "ticketPrices",
+      title: "Prezzi biglietti",
+      fieldset: "biglietteria",
+      description:
+        "Tariffe mostrate nella card 'Tariffe biglietti' di /societa/biglietteria. Una riga per categoria. Se lasci vuoto, vengono usati i prezzi di default (Prima Squadra 10€, Juniores e Settore Giovanile Scolastico 7€).",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "ticketTier",
+          fields: [
+            defineField({
+              name: "label",
+              title: "Categoria / descrizione",
+              description:
+                "Es. 'Prima Squadra', 'Juniores e Settore Giovanile Scolastico', 'Ridotto'.",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "price",
+              title: "Prezzo",
+              description: "Es. '10€', '7€', 'Gratuito'. Scrivi anche il simbolo €.",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: {
+            select: { title: "label", subtitle: "price" },
+          },
+        }),
       ],
     }),
     defineField({

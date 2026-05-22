@@ -178,6 +178,7 @@ export const settingsQuery = defineQuery(`
     mazzolaTitle,
     mazzolaBody,
     mazzolaPlayers,
+    "ticketPrices": ticketPrices[]{ label, price },
     "defaultOgImage": defaultOgImage.asset->url,
     "registrationFormUrl": registrationFormFile.asset->url
   }
