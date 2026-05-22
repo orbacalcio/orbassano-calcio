@@ -428,24 +428,9 @@ function TeamView({ team }: { team: TeamDetail }) {
         </Container>
       </header>
 
-      {/* INFO STRIP */}
-      <div className="border-border/50 bg-surface-1 border-b">
-        <Container className="py-6" size="wide">
-          {/* Stagione e Girone rimossi 2026-05-22 (richiesta utente):
-              restano solo Categoria e contatore Atleti. */}
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
-            <InfoCell label="Categoria" value={team.league} />
-            <InfoCell
-              label="Atleti"
-              value={
-                team.players.length > 0 ? `${team.players.length}` : null
-              }
-              fallback="—"
-              mono
-            />
-          </dl>
-        </Container>
-      </div>
+      {/* Striscia info (Stagione/Girone/Categoria/Atleti) rimossa
+          2026-05-22 (richiesta utente): l'header resta solo eyebrow
+          categoria + nome squadra. */}
 
       {/* DESCRIZIONE */}
       {team.description && team.description.length > 0 && (
@@ -473,31 +458,6 @@ function TeamView({ team }: { team: TeamDetail }) {
 }
 
 // ---------- HELPERS ------------------------------------------------------------------
-
-function InfoCell({
-  label,
-  value,
-  fallback = "—",
-  mono = false,
-}: {
-  label: string;
-  value: string | null | undefined;
-  fallback?: string;
-  mono?: boolean;
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <dt className="text-ink-low font-mono text-[11px] tracking-[0.12em] uppercase">
-        {label}
-      </dt>
-      <dd
-        className={`text-ink-hi text-base font-semibold ${mono ? "font-mono tracking-wide" : ""}`}
-      >
-        {value && value.length > 0 ? value : fallback}
-      </dd>
-    </div>
-  );
-}
 
 function Breadcrumb({
   items,
