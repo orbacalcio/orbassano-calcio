@@ -306,11 +306,22 @@ export async function Footer() {
 
       <div className="bg-surface-1 border-ink-mid border-t">
         <Container
-          className="flex items-center justify-center py-6"
+          className="flex flex-col items-center gap-1.5 py-6 text-center"
           size="wide"
         >
-          <span className="text-brand-white font-mono text-center text-[10px] tracking-normal sm:text-[11px] lg:text-[12px]">
+          <span className="text-brand-white font-mono text-[10px] tracking-normal sm:text-[11px] lg:text-[12px]">
             <span className="text-[11px] sm:text-[12px] lg:text-[13px]">©</span> {year} A.S.D. Orbassano Calcio · Tutti i diritti riservati
+          </span>
+          <span className="text-ink-low font-mono text-[10px] tracking-normal sm:text-[11px]">
+            Sito realizzato da{" "}
+            <a
+              href="https://digitalsoul.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink-mid hover:text-brand-gold font-semibold transition-colors"
+            >
+              DiGiT@L SouL
+            </a>
           </span>
         </Container>
       </div>
