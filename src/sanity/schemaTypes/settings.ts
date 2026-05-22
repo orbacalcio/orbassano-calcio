@@ -534,6 +534,15 @@ export const settings = defineType({
       ],
     }),
     defineField({
+      name: "psHubHeroImage",
+      title: "Hero — immagine di sfondo",
+      fieldset: "primaSquadraHub",
+      description:
+        "Immagine grande in cima alla pagina Prima Squadra (es. stadio/tifo), con sopra il titolo 'Prima Squadra'.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "psHubRosaImage",
       title: 'Box "La Rosa" — immagine',
       fieldset: "primaSquadraHub",

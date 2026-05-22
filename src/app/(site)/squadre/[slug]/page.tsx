@@ -61,6 +61,7 @@ async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
 // da Impostazioni globali → fieldset "Pagina Prima Squadra (hub)".
 async function fetchPrimaSquadraHub(): Promise<PrimaSquadraHubData> {
   const empty: PrimaSquadraHubData = {
+    heroImage: null,
     rosaImage: null,
     newsImage: null,
     calendarioImage: null,
@@ -73,6 +74,7 @@ async function fetchPrimaSquadraHub(): Promise<PrimaSquadraHubData> {
       {},
       { next: { tags: ["settings"] } },
     )) as {
+      psHubHeroImage?: string | null;
       psHubRosaImage?: string | null;
       psHubNewsImage?: string | null;
       psHubCalendarioImage?: string | null;
@@ -80,6 +82,7 @@ async function fetchPrimaSquadraHub(): Promise<PrimaSquadraHubData> {
       psClassificaUrl?: string | null;
     } | null;
     return {
+      heroImage: data?.psHubHeroImage ?? null,
       rosaImage: data?.psHubRosaImage ?? null,
       newsImage: data?.psHubNewsImage ?? null,
       calendarioImage: data?.psHubCalendarioImage ?? null,

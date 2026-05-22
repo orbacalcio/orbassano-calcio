@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Container } from "@/components/ui/Container";
 
 /**
  * Hub della Prima Squadra: 4 box full-bleed (pattern juventus.com) con
@@ -15,6 +16,7 @@ import Link from "next/link";
  *  - Classifica → link esterno editabile da Studio (fallback al calendario)
  */
 export type PrimaSquadraHubData = {
+  heroImage: string | null;
   rosaImage: string | null;
   newsImage: string | null;
   calendarioImage: string | null;
@@ -30,6 +32,7 @@ type Box = {
 };
 
 export function PrimaSquadraHub({
+  heroImage,
   rosaImage,
   newsImage,
   calendarioImage,
@@ -65,16 +68,85 @@ export function PrimaSquadraHub({
     },
   ];
 
-  // Griglia full-bleed 2×2 (1 colonna su mobile). Spazio (navy) tra le
-  // righe via gap-y; nessuna linea rossa orizzontale. La linea rossa
-  // verticale (3px) tra le due colonne è un bordo destro sui box di
-  // sinistra (solo da sm+).
   return (
-    <div className="bg-light-bg-0 grid grid-cols-1 gap-y-16 sm:grid-cols-2 lg:gap-y-24">
-      {boxes.map((box, i) => (
-        <HubCard key={box.title} box={box} leftColumn={i % 2 === 0} />
-      ))}
-    </div>
+    <>
+      {/* HERO: foto full-bleed (da Studio) + titolo "Prima Squadra". */}
+      <section className="relative isolate overflow-hidden">
+        {heroImage ? (
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            aria-hidden
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <div
+            aria-hidden
+            className="from-surface-2 via-surface-1 to-brand-blue/40 absolute inset-0 bg-gradient-to-br"
+          />
+        )}
+        {/* Tinta navy + scurimento per la leggibilità del titolo bianco. */}
+        <div
+          aria-hidden
+          className="bg-brand-blue absolute inset-0 opacity-40 mix-blend-multiply"
+        />
+        <div
+          aria-hidden
+          className="from-surface-0/80 via-surface-0/30 absolute inset-0 bg-gradient-to-t to-transparent"
+        />
+        <Container
+          size="wide"
+          className="relative flex min-h-[42vh] items-center py-20 lg:min-h-[56vh]"
+        >
+          <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase sm:text-6xl lg:text-8xl">
+            Prima Squadra
+          </h1>
+        </Container>
+      </section>
+
+      {/* Fascia chiara con breadcrumb. */}
+      <div className="bg-light-bg-0">
+        <Container size="wide" className="py-5">
+          <ol className="text-light-ink-mid flex flex-wrap items-center gap-2 font-mono text-xs tracking-[0.12em] uppercase">
+            <li>
+              <Link href="/" className="hover:text-brand-gold transition-colors">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden className="text-light-ink-low">
+              /
+            </li>
+            <li>
+              <Link
+                href="/squadre"
+                className="hover:text-brand-gold transition-colors"
+              >
+                Squadre
+              </Link>
+            </li>
+            <li aria-hidden className="text-light-ink-low">
+              /
+            </li>
+            <li aria-current="page" className="text-light-ink-hi">
+              Prima Squadra
+            </li>
+          </ol>
+        </Container>
+      </div>
+
+      {/* Griglia full-bleed 2×2 (1 colonna su mobile) su sfondo chiaro.
+          Spazio tra le righe via gap-y; nessuna linea rossa orizzontale.
+          Linea rossa verticale (3px) tra le colonne = bordo destro sui
+          box di sinistra (solo da sm+). */}
+      <div className="bg-light-bg-0 grid grid-cols-1 gap-y-16 pb-16 sm:grid-cols-2 lg:gap-y-24 lg:pb-24">
+        {boxes.map((box, i) => (
+          <HubCard key={box.title} box={box} leftColumn={i % 2 === 0} />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -118,7 +190,12 @@ function HubCard({ box, leftColumn }: { box: Box; leftColumn: boolean }) {
         <span className="text-brand-red font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base lg:text-lg">
           Prima Squadra
         </span>
-        <h2 className="font-display text-ink-hi mt-3 max-w-[14ch] text-5xl leading-[0.95] font-extrabold tracking-[0.005em] text-balance uppercase sm:text-6xl lg:text-7xl">
+        {/* min-h = 2 righe (leading 0.95 → 1.9em): riserva sempre lo
+            spazio per il titolo a 2 righe, così i blocchi hanno la
+            stessa altezza e — essendo centrati — gli eyebrow dei box
+            sulla stessa riga restano allineati anche quando un titolo
+            va a capo (es. "Calendario e Risultati"). */}
+        <h2 className="font-display text-ink-hi mt-3 min-h-[1.9em] max-w-[14ch] text-5xl leading-[0.95] font-extrabold tracking-[0.005em] text-balance uppercase sm:text-6xl lg:text-7xl">
           {box.title}
         </h2>
       </div>
