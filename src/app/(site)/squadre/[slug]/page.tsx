@@ -427,45 +427,35 @@ export function TeamView({
       <JsonLd data={buildBreadcrumbLd(breadcrumbItemsLd)} />
       <Breadcrumb items={breadcrumbItems} current={title} />
 
-      {/* HERO con pattern "ambient backdrop" (Apple TV / Netflix):
-          1. Layer 1: stessa foto in versione blurred + scaled, fa
-             da bg che riempie l'intero container — niente piu'
-             bordi navy vuoti.
-          2. Layer 2: foto principale object-contain, mostrata per
-             intero (16:9, niente tagli). Sovrapposta al backdrop
-             blurred.
-          3. Layer 3: gradient bottom-to-top morbido per la
-             leggibilita' del testo "Categoria + Nome squadra" che
-             vive in basso. */}
-      <header className="border-border/50 bg-surface-0 relative overflow-hidden border-b">
+      {/* HERO full-width (pattern juventus.com / hub Prima Squadra):
+          la foto riempie tutta la fascia a tutta larghezza (object-cover,
+          tagliata quanto serve), con overlay navy in multiply + gradient
+          dal basso per la leggibilita' del testo "Categoria + Nome
+          squadra". Niente piu' backdrop sfocato ne' bande laterali. */}
+      <header className="border-border/50 bg-surface-0 relative isolate overflow-hidden border-b">
         {team.heroImage ? (
           <>
-            {/* Layer 1: backdrop blurred (decorativo) */}
-            <Image
-              src={team.heroImage}
-              alt=""
-              fill
-              priority
-              aria-hidden
-              className="scale-110 object-cover opacity-60 blur-3xl"
-              sizes="100vw"
-            />
-            {/* Layer 2: foto principale, intera, niente tagli */}
+            {/* Foto full-width: riempie tutta la fascia. */}
             <Image
               src={team.heroImage}
               alt={team.name}
               fill
               priority
-              className="relative object-contain"
+              className="object-cover"
               sizes="100vw"
               placeholder={team.heroImageLqip ? "blur" : "empty"}
               blurDataURL={team.heroImageLqip ?? undefined}
             />
-            {/* Layer 3: gradient legibility — scurisce il basso per
-                il testo, lascia il centro/alto pulito. */}
+            {/* Tinta navy in multiply: tira la foto verso il brand e
+                aumenta il contrasto col testo bianco. */}
             <div
               aria-hidden
-              className="from-surface-0/85 absolute inset-0 bg-gradient-to-t via-transparent to-transparent"
+              className="bg-brand-blue absolute inset-0 opacity-40 mix-blend-multiply"
+            />
+            {/* Gradient bottom-to-top per la leggibilita' del testo. */}
+            <div
+              aria-hidden
+              className="from-surface-0/90 via-surface-0/20 absolute inset-0 bg-gradient-to-t to-transparent"
             />
           </>
         ) : (
