@@ -5,7 +5,7 @@ import {
   motion,
   useReducedMotion,
 } from "framer-motion";
-import { Loader2, Search as SearchIcon, X } from "lucide-react";
+import { Delete, Loader2, Search as SearchIcon, X } from "lucide-react";
 import Link from "next/link";
 import {
   useCallback,
@@ -237,7 +237,7 @@ export function SearchDialog({ open, onClose }: Props) {
                   aria-label="Termine di ricerca"
                   autoComplete="off"
                   spellCheck={false}
-                  className="text-ink-hi placeholder:text-ink-low font-display flex-1 bg-transparent text-2xl leading-none font-bold tracking-[0.005em] uppercase outline-none sm:text-3xl"
+                  className="text-ink-hi placeholder:text-ink-low font-display flex-1 bg-transparent text-2xl leading-none font-bold tracking-[0.005em] uppercase outline-none sm:text-3xl [&::-webkit-search-cancel-button]:appearance-none"
                 />
                 {loading && (
                   <Loader2
@@ -245,6 +245,22 @@ export function SearchDialog({ open, onClose }: Props) {
                     className="text-ink-mid animate-spin"
                     aria-hidden
                   />
+                )}
+                {/* Cancella il testo digitato: icona backspace (NON una X,
+                    per non confondersi col pulsante "Chiudi ricerca"). Il
+                    clear nativo dell'input search è nascosto via CSS sopra. */}
+                {q.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQ("");
+                      inputRef.current?.focus();
+                    }}
+                    aria-label="Cancella testo"
+                    className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-2"
+                  >
+                    <Delete size={20} aria-hidden />
+                  </button>
                 )}
                 <button
                   type="button"
