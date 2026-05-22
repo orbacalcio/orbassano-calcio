@@ -30,9 +30,10 @@ export default async function NewsPage() {
               Le ultime dal club
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Risultati, dietro le quinte, comunicati ufficiali. Tutto quello
-              che esce dalla redazione di Orbassano Calcio. Filtra per
-              categoria per trovare quello che cerchi.
+              Risultati, dietro le quinte, comunicati ufficiali e rassegna
+              stampa. Tutto quello che racconta l&apos;Orbassano Calcio, dalle
+              nostre notizie agli articoli delle testate giornalistiche.
+              Filtra per categoria per trovare quello che cerchi.
             </p>
           </div>
         </Container>
