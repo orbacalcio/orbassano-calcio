@@ -108,8 +108,10 @@ export function PrimaSquadraHub({
       </section>
 
       {/* Fascia chiara con breadcrumb. */}
+      {/* Fascia breadcrumb alta quanto lo spazio tra le due righe di box
+          (gap-y-16 = 4rem / lg:gap-y-24 = 6rem): testo centrato. */}
       <div className="bg-light-bg-0">
-        <Container size="wide" className="py-8 lg:py-12">
+        <Container size="wide" className="flex min-h-16 items-center lg:min-h-24">
           <ol className="text-light-ink-mid flex flex-wrap items-center gap-2.5 font-mono text-sm tracking-[0.12em] uppercase md:text-base">
             <li>
               <Link href="/" className="hover:text-brand-gold transition-colors">
