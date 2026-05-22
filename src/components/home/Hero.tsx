@@ -143,8 +143,8 @@ export async function Hero() {
     <section
       data-hero-sentinel
       aria-label="Identità del club"
-      // -mt-[100px] lg:-mt-[78px]: annulla il padding-top del main
-      // (AppShell pt-[100px] lg:pt-[78px]) cosi' l'hero parte da Y=0
+      // -mt-[111px] lg:-mt-[78px]: annulla il padding-top del main
+      // (AppShell pt-[111px] lg:pt-[78px]) cosi' l'hero parte da Y=0
       // del viewport e la Topbar transparente in HERO mode fluttua
       // SOPRA l'immagine, juventus.com-style. I valori sono in
       // sincrono con AppShell.tsx — se cambi uno cambia anche l'altro.
@@ -153,7 +153,7 @@ export async function Hero() {
       // Android la barra indirizzi dinamica non taglia piu' il fondo
       // dell'hero (con 100vh la CTA poteva finire sotto la piega). Il
       // prossimo blocco (NewsGrid) parte subito sotto al viewport edge.
-      className="relative -mt-[100px] flex min-h-dvh flex-col justify-center overflow-hidden lg:-mt-[78px]"
+      className="relative -mt-[111px] flex min-h-dvh flex-col justify-center overflow-hidden lg:-mt-[78px]"
     >
       {hasSlides ? (
         <HeroCarousel slides={resolvedSlides} config={config} />

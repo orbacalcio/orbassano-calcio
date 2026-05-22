@@ -164,7 +164,7 @@ export function CalendarioFlatList({
 
       {groups.map((g) => (
         <div key={g.key} className="flex flex-col gap-3">
-          <h4 className="font-display text-ink-mid sticky top-[84px] z-10 bg-surface-0/95 -mx-1 px-1 text-lg font-bold tracking-[0.1em] uppercase backdrop-blur-md md:text-xl lg:top-[78px]">
+          <h4 className="font-display text-ink-mid sticky top-[95px] z-10 bg-surface-0/95 -mx-1 px-1 text-lg font-bold tracking-[0.1em] uppercase backdrop-blur-md md:text-xl lg:top-[78px]">
             {g.label}
           </h4>
           <div className="flex flex-col gap-2">

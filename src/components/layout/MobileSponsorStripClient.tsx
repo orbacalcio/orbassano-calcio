@@ -20,9 +20,9 @@ type Sponsor = {
  * direzione dello scroll.
  *
  * Altezza 56px (h-14): il padding-top del main (AppShell) e l'offset
- * negativo dell'hero sono tarati su 44px (topbar) + 56px = 100px. Se
- * cambi l'altezza qui, aggiorna pt-[100px] in AppShell e -mt-[100px]
- * in Hero.
+ * negativo dell'hero sono tarati su 55px (topbar) + 56px = 111px. Se
+ * cambi l'altezza qui o quella della topbar, aggiorna pt-[111px] in
+ * AppShell e -mt-[111px] in Hero.
  *
  * Bianco: i loghi sponsor sono pensati per fondo chiaro (stesso
  * pattern del marquee desktop, vedi SponsorMarquee). Il fallback
@@ -55,13 +55,13 @@ export function MobileSponsorStripClient({
 
   return (
     <div
-      className="fixed inset-x-0 top-11 flex h-14 items-center justify-center gap-6 border-b border-black/10 bg-white px-4 transition-transform duration-300 lg:hidden"
+      className="fixed inset-x-0 top-[55px] flex h-14 items-center justify-center gap-6 border-b border-black/10 bg-white px-4 transition-transform duration-300 lg:hidden"
       style={{
         zIndex: Z.mobileSponsorStrip,
-        // -100% (altezza) - 2.75rem (offset top-11) = fuori schermo,
+        // -100% (altezza) - 55px (offset top-[55px]) = fuori schermo,
         // dietro/oltre la topbar.
         transform: hidden
-          ? "translateY(calc(-100% - 2.75rem))"
+          ? "translateY(calc(-100% - 55px))"
           : "translateY(0)",
       }}
       role="region"

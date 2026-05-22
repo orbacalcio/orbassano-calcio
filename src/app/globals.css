@@ -75,11 +75,11 @@ html {
      Il blocco prefers-reduced-motion in fondo lo riporta a 'auto'
      per chi richiede meno movimento. */
   scroll-behavior: smooth;
-  /* Barre fisse in alto (MobileTopbar 44px + MobileSponsorStrip 40px =
-     84px su <lg; Topbar 78px su lg): senza questo, ogni anchor (#id) e
-     lo skip-link atterrerebbero col target nascosto sotto le barre.
-     scroll-padding-top riserva lo spazio. Override 78px su lg sotto. */
-  scroll-padding-top: 84px;
+  /* Barre fisse in alto (MobileTopbar 55px + margine = 95px su <lg;
+     Topbar 78px su lg): senza questo, ogni anchor (#id) e lo skip-link
+     atterrerebbero col target nascosto sotto le barre. scroll-padding-top
+     riserva lo spazio. Override 78px su lg sotto. */
+  scroll-padding-top: 95px;
   /* overflow-x: clip impedisce scrollbar orizzontale generata dalle
      SidebarLeft/Right fixed traslate fuori viewport (translateX
      -88/+80 al fade-out post-hero). clip e' preferibile a hidden:

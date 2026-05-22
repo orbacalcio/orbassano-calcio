@@ -6,7 +6,8 @@ import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { Z } from "@/lib/z-indexes";
 
 /**
- * Topbar mobile (44px sticky, solo <lg). Contiene:
+ * Topbar mobile (55px sticky, solo <lg — ingrandita +25% il 2026-05-22).
+ * Contiene:
  * - Hamburger sx (apre il NavigationDrawer condiviso col desktop scrolled)
  * - Logo centrato
  * - Spacer destro per simmetria visiva
@@ -22,7 +23,7 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
   const onLogoClick = useHomeLogoClick();
   return (
     <header
-      className="border-border/50 bg-surface-0/80 fixed inset-x-0 top-0 flex h-11 items-center justify-between border-b px-3 backdrop-blur-md lg:hidden"
+      className="border-border/50 bg-surface-0/80 fixed inset-x-0 top-0 flex h-[55px] items-center justify-between border-b px-3 backdrop-blur-md lg:hidden"
       style={{ zIndex: Z.topbar }}
       role="banner"
     >
@@ -31,11 +32,11 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
         aria-label="Apri menu"
         aria-controls="navigation-drawer"
         onClick={onMenuClick}
-        className="text-ink-hi focus-visible:outline-brand-gold flex h-11 w-11 items-center justify-center rounded-md focus-visible:outline-2"
+        className="text-ink-hi focus-visible:outline-brand-gold flex h-full w-12 items-center justify-center rounded-md focus-visible:outline-2"
       >
         <svg
-          width={22}
-          height={22}
+          width={28}
+          height={28}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -57,12 +58,12 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Image
           src="/Logo_Orbassano_2K.png"
           alt=""
-          width={28}
-          height={40}
+          width={35}
+          height={50}
           priority
         />
       </Link>
-      <span aria-hidden className="h-11 w-11" />
+      <span aria-hidden className="h-full w-12" />
     </header>
   );
 }
