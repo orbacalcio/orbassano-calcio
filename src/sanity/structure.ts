@@ -280,9 +280,12 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         ),
 
       // ----- SETTORE GIOVANILE -----------------------------------------
-      // Summer Camp (date camp estivo pre-stagione) + Tornei (eventi
-      // organizzati o ospitati). Vivono fuori da "Stagione corrente"
-      // perche' la stagione e' un field del singolo documento.
+      // Solo Summer Camp (date camp estivo pre-stagione, esclusivo SGS).
+      // Vive fuori da "Stagione corrente" perche' la stagione e' un
+      // field del singolo documento. I Tornei sono stati spostati FUORI
+      // di qui a voce top-level (vedi sotto): possono riguardare qualsiasi
+      // squadra, anche la Prima Squadra, quindi nidificarli sotto il
+      // settore giovanile era fuorviante (richiesta utente 2026-05-22).
       S.listItem()
         .title("Settore Giovanile")
         .icon(GraduationCap)
@@ -293,11 +296,14 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("openDay")
                 .title("Summer Camp")
                 .icon(CalendarCheck),
-              S.documentTypeListItem("tournament")
-                .title("Tornei")
-                .icon(Trophy),
             ]),
         ),
+
+      // ----- TORNEI (qualsiasi squadra) --------------------------------
+      // Top-level: i tornei (amichevoli, memorial, manifestazioni)
+      // vanno dalla Prima Squadra al Settore Giovanile — vedi il campo
+      // category dello schema tournament.
+      S.documentTypeListItem("tournament").title("Tornei").icon(Trophy),
 
       // ----- AREE EDITORIALI -------------------------------------------
       S.listItem()
