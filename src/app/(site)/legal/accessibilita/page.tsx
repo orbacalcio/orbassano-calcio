@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Dichiarazione di accessibilità di orbassanocalcio.com: stato di conformità WCAG 2.1 AA, contenuti non accessibili, come segnalare problemi.",
 };
 
-const LAST_UPDATE = "20 maggio 2026";
+const LAST_UPDATE = "22 maggio 2026";
 const A11Y_EMAIL = "info@orbassanocalcio.com";
 
 /**
@@ -21,7 +21,7 @@ const A11Y_EMAIL = "info@orbassanocalcio.com";
  * dilettantistica (la Legge Stanca / D.Lgs. 82/2005 vincola PA e grandi
  * imprese), ma pubblicata come buona pratica e in vista dell'European
  * Accessibility Act. Stato dichiarato: PARZIALMENTE CONFORME, onesto
- * rispetto all'audit interno del 2026-05-20. Aggiornare lo stato e la
+ * rispetto all'audit interno del 2026-05-22. Aggiornare lo stato e la
  * sezione "contenuti non accessibili" quando i rilievi vengono chiusi.
  */
 export default function AccessibilitaPage() {
@@ -46,7 +46,7 @@ export default function AccessibilitaPage() {
 
       <LegalSection title="Cosa abbiamo verificato e funziona">
         <p>
-          Da un audit interno del 20 maggio 2026 risultano conformi:
+          Da un audit interno del 22 maggio 2026 risultano conformi:
         </p>
         <LegalList
           items={[
@@ -55,9 +55,13 @@ export default function AccessibilitaPage() {
             "Struttura semantica corretta (titoli, liste, aree di pagina) per gli screen reader.",
             "Moduli con etichette associate, messaggi di errore annunciati e validazione chiara.",
             "Pulsanti con sola icona dotati di etichetta testuale per screen reader.",
+            "Filtri (news, calendario, archivio) realizzati con menu a tendina nativi, pienamente accessibili da tastiera e screen reader.",
+            "Pulsanti d'azione con fondo blu navy a riposo: testo bianco con contrasto elevato (ben oltre la soglia AA).",
+            "Aree toccabili ampie su mobile (barra in alto e comandi ingranditi), comode anche per chi ha difficoltà motorie.",
             "Rispetto della preferenza «riduci animazioni» del sistema operativo.",
             "Lingua della pagina dichiarata (italiano), testo ridimensionabile fino al 200% senza perdita di contenuto.",
             "Menu, ricerca e banner cookie utilizzabili con tastiera e chiudibili con il tasto Esc.",
+            "Decorazioni grafiche (motivi di sfondo negli header) marcate come puramente decorative e ignorate dagli screen reader.",
           ]}
         />
       </LegalSection>
@@ -70,13 +74,14 @@ export default function AccessibilitaPage() {
         <LegalList
           items={[
             <>
-              <strong>Contrasto di alcuni testi.</strong> Abbiamo già
-              corretto le etichette piccole e i testi secondari per
-              superare il rapporto di contrasto richiesto. Il testo bianco
-              sui pulsanti rossi d&apos;azione resta a un contrasto di
-              poco inferiore alla soglia per il testo normale (resta
-              conforme per il testo in grassetto, come quello dei
-              pulsanti): è un colore identitario del club e lo manteniamo.
+              <strong>Stato «al passaggio del mouse» dei pulsanti.</strong>{" "}
+              A riposo i pulsanti d&apos;azione sono blu navy con testo
+              bianco ad alto contrasto. Solo passandoci sopra col mouse
+              compare per un istante il rosso del club: in quello stato
+              transitorio il contrasto del testo bianco è di poco
+              inferiore alla soglia per il testo normale (resta conforme
+              per il testo in grassetto, come quello dei pulsanti). È un
+              colore identitario e lo manteniamo solo come effetto hover.
             </>,
             <>
               <strong>Descrizioni delle immagini del carosello.</strong> Le
