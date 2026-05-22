@@ -93,8 +93,7 @@ export default async function StoriaPage() {
             <p className="text-ink-mid max-w-xl text-sm leading-relaxed">
               Per approfondire la cronistoria completa, le note di stagione
               e le fonti d&apos;archivio (La Stampa), consulta la pagina
-              dedicata su Wikipedia, mantenuta dal social media manager
-              del club.
+              dedicata su Wikipedia.
             </p>
           </div>
           <a
