@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -425,7 +426,6 @@ export function TeamView({
         })}
       />
       <JsonLd data={buildBreadcrumbLd(breadcrumbItemsLd)} />
-      <Breadcrumb items={breadcrumbItems} current={title} />
 
       {/* HERO full-width (pattern juventus.com / hub Prima Squadra):
           la foto riempie tutta la fascia a tutta larghezza (object-cover,
@@ -464,8 +464,11 @@ export function TeamView({
             className="from-surface-2 via-surface-1 to-brand-blue/30 absolute inset-0 bg-gradient-to-br"
           />
         )}
+        {/* Altezza allineata all'hero della home (min-h-dvh = 100dvh).
+            dvh gestisce la barra browser dinamica su mobile. Su tutti i
+            breakpoint la foto riempie l'intera viewport in altezza. */}
         <Container
-          className="relative flex min-h-[42vh] flex-col justify-end gap-4 py-16 lg:min-h-[48vh] lg:py-24"
+          className="relative flex min-h-dvh flex-col justify-end gap-4 py-16 lg:py-24"
           size="wide"
         >
           <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
@@ -480,9 +483,45 @@ export function TeamView({
         </Container>
       </header>
 
-      {/* Striscia info (Stagione/Girone/Categoria/Atleti) rimossa
-          2026-05-22 (richiesta utente): l'header resta solo eyebrow
-          categoria + nome squadra. */}
+      {/* Fascia chiara con breadcrumb di ritorno all'elenco squadre,
+          sotto la foto (stessa resa dell'hub Prima Squadra). Il
+          breadcrumb e' dinamico: Settore Giovanile e le sotto-pagine
+          (es. "La Rosa") aggiungono step intermedi. */}
+      <div className="bg-light-bg-0">
+        <Container
+          size="wide"
+          className="flex min-h-16 items-center lg:min-h-20"
+        >
+          <ol className="text-light-ink-mid font-display flex flex-wrap items-center gap-2.5 text-sm font-bold tracking-[0.12em] uppercase md:text-base">
+            <li>
+              <Link href="/" className="hover:text-brand-gold transition-colors">
+                Home
+              </Link>
+            </li>
+            {breadcrumbItems.map((item) => (
+              <Fragment key={item.href}>
+                <li aria-hidden className="text-light-ink-low">
+                  /
+                </li>
+                <li>
+                  <Link
+                    href={item.href}
+                    className="hover:text-brand-gold transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              </Fragment>
+            ))}
+            <li aria-hidden className="text-light-ink-low">
+              /
+            </li>
+            <li aria-current="page" className="text-light-ink-hi">
+              {title}
+            </li>
+          </ol>
+        </Container>
+      </div>
 
       {/* DESCRIZIONE */}
       {team.description && team.description.length > 0 && (
