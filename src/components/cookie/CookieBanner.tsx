@@ -107,6 +107,18 @@ export function CookieBanner() {
     }
   }, []);
 
+  // Riapertura preferenze da link esterno (es. voce "Preferenze cookie"
+  // nel footer su mobile, dove il bottone flottante è nascosto): ascolta
+  // un evento custom su window e riporta il banner in primo piano.
+  useEffect(() => {
+    function onOpen() {
+      setView("banner");
+    }
+    window.addEventListener("orba:open-cookie-preferences", onOpen);
+    return () =>
+      window.removeEventListener("orba:open-cookie-preferences", onOpen);
+  }, []);
+
   async function persist(
     action: StoredConsent["action"],
     categories: Categories,
