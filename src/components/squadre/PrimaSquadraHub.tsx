@@ -109,8 +109,8 @@ export function PrimaSquadraHub({
 
       {/* Fascia chiara con breadcrumb. */}
       <div className="bg-light-bg-0">
-        <Container size="wide" className="py-5">
-          <ol className="text-light-ink-mid flex flex-wrap items-center gap-2 font-mono text-xs tracking-[0.12em] uppercase">
+        <Container size="wide" className="py-8 lg:py-12">
+          <ol className="text-light-ink-mid flex flex-wrap items-center gap-2.5 font-mono text-sm tracking-[0.12em] uppercase md:text-base">
             <li>
               <Link href="/" className="hover:text-brand-gold transition-colors">
                 Home
