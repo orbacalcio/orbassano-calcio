@@ -38,7 +38,10 @@ const STROKE = {
 const MOTIFS: Record<HeaderMotifVariant, ReactNode> = {
   pitch: (
     <>
-      <circle cx="120" cy="120" r="46" {...STROKE} />
+      <g {...STROKE}>
+        <line x1="120" y1="4" x2="120" y2="236" />
+        <circle cx="120" cy="120" r="46" />
+      </g>
       <circle cx="120" cy="120" r="3.5" fill="currentColor" />
     </>
   ),
