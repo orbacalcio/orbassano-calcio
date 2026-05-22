@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { useHomeLogoClick } from "@/lib/use-home-logo-click";
 import { Z } from "@/lib/z-indexes";
 
@@ -10,16 +11,20 @@ import { Z } from "@/lib/z-indexes";
  * Contiene:
  * - Hamburger sx (apre il NavigationDrawer condiviso col desktop scrolled)
  * - Logo centrato
- * - Spacer destro per simmetria visiva
+ * - Lente di ricerca dx (apre la SearchDialog, richiesta utente
+ *   2026-05-22 — riportata in topbar oltre che dentro al drawer)
  *
- * La logica di apertura/chiusura del drawer vive nel ClientShell padre,
- * che la condivide con la Topbar desktop in modalita' scrolled. Qui
- * passiamo solo onMenuClick.
- *
- * Search e' stata rimossa dalla topbar mobile (M3 fix originale): vive
- * solo dentro al drawer aperto.
+ * La logica di apertura del drawer e della ricerca vive nel ClientShell
+ * padre (condivisa con la Topbar desktop): qui riceviamo onMenuClick e
+ * onSearchClick.
  */
-export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
+export function MobileTopbar({
+  onMenuClick,
+  onSearchClick,
+}: {
+  onMenuClick: () => void;
+  onSearchClick: () => void;
+}) {
   const onLogoClick = useHomeLogoClick();
   return (
     <header
@@ -63,7 +68,14 @@ export function MobileTopbar({ onMenuClick }: { onMenuClick: () => void }) {
           priority
         />
       </Link>
-      <span aria-hidden className="h-full w-12" />
+      <button
+        type="button"
+        aria-label="Cerca"
+        onClick={onSearchClick}
+        className="text-ink-mid hover:text-ink-hi focus-visible:outline-brand-gold flex h-full w-12 items-center justify-center rounded-md focus-visible:outline-2"
+      >
+        <Search size={24} aria-hidden />
+      </button>
     </header>
   );
 }

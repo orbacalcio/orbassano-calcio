@@ -114,7 +114,7 @@ export function ClientShell({
   return (
     <>
       {/* Mobile topbar (sempre visibile <lg, niente switch su mobile) */}
-      <MobileTopbar onMenuClick={openDrawer} />
+      <MobileTopbar onMenuClick={openDrawer} onSearchClick={openSearch} />
 
       {/* Topbar unica: cambia forma in base a heroVisible. Si allarga
           dai bordi sidebar (88+80) a full-width, e fade-in dei

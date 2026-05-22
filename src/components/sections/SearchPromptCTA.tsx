@@ -2,8 +2,14 @@
 
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
+
+// Placeholder responsive: testo lungo su desktop (≥md), corto su mobile
+// dove il lungo verrebbe tagliato. L'uppercase è applicato via CSS
+// (vale anche per il placeholder) senza toccare il valore digitato.
+const PLACEHOLDER_LONG = "Scrivi qui per iniziare la ricerca";
+const PLACEHOLDER_SHORT = "Ricerca";
 
 /**
  * Barra di ricerca grande sopra il footer (pattern juventus.com).
@@ -24,6 +30,17 @@ import { Container } from "@/components/ui/Container";
 export function SearchPromptCTA() {
   const router = useRouter();
   const [q, setQ] = useState("");
+  // Default = corto (mobile-first / SSR); su md+ passa al lungo dopo mount.
+  const [placeholder, setPlaceholder] = useState(PLACEHOLDER_SHORT);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () =>
+      setPlaceholder(mq.matches ? PLACEHOLDER_LONG : PLACEHOLDER_SHORT);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -46,11 +63,11 @@ export function SearchPromptCTA() {
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Ricerca"
+          placeholder={placeholder}
           aria-label="Termine di ricerca"
           autoComplete="off"
           spellCheck={false}
-          className="font-display text-surface-0 placeholder:text-surface-0/40 min-w-0 flex-1 bg-transparent text-2xl leading-tight font-bold tracking-[0.005em] outline-none md:text-4xl lg:text-5xl"
+          className="font-display text-surface-0 placeholder:text-surface-0/40 min-w-0 flex-1 bg-transparent text-2xl leading-tight font-bold tracking-[0.005em] uppercase outline-none md:text-4xl lg:text-5xl"
         />
         <button
           type="submit"
