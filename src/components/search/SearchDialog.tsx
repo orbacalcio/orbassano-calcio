@@ -233,7 +233,7 @@ export function SearchDialog({ open, onClose }: Props) {
                   type="search"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  placeholder="Cerca news, giocatori, squadre, sponsor…"
+                  placeholder="Cerca tutti i contenuti…"
                   aria-label="Termine di ricerca"
                   autoComplete="off"
                   spellCheck={false}
