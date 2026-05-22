@@ -56,6 +56,13 @@ export const settings = defineType({
         "Tariffe dei biglietti mostrate nella card 'Tariffe biglietti' della pagina /societa/biglietteria.",
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: "primaSquadraHub",
+      title: 'Pagina "Prima Squadra" (hub 4 box)',
+      description:
+        "Immagini di sfondo dei 4 box (La Rosa · Le ultime news · Calendario e risultati · Classifica) della pagina /squadre/prima-squadra e link esterno alla classifica.",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({
@@ -525,6 +532,44 @@ export const settings = defineType({
           },
         }),
       ],
+    }),
+    defineField({
+      name: "psHubRosaImage",
+      title: 'Box "La Rosa" — immagine',
+      fieldset: "primaSquadraHub",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "psHubNewsImage",
+      title: 'Box "Le ultime news" — immagine',
+      fieldset: "primaSquadraHub",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "psHubCalendarioImage",
+      title: 'Box "Calendario e risultati" — immagine',
+      fieldset: "primaSquadraHub",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "psHubClassificaImage",
+      title: 'Box "Classifica" — immagine',
+      fieldset: "primaSquadraHub",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "psClassificaUrl",
+      title: "Classifica — link esterno",
+      fieldset: "primaSquadraHub",
+      description:
+        "URL alla classifica del campionato (es. Tuttocampo / FIGC). Il box 'Classifica' linka qui. Se vuoto, il box rimanda alla pagina calendario.",
+      type: "url",
+      validation: (r) =>
+        r.uri({ scheme: ["https"], allowRelative: false }),
     }),
     defineField({
       name: "registrationFormFile",

@@ -12,8 +12,15 @@ export const metadata: Metadata = {
     "Risultati, dietro le quinte e comunicati ufficiali di ASD Orbassano Calcio. Filtra l'archivio per categoria: Prima Squadra, Settore Giovanile, Società, Sponsor.",
 };
 
-export default async function NewsPage() {
-  const news = await fetchAllNews();
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ categoria?: string }>;
+}) {
+  const [{ categoria }, news] = await Promise.all([
+    searchParams,
+    fetchAllNews(),
+  ]);
 
   return (
     <>
@@ -47,7 +54,7 @@ export default async function NewsPage() {
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
-            <NewsArchive news={news} />
+            <NewsArchive news={news} initialCategory={categoria} />
           </RevealOnScroll>
         </Container>
       </section>

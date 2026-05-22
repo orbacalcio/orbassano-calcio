@@ -16,6 +16,9 @@ import type { NewsCategory, NewsSummary } from "@/sanity/fetchers";
  */
 type Props = {
   news: NewsSummary[];
+  /** Categoria iniziale dal query string (?categoria=...), es. link
+   *  "Le ultime news" della hub Prima Squadra. Default: tutte. */
+  initialCategory?: string;
 };
 
 const CATEGORIES: NewsCategory[] = [
@@ -30,9 +33,16 @@ const CATEGORIES: NewsCategory[] = [
 // di quante crescere ad ogni click. 9 = 3 righe piene su lg (grid-3).
 const REST_STEP = 9;
 
-export function NewsArchive({ news }: Props) {
+export function NewsArchive({ news, initialCategory }: Props) {
+  // Normalizza la categoria iniziale dal query string: deve combaciare
+  // esattamente con un valore di CATEGORIES, altrimenti "all".
+  const normalizedInitial: NewsCategory | "all" = (
+    CATEGORIES as string[]
+  ).includes(initialCategory ?? "")
+    ? (initialCategory as NewsCategory)
+    : "all";
   const [activeCategory, setActiveCategory] = useState<NewsCategory | "all">(
-    "all",
+    normalizedInitial,
   );
   const [visibleRest, setVisibleRest] = useState(REST_STEP);
 

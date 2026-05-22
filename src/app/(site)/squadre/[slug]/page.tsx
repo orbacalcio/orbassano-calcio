@@ -12,6 +12,10 @@ import {
 import { JsonLd } from "@/components/seo/JsonLd";
 import { RegistrationPaymentBlock } from "@/components/settore-giovanile/RegistrationPaymentBlock";
 import { PlayerCard } from "@/components/squadre/PlayerCard";
+import {
+  PrimaSquadraHub,
+  type PrimaSquadraHubData,
+} from "@/components/squadre/PrimaSquadraHub";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
@@ -50,6 +54,40 @@ async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
     return (data ?? {}) as RegistrationSettings;
   } catch {
     return {};
+  }
+}
+
+// Dati CMS della hub Prima Squadra (immagini dei 4 box + link classifica),
+// da Impostazioni globali → fieldset "Pagina Prima Squadra (hub)".
+async function fetchPrimaSquadraHub(): Promise<PrimaSquadraHubData> {
+  const empty: PrimaSquadraHubData = {
+    rosaImage: null,
+    newsImage: null,
+    calendarioImage: null,
+    classificaImage: null,
+    classificaUrl: null,
+  };
+  try {
+    const data = (await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    )) as {
+      psHubRosaImage?: string | null;
+      psHubNewsImage?: string | null;
+      psHubCalendarioImage?: string | null;
+      psHubClassificaImage?: string | null;
+      psClassificaUrl?: string | null;
+    } | null;
+    return {
+      rosaImage: data?.psHubRosaImage ?? null,
+      newsImage: data?.psHubNewsImage ?? null,
+      calendarioImage: data?.psHubCalendarioImage ?? null,
+      classificaImage: data?.psHubClassificaImage ?? null,
+      classificaUrl: data?.psClassificaUrl ?? null,
+    };
+  } catch {
+    return empty;
   }
 }
 
@@ -187,6 +225,13 @@ export default async function TeamOrCategoryPage({
     const teams = await fetchTeamsByCategory(categoryName);
     if (teams.length === 0) notFound();
     return <CategoryView category={categoryName} teams={teams} />;
+  }
+
+  // Prima Squadra: hub a 4 box (richiesta utente 2026-05-22). La rosa
+  // vive ora su /squadre/prima-squadra/rosa.
+  if (slug === "prima-squadra") {
+    const hub = await fetchPrimaSquadraHub();
+    return <PrimaSquadraHub {...hub} />;
   }
 
   const team = await fetchTeamBySlug(slug);
@@ -337,7 +382,16 @@ async function CategoryView({
 
 // ---------- VISTA SQUADRA SINGOLA ----------------------------------------------------
 
-function TeamView({ team }: { team: TeamDetail }) {
+export function TeamView({
+  team,
+  heading,
+}: {
+  team: TeamDetail;
+  /** Titolo override (es. "La Rosa" per la sotto-pagina prima-squadra/rosa).
+   *  Se assente usa team.name. */
+  heading?: string;
+}) {
+  const title = heading ?? team.name;
   const subtitle =
     team.subcategory && team.subcategory !== team.name ? team.subcategory : null;
   const breadcrumbItems: Array<{ label: string; href: string }> = [
@@ -349,10 +403,15 @@ function TeamView({ team }: { team: TeamDetail }) {
       href: "/squadre/settore-giovanile",
     });
   }
+  // Sotto-pagina (heading override): aggiunge lo step verso la hub
+  // della squadra prima della voce corrente.
+  if (heading) {
+    breadcrumbItems.push({ label: team.name, href: `/squadre/${team.slug}` });
+  }
   const breadcrumbItemsLd = [
     { name: "Home", url: "/" },
     ...breadcrumbItems.map((b) => ({ name: b.label, url: b.href })),
-    { name: team.name, url: `/squadre/${team.slug}` },
+    { name: title, url: `/squadre/${team.slug}` },
   ];
   return (
     <>
@@ -363,7 +422,7 @@ function TeamView({ team }: { team: TeamDetail }) {
         })}
       />
       <JsonLd data={buildBreadcrumbLd(breadcrumbItemsLd)} />
-      <Breadcrumb items={breadcrumbItems} current={team.name} />
+      <Breadcrumb items={breadcrumbItems} current={title} />
 
       {/* HERO con pattern "ambient backdrop" (Apple TV / Netflix):
           1. Layer 1: stessa foto in versione blurred + scaled, fa
@@ -420,7 +479,7 @@ function TeamView({ team }: { team: TeamDetail }) {
             {team.category}
           </span>
           <h1 className="font-display text-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-            {team.name}
+            {title}
           </h1>
           {subtitle && (
             <span className="text-ink-mid text-lg lg:text-xl">{subtitle}</span>
