@@ -158,13 +158,16 @@ export async function SponsorMarquee() {
         ))}
       </ul>
 
-      <div className="mt-10 flex justify-center">
+      <div className="mt-10 flex flex-col items-center gap-3">
+        <p className="text-ink-mid text-sm">
+          Vuoi vedere il tuo marchio accanto al rossoblù?
+        </p>
         <Link
-          href="/sponsor"
-          className="text-brand-gold hover:text-brand-white inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.05em] transition-colors"
+          href="/sponsor/opportunita"
+          className="bg-brand-blue btn-wow-sweep text-brand-white font-display hover:bg-brand-red focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
         >
-          Tutti gli sponsor del club
-          <ArrowUpRight size={14} />
+          Diventa sponsor del club
+          <ArrowUpRight size={14} aria-hidden />
         </Link>
       </div>
 
