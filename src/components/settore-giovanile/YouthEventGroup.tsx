@@ -59,7 +59,7 @@ export function YouthEventGroup({
   return (
     <section
       aria-labelledby={`group-${slugify(category)}`}
-      className="border-border bg-surface-1/40 rounded-2xl border p-6 lg:p-8"
+      className="border-border bg-surface-1 rounded-2xl border p-6 lg:p-8"
     >
       <h2
         id={`group-${slugify(category)}`}
