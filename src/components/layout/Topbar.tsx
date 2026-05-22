@@ -167,7 +167,7 @@ export function Topbar({
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="font-display text-ink-hi hover:text-brand-gold text-sm font-semibold tracking-[0.1em] whitespace-nowrap uppercase transition-colors"
+                className="font-display text-ink-hi hover:text-brand-gold text-[1.1rem] font-semibold tracking-[0.1em] whitespace-nowrap uppercase transition-colors"
               >
                 {item.label}
               </Link>
