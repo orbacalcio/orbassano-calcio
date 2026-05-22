@@ -174,6 +174,11 @@ export function HeroCarousel({
         "absolute inset-0",
         isTransitioning && "[&_*]:will-change-transform",
       )}
+      // touch-action: pan-y → lo scroll verticale resta nativo, ma il
+      // gesto orizzontale viene riservato allo swipe (altrimenti il
+      // browser lo intercetta e onPanEnd non scatta in modo affidabile
+      // su mobile). touch-pan-x non serve: il cross-fade non slitta.
+      style={{ touchAction: "pan-y" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       // Swipe orizzontale su touch: onPanEnd NON muove il layer (il
