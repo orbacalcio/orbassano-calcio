@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+// @ts-check
 
 /**
  * Tabella redirect 301 dalle vecchie URL Wix → nuove URL del sito.
@@ -128,7 +128,8 @@ const securityHeaders = [
   },
 ];
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
