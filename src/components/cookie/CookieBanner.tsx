@@ -417,9 +417,11 @@ function ChalkPitchBackground({ reduced }: { reduced: boolean }) {
         animate={reduced ? undefined : { pathLength: 1 }}
         transition={{ ...baseTransition, delay: reduced ? 0 : 0.9 }}
       />
-      {/* Dischetto del rigore */}
+      {/* Dischetto del rigore: dentro l'area, spostato verso la linea
+          dell'area (x≈315) — come nella realtà sta più vicino alla porta
+          del bordo area. */}
       <motion.circle
-        cx={335}
+        cx={315}
         cy={100}
         r={2}
         fill="currentColor"
@@ -428,9 +430,11 @@ function ChalkPitchBackground({ reduced }: { reduced: boolean }) {
         animate={reduced ? undefined : { opacity: 1 }}
         transition={{ duration: 0.3, delay: reduced ? 0 : 1.2 }}
       />
-      {/* Arco del rigore */}
+      {/* Arco del rigore: centrato sul dischetto (315,100), disegnato
+          solo nella parte ESTERNA all'area (a sinistra della linea
+          x=300, bulge verso x≈291). sweep-flag 0 = bulge a sinistra. */}
       <motion.path
-        d="M 312 88 A 18 18 0 0 0 312 112"
+        d="M 300 81 A 24 24 0 0 0 300 119"
         initial={reduced ? false : { pathLength: 0 }}
         animate={reduced ? undefined : { pathLength: 1 }}
         transition={{ ...baseTransition, delay: reduced ? 0 : 1.3 }}
