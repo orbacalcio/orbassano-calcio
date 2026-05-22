@@ -70,7 +70,7 @@ export function PrimaSquadraHub({
   // verticale (3px) tra le due colonne è un bordo destro sui box di
   // sinistra (solo da sm+).
   return (
-    <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:gap-y-10">
+    <div className="bg-light-bg-0 grid grid-cols-1 gap-y-16 sm:grid-cols-2 lg:gap-y-24">
       {boxes.map((box, i) => (
         <HubCard key={box.title} box={box} leftColumn={i % 2 === 0} />
       ))}
@@ -111,14 +111,20 @@ function HubCard({ box, leftColumn }: { box: Box; leftColumn: boolean }) {
         className="from-surface-0/90 via-surface-0/20 absolute inset-0 bg-gradient-to-t to-transparent"
       />
 
-      <div className="relative flex h-full flex-col justify-end px-6 pb-10 sm:px-8 lg:px-12 lg:pb-14">
-        <span className="text-brand-red font-display text-xs font-bold tracking-[0.2em] uppercase md:text-sm">
+      {/* Eyebrow + titolo: centrati verticalmente nel box, più grandi.
+          Titolo con max-width in ch → va a capo quando lungo
+          (es. "Calendario e risultati"). */}
+      <div className="relative flex h-full w-full flex-col items-start justify-center px-6 sm:px-8 lg:px-12">
+        <span className="text-brand-red font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base lg:text-lg">
           Prima Squadra
         </span>
-        <h2 className="font-display text-ink-hi mt-2 text-4xl leading-[0.95] font-extrabold tracking-[0.005em] uppercase sm:text-5xl lg:text-6xl">
+        <h2 className="font-display text-ink-hi mt-3 max-w-[14ch] text-5xl leading-[0.95] font-extrabold tracking-[0.005em] text-balance uppercase sm:text-6xl lg:text-7xl">
           {box.title}
         </h2>
-        <span className="bg-brand-white text-surface-0 font-display group-hover:bg-brand-gold mt-6 inline-flex w-fit items-center rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] uppercase transition-colors duration-300 md:text-sm">
+      </div>
+      {/* Bottone: ancorato in fondo al box (invariato). */}
+      <div className="absolute inset-x-0 bottom-10 px-6 sm:px-8 lg:bottom-14 lg:px-12">
+        <span className="bg-brand-white text-surface-0 font-display group-hover:bg-brand-gold inline-flex w-fit items-center rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] uppercase transition-colors duration-300 md:text-sm">
           Scopri di più
         </span>
       </div>
