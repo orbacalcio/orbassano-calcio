@@ -105,7 +105,7 @@ export default function SocietaPage() {
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
           <RevealOnScroll>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {HUB_CARDS.map((card) => (
                 <SocietaHubCard key={card.number} {...card} />
               ))}
