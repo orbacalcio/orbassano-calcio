@@ -435,13 +435,16 @@ export function TeamView({
       <header className="border-border/50 bg-surface-0 relative isolate overflow-hidden border-b">
         {team.heroImage ? (
           <>
-            {/* Foto full-width: riempie tutta la fascia. */}
+            {/* Foto full-width: riempie tutta la fascia. object-top
+                ancora l'immagine in alto: parte intera dal bordo
+                superiore e, se manca spazio, taglia in basso (meglio
+                tagliare i piedi che le teste). */}
             <Image
               src={team.heroImage}
               alt={team.name}
               fill
               priority
-              className="object-cover"
+              className="object-cover object-top"
               sizes="100vw"
               placeholder={team.heroImageLqip ? "blur" : "empty"}
               blurDataURL={team.heroImageLqip ?? undefined}
