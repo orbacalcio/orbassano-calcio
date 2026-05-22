@@ -88,11 +88,14 @@ export function PrimaSquadraHub({
             className="from-surface-2 via-surface-1 to-brand-blue/40 absolute inset-0 bg-gradient-to-br"
           />
         )}
-        {/* Tinta navy + scurimento per la leggibilità del titolo bianco. */}
+        {/* Tinta navy DOPPIA rispetto ai box (che hanno un solo passaggio
+            multiply al 55%): qui multiply 55% + un secondo strato navy
+            flat → navy piu' intenso e leggibilità del titolo bianco. */}
         <div
           aria-hidden
-          className="bg-brand-blue absolute inset-0 opacity-40 mix-blend-multiply"
+          className="bg-brand-blue absolute inset-0 opacity-55 mix-blend-multiply"
         />
+        <div aria-hidden className="bg-brand-blue/35 absolute inset-0" />
         <div
           aria-hidden
           className="from-surface-0/80 via-surface-0/30 absolute inset-0 bg-gradient-to-t to-transparent"
@@ -112,7 +115,7 @@ export function PrimaSquadraHub({
           (gap-y-16 = 4rem / lg:gap-y-24 = 6rem): testo centrato. */}
       <div className="bg-light-bg-0">
         <Container size="wide" className="flex min-h-16 items-center lg:min-h-24">
-          <ol className="text-light-ink-mid flex flex-wrap items-center gap-2.5 font-mono text-sm tracking-[0.12em] uppercase md:text-base">
+          <ol className="text-light-ink-mid font-display flex flex-wrap items-center gap-2.5 text-sm font-bold tracking-[0.12em] uppercase md:text-base">
             <li>
               <Link href="/" className="hover:text-brand-gold transition-colors">
                 Home
