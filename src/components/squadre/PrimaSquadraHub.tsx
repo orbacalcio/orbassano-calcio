@@ -192,7 +192,9 @@ function HubCard({ box, leftColumn }: { box: Box; leftColumn: boolean }) {
           Titolo con max-width in ch → va a capo quando lungo
           (es. "Calendario e risultati"). */}
       <div className="relative flex h-full w-full flex-col items-start justify-center px-6 sm:px-8 lg:px-12">
-        <span className="text-brand-red font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base lg:text-lg">
+        {/* Eyebrow +50% rispetto alla scala precedente (sm/base/lg →
+            1.3125 / 1.5 / 1.6875 rem). Richiesta utente 2026-05-22. */}
+        <span className="text-brand-red font-display text-[1.3125rem] font-bold tracking-[0.2em] uppercase md:text-[1.5rem] lg:text-[1.6875rem]">
           Prima Squadra
         </span>
         {/* min-h = 2 righe (leading 0.95 → 1.9em): riserva sempre lo
