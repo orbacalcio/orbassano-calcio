@@ -53,9 +53,19 @@ export function MobileSponsorStripClient({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lista duplicata per il loop marquee infinito (translateX -50% =
+  // esattamente una copia, scorrimento senza salti).
+  const reel = [...sponsors, ...sponsors];
+
   return (
     <div
-      className="fixed inset-x-0 top-[55px] flex h-14 items-center justify-center gap-6 border-b border-black/10 bg-white px-4 transition-transform duration-300 xl:hidden"
+      // Marquee orizzontale auto-scorrevole (stessa logica del marquee
+      // sponsor in fondo alla home): con piu' di 2-3 sponsor su schermi
+      // stretti la riga centrata debordava e tagliava primo/ultimo logo.
+      // Ora i loghi scorrono in loop continuo. overflow-hidden clippa;
+      // con prefers-reduced-motion l'animazione si ferma e la striscia
+      // diventa scrollabile a mano (motion-reduce:overflow-x-auto).
+      className="fixed inset-x-0 top-[55px] h-14 overflow-hidden border-b border-black/10 bg-white transition-transform duration-300 [scrollbar-width:none] motion-reduce:overflow-x-auto xl:hidden [&::-webkit-scrollbar]:hidden"
       style={{
         zIndex: Z.mobileSponsorStrip,
         // -100% (altezza) - 55px (offset top-[55px]) = fuori schermo,
@@ -68,33 +78,61 @@ export function MobileSponsorStripClient({
       aria-label="Sponsor principali"
       aria-hidden={hidden}
     >
-      {sponsors.map((s) => {
-        const logo = (
-          <SponsorLogo
-            sponsor={s}
-            variant="color"
-            width={200}
-            height={64}
-            className="font-display text-surface-0 h-8 w-auto text-base font-bold tracking-[0.02em]"
-          />
-        );
-        return s.website ? (
-          <a
-            key={s._id}
-            href={s.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${s.name} (sponsor principale)`}
-            className="shrink-0"
-          >
-            {logo}
-          </a>
-        ) : (
-          <span key={s._id} className="shrink-0">
-            {logo}
-          </span>
-        );
-      })}
+      {/* Sfumature ai bordi: i loghi entrano/escono in dissolvenza invece
+          di apparire tagliati di netto. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-white to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-white to-transparent"
+      />
+      <ul
+        className="flex h-full w-max items-center gap-10 motion-safe:animate-[marquee-sponsor_25s_linear_infinite] hover:[animation-play-state:paused]"
+        aria-hidden="true"
+      >
+        {reel.map((s, i) => {
+          const logo = (
+            <SponsorLogo
+              sponsor={s}
+              variant="color"
+              width={200}
+              height={64}
+              className="font-display text-surface-0 h-8 w-auto text-base font-bold tracking-[0.02em]"
+            />
+          );
+          return (
+            <li key={`${s._id}-${i}`} className="flex shrink-0 items-center">
+              {s.website ? (
+                <a
+                  href={s.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${s.name} (sponsor principale)`}
+                  className="block"
+                >
+                  {logo}
+                </a>
+              ) : (
+                logo
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {/* Lista accessibile coi nomi reali (non duplicati). */}
+      <ul className="sr-only">
+        {sponsors.map((s) => (
+          <li key={s._id}>{s.name}</li>
+        ))}
+      </ul>
+      <style>{`
+        @keyframes marquee-sponsor {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   );
 }
