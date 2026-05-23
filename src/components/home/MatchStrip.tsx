@@ -130,9 +130,18 @@ export async function MatchStrip() {
   // lo slot 3 viene rimosso e la grid si chiude a 3 colonne: lo slot
   // classifica/statistiche occupa il posto.
   const showCountdown = Boolean(nextMatch && !nextMatch.isDateTbd);
+  // Breakpoint PROGRESSIVI (logica juventus.com) per evitare la
+  // sovrapposizione dei contenuti:
+  //   - mobile: 1 colonna, tutti i blocchi impilati a tutta larghezza;
+  //   - md (≥768, tablet): 2 colonne (2×2) — ogni blocco ha ~metà
+  //     larghezza, spazio abbondante, niente overlap;
+  //   - xl (≥1280): riga densa a 4 colonne, con la colonna del countdown
+  //     ALLARGATA (1.5fr) cosi' l'orologio "Ng HH:MM:SS" non sfora.
+  // Il vecchio salto 1→4 colonne a lg (1024) schiacciava il countdown
+  // (~170px) facendolo sovrapporre alla colonna accanto.
   const gridClass = showCountdown
-    ? "grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1.1fr_1fr]"
-    : "grid grid-cols-1 gap-px lg:grid-cols-[2fr_2fr_1fr]";
+    ? "grid grid-cols-1 gap-px md:grid-cols-2 xl:grid-cols-[1.8fr_1.8fr_1.5fr_1fr]"
+    : "grid grid-cols-1 gap-px md:grid-cols-2 xl:grid-cols-[2fr_2fr_1fr]";
 
   return (
     <section
@@ -223,7 +232,7 @@ export async function MatchStrip() {
                 con data ufficiale (no TBD): grid layout si chiude a
                 3 colonne quando il countdown sparisce. */}
             {showCountdown && nextMatch && (
-              <div className="border-border/40 flex flex-col items-stretch justify-center border-l border-r">
+              <div className="border-border/40 flex flex-col items-stretch justify-center xl:border-l xl:border-r">
                 <MatchCountdown targetISO={nextMatch.date} />
               </div>
             )}
@@ -231,10 +240,10 @@ export async function MatchStrip() {
             {/* Slot 4 — CLASSIFICA + STATISTICHE impilate, con
                 attribution sprintesport in fondo. */}
             <div className="flex flex-col">
-              {/* Mobile: classifica + statistiche affiancate e compatte
-                  (grid-cols-2). Su lg tornano impilate nella colonna
-                  stretta dello slot 4 (grid-rows-2). */}
-              <div className="grid flex-1 grid-cols-2 gap-px lg:grid-cols-1 lg:grid-rows-2">
+              {/* Mobile + tablet: classifica + statistiche affiancate e
+                  compatte (grid-cols-2). Solo da xl tornano impilate
+                  nella colonna stretta dello slot 4 (grid-rows-2). */}
+              <div className="grid flex-1 grid-cols-2 gap-px xl:grid-cols-1 xl:grid-rows-2">
                 <ShortcutTile
                   href={classificaUrl}
                   label="Classifica"

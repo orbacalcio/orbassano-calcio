@@ -94,7 +94,7 @@ export function MatchCountdown({ targetISO }: { targetISO: string }) {
       {/* tabular-nums per non vedere i digit "ballare" mentre il
           contatore aggiorna ogni secondo. */}
       <span
-        className="font-mono text-ink-hi text-3xl font-bold tabular-nums tracking-tight md:text-4xl"
+        className="font-mono text-ink-hi text-3xl font-bold tabular-nums tracking-tight whitespace-nowrap md:text-4xl xl:text-3xl"
         aria-live="polite"
         // suppressHydrationWarning: dopo mount il countdown
         // diverge subito dal valore SSR (Date.now() lato server vs
