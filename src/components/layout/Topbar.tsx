@@ -128,11 +128,13 @@ export function Topbar({
       role="banner"
       aria-label="Barra di navigazione"
     >
-      {/* Sx scrolled-only: hamburger + nav inline. Visibile in
-          SCROLLED, fade-out in HERO. pointerEvents segue l'opacity
-          per non rendere cliccabile cio' che e' invisibile. */}
+      {/* Sx scrolled-only: hamburger + logo + nav inline. Visibile in
+          SCROLLED, fade-out in HERO. Il logo societa' vive QUI (non piu'
+          centrato in absolute) cosi' non viene mai coperto dalle tile
+          sponsor a destra quando sono molte (>2). pointerEvents segue
+          l'opacity per non rendere cliccabile cio' che e' invisibile. */}
       <motion.div
-        className="absolute left-0 flex h-full items-center gap-7 pl-8"
+        className="absolute left-0 flex h-full items-center gap-6 pl-8"
         initial={false}
         animate={{
           opacity: heroVisible ? 0 : 1,
@@ -162,6 +164,20 @@ export function Topbar({
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
+        <Link
+          href="/"
+          onClick={onLogoClick}
+          aria-label="ASD Orbassano Calcio - Home"
+          className="shrink-0"
+        >
+          <Image
+            src="/Logo_Orbassano_2K.png"
+            alt=""
+            width={44}
+            height={62}
+            priority
+          />
+        </Link>
         <ul className="flex items-center gap-6">
           {navItems.map((item) => (
             <li key={item.href}>
@@ -176,31 +192,6 @@ export function Topbar({
         </ul>
       </motion.div>
 
-      {/* Centro scrolled-only: logo Orbassano. Visibile in SCROLLED. */}
-      <motion.div
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
-        initial={false}
-        animate={{
-          opacity: heroVisible ? 0 : 1,
-          pointerEvents: heroVisible ? "none" : "auto",
-        }}
-        transition={transition}
-      >
-        <Link
-          href="/"
-          onClick={onLogoClick}
-          aria-label="ASD Orbassano Calcio - Home"
-          className="pointer-events-auto"
-        >
-          <Image
-            src="/Logo_Orbassano_2K.png"
-            alt=""
-            width={51}
-            height={72}
-            priority
-          />
-        </Link>
-      </motion.div>
 
       {/* Dx: tile sponsor (sx) + search button (dx).
           Math allineamento:
