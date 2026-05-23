@@ -122,7 +122,7 @@ export function SidebarLeft({ onMoreClick }: { onMoreClick: () => void }) {
   return (
     <nav
       aria-label="Navigazione principale"
-      className="bg-surface-0/55 fixed top-0 left-0 hidden h-screen w-[88px] flex-col items-center pt-[60px] pb-6 backdrop-blur-md lg:flex"
+      className="bg-surface-0/55 fixed top-0 left-0 hidden h-screen w-[88px] flex-col items-center pt-[60px] pb-6 backdrop-blur-md xl:flex"
       style={{ zIndex: Z.sidebar }}
     >
       <ul className="flex flex-1 flex-col items-center gap-9">

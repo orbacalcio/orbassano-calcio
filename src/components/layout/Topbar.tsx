@@ -111,7 +111,7 @@ export function Topbar({
 
   return (
     <motion.header
-      className="fixed top-0 hidden h-[78px] items-center border-b lg:flex"
+      className="fixed top-0 hidden h-[78px] items-center border-b xl:flex"
       style={{ zIndex: Z.topbar }}
       initial={false}
       animate={{

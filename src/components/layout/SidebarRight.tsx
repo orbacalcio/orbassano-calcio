@@ -30,7 +30,7 @@ export function SidebarRight({
   return (
     <aside
       aria-label="Social del club"
-      className="bg-surface-0/55 fixed top-0 right-0 hidden h-screen w-[80px] flex-col items-center pt-[125px] pb-6 backdrop-blur-md lg:flex"
+      className="bg-surface-0/55 fixed top-0 right-0 hidden h-screen w-[80px] flex-col items-center pt-[125px] pb-6 backdrop-blur-md xl:flex"
       style={{ zIndex: Z.sidebar }}
     >
       {/* pt-[125px]: barra social alzata di 50px (era pt-[175px], che

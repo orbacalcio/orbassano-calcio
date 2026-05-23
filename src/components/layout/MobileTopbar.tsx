@@ -28,7 +28,7 @@ export function MobileTopbar({
   const onLogoClick = useHomeLogoClick();
   return (
     <header
-      className="border-border/50 bg-surface-0/80 fixed inset-x-0 top-0 flex h-[55px] items-center justify-between border-b px-3 backdrop-blur-md lg:hidden"
+      className="border-border/50 bg-surface-0/80 fixed inset-x-0 top-0 flex h-[55px] items-center justify-between border-b px-3 backdrop-blur-md xl:hidden"
       style={{ zIndex: Z.topbar }}
       role="banner"
     >

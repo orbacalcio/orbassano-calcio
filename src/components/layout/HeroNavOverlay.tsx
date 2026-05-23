@@ -21,7 +21,7 @@ export function HeroNavOverlay() {
   return (
     <nav
       aria-label="Navigazione principale (mobile, sopra hero)"
-      className="lg:hidden"
+      className="xl:hidden"
     >
       <ul className="flex flex-col items-center gap-2 text-center sm:gap-3">
         {items.map((item) => (

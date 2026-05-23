@@ -234,10 +234,11 @@ export async function Footer() {
                     </Link>
                   </li>
                 ))}
-                {/* Preferenze cookie: solo su mobile (su desktop c'è il
-                    bottone flottante). Riapre il banner consensi. */}
+                {/* Preferenze cookie: solo su mobile/tablet (da xl c'è il
+                    bottone flottante allineato alla sidebar). Riapre il
+                    banner consensi. */}
                 {section.title === "Legale" && (
-                  <li className="lg:hidden">
+                  <li className="xl:hidden">
                     <CookiePreferencesButton className="text-ink-mid hover:text-ink-hi text-sm transition-colors" />
                   </li>
                 )}

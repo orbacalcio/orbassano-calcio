@@ -55,7 +55,7 @@ export function MobileSponsorStripClient({
 
   return (
     <div
-      className="fixed inset-x-0 top-[55px] flex h-14 items-center justify-center gap-6 border-b border-black/10 bg-white px-4 transition-transform duration-300 lg:hidden"
+      className="fixed inset-x-0 top-[55px] flex h-14 items-center justify-center gap-6 border-b border-black/10 bg-white px-4 transition-transform duration-300 xl:hidden"
       style={{
         zIndex: Z.mobileSponsorStrip,
         // -100% (altezza) - 55px (offset top-[55px]) = fuori schermo,

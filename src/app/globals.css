@@ -136,14 +136,15 @@ body {
  * scatto. Stessa identica curva del topbar morph per coreografia
  * coerente.
  */
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   html {
-    /* Su lg le barre mobile spariscono: resta solo la Topbar 78px. */
+    /* Da xl le barre mobile spariscono: resta solo la Topbar 78px.
+       (Lo shell desktop — sidebar+topbar+padding — vive da xl ≥1280.) */
     scroll-padding-top: 78px;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   #main-content,
   #main-content + div {
     transition:
@@ -178,15 +179,15 @@ html.past-hero #main-content + div {
  * Stessa identica curva 450ms cubic-bezier delle altre transizioni del
  * shell → tutto in sincrono.
  *
- * Solo su lg+: sotto md non ci sono sidebar laterali quindi niente
- * shift da compensare.
+ * Solo su xl+: sotto (tablet/telefoni) non ci sono sidebar laterali
+ * quindi niente shift da compensare.
  */
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .hero-slide-text {
     transition: padding-left 450ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   html.past-hero .hero-slide-text {
-    padding-left: calc(48px + 88px); /* lg:px-12 base + 88px compensazione */
+    padding-left: calc(48px + 88px); /* px-12 base + 88px compensazione */
   }
 }
 
