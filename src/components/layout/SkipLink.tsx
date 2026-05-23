@@ -13,7 +13,11 @@ export function SkipLink({
   return (
     <a
       href={`#${targetId}`}
-      className="bg-brand-gold text-surface-0 sr-only fixed top-4 left-4 z-[100] rounded-md px-4 py-2 text-sm font-semibold uppercase outline-none focus:not-sr-only focus:ring-2 focus:ring-white"
+      // Resta sempre `fixed` (niente sr-only/not-sr-only che resetta
+      // position: static e faceva srotolare il link come barra a tutta
+      // larghezza al focus). Nascosto fuori dal viewport con translate,
+      // scivola dentro solo al focus tastiera.
+      className="bg-brand-gold text-surface-0 focus-visible:ring-white fixed top-4 left-4 z-[100] -translate-y-[150%] rounded-md px-4 py-2 text-sm font-semibold uppercase outline-none transition-transform duration-200 focus:translate-y-0 focus-visible:ring-2"
     >
       {label}
     </a>
