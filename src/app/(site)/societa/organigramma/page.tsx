@@ -6,59 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { buildClubOfficialLd } from "@/lib/json-ld";
-import { fetchClubOfficials, type ClubOfficial } from "@/sanity/fetchers";
-
-/**
- * Raggruppa i dirigenti per il campo `group` e ordina le righe per
- * `groupOrder` (min del gruppo). Dirigenti senza group finiscono in
- * un gruppo "default" senza titolo. Tie-break: ordine di prima
- * occorrenza nella lista (gia' ordinata per `order`).
- */
-function groupOfficials(
-  officials: ClubOfficial[],
-): Array<{
-  key: string;
-  title: string | null;
-  items: ClubOfficial[];
-}> {
-  const groups = new Map<string, ClubOfficial[]>();
-  for (const o of officials) {
-    const key = o.group?.trim() ?? "";
-    const existing = groups.get(key);
-    if (existing) {
-      existing.push(o);
-    } else {
-      groups.set(key, [o]);
-    }
-  }
-  // Calcolo della chiave di ordinamento per ogni gruppo: min del
-  // groupOrder esplicito; se nessun membro ce l'ha, fallback a +Infinity
-  // (cioe' ordine di prima occorrenza preservato dal Map insertion order).
-  const insertionIndex = new Map<string, number>();
-  let i = 0;
-  for (const key of groups.keys()) {
-    insertionIndex.set(key, i++);
-  }
-  return Array.from(groups, ([key, items]) => {
-    const explicitOrders = items
-      .map((o) => o.groupOrder)
-      .filter((v): v is number => typeof v === "number");
-    const rowOrder =
-      explicitOrders.length > 0 ? Math.min(...explicitOrders) : Infinity;
-    return {
-      key: key || "_default",
-      title: key || null,
-      items,
-      rowOrder,
-      insertion: insertionIndex.get(key) ?? 0,
-    };
-  })
-    .sort((a, b) => {
-      if (a.rowOrder !== b.rowOrder) return a.rowOrder - b.rowOrder;
-      return a.insertion - b.insertion;
-    })
-    .map(({ key, title, items }) => ({ key, title, items }));
-}
+import { fetchClubOfficials } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/societa/organigramma" },
@@ -112,20 +60,14 @@ export default async function OrganigrammaPage() {
         <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
             {officials.length > 0 ? (
-              <div className="flex flex-col gap-8 sm:gap-12">
-                {groupOfficials(officials).map((group) => (
-                  <section key={group.key} className="flex flex-col gap-4 sm:gap-6">
-                    {group.title && (
-                      <h2 className="text-brand-gold font-display text-2xl leading-none font-extrabold tracking-[0.01em] uppercase sm:text-5xl lg:text-6xl">
-                        {group.title}
-                      </h2>
-                    )}
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-                      {group.items.map((o) => (
-                        <OfficialCard key={o._id} official={o} />
-                      ))}
-                    </div>
-                  </section>
+              // Griglia unica, senza titoli di sezione (richiesta utente
+              // 2026-05-22): il "Consiglio Direttivo" è l'insieme di tutti
+              // ed è la cornice della pagina (eyebrow + intro), non un
+              // sottogruppo. Ogni card mostra il ruolo, quindi i raggruppamenti
+              // espliciti non servono. Ordine dei dirigenti = campo `order`.
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+                {officials.map((o) => (
+                  <OfficialCard key={o._id} official={o} />
                 ))}
               </div>
             ) : (
