@@ -433,9 +433,15 @@ export async function YouthMatchStrip() {
   const lastBySlug = new Map(lastRows.map((r) => [r.slug, r.match]));
 
   return (
+    // Visibile SOLO da lg (≥1024px): la tabella a 6 colonne (Juniores +
+    // Settore Giovanile) ha spazio sufficiente solo da desktop. Sotto i
+    // 1024px (telefoni + tablet) la nascondiamo del tutto — i risultati
+    // del vivaio restano raggiungibili dal menu Calendario — per evitare
+    // il layout cramped che faceva accavallare "Calendario in arrivo",
+    // loghi e punteggi (richiesta utente 2026-05-22).
     <section
       aria-label="Risultati Juniores e Settore Giovanile"
-      className="bg-light-bg-0 py-6 lg:py-9"
+      className="bg-light-bg-0 hidden py-6 lg:block lg:py-9"
     >
       <div className="border-border bg-surface-1 relative overflow-hidden border-y">
         <Container className="relative" size="wide">
