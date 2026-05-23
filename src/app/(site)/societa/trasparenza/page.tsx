@@ -200,10 +200,9 @@ export default async function TrasparenzaPage() {
                     </div>
                   ) : (
                     <p className="text-ink-mid mt-4 text-sm leading-relaxed">
-                      Posizione attualmente vacante. In attesa di nuova
-                      nomina, le segnalazioni in materia di Safeguarding
-                      sono ricevute dal Direttivo (art. 3.7 del Codice
-                      Etico). Vai alla pagina{" "}
+                      Le segnalazioni in materia di Safeguarding sono
+                      ricevute dal Direttivo (art. 3.7 del Codice Etico).
+                      Vai alla pagina{" "}
                       <Link
                         href="/societa/segnalazioni"
                         className="text-brand-gold hover:text-brand-white underline-offset-2 hover:underline"
