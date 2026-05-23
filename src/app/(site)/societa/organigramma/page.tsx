@@ -60,12 +60,14 @@ export default async function OrganigrammaPage() {
         <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
             {officials.length > 0 ? (
-              // Griglia unica, senza titoli di sezione (richiesta utente
-              // 2026-05-22): il "Consiglio Direttivo" è l'insieme di tutti
-              // ed è la cornice della pagina (eyebrow + intro), non un
-              // sottogruppo. Ogni card mostra il ruolo, quindi i raggruppamenti
-              // espliciti non servono. Ordine dei dirigenti = campo `order`.
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+              // Griglia a 3 colonne, senza titoli di sezione (richiesta
+              // utente 2026-05-22): il "Consiglio Direttivo" è l'insieme di
+              // tutti ed è la cornice della pagina (eyebrow + intro). Con 5
+              // dirigenti la griglia a 3 colonne dà due righe pulite —
+              // riga 1: Presidente · Vice · Direttore Generale,
+              // riga 2: Tesoriere · Consigliere — seguendo il campo `order`.
+              // Sotto md restano impilati a tutta larghezza.
+              <div className="grid grid-cols-1 gap-3 sm:gap-5 md:grid-cols-3">
                 {officials.map((o) => (
                   <OfficialCard key={o._id} official={o} />
                 ))}
