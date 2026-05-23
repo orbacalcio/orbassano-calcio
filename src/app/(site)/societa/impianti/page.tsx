@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FacilityCard } from "@/components/societa/FacilityCard";
-import { MazzolaImpiantiBox } from "@/components/societa/MazzolaImpiantiBox";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
@@ -76,13 +75,6 @@ export default async function ImpiantiPage() {
           </RevealOnScroll>
         </Container>
       </section>
-
-      {/* Box editoriale "Il Mazzola" — sempre visibile (testo + lista
-          campioni editabili da Studio → singleton settings → fieldset
-          "Box Il Mazzola"). Indipendente dallo stato isActive del
-          facility Mazzola in CMS: e' una memoria storica, non un
-          impianto operativo. */}
-      <MazzolaImpiantiBox />
     </>
   );
 }

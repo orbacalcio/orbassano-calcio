@@ -107,7 +107,7 @@ export default function CinquePerMillePage() {
               <span className="text-ink-mid font-display text-sm font-bold tracking-[0.2em] uppercase">
                 Codice fiscale
               </span>
-              <span className="text-brand-gold font-mono text-3xl font-medium tracking-tight break-words sm:text-5xl sm:tracking-[0.05em] md:text-6xl">
+              <span className="text-brand-gold font-mono text-3xl font-medium tracking-tight whitespace-nowrap tabular-nums sm:text-5xl sm:tracking-[0.05em] md:text-6xl lg:text-5xl xl:text-6xl">
                 {FISCAL_CODE}
               </span>
               <span className="text-ink-mid text-sm">

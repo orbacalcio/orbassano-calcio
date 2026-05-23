@@ -133,8 +133,8 @@ export default async function BiglietteriaPage() {
                   title="Biglietteria fisica"
                 >
                   <p>
-                    La biglietteria dello stadio (ingresso principale in
-                    Via Ignazio Silone 4) è sempre aperta il giorno della
+                    La biglietteria dell&apos;impianto sportivo (ingresso
+                    principale in Via Ignazio Silone 4) è sempre aperta il giorno della
                     partita, 1 ora prima del fischio di inizio. Ti
                     invitiamo a recarti agli sportelli con adeguato
                     anticipo per facilitare le operazioni di ingresso.

@@ -33,13 +33,13 @@ const PACKAGES = [
     icon: Crown,
     title: "Main Sponsor",
     badge: "Massima visibilità",
-    body: "Logo sulla maglia da gioco, presenza in topbar del sito, banner stadio, contenuti social dedicati. Il pacchetto più visibile della stagione, riservato a un numero limitato di brand.",
+    body: "Logo sulla maglia da gioco, presenza in topbar del sito, banner all'impianto sportivo, contenuti social dedicati. Il pacchetto più visibile della stagione, riservato a un numero limitato di brand.",
   },
   {
     icon: Sparkles,
     title: "Official Sponsor",
     badge: "Visibilità mirata",
-    body: "Logo nella sezione sponsor del sito, nei materiali ufficiali e nei comunicati stampa. Banner allo stadio Aldo Porta nei giorni di partita. Mention dedicate sui social.",
+    body: "Logo nella sezione sponsor del sito, nei materiali ufficiali e nei comunicati stampa. Banner all'impianto sportivo Aldo Porta nei giorni di partita. Mention dedicate sui social.",
   },
   {
     icon: Handshake,
