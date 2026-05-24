@@ -179,6 +179,7 @@ export const settingsQuery = defineQuery(`
     mazzolaBody,
     mazzolaPlayers,
     "ticketPrices": ticketPrices[]{ label, price },
+    "sponsorStats": sponsorStats[]{ value, label },
     "psHubHeroImage": psHubHeroImage.asset->url,
     "psHubRosaImage": psHubRosaImage.asset->url,
     "psHubNewsImage": psHubNewsImage.asset->url,

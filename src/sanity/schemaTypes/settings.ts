@@ -534,6 +534,39 @@ export const settings = defineType({
       ],
     }),
     defineField({
+      name: "sponsorStats",
+      title: "Pagina Opportunità — Box numeri",
+      description:
+        "I numeri della fascia statistiche di /sponsor/opportunita (valore + etichetta), nell'ordine di visualizzazione. Se lasci vuoto, vengono usati i valori di default.",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "sponsorStat",
+          fields: [
+            defineField({
+              name: "value",
+              title: "Valore",
+              description: "Es. '23', '120+', '30K+'.",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "label",
+              title: "Etichetta",
+              description:
+                "Es. 'Atleti prima squadra', 'Visualizzazioni social / mese'.",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: {
+            select: { title: "value", subtitle: "label" },
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: "psHubHeroImage",
       title: "Hero — immagine di sfondo",
       fieldset: "primaSquadraHub",

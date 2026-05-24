@@ -11,6 +11,8 @@ import { SponsorLeadForm } from "@/components/forms/SponsorLeadForm";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
+import { sanityClient } from "@/sanity/client";
+import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/sponsor/opportunita" },
@@ -19,7 +21,11 @@ export const metadata: Metadata = {
     "Pacchetti sponsorizzazione ASD Orbassano Calcio: Main Sponsor, Official Sponsor, Corporate Partner. Richiedi una proposta su misura per la tua azienda.",
 };
 
-const NUMBERS = [
+type Stat = { value: string; label: string };
+
+// Fallback usato se in Studio (Impostazioni globali → "Pagina Opportunità
+// — Box numeri") non è stato inserito nulla.
+const DEFAULT_NUMBERS: Stat[] = [
   { value: "+95", label: "Anni di rossoblù" },
   { value: "23", label: "Atleti prima squadra" },
   { value: "120+", label: "Giovani nel SGS" },
@@ -27,6 +33,20 @@ const NUMBERS = [
   { value: "10K+", label: "Reach social mensile" },
   { value: "30+", label: "Partite ufficiali/anno" },
 ];
+
+async function fetchSponsorStats(): Promise<Stat[]> {
+  try {
+    const data = (await sanityClient.fetch(
+      settingsQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    )) as { sponsorStats?: Stat[] | null } | null;
+    const stats = data?.sponsorStats;
+    return stats && stats.length > 0 ? stats : DEFAULT_NUMBERS;
+  } catch {
+    return DEFAULT_NUMBERS;
+  }
+}
 
 const PACKAGES = [
   {
@@ -55,7 +75,8 @@ const PACKAGES = [
   },
 ];
 
-export default function OpportunitaPage() {
+export default async function OpportunitaPage() {
+  const numbers = await fetchSponsorStats();
   return (
     <>
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -97,7 +118,7 @@ export default function OpportunitaPage() {
       >
         <Container className="py-12 lg:py-16" size="wide">
           <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
-            {NUMBERS.map((n) => (
+            {numbers.map((n) => (
               <li key={n.label} className="flex flex-col gap-1">
                 <span className="font-display text-brand-gold text-3xl leading-none font-black tracking-[0.005em] sm:text-4xl">
                   {n.value}
