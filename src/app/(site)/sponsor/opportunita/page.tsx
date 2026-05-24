@@ -198,21 +198,29 @@ export default async function OpportunitaPage() {
               sui tuoi obiettivi. Niente listini standard, niente
               automatismi: parliamo direttamente con te.
             </p>
-            {/* Stemma del club come watermark trasparente nello spazio
-                vuoto a sinistra del form. Solo da lg (sotto, il form
-                e' a tutta larghezza e non c'e' spazio vuoto). */}
+            {/* Stemma del club a piena opacità nello spazio vuoto a
+                sinistra del form, con glow brand + ombra + leggera
+                fluttuazione (motion-safe). Solo da lg (sotto, il form e'
+                a tutta larghezza e non c'e' spazio vuoto). */}
             <div
               aria-hidden
-              className="pointer-events-none mt-6 hidden justify-center lg:flex"
+              className="pointer-events-none relative mt-8 hidden items-center justify-center lg:flex"
             >
+              <span className="bg-brand-gold/15 absolute h-72 w-72 rounded-full blur-[90px]" />
               <Image
                 src="/Logo_Orbassano_2K.png"
                 alt=""
                 width={520}
                 height={733}
-                className="h-auto w-full max-w-[300px] opacity-10"
+                className="relative h-auto w-full max-w-[360px] drop-shadow-2xl motion-safe:animate-[float-soft_6s_ease-in-out_infinite]"
               />
             </div>
+            <style>{`
+              @keyframes float-soft {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-12px); }
+              }
+            `}</style>
           </div>
 
           <div className="border-brand-gold/30 bg-surface-1/70 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
