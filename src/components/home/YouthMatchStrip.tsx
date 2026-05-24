@@ -8,7 +8,6 @@ import {
 import { MatchDatePill } from "@/components/calendario/MatchDatePill";
 import { TeamLogo } from "@/components/calendario/TeamLogo";
 import { Container } from "@/components/ui/Container";
-import { cn } from "@/lib/cn";
 import { APP_TIME_ZONE } from "@/lib/date";
 import {
   fetchLastMatchesByTeamSlugs,
@@ -70,29 +69,6 @@ function formatTimeOnly(iso: string): string {
   });
 }
 
-type ResultTag = "V" | "X" | "P";
-
-function getResultTag(
-  home: boolean,
-  scoreHome: number | null,
-  scoreAway: number | null,
-): ResultTag | null {
-  if (typeof scoreHome !== "number" || typeof scoreAway !== "number")
-    return null;
-  const ourScore = home ? scoreHome : scoreAway;
-  const oppScore = home ? scoreAway : scoreHome;
-  if (ourScore > oppScore) return "V";
-  if (ourScore < oppScore) return "P";
-  return "X";
-}
-
-const RESULT_TAG_CLASS: Record<ResultTag, string> = {
-  V: "border-brand-gold/40 bg-brand-gold/20 text-brand-gold",
-  X: "border-border/40 bg-surface-2 text-ink-mid",
-  P: "border-brand-red/40 bg-brand-red/20 text-brand-red",
-};
-
-
 /**
  * Calcola HOME e AWAY logos per una partita. Solo loghi (no nomi
  * squadra dentro la cella).
@@ -137,7 +113,6 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
     );
   }
   const { homeLogo, awayLogo } = buildScoreboardLogos(match);
-  const tag = getResultTag(match.home, match.scoreHome, match.scoreAway);
   // Cascata tabellino esterno (Sprintsport / Tuttocampo): prima il link
   // specifico del match, poi il fallback di competition. Identico a
   // MatchCard.tsx → Prima Squadra (cosi' anche le youth row mostrano
@@ -157,12 +132,8 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
     <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
       <MatchDatePill iso={match.date} size="md" />
       <div className="flex min-w-0 flex-1 items-center">
-        {/* Scoreboard row centrata. Tabellino vive DENTRO la col del score
-            (flex-col items-center) — cosi' resta sempre allineato sotto
-            ai numeri "1 - 3" indipendentemente dalla posizione del tag
-            V/X/P, che invece flotta a destra come pillola fuori-flusso
-            (absolute) per non spostare il baricentro orizzontale. */}
-        <div className="relative flex w-full items-center justify-center gap-4 md:gap-6">
+        {/* Scoreboard row centrata: logo · punteggio (+ tabellino) · logo. */}
+        <div className="flex w-full items-center justify-center gap-4 md:gap-6">
           <TeamLogo
             name={homeLogo.logoName}
             src={homeLogo.logoSrc}
@@ -201,19 +172,6 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
             size={40}
             interactive={false}
           />
-          {tag && (
-            <span
-              className={cn(
-                "font-mono absolute right-0 top-1/2 inline-flex h-6 min-w-6 -translate-y-1/2 items-center justify-center rounded-sm border px-1.5 text-xs font-bold",
-                RESULT_TAG_CLASS[tag],
-              )}
-              aria-label={
-                tag === "V" ? "Vittoria" : tag === "P" ? "Sconfitta" : "Pareggio"
-              }
-            >
-              {tag}
-            </span>
-          )}
         </div>
       </div>
     </div>
