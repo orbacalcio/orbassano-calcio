@@ -313,7 +313,14 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
           S.list()
             .title("Società")
             .items([
-              S.documentTypeListItem("clubOfficial").title("Organigramma"),
+              S.listItem()
+                .title("Organigramma")
+                .icon(Building2)
+                .child(
+                  S.documentTypeList("clubOfficial")
+                    .title("Organigramma")
+                    .defaultOrdering([{ field: "order", direction: "asc" }]),
+                ),
               S.documentTypeListItem("facility")
                 .title("Impianti sportivi")
                 .icon(MapPin),
