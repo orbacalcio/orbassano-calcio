@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -197,6 +198,21 @@ export default async function OpportunitaPage() {
               sui tuoi obiettivi. Niente listini standard, niente
               automatismi: parliamo direttamente con te.
             </p>
+            {/* Stemma del club come watermark trasparente nello spazio
+                vuoto a sinistra del form. Solo da lg (sotto, il form
+                e' a tutta larghezza e non c'e' spazio vuoto). */}
+            <div
+              aria-hidden
+              className="pointer-events-none mt-6 hidden justify-center lg:flex"
+            >
+              <Image
+                src="/Logo_Orbassano_2K.png"
+                alt=""
+                width={520}
+                height={733}
+                className="h-auto w-full max-w-[300px] opacity-10"
+              />
+            </div>
           </div>
 
           <div className="border-brand-gold/30 bg-surface-1/70 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
