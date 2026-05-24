@@ -383,8 +383,10 @@ export function MatchCard({
         </span>
       </div>
 
-      {/* Azioni / venue extras */}
-      <div className="text-ink-low flex shrink-0 items-center gap-2 md:w-24 md:justify-end">
+      {/* Azioni / venue extras. relative z-10: sta SOPRA il link in
+          overlay (stretched) della card finished, cosi' gli highlights
+          restano cliccabili e non vengono "rubati" dal click→tabellino. */}
+      <div className="text-ink-low relative z-10 flex shrink-0 items-center gap-2 md:w-24 md:justify-end">
         {match.isClosedDoors && (
           <span title="Match a porte chiuse" className="text-ink-mid">
             <Ban size={14} aria-hidden />
@@ -428,16 +430,24 @@ export function MatchCard({
   const ariaLabel = `${match.home ? ourTeamName : opponentName} vs ${match.home ? opponentName : ourTeamName}, ${formatDay(match.date)} ${formatMonthShort(match.date)}`;
 
   if (cardIsAnchor && reportHref) {
+    // Stretched link: l'intera card apre il tabellino esterno tramite un
+    // <a> in overlay (absolute inset-0, z-0) SOTTO i contenuti. Cosi'
+    // niente <a> annidati (HTML invalido) e gli highlights — che vivono
+    // nel blocco azioni con z-10 — restano cliccabili separatamente.
     return (
-      <a
-        href={reportHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${ariaLabel} — apri tabellino`}
+      <article
+        aria-label={ariaLabel}
         className={cn(cardBase, cardInteractive)}
       >
         {inner}
-      </a>
+        <a
+          href={reportHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${ariaLabel} — apri tabellino`}
+          className="focus-visible:outline-brand-gold absolute inset-0 z-0 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2"
+        />
+      </article>
     );
   }
 
