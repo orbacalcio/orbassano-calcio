@@ -43,6 +43,10 @@ type Props = {
   primaryColor?: string | null;
   className?: string;
   ariaLabel?: string;
+  /** Logo adattivo: riempie la colonna (w-full) fino a `size` px di max,
+   *  mantenendo il box quadrato. Si rimpicciolisce nelle griglie strette
+   *  invece di sforare. Default false = dimensione fissa size×size. */
+  adaptive?: boolean;
 };
 
 // Box quadrato 1:1 + object-contain: aspect universale che accoglie
@@ -60,27 +64,50 @@ export function TeamLogo({
   primaryColor = null,
   className,
   ariaLabel,
+  adaptive = false,
 }: Props) {
   const isClickable = interactive && href !== null && href.length > 0;
   const boxHeight = size;
   const boxWidth = size;
 
+  // adaptive: box quadrato w-full con max-width=size → il logo riempie la
+  // colonna fino a `size` px e si rimpicciolisce se la colonna e' piu'
+  // stretta (niente overflow nelle griglie dense). fixed: size×size.
   const inner = src ? (
-    <Image
-      src={src}
-      alt={ariaLabel ?? name}
-      width={boxWidth}
-      height={boxHeight}
-      className="rounded-sm bg-white p-0.5 object-contain"
-      style={{ width: boxWidth, height: boxHeight }}
-    />
+    adaptive ? (
+      <span
+        className="relative block aspect-square w-full"
+        style={{ maxWidth: boxWidth }}
+      >
+        <Image
+          src={src}
+          alt={ariaLabel ?? name}
+          fill
+          sizes={`${size}px`}
+          className="rounded-sm bg-white p-0.5 object-contain"
+        />
+      </span>
+    ) : (
+      <Image
+        src={src}
+        alt={ariaLabel ?? name}
+        width={boxWidth}
+        height={boxHeight}
+        className="rounded-sm bg-white p-0.5 object-contain"
+        style={{ width: boxWidth, height: boxHeight }}
+      />
+    )
   ) : (
     <span
       aria-hidden
-      className="border-border/40 text-ink-mid font-display flex items-center justify-center rounded-sm border font-bold uppercase"
+      className={cn(
+        "border-border/40 text-ink-mid font-display flex items-center justify-center rounded-sm border font-bold uppercase",
+        adaptive && "aspect-square w-full",
+      )}
       style={{
-        width: boxWidth,
-        height: boxHeight,
+        width: adaptive ? undefined : boxWidth,
+        height: adaptive ? undefined : boxHeight,
+        maxWidth: adaptive ? boxWidth : undefined,
         fontSize: Math.max(10, Math.floor(size * 0.4)),
         backgroundColor: primaryColor ?? undefined,
         color: primaryColor ? "#fff" : undefined,
@@ -90,7 +117,9 @@ export function TeamLogo({
     </span>
   );
 
-  const baseClass = cn("inline-flex shrink-0 items-center", className);
+  const baseClass = adaptive
+    ? cn("flex w-full justify-center", className)
+    : cn("inline-flex shrink-0 items-center", className);
 
   if (isClickable) {
     const isExternal = /^https?:\/\//.test(href);

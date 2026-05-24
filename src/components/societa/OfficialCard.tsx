@@ -17,10 +17,10 @@ export function OfficialCard({ official }: Props) {
 
   return (
     <article className="flex w-full max-w-[18rem] flex-col items-center gap-1.5 text-center sm:w-auto sm:min-w-[12rem]">
-      <h3 className="font-display text-light-ink-hi text-xl leading-tight font-extrabold tracking-[0.005em] uppercase sm:text-2xl">
+      <h3 className="font-display text-light-ink-hi text-xl leading-tight font-extrabold tracking-[0.01em] sm:text-2xl">
         {displayName}
       </h3>
-      <span className="text-brand-gold font-mono text-[11px] font-semibold tracking-[0.18em] uppercase">
+      <span className="text-light-ink-mid font-mono text-[11px] font-semibold tracking-[0.18em] uppercase">
         {official.role}
       </span>
     </article>

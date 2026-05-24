@@ -77,17 +77,29 @@ export default async function OrganigrammaPage() {
               <div className="flex flex-col items-center gap-14 lg:gap-20">
                 {president && (
                   <section className="flex w-full flex-col items-center gap-7">
-                    <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
-                      Presidente
-                    </h2>
+                    <div className="flex flex-col items-center gap-3">
+                      <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
+                        Presidente
+                      </h2>
+                      <span
+                        aria-hidden
+                        className="bg-brand-gold h-[3px] w-12 rounded-full"
+                      />
+                    </div>
                     <OfficialCard official={president} />
                   </section>
                 )}
                 {council.length > 0 && (
                   <section className="flex w-full flex-col items-center gap-8">
-                    <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
-                      Consiglio Direttivo
-                    </h2>
+                    <div className="flex flex-col items-center gap-3">
+                      <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
+                        Consiglio Direttivo
+                      </h2>
+                      <span
+                        aria-hidden
+                        className="bg-brand-gold h-[3px] w-12 rounded-full"
+                      />
+                    </div>
                     <div className="flex flex-wrap justify-center gap-x-12 gap-y-9">
                       {council.map((o) => (
                         <OfficialCard key={o._id} official={o} />
