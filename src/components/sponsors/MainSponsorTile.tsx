@@ -51,16 +51,22 @@ export function MainSponsorTile({
         rel="noopener noreferrer sponsored"
         aria-label={`${sponsor.name} (sponsor principale)`}
         style={{ width: `${width}px`, ...transitionStyle }}
-        className="group flex h-full items-center justify-center overflow-hidden bg-white px-5"
+        className="group flex h-full items-center justify-center bg-white px-5"
       >
-        <SponsorLogo
-          sponsor={sponsor}
-          variant="color"
-          width={300}
-          height={Math.round(logoMaxHeight)}
-          style={{ maxHeight: `${logoMaxHeight}px`, ...transitionStyle }}
-          className="text-surface-0 max-w-full object-contain transition-transform duration-300 ease-out group-hover:scale-110"
-        />
+        {/* Lo zoom vive su questo wrapper, NON sulla SponsorLogo: quella
+            ha un `transition` inline (shrink topbar) che sovrascriverebbe
+            transition-transform rendendo lo scale a scatti. Qui niente
+            conflitto → zoom morbido. */}
+        <span className="flex items-center justify-center transition-transform duration-300 ease-out will-change-transform group-hover:scale-110">
+          <SponsorLogo
+            sponsor={sponsor}
+            variant="color"
+            width={300}
+            height={Math.round(logoMaxHeight)}
+            style={{ maxHeight: `${logoMaxHeight}px`, ...transitionStyle }}
+            className="text-surface-0 max-w-full object-contain"
+          />
+        </span>
       </a>
     </li>
   );

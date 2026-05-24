@@ -209,7 +209,7 @@ export default async function OpportunitaPage() {
               className="pointer-events-none relative mt-8 hidden items-center justify-center lg:flex"
             >
               <span
-                className="absolute h-80 w-80 rounded-full opacity-60 blur-[60px] motion-safe:animate-[spin_14s_linear_infinite]"
+                className="absolute h-[460px] w-[460px] rounded-full opacity-70 blur-[70px] motion-safe:animate-[spin_14s_linear_infinite]"
                 style={{
                   background:
                     "conic-gradient(from 0deg, var(--color-brand-red), var(--color-brand-blue), var(--color-brand-gold), var(--color-brand-red))",
