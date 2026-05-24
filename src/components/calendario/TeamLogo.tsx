@@ -75,18 +75,15 @@ export function TeamLogo({
   // stretta (niente overflow nelle griglie dense). fixed: size×size.
   const inner = src ? (
     adaptive ? (
-      <span
-        className="relative block aspect-square w-full"
+      <Image
+        src={src}
+        alt={ariaLabel ?? name}
+        width={boxWidth}
+        height={boxHeight}
+        sizes={`${size}px`}
+        className="h-auto w-full rounded-sm bg-white p-0.5 object-contain"
         style={{ maxWidth: boxWidth }}
-      >
-        <Image
-          src={src}
-          alt={ariaLabel ?? name}
-          fill
-          sizes={`${size}px`}
-          className="rounded-sm bg-white p-0.5 object-contain"
-        />
-      </span>
+      />
     ) : (
       <Image
         src={src}

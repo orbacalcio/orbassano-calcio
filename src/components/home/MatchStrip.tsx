@@ -130,18 +130,16 @@ export async function MatchStrip() {
   // lo slot 3 viene rimosso e la grid si chiude a 3 colonne: lo slot
   // classifica/statistiche occupa il posto.
   const showCountdown = Boolean(nextMatch && !nextMatch.isDateTbd);
-  // Breakpoint PROGRESSIVI (logica juventus.com) per evitare la
-  // sovrapposizione dei contenuti:
-  //   - mobile: 1 colonna, tutti i blocchi impilati a tutta larghezza;
-  //   - md (≥768, tablet): 2 colonne (2×2) — ogni blocco ha ~metà
-  //     larghezza, spazio abbondante, niente overlap;
-  //   - xl (≥1280): riga densa a 4 colonne, con la colonna del countdown
-  //     ALLARGATA (1.5fr) cosi' l'orologio "Ng HH:MM:SS" non sfora.
-  // Il vecchio salto 1→4 colonne a lg (1024) schiacciava il countdown
-  // (~170px) facendolo sovrapporre alla colonna accanto.
+  // Layout: 1 colonna full-width fino a xl, poi riga densa a 4 colonne.
+  //   - < xl (mobile/tablet/foldable): ogni blocco a TUTTA LARGHEZZA
+  //     impilato → la card ha spazio per loghi grandi (no microscopici)
+  //     e niente overlap. (Il vecchio stadio md:grid-cols-2 dimezzava la
+  //     card sui tablet rendendo i loghi minuscoli.)
+  //   - xl (≥1280): riga densa a 4 colonne, countdown allargato (1.5fr);
+  //     i loghi `adaptive` si rimpiccioliscono per stare nei box stretti.
   const gridClass = showCountdown
-    ? "grid grid-cols-1 gap-px md:grid-cols-2 xl:grid-cols-[1.8fr_1.8fr_1.5fr_1fr]"
-    : "grid grid-cols-1 gap-px md:grid-cols-2 xl:grid-cols-[2fr_2fr_1fr]";
+    ? "grid grid-cols-1 gap-px xl:grid-cols-[1.8fr_1.8fr_1.5fr_1fr]"
+    : "grid grid-cols-1 gap-px xl:grid-cols-[2fr_2fr_1fr]";
 
   return (
     <section
