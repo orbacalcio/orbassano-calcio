@@ -196,7 +196,7 @@ export function MatchCard({
             <TeamLogo
               src={match.home ? OUR_LOGO_SRC : opponentLogo}
               name={match.home ? ourTeamName : opponentName}
-              size={72}
+              size={86}
               interactive={false}
               primaryColor={!match.home ? opponentClub?.primaryColor ?? null : null}
             />
@@ -229,7 +229,7 @@ export function MatchCard({
             <TeamLogo
               src={match.home ? opponentLogo : OUR_LOGO_SRC}
               name={match.home ? opponentName : ourTeamName}
-              size={72}
+              size={86}
               interactive={false}
               primaryColor={match.home ? opponentClub?.primaryColor ?? null : null}
             />

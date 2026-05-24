@@ -17,6 +17,15 @@ export const metadata: Metadata = {
 
 export default async function OrganigrammaPage() {
   const officials = await fetchClubOfficials();
+  // Due livelli (richiesta utente 2026-05-22): il Presidente in evidenza
+  // in cima, tutti gli altri nel Consiglio Direttivo. Match esatto su
+  // "presidente" (esclude "vice presidente"); fallback al primo per
+  // `order` se non trovato.
+  const president =
+    officials.find((o) => o.role.trim().toLowerCase() === "presidente") ??
+    officials[0] ??
+    null;
+  const council = officials.filter((o) => o !== president);
 
   // Person JSON-LD per ogni dirigente (audit fix #2): da' a Google
   // una mappa "chi e' chi" del club, utile per knowledge graph e
@@ -60,17 +69,32 @@ export default async function OrganigrammaPage() {
         <Container className="py-16 lg:py-24" size="wide">
           <RevealOnScroll>
             {officials.length > 0 ? (
-              // Griglia a 3 colonne, senza titoli di sezione (richiesta
-              // utente 2026-05-22): il "Consiglio Direttivo" è l'insieme di
-              // tutti ed è la cornice della pagina (eyebrow + intro). Con 5
-              // dirigenti la griglia a 3 colonne dà due righe pulite —
-              // riga 1: Presidente · Vice · Direttore Generale,
-              // riga 2: Tesoriere · Consigliere — seguendo il campo `order`.
-              // Sotto md restano impilati a tutta larghezza.
-              <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-3">
-                {officials.map((o) => (
-                  <OfficialCard key={o._id} official={o} />
-                ))}
+              // Due livelli, tutto centrato (anche tablet/mobile), senza
+              // box: Presidente in cima da solo, poi il Consiglio
+              // Direttivo (tutti gli altri) in una riga che va a capo
+              // centrata. flex-wrap justify-center → centratura su ogni
+              // breakpoint senza colonne fisse.
+              <div className="flex flex-col items-center gap-14 lg:gap-20">
+                {president && (
+                  <section className="flex w-full flex-col items-center gap-7">
+                    <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
+                      Presidente
+                    </h2>
+                    <OfficialCard official={president} />
+                  </section>
+                )}
+                {council.length > 0 && (
+                  <section className="flex w-full flex-col items-center gap-8">
+                    <h2 className="font-display text-light-ink-hi text-center text-3xl font-extrabold tracking-[0.03em] uppercase sm:text-4xl">
+                      Consiglio Direttivo
+                    </h2>
+                    <div className="flex flex-wrap justify-center gap-x-12 gap-y-9">
+                      {council.map((o) => (
+                        <OfficialCard key={o._id} official={o} />
+                      ))}
+                    </div>
+                  </section>
+                )}
               </div>
             ) : (
               <p className="text-light-ink-mid border-light-border bg-light-bg-1 rounded-2xl border border-dashed p-10 text-center text-base">
