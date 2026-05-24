@@ -67,7 +67,7 @@ export default async function OrganigrammaPage() {
               // riga 1: Presidente · Vice · Direttore Generale,
               // riga 2: Tesoriere · Consigliere — seguendo il campo `order`.
               // Sotto md restano impilati a tutta larghezza.
-              <div className="grid grid-cols-1 gap-3 sm:gap-5 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-3">
                 {officials.map((o) => (
                   <OfficialCard key={o._id} official={o} />
                 ))}

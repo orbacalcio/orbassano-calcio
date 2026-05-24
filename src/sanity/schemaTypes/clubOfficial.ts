@@ -34,24 +34,10 @@ export const clubOfficial = defineType({
       type: "string",
     }),
     defineField({
-      name: "group",
-      title: "Riga (raggruppamento)",
-      description:
-        "Etichetta del raggruppamento sulla pagina /societa/organigramma. Dirigenti con la stessa etichetta vanno nella stessa riga; cambiare etichetta = nuova riga con spazio sopra. Es. 'Presidenza', 'Direzione finanziaria', 'Consiglio direttivo'. Vuoto = riga unica con tutti gli altri senza etichetta.",
-      type: "string",
-    }),
-    defineField({
-      name: "groupOrder",
-      title: "Ordine della riga",
-      description:
-        "Numero che decide la posizione verticale della riga sulla pagina (più basso = più in alto). Es. 0 per 'Presidenza' in cima, 1 per la riga successiva, 2 per quella sotto. Basta valorizzarlo su UN dirigente del gruppo: gli altri ereditano. Vuoto = ordine automatico basato sul campo Ordine del primo dirigente.",
-      type: "number",
-    }),
-    defineField({
       name: "order",
-      title: "Ordine nella riga",
+      title: "Ordine",
       description:
-        "Posizione orizzontale del dirigente DENTRO la sua riga (più basso = più a sinistra).",
+        "Posizione del dirigente nell'organigramma: più basso = prima (in alto a sinistra). Es. 0 Presidente · 1 Vice · 2 Direttore Generale · 3 Tesoriere · 4 Consigliere. La pagina dispone le card in un'unica griglia seguendo quest'ordine, senza raggruppamenti.",
       type: "number",
     }),
   ],
