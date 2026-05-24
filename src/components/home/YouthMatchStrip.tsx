@@ -149,6 +149,10 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
   const hasScore =
     typeof match.scoreHome === "number" &&
     typeof match.scoreAway === "number";
+  // Colore numeri risultato allineato a MatchCard (pagine calendario):
+  // nostro punteggio bianco, avversario blu chiaro (ink-low). Niente rosso.
+  const homeScoreClass = match.home ? "text-brand-white" : "text-ink-low";
+  const awayScoreClass = match.home ? "text-ink-low" : "text-brand-white";
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-4">
       <MatchDatePill iso={match.date} size="md" />
@@ -167,19 +171,14 @@ function PastMatchCell({ match }: { match: YouthLastMatch | null }) {
             interactive={false}
           />
           <div className="flex shrink-0 flex-col items-center gap-1">
-            <span
-              className={cn(
-                "font-display text-2xl font-extrabold tracking-[0.005em] md:text-3xl",
-                hasScore ? "text-brand-red" : "text-ink-hi",
-              )}
-            >
+            <span className="font-display text-2xl font-extrabold tracking-[0.005em] md:text-3xl">
               {hasScore ? (
                 <span className="inline-flex items-center gap-6">
-                  <span>{match.scoreHome}</span>
-                  <span>{match.scoreAway}</span>
+                  <span className={homeScoreClass}>{match.scoreHome}</span>
+                  <span className={awayScoreClass}>{match.scoreAway}</span>
                 </span>
               ) : (
-                "—"
+                <span className="text-ink-hi">—</span>
               )}
             </span>
             {tabellinoHref && (
