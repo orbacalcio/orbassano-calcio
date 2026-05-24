@@ -397,11 +397,12 @@ export function MatchCard({
             href={match.highlightsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Highlights su YouTube"
-            className="hover:text-brand-gold transition-colors"
+            aria-label="Guarda gli highlights su YouTube"
+            title="Guarda gli highlights"
+            className="border-brand-red/50 text-brand-red hover:bg-brand-red hover:text-brand-white focus-visible:outline-brand-gold inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             onClick={(e) => e.stopPropagation()}
           >
-            <Play size={16} />
+            <Play size={20} fill="currentColor" aria-hidden />
           </a>
         )}
         {match.reportLink && cardIsAnchor === false && (
