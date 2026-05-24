@@ -199,28 +199,30 @@ export default async function OpportunitaPage() {
               automatismi: parliamo direttamente con te.
             </p>
             {/* Stemma del club a piena opacità nello spazio vuoto a
-                sinistra del form, con glow brand + ombra + leggera
-                fluttuazione (motion-safe). Solo da lg (sotto, il form e'
-                a tutta larghezza e non c'e' spazio vuoto). */}
+                sinistra del form: dietro lo stemma un halo multicolor del
+                brand (rosso/blu/oro) che ruota lentamente, sfocato →
+                effetto glow premium. Lo stemma resta nitido + ombra.
+                Solo da lg. motion-safe: l'halo è statico per chi disattiva
+                le animazioni. */}
             <div
               aria-hidden
               className="pointer-events-none relative mt-8 hidden items-center justify-center lg:flex"
             >
-              <span className="bg-brand-gold/15 absolute h-72 w-72 rounded-full blur-[90px]" />
+              <span
+                className="absolute h-80 w-80 rounded-full opacity-60 blur-[60px] motion-safe:animate-[spin_14s_linear_infinite]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, var(--color-brand-red), var(--color-brand-blue), var(--color-brand-gold), var(--color-brand-red))",
+                }}
+              />
               <Image
                 src="/Logo_Orbassano_2K.png"
                 alt=""
                 width={520}
                 height={733}
-                className="relative h-auto w-full max-w-[360px] drop-shadow-2xl motion-safe:animate-[float-soft_6s_ease-in-out_infinite]"
+                className="relative h-auto w-full max-w-[360px] drop-shadow-2xl"
               />
             </div>
-            <style>{`
-              @keyframes float-soft {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-12px); }
-              }
-            `}</style>
           </div>
 
           <div className="border-brand-gold/30 bg-surface-1/70 rounded-3xl border p-8 backdrop-blur-sm sm:p-10">
