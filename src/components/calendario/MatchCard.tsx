@@ -399,10 +399,18 @@ export function MatchCard({
             rel="noopener noreferrer"
             aria-label="Guarda gli highlights su YouTube"
             title="Guarda gli highlights"
-            className="border-brand-red/50 text-brand-red hover:bg-brand-red hover:text-brand-white focus-visible:outline-brand-gold inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="group focus-visible:outline-brand-gold relative inline-flex h-14 w-14 shrink-0 items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <Play size={20} fill="currentColor" aria-hidden />
+            {/* Anello pulsante che richiama l'occhio sul video. */}
+            <span
+              aria-hidden
+              className="bg-brand-red/50 absolute inline-flex h-full w-full rounded-full motion-safe:animate-ping"
+            />
+            {/* Pulsante pieno rosso (niente trasparenza) + glow + scale hover. */}
+            <span className="bg-brand-red text-brand-white shadow-brand-red/50 relative inline-flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
+              <Play size={26} fill="currentColor" className="ml-0.5" aria-hidden />
+            </span>
           </a>
         )}
         {match.reportLink && cardIsAnchor === false && (
