@@ -200,9 +200,9 @@ export const news = defineType({
       name: "sendToNewsletter",
       title: "Invia alla newsletter",
       description:
-        "Quando pubblichi questo articolo, viene inviato via email agli iscritti newsletter (Brevo). Disattiva per articoli marginali (es. errata corrige, post tecnici).",
+        "OFF di default: attivalo SOLO se vuoi che, alla pubblicazione, questo articolo venga inviato via email agli iscritti newsletter (Brevo). Lascia spento per articoli marginali (es. errata corrige, post tecnici).",
       type: "boolean",
-      initialValue: true,
+      initialValue: false,
     }),
     defineField({
       name: "dispatchedAt",
