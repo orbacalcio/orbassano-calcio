@@ -52,10 +52,15 @@ export type EventRow = {
 export function YouthEventGroup({
   category,
   rows,
+  notes,
   emptyLabel = "Nessuna data pubblicata.",
 }: {
   category: string;
   rows: EventRow[];
+  /** Note generali del gruppo (mostrate UNA volta in alto). Usate
+   *  quando la stessa nota e' comune a tutte le date della categoria —
+   *  evita la duplicazione per riga. */
+  notes?: string[];
   emptyLabel?: string;
 }) {
   return (
@@ -65,10 +70,18 @@ export function YouthEventGroup({
     >
       <h2
         id={`group-${slugify(category)}`}
-        className="font-display text-ink-hi mb-5 text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase lg:text-3xl"
+        className="font-display text-ink-hi mb-3 text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase lg:text-3xl"
       >
         {category}
       </h2>
+
+      {notes && notes.length > 0 && (
+        <div className="text-ink-mid mb-5 flex flex-col gap-1 text-sm italic leading-relaxed">
+          {notes.map((n, i) => (
+            <p key={`${i}-${n.slice(0, 20)}`}>{n}</p>
+          ))}
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <p className="text-ink-mid text-sm italic">{emptyLabel}</p>

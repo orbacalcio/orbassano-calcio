@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, CalendarCheck, GraduationCap } from "lucide-react";
-import { RegistrationPaymentBlock } from "@/components/settore-giovanile/RegistrationPaymentBlock";
 import {
   YouthEventGroup,
   type EventRow,
 } from "@/components/settore-giovanile/YouthEventGroup";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
-import { sanityClient } from "@/sanity/client";
 import { fetchOpenDays } from "@/sanity/fetchers";
-import { settingsQuery } from "@/sanity/queries";
 
 /**
  * Pagina Summer Camp del Settore Giovanile Scolastico.
@@ -44,47 +41,16 @@ const CATEGORY_ORDER = [
   "Giovanissimi Under 14",
 ] as const;
 
-// Fallback hardcoded dei dati legali/contatto: vengono usati solo se
-// Sanity non ha ancora il singleton settings popolato. Allineati al
-// modulo di iscrizione PDF stagione 2026/2027 fornito dal club.
-const FALLBACK_IBAN = "IT93H0853030680000000002547";
-const FALLBACK_PHONE = "+39 327 779 3326";
-
-type RegistrationSettings = {
-  registrationFormUrl?: string | null;
-  legalInfo?: { iban?: string | null } | null;
-  contactInfo?: {
-    phone?: string | null;
-  } | null;
-};
-
-async function fetchRegistrationSettings(): Promise<RegistrationSettings> {
-  try {
-    const data = await sanityClient.fetch(
-      settingsQuery,
-      {},
-      { next: { tags: ["settings"] } },
-    );
-    return (data ?? {}) as RegistrationSettings;
-  } catch {
-    return {};
-  }
-}
-
 export default async function SummerCampPage() {
-  const [events, settings] = await Promise.all([
-    fetchOpenDays(),
-    fetchRegistrationSettings(),
-  ]);
-  const moduleUrl = settings.registrationFormUrl ?? null;
-  const iban = settings.legalInfo?.iban ?? FALLBACK_IBAN;
-  const phone = settings.contactInfo?.phone ?? FALLBACK_PHONE;
+  const events = await fetchOpenDays();
 
   // Raggruppa per categoria espandendo categorie × sessioni in righe:
   // un evento con categorie [U17, U16] e 2 sessioni produce 2 righe in
-  // OGNI gruppo categoria. Cosi' YouthEventGroup (una riga = un giorno)
-  // resta invariato e gestito anche dai Tornei.
+  // OGNI gruppo categoria. Le NOTE vengono raccolte UNA volta per
+  // categoria (deduplicate) e passate al gruppo come prop top-level —
+  // non duplicate per ogni data/orario.
   const byCategory = new Map<string, EventRow[]>();
+  const notesByCategory = new Map<string, string[]>();
   for (const cat of CATEGORY_ORDER) byCategory.set(cat, []);
   for (const ev of events) {
     const cta = ev.downloadModuleUrl
@@ -94,6 +60,7 @@ export default async function SummerCampPage() {
           icon: "download" as const,
         }
       : null;
+    const note = ev.notes?.trim() ?? "";
     for (const cat of ev.categories) {
       const list = byCategory.get(cat);
       if (!list) continue; // categoria fuori dall'ordine atteso → ignora
@@ -105,10 +72,18 @@ export default async function SummerCampPage() {
           endTime: session.endTime,
           venue: ev.venue,
           mapsUrl: ev.mapsUrl,
-          notes: ev.notes,
+          // notes intenzionalmente omesse qui: vivono UNA volta in
+          // alto al gruppo (vedi notesByCategory).
           cta,
         });
       });
+      if (note) {
+        const noteList = notesByCategory.get(cat) ?? [];
+        if (!noteList.includes(note)) {
+          noteList.push(note);
+          notesByCategory.set(cat, noteList);
+        }
+      }
     }
   }
   // Ordina le righe di ogni categoria per data crescente (le sessioni
@@ -144,32 +119,20 @@ export default async function SummerCampPage() {
               Summer Camp
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Da metà giugno, due/tre settimane di calcio, sport e
-              divertimento con i tecnici dell&apos;Orbassano Calcio. Il
-              Summer Camp è aperto ai ragazzi del Settore Giovanile
-              Scolastico: un&apos;esperienza all&apos;insegna del gioco e
-              dell&apos;amicizia, in attesa della nuova stagione. Qui sotto
-              trovi le date e il modulo per iscriverti.
+              Due settimane di calcio, sport e divertimento con i nostri
+              tecnici. Il Summer Camp è aperto ai ragazzi del Settore
+              Giovanile Scolastico: un&apos;esperienza all&apos;insegna
+              del gioco e dell&apos;amicizia, in attesa della nuova
+              stagione. Qui sotto trovi le date e il modulo per
+              iscriverti.
             </p>
           </div>
         </Container>
       </header>
 
       <section className="bg-light-bg-0">
-      {/* In alto: blocco unico modulo iscrizione + info pagamento
-          (RegistrationPaymentBlock, shared con /settore-giovanile hub).
-          La prima cosa che l'utente vede e' "come iscriversi", le date
-          del camp vengono subito sotto. Layout 2 colonne md+ (modulo +
-          bonifico), impilato su mobile. */}
-      <Container className="pt-12 lg:pt-16" size="wide">
-        <RegistrationPaymentBlock
-          moduleUrl={moduleUrl}
-          iban={iban}
-          phone={phone}
-        />
-      </Container>
-
-      {/* Sotto i box iscrizione: date del Summer Camp per categoria. */}
+      {/* Date del Summer Camp per categoria. (Blocchi "modulo iscrizione"
+          e "pagamento" rimossi su richiesta utente.) */}
       <Container className="py-12 lg:py-16" size="wide">
         {events.length === 0 ? (
           <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
@@ -190,11 +153,13 @@ export default async function SummerCampPage() {
           <div className="flex flex-col gap-6">
             {CATEGORY_ORDER.map((cat) => {
               const rows = byCategory.get(cat) ?? [];
+              const notes = notesByCategory.get(cat) ?? [];
               return (
                 <YouthEventGroup
                   key={cat}
                   category={cat}
                   rows={rows}
+                  notes={notes}
                   emptyLabel="Nessuna data ancora pubblicata per questa categoria."
                 />
               );
