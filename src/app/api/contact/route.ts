@@ -10,8 +10,8 @@ import {
 } from "@/lib/validation";
 
 /**
- * Form contatti generico → email a CLUB_EMAIL via Resend, con replyTo
- * sull'utente. In dev (senza RESEND_API_KEY) logga e simula success.
+ * Form contatti generico → email a CLUB_EMAIL via Brevo, con replyTo
+ * sull'utente. In dev (senza BREVO_API_KEY) logga e simula success.
  *
  * Body atteso:
  * { name, email, phone?, subject, message, privacy }
