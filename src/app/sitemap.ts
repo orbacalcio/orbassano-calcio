@@ -78,6 +78,15 @@ const STATIC_ROUTES: Array<{
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Coming Soon attivo: sitemap vuoto. Coerente con robots.ts che
+  // disallow tutto. Evitiamo che Google scopra le URL del sito reale
+  // mentre la landing pre-lancio e' attiva: appena flippiamo
+  // COMING_SOON_MODE=false al go-live, il sitemap torna popolato e
+  // submittiamo a Search Console.
+  if (process.env.COMING_SOON_MODE === "true") {
+    return [];
+  }
+
   const now = new Date();
 
   // Fetch dinamico in parallelo. Errori → array vuoti, non bloccano la
