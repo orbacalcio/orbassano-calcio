@@ -128,6 +128,32 @@ const securityHeaders = [
   },
 ];
 
+/**
+ * Coming Soon Gate via Vercel rewrites (vedi anche
+ * src/app/coming-soon/page.tsx, src/app/api/preview/route.ts).
+ *
+ * Perche' rewrites e non proxy.ts: in Next.js 16 il proxy gira di
+ * default su runtime Node.js. Vercel serve le pagine statiche dal
+ * CDN edge senza invocare la function proxy, quindi proxy.ts NON
+ * intercetta le rotte prerenderizzate (testato 2026-06-03, header
+ * x-cs-proxy assente su /, /squadre, /studio).
+ *
+ * Le rewrites Next/Vercel invece sono interpretate dal routing
+ * Vercel PRIMA del CDN cache: garantito che intercettino ogni rotta
+ * pubblica.
+ *
+ * Attivazione: setta `COMING_SOON_MODE=true` su Vercel + redeploy.
+ * La funzione `rewrites()` viene valutata al build, quindi il flip
+ * richiede un nuovo build (lo stesso vincolo che avremmo avuto col
+ * proxy).
+ *
+ * Bypass: visita `/api/preview?key=<COMING_SOON_BYPASS_KEY>`. Setta
+ * cookie httpOnly `cs-bypass=1` per 14 giorni; le rewrites hanno
+ * `missing: cookie cs-bypass=1` quindi chi ha il cookie vede il sito
+ * reale. Per uscire dall'anteprima: `/api/preview?reset=1`.
+ */
+const comingSoonActive = process.env.COMING_SOON_MODE === "true";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -144,6 +170,33 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
       },
     ],
+  },
+  async rewrites() {
+    if (!comingSoonActive) return [];
+    return {
+      beforeFiles: [
+        {
+          // Rewrite TUTTE le rotte pubbliche → /coming-soon. URL
+          // preservata in barra (rewrite trasparente). Esclusioni
+          // (lookahead negativo):
+          //  - coming-soon (target del rewrite, evita loop)
+          //  - api        (route handler + bypass /api/preview)
+          //  - studio     (CMS Sanity, basic auth in proxy.ts)
+          //  - _next      (asset Next.js build-time)
+          //  - robots.txt / sitemap.xml (file metadata speciali —
+          //    src/app/robots.ts gestisce il Disallow / da solo)
+          //  - opengraph-image / twitter-image (OG dinamiche)
+          //  - .*\..*    (qualsiasi path con un punto: Logo.png,
+          //               file.css, font.woff2, etc.)
+          source:
+            "/((?!coming-soon|api|studio|_next|robots\\.txt|sitemap\\.xml|opengraph-image|twitter-image|.*\\..*).*)",
+          missing: [
+            { type: "cookie", key: "cs-bypass", value: "1" },
+          ],
+          destination: "/coming-soon",
+        },
+      ],
+    };
   },
   async redirects() {
     // Redirect interni 301 per pagine spostate/accorpate: preservano
