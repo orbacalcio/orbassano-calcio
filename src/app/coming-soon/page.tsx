@@ -94,18 +94,16 @@ export default function ComingSoonPage() {
         </span>
 
         <h1 className="font-display text-ink-hi mt-5 text-4xl leading-[0.92] font-black tracking-[0.005em] uppercase sm:text-6xl lg:text-7xl">
-          Una nuova era
+          Nuovo sito,
           <br />
-          <span className="text-brand-red">sta per partire.</span>
+          <span className="text-brand-red">stesso cuore rossoblù.</span>
         </h1>
 
         <p className="text-ink-mid mt-6 max-w-xl text-base leading-relaxed sm:text-lg">
-          Il sito ufficiale del club rossoblù sarà online il{" "}
+          Il nuovo sito ufficiale rossoblù sarà online il{" "}
           <span className="text-ink-hi font-mono font-semibold">
             06.06.2026
-          </span>{" "}
-          alle{" "}
-          <span className="text-ink-hi font-mono font-semibold">ore 08:00</span>
+          </span>
           .
         </p>
 
