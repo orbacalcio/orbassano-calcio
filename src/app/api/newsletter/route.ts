@@ -1,4 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  emailLinkRow,
+  emailRow,
+  renderEmailShell,
+} from "@/lib/email-shell";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
@@ -13,7 +18,7 @@ import {
  *  1. Validation lato server (email, privacy)
  *  2. Se BREVO_API_KEY presente: aggiunge il contatto alla lista Brevo
  *     in modalità double opt-in (Brevo invia il template di conferma).
- *  3. Notifica admin via Resend con riepilogo del nuovo iscritto.
+ *  3. Notifica admin via Brevo transazionale con riepilogo del nuovo iscritto.
  *
  * Senza BREVO_API_KEY: fallback graceful — l'email viene comunque
  * notificata all'admin che la aggiungerà manualmente, e l'utente
@@ -157,27 +162,21 @@ function renderAdminEmail(p: {
         ? `Brevo non configurato: ${p.brevoResult.reason} — aggiungi manualmente alla lista.`
         : `Brevo errore: ${p.brevoResult.message} — verifica configurazione.`;
 
-  return `
-    <!doctype html>
-    <html lang="it">
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background:#0A1428; color:#F5F7FA;">
-        <h1 style="font-size: 22px; color:#C9A35D; margin: 0 0 8px;">Nuova iscrizione newsletter</h1>
-        <p style="color:#A8B5CC; font-size:13px; margin: 0 0 24px;">Form /newsletter</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Nome</td>
-            <td style="padding: 8px 0;">${escapeHtml(p.firstName || "—")}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Email</td>
-            <td style="padding: 8px 0;"><a href="mailto:${escapeHtml(p.email)}" style="color:#C9A35D;">${escapeHtml(p.email)}</a></td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Stato Brevo</td>
-            <td style="padding: 8px 0;">${escapeHtml(status)}</td>
-          </tr>
-        </table>
-      </body>
-    </html>
-  `;
+  const rows = [
+    emailRow("Nome", escapeHtml(p.firstName || "—")),
+    emailLinkRow(
+      "Email",
+      `mailto:${escapeHtml(p.email)}`,
+      escapeHtml(p.email),
+    ),
+    emailRow("Stato Brevo", escapeHtml(status)),
+  ].join("\n");
+  return renderEmailShell({
+    eyebrow: "ASD Orbassano Calcio",
+    title: "Nuova iscrizione newsletter",
+    subtitle: "Form /newsletter",
+    contentHtml: `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+${rows}
+</table>`,
+  });
 }

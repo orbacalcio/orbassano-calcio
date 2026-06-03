@@ -1,4 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  EMAIL_DIVIDER,
+  emailLinkRow,
+  emailParagraph,
+  emailRow,
+  emailSection,
+  renderEmailShell,
+} from "@/lib/email-shell";
 import { FEATURES } from "@/lib/features";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -342,107 +350,128 @@ function renderInternalEmail(p: {
     .join("");
 
   const segnalanteBlock = p.data.isAnonimo
-    ? `<p style="color:#EA1D22; font-weight:bold;">SEGNALAZIONE ANONIMA</p>
-       <p style="color:#A8B5CC;">Il segnalante non ha lasciato dati identificativi (art. 11.5 del Codice Etico).</p>`
-    : `
-      <table style="width:100%; border-collapse:collapse;">
-        <tr><td style="padding:6px 0; color:#A8B5CC; font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">Cognome e Nome</td><td style="padding:6px 0; color:#F5F7FA;">${escapeHtml(p.data.cognomeNome || "—")}</td></tr>
-        <tr><td style="padding:6px 0; color:#A8B5CC; font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">Ruolo</td><td style="padding:6px 0; color:#F5F7FA;">${escapeHtml(p.data.ruolo || "—")}${p.data.ruoloAltro ? ` (${escapeHtml(p.data.ruoloAltro)})` : ""}</td></tr>
-        <tr><td style="padding:6px 0; color:#A8B5CC; font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">Email</td><td style="padding:6px 0;"><a href="mailto:${escapeHtml(p.data.email)}" style="color:#C9A35D;">${escapeHtml(p.data.email || "—")}</a></td></tr>
-        <tr><td style="padding:6px 0; color:#A8B5CC; font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">Telefono</td><td style="padding:6px 0; color:#F5F7FA;">${escapeHtml(p.data.telefono || "—")}</td></tr>
-        <tr><td style="padding:6px 0; color:#A8B5CC; font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">Consenso ricontatto</td><td style="padding:6px 0; color:#F5F7FA;">${p.data.consensoRicontatto ? "Sì" : "No"}</td></tr>
-      </table>`;
+    ? `<p style="margin:0 0 8px;color:#e91f22;font-weight:bold;font-size:14px;">SEGNALAZIONE ANONIMA</p>
+<p style="margin:0;color:#626f8d;font-size:13px;line-height:1.5;">Il segnalante non ha lasciato dati identificativi (art. 11.5 del Codice Etico).</p>`
+    : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+${[
+  emailRow("Cognome e Nome", escapeHtml(p.data.cognomeNome || "—")),
+  emailRow(
+    "Ruolo",
+    `${escapeHtml(p.data.ruolo || "—")}${p.data.ruoloAltro ? ` (${escapeHtml(p.data.ruoloAltro)})` : ""}`,
+  ),
+  emailLinkRow(
+    "Email",
+    `mailto:${escapeHtml(p.data.email)}`,
+    escapeHtml(p.data.email || "—"),
+  ),
+  emailRow("Telefono", escapeHtml(p.data.telefono || "—")),
+  emailRow(
+    "Consenso ricontatto",
+    p.data.consensoRicontatto ? "Sì" : "No",
+  ),
+].join("\n")}
+</table>`;
 
-  return `
-    <!doctype html>
-    <html lang="it">
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 720px; margin: 0 auto; padding: 24px; background:#0A1428; color:#F5F7FA;">
-        <h1 style="font-size: 22px; color:#C9A35D; margin: 0 0 8px;">Nuova segnalazione · Codice Etico</h1>
-        <p style="color:#A8B5CC; font-size:13px; margin: 0 0 24px;">Protocollo <strong style="color:#F5F7FA;">${escapeHtml(p.protocollo)}</strong> · Ricevuta il ${escapeHtml(new Date(p.ricevutaIl).toLocaleString("it-IT"))}</p>
+  const periodoBlock = `<p style="margin:0;color:#0A1428;font-size:14px;">
+${p.data.dataPeriodoInizio ? `Dal <strong>${escapeHtml(p.data.dataPeriodoInizio)}</strong>` : "Inizio non indicato"}${p.data.dataPeriodoFine ? ` al <strong>${escapeHtml(p.data.dataPeriodoFine)}</strong>` : " <em style='color:#626f8d;'>(non indicata fine, fatti potenzialmente in corso)</em>"}
+</p>${p.data.luogo ? `\n<p style="margin:8px 0 0;color:#626f8d;font-size:13px;">Luogo: ${escapeHtml(p.data.luogo)}</p>` : ""}`;
 
-        <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Identità segnalante</h2>
-        ${segnalanteBlock}
+  const docBlock = `<p style="margin:0;color:#0A1428;font-size:14px;">${p.data.hasAllegati ? "Il segnalante dichiara di avere documentazione." : "Nessuna documentazione dichiarata."}</p>${
+    p.data.hasAllegati && p.data.notaAllegati
+      ? `\n<p style="margin:8px 0 0;color:#626f8d;font-size:13px;">${escapeHtml(p.data.notaAllegati)}</p>`
+      : ""
+  }`;
 
-        <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Tipologie segnalate</h2>
-        <ul style="margin:0; padding-left: 20px; color:#F5F7FA;">${tipologiePretty}</ul>
-        ${p.data.tipologiaAltro ? `<p style="color:#A8B5CC; font-size:13px; margin:8px 0 0;">Specifica "Altro": ${escapeHtml(p.data.tipologiaAltro)}</p>` : ""}
+  const content = `<p style="margin:0 0 8px;color:#626f8d;font-size:13px;line-height:1.5;">
+  Protocollo <strong style="color:#0A1428;font-family:monospace;">${escapeHtml(p.protocollo)}</strong> · Ricevuta il ${escapeHtml(new Date(p.ricevutaIl).toLocaleString("it-IT"))}
+</p>
 
-        <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Periodo dei fatti</h2>
-        <p style="color:#F5F7FA; margin:0;">
-          ${p.data.dataPeriodoInizio ? `Dal <strong>${escapeHtml(p.data.dataPeriodoInizio)}</strong>` : "Inizio non indicato"}
-          ${p.data.dataPeriodoFine ? ` al <strong>${escapeHtml(p.data.dataPeriodoFine)}</strong>` : " (non indicata fine, fatti potenzialmente in corso)"}
-        </p>
-        ${p.data.luogo ? `<p style="color:#A8B5CC; font-size:13px; margin:8px 0 0;">Luogo: ${escapeHtml(p.data.luogo)}</p>` : ""}
+${emailSection("Identità segnalante", segnalanteBlock)}
 
-        ${p.data.personeCoinvolte ? `
-          <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Persone coinvolte</h2>
-          <p style="white-space: pre-wrap; line-height: 1.6; color:#F5F7FA; margin:0;">${escapeHtml(p.data.personeCoinvolte)}</p>
-        ` : ""}
+${emailSection(
+  "Tipologie segnalate",
+  `<ul style="margin:0;padding-left:20px;color:#0A1428;font-size:14px;line-height:1.7;">${tipologiePretty}</ul>${
+    p.data.tipologiaAltro
+      ? `\n<p style="margin:8px 0 0;color:#626f8d;font-size:13px;">Specifica &quot;Altro&quot;: ${escapeHtml(p.data.tipologiaAltro)}</p>`
+      : ""
+  }`,
+)}
 
-        <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Descrizione fatti</h2>
-        <p style="white-space: pre-wrap; line-height: 1.6; color:#F5F7FA; margin:0;">${escapeHtml(p.data.descrizione)}</p>
+${emailSection("Periodo dei fatti", periodoBlock)}
 
-        ${p.data.testimoni ? `
-          <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Testimoni</h2>
-          <p style="white-space: pre-wrap; line-height: 1.6; color:#F5F7FA; margin:0;">${escapeHtml(p.data.testimoni)}</p>
-        ` : ""}
+${
+  p.data.personeCoinvolte
+    ? emailSection(
+        "Persone coinvolte",
+        emailParagraph(escapeHtml(p.data.personeCoinvolte)),
+      )
+    : ""
+}
 
-        <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Documentazione</h2>
-        <p style="color:#F5F7FA; margin:0;">${p.data.hasAllegati ? "Il segnalante dichiara di avere documentazione." : "Nessuna documentazione dichiarata."}</p>
-        ${p.data.hasAllegati && p.data.notaAllegati ? `<p style="color:#A8B5CC; font-size:13px; margin:8px 0 0;">${escapeHtml(p.data.notaAllegati)}</p>` : ""}
+${emailSection("Descrizione fatti", emailParagraph(escapeHtml(p.data.descrizione)))}
 
-        ${p.data.giaSegnalato === "si" ? `
-          <h2 style="font-size:14px; color:#C9A35D; text-transform:uppercase; letter-spacing:0.1em; margin: 24px 0 8px; border-bottom:1px solid #1F2F4D; padding-bottom:6px;">Già segnalato altrove</h2>
-          <p style="color:#F5F7FA; margin:0;">${escapeHtml(p.data.giaSegnalatoSpecifica)}</p>
-        ` : ""}
+${
+  p.data.testimoni
+    ? emailSection("Testimoni", emailParagraph(escapeHtml(p.data.testimoni)))
+    : ""
+}
 
-        <hr style="border:none; border-top:1px solid #1F2F4D; margin: 32px 0;" />
-        <p style="color:#A8B5CC; font-size:11px; line-height:1.5;">
-          IP hash audit (no tracking): <code style="color:#F5F7FA;">${escapeHtml(p.ipHash)}</code><br/>
-          Apri il record nel CMS per gestire l'istruttoria: cerca il protocollo <strong>${escapeHtml(p.protocollo)}</strong> sotto <em>Governance & trasparenza → Segnalazioni (RISERVATE)</em>.<br/>
-          <em>Comunicazione strettamente riservata al Direttivo + Responsabile Safeguarding (art. 11.6 Codice Etico).</em>
-        </p>
-      </body>
-    </html>
-  `;
+${emailSection("Documentazione", docBlock)}
+
+${
+  p.data.giaSegnalato === "si"
+    ? emailSection(
+        "Già segnalato altrove",
+        emailParagraph(escapeHtml(p.data.giaSegnalatoSpecifica)),
+      )
+    : ""
+}
+
+${EMAIL_DIVIDER}
+<p style="margin:0;color:#626f8d;font-size:11px;line-height:1.6;">
+  IP hash audit (no tracking): <code style="color:#0A1428;background:#f0f2f5;padding:2px 6px;border-radius:4px;">${escapeHtml(p.ipHash)}</code><br/>
+  Apri il record nel CMS per gestire l'istruttoria: cerca il protocollo <strong style="color:#0A1428;">${escapeHtml(p.protocollo)}</strong> sotto <em>Governance &amp; trasparenza → Segnalazioni (RISERVATE)</em>.<br/>
+  <em>Comunicazione strettamente riservata al Direttivo + Responsabile Safeguarding (art. 11.6 Codice Etico).</em>
+</p>`;
+
+  return renderEmailShell({
+    eyebrow: "Codice Etico · Riservato",
+    title: "Nuova segnalazione",
+    subtitle: `Protocollo ${escapeHtml(p.protocollo)}`,
+    contentHtml: content,
+    footerNote:
+      "ASD Orbassano Calcio · Direttivo + Responsabile Safeguarding · Riservatezza art. 11.6 CE",
+  });
 }
 
 function renderConfirmationEmail(p: { protocollo: string }): string {
-  return `
-    <!doctype html>
-    <html lang="it">
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background:#0A1428; color:#F5F7FA;">
-        <h1 style="font-size: 22px; color:#C9A35D; margin: 0 0 8px;">Conferma ricezione segnalazione</h1>
-        <p style="color:#A8B5CC; font-size:13px; margin: 0 0 24px;">A.S.D. Orbassano Calcio · Codice Etico</p>
+  const content = `<p style="margin:0 0 16px;color:#0A1428;font-size:14px;line-height:1.6;">
+  Abbiamo ricevuto la tua segnalazione. Il protocollo univoco assegnato è:
+</p>
+<p style="margin:0 0 24px;padding:18px;background:#f0f2f5;border-left:4px solid #e91f22;border-radius:6px;font-family:monospace;font-size:22px;color:#0A1428;font-weight:bold;text-align:center;letter-spacing:0.04em;">
+  ${escapeHtml(p.protocollo)}
+</p>
 
-        <p style="color:#F5F7FA; line-height:1.6; margin:0 0 16px;">
-          Abbiamo ricevuto la tua segnalazione. Il protocollo univoco assegnato e':
-        </p>
-        <p style="font-family: monospace; font-size: 24px; color:#C9A35D; font-weight:bold; padding: 16px; background:#1F2F4D; border-radius: 8px; text-align:center; margin: 0 0 24px;">
-          ${escapeHtml(p.protocollo)}
-        </p>
+<p style="margin:0 0 16px;color:#0A1428;font-size:14px;line-height:1.6;">
+  Conserva questo numero per le comunicazioni future. Il Direttivo e il Responsabile Safeguarding (quando in carica) avvieranno l'istruttoria entro 30-60 giorni dalla ricezione (art. 11.11 del Codice Etico).
+</p>
+<p style="margin:0;color:#0A1428;font-size:14px;line-height:1.6;">
+  Se hai consentito al ricontatto, potremo cercarti per chiarimenti e per comunicarti l'esito.
+</p>
 
-        <p style="color:#F5F7FA; line-height:1.6; margin:0 0 16px;">
-          Conserva questo numero per le comunicazioni future. Il Direttivo e il Responsabile Safeguarding (quando in carica) avvieranno l'istruttoria entro 30-60 giorni dalla ricezione (art. 11.11 del Codice Etico).
-        </p>
-        <p style="color:#F5F7FA; line-height:1.6; margin:0 0 16px;">
-          Se hai consentito al ricontatto, potremo cercarti per chiarimenti e per comunicarti l'esito.
-        </p>
+${EMAIL_DIVIDER}
 
-        <hr style="border:none; border-top:1px solid #1F2F4D; margin: 24px 0;" />
-        <p style="color:#A8B5CC; font-size:12px; line-height:1.5;">
-          Ti ricordiamo che la tua segnalazione e' coperta da riservatezza
-          (art. 11.6 del Codice) e che e' fatto divieto di ritorsioni nei
-          tuoi confronti (art. 11.7).
-        </p>
-        <p style="color:#A8B5CC; font-size:12px; line-height:1.5;">
-          Per emergenze immediate (abuso in corso, pericolo per minori,
-          reato in atto) contatta direttamente le forze dell'ordine al
-          numero unico <strong style="color:#F5F7FA;">112</strong>.
-        </p>
-      </body>
-    </html>
-  `;
+<p style="margin:0 0 12px;color:#626f8d;font-size:12px;line-height:1.6;">
+  Ti ricordiamo che la tua segnalazione è coperta da riservatezza (art. 11.6 del Codice) e che è fatto divieto di ritorsioni nei tuoi confronti (art. 11.7).
+</p>
+<p style="margin:0;color:#626f8d;font-size:12px;line-height:1.6;">
+  Per emergenze immediate (abuso in corso, pericolo per minori, reato in atto) contatta direttamente le forze dell'ordine al numero unico <strong style="color:#0A1428;">112</strong>.
+</p>`;
+  return renderEmailShell({
+    eyebrow: "ASD Orbassano Calcio · Codice Etico",
+    title: "Conferma ricezione segnalazione",
+    contentHtml: content,
+  });
 }
 
 export async function POST(req: NextRequest) {

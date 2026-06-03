@@ -1,4 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  EMAIL_DIVIDER,
+  emailParagraph,
+  emailRow,
+  emailLinkRow,
+  renderEmailShell,
+} from "@/lib/email-shell";
 import { CLUB_EMAIL, sendTransactionalEmail } from "@/lib/mailer";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
@@ -116,37 +123,32 @@ function renderEmail(p: {
   subject: string;
   message: string;
 }): string {
-  return `
-    <!doctype html>
-    <html lang="it">
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background:#0A1428; color:#F5F7FA;">
-        <h1 style="font-size: 22px; color:#C9A35D; margin: 0 0 8px;">Nuovo messaggio dal sito</h1>
-        <p style="color:#A8B5CC; font-size:13px; margin: 0 0 24px;">Form /contatti</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Da</td>
-            <td style="padding: 8px 0; color:#F5F7FA;">${escapeHtml(p.name)}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Email</td>
-            <td style="padding: 8px 0;"><a href="mailto:${escapeHtml(p.email)}" style="color:#C9A35D;">${escapeHtml(p.email)}</a></td>
-          </tr>
-          ${
-            p.phone
-              ? `<tr>
-                  <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Telefono</td>
-                  <td style="padding: 8px 0;"><a href="tel:${escapeHtml(p.phone)}" style="color:#C9A35D;">${escapeHtml(p.phone)}</a></td>
-                </tr>`
-              : ""
-          }
-          <tr>
-            <td style="padding: 8px 0; color:#A8B5CC; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Oggetto</td>
-            <td style="padding: 8px 0; color:#F5F7FA;">${escapeHtml(p.subject)}</td>
-          </tr>
-        </table>
-        <hr style="border:none; border-top:1px solid #1F2F4D; margin: 24px 0;" />
-        <p style="white-space: pre-wrap; line-height: 1.6;">${escapeHtml(p.message)}</p>
-      </body>
-    </html>
-  `;
+  const rows = [
+    emailRow("Da", escapeHtml(p.name)),
+    emailLinkRow(
+      "Email",
+      `mailto:${escapeHtml(p.email)}`,
+      escapeHtml(p.email),
+    ),
+    p.phone
+      ? emailLinkRow(
+          "Telefono",
+          `tel:${escapeHtml(p.phone)}`,
+          escapeHtml(p.phone),
+        )
+      : "",
+    emailRow("Oggetto", escapeHtml(p.subject)),
+  ]
+    .filter(Boolean)
+    .join("\n");
+  return renderEmailShell({
+    eyebrow: "ASD Orbassano Calcio",
+    title: "Nuovo messaggio dal sito",
+    subtitle: "Form /contatti",
+    contentHtml: `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+${rows}
+</table>
+${EMAIL_DIVIDER}
+${emailParagraph(escapeHtml(p.message))}`,
+  });
 }
