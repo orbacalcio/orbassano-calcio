@@ -100,7 +100,7 @@ export default function ComingSoonPage() {
         </h1>
 
         <p className="text-ink-mid mt-6 max-w-xl text-base leading-relaxed sm:text-lg">
-          Il nuovo sito ufficiale rossoblù sarà online il{" "}
+          Il nuovo sito ufficiale sarà online il{" "}
           <span className="text-ink-hi font-mono font-semibold">
             06.06.2026
           </span>
