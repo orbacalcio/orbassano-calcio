@@ -124,7 +124,13 @@ export default function ComingSoonPage() {
 
       {/* Footer minimal */}
       <footer className="border-border/30 text-ink-low relative z-10 border-t py-5 text-center font-mono text-[10px] tracking-[0.18em] uppercase">
-        ASD Orbassano Calcio · P.IVA 12100640015
+        ASD Orbassano Calcio ·{" "}
+        <a
+          href="mailto:info@orbassanocalcio.com"
+          className="hover:text-brand-gold transition-colors"
+        >
+          info@orbassanocalcio.com
+        </a>
       </footer>
     </main>
   );
