@@ -151,10 +151,8 @@ export default async function SummerCampPage() {
               Vuoi partecipare al Summer Camp?
             </h2>
             <p className="text-light-ink-mid text-sm leading-relaxed lg:text-base">
-              Niente modulo online: per iscriverti contatta direttamente
-              la Segreteria del Settore Giovanile Scolastico. Ti diamo
-              tutte le informazioni su quote, modulo cartaceo e
-              materiale necessario.
+              Per iscriverti contatta direttamente la Segreteria del
+              Settore Giovanile Scolastico.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
