@@ -123,8 +123,7 @@ export default async function SummerCampPage() {
               tecnici. Il Summer Camp è aperto ai ragazzi del Settore
               Giovanile Scolastico: un&apos;esperienza all&apos;insegna
               del gioco e dell&apos;amicizia, in attesa della nuova
-              stagione. Qui sotto trovi le date e il modulo per
-              iscriverti.
+              stagione. Qui sotto trovi tutte le date.
             </p>
           </div>
         </Container>

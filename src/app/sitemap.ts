@@ -174,21 +174,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Pagine governance solo se feature flag attivo (delibera Direttivo
   // del Codice Etico). Se off, le pagine ritornano 404 e il sitemap
   // non le include — niente esposizione SEO prematura.
-  // /societa/codice-etico verra' aggiunto quando la pagina sarà
-  // implementata (Step 2 del task governance — attesa del file HTML
-  // sorgente).
+  //
+  // NB: `/societa/trasparenza` e' VOLUTAMENTE esclusa dal sitemap
+  // (richiesta utente 2026-06-04). La pagina esiste come "accessible
+  // by direct URL only" ma NON va indicizzata da Google ne' linkata
+  // da menu/footer. Coerente col `robots: noindex/nofollow` settato
+  // sulla page metadata. Vedi project_trasparenza_hidden.md.
   const governanceEntries: MetadataRoute.Sitemap = FEATURES.governanceSection
     ? [
         {
           url: `${SITE_URL}/societa/codice-etico`,
           lastModified: now,
           changeFrequency: "yearly" as const,
-          priority: 0.6,
-        },
-        {
-          url: `${SITE_URL}/societa/trasparenza`,
-          lastModified: now,
-          changeFrequency: "monthly" as const,
           priority: 0.6,
         },
         {

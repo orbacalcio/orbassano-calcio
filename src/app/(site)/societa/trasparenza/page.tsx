@@ -18,9 +18,12 @@ export const metadata: Metadata = {
   title: "Trasparenza",
   description:
     "Rendicontazione 5×1000 e dati di governance di A.S.D. Orbassano Calcio: importi ricevuti, destinazioni delle somme, organi sociali.",
-  robots: FEATURES.governanceSection
-    ? undefined
-    : { index: false, follow: false },
+  // SEMPRE noindex/nofollow per la pagina trasparenza (richiesta utente
+  // 2026-06-04): anche quando governance e' attivo (Codice Etico e
+  // Segnalazioni esposti), la trasparenza resta "pagina raggiungibile
+  // solo via URL diretto, non indicizzata, non promossa da menu/footer".
+  // Vedi memoria project_trasparenza_hidden.md.
+  robots: { index: false, follow: false },
 };
 
 const RUOLI_ORDER: Record<string, number> = {
