@@ -76,7 +76,7 @@ export function YouthEventGroup({
       </h2>
 
       {notes && notes.length > 0 && (
-        <div className="text-ink-mid mb-5 flex flex-col gap-1 text-sm italic leading-relaxed">
+        <div className="text-ink-mid mb-5 flex flex-col gap-1 text-base italic leading-relaxed lg:text-lg">
           {notes.map((n, i) => (
             <p key={`${i}-${n.slice(0, 20)}`}>{n}</p>
           ))}
@@ -84,7 +84,7 @@ export function YouthEventGroup({
       )}
 
       {rows.length === 0 ? (
-        <p className="text-ink-mid text-sm italic">{emptyLabel}</p>
+        <p className="text-ink-mid text-base italic">{emptyLabel}</p>
       ) : (
         <ul className="divide-border/40 flex flex-col divide-y">
           {rows.map((row) => (
@@ -125,32 +125,34 @@ function EventRowItem({ row }: { row: EventRow }) {
   const mapsSafe =
     row.mapsUrl && isSafeUrl(row.mapsUrl) ? row.mapsUrl : null;
   return (
-    <li className="flex flex-col gap-3 py-4 md:grid md:grid-cols-[7rem_8rem_1fr_auto] md:items-start md:gap-6">
-      <div className="flex flex-col gap-0.5">
-        <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+    <li className="flex flex-col gap-3 py-5 md:grid md:grid-cols-[8rem_9rem_1fr_auto] md:items-start md:gap-6">
+      <div className="flex flex-col gap-1">
+        <span className="text-ink-low font-mono text-[11px] tracking-[0.15em] uppercase">
           Data
         </span>
-        <span className="font-display text-ink-hi text-base font-bold tracking-wide">
+        <span className="font-display text-ink-hi text-lg font-bold tracking-wide lg:text-xl">
           {day}/{month}/{year}
         </span>
-        <span className="text-ink-mid text-xs">{weekday}</span>
+        <span className="text-ink-mid text-sm">{weekday}</span>
       </div>
 
-      <div className="flex flex-col gap-0.5">
-        <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+      <div className="flex flex-col gap-1">
+        <span className="text-ink-low font-mono text-[11px] tracking-[0.15em] uppercase">
           Orario
         </span>
-        <span className="text-ink-hi font-mono text-sm">{timeRange}</span>
+        <span className="text-ink-hi font-mono text-base lg:text-lg">
+          {timeRange}
+        </span>
       </div>
 
-      <div className="flex min-w-0 flex-col gap-1.5">
-        <span className="text-ink-low font-mono text-[10px] tracking-[0.15em] uppercase">
+      <div className="flex min-w-0 flex-col gap-2">
+        <span className="text-ink-low font-mono text-[11px] tracking-[0.15em] uppercase">
           Indirizzo
         </span>
-        <span className="text-ink-hi inline-flex items-start gap-1.5 text-sm leading-relaxed">
+        <span className="text-ink-hi inline-flex items-start gap-1.5 text-base leading-relaxed">
           <MapPin
-            size={14}
-            className="text-brand-gold mt-0.5 shrink-0"
+            size={16}
+            className="text-brand-gold mt-1 shrink-0"
             aria-hidden
           />
           {row.venue}
@@ -160,15 +162,15 @@ function EventRowItem({ row }: { row: EventRow }) {
             href={mapsSafe}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-brand-gold hover:text-ink-hi inline-flex w-fit items-center gap-1 text-xs font-semibold tracking-[0.02em] transition-colors"
+            className="text-brand-gold hover:text-ink-hi inline-flex w-fit items-center gap-1.5 text-sm font-semibold tracking-[0.02em] transition-colors"
           >
-            <MapPin size={12} aria-hidden />
+            <MapPin size={14} aria-hidden />
             Raggiungi l&apos;impianto sportivo
-            <ExternalLink size={11} aria-hidden />
+            <ExternalLink size={12} aria-hidden />
           </a>
         )}
         {row.notes && (
-          <p className="text-ink-mid text-xs italic leading-relaxed">
+          <p className="text-ink-mid text-sm italic leading-relaxed">
             {row.notes}
           </p>
         )}
