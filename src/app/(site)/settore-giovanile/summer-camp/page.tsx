@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, CalendarCheck, GraduationCap } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarCheck,
+  GraduationCap,
+  Mail,
+  Phone,
+} from "lucide-react";
 import {
   YouthEventGroup,
   type EventRow,
@@ -133,6 +139,56 @@ export default async function SummerCampPage() {
       {/* Date del Summer Camp per categoria. (Blocchi "modulo iscrizione"
           e "pagamento" rimossi su richiesta utente.) */}
       <Container className="py-12 lg:py-16" size="wide">
+        {/* CTA iscrizioni in cima: niente form online, contatto diretto
+            col Settore Giovanile Scolastico. Sempre visibile sopra le
+            date cosi' chi arriva sa subito come iscriversi. */}
+        <div className="border-light-border bg-light-bg-1 mb-8 rounded-2xl border p-8 lg:mb-12 lg:p-10">
+          <div className="mb-6 flex flex-col gap-2">
+            <span className="text-brand-red font-display text-xs font-bold tracking-[0.22em] uppercase md:text-sm">
+              Iscrizioni
+            </span>
+            <h2 className="font-display text-light-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase lg:text-3xl">
+              Vuoi partecipare al Summer Camp?
+            </h2>
+            <p className="text-light-ink-mid text-sm leading-relaxed lg:text-base">
+              Niente modulo online: per iscriverti contatta direttamente
+              la Segreteria del Settore Giovanile Scolastico. Ti diamo
+              tutte le informazioni su quote, modulo cartaceo e
+              materiale necessario.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a
+              href="tel:+393277793326"
+              className="border-light-border bg-light-bg-0 hover:border-brand-red hover:bg-light-bg-1 focus-visible:outline-brand-red flex flex-1 items-center gap-4 rounded-xl border p-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <Phone className="text-brand-red shrink-0" size={26} aria-hidden />
+              <span className="flex min-w-0 flex-col">
+                <span className="text-light-ink-low font-mono text-[10px] font-semibold tracking-[0.18em] uppercase">
+                  Telefono
+                </span>
+                <span className="font-display text-light-ink-hi text-lg leading-tight font-bold tracking-wide">
+                  +39 327 779 3326
+                </span>
+              </span>
+            </a>
+            <a
+              href="mailto:sgs@orbassanocalcio.com"
+              className="border-light-border bg-light-bg-0 hover:border-brand-red hover:bg-light-bg-1 focus-visible:outline-brand-red flex flex-1 items-center gap-4 rounded-xl border p-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <Mail className="text-brand-red shrink-0" size={26} aria-hidden />
+              <span className="flex min-w-0 flex-col">
+                <span className="text-light-ink-low font-mono text-[10px] font-semibold tracking-[0.18em] uppercase">
+                  Email Segreteria SGS
+                </span>
+                <span className="font-display text-light-ink-hi text-base leading-tight font-bold break-all sm:text-lg">
+                  sgs@orbassanocalcio.com
+                </span>
+              </span>
+            </a>
+          </div>
+        </div>
+
         {events.length === 0 ? (
           <div className="border-light-border bg-light-bg-1 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
             <CalendarCheck
