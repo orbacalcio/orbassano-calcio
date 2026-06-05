@@ -330,8 +330,8 @@ async function CategoryView({
                     Summer Camp
                   </h2>
                   <p className="text-ink-mid text-sm leading-relaxed">
-                    Due/tre settimane di calcio e divertimento da metà
-                    giugno. Scopri le date e scarica il modulo iscrizione.
+                    Due settimane di calcio e divertimento estivo.
+                    Scopri le date e iscriviti, i posti sono limitati.
                   </p>
                   <span className="text-brand-gold inline-flex items-center gap-2 text-xs font-semibold tracking-[0.1em] uppercase">
                     Vai al calendario
