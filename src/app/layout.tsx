@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Big_Shoulders, Geist_Mono, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildOrganizationLd, buildWebsiteLd } from "@/lib/json-ld";
 import "./globals.css";
@@ -124,6 +126,11 @@ export default function RootLayout({
         {children}
         <JsonLd data={buildOrganizationLd()} />
         <JsonLd data={buildWebsiteLd()} />
+        {/* Vercel Web Analytics + Speed Insights: first-party, no
+            cookie, GDPR-compliant. No consent banner richiesto.
+            Activazione dashboard Vercel (tab Analytics + Speed Insights). */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
