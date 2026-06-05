@@ -50,8 +50,8 @@ export default async function StoriaPage() {
               Trapattoni con Paolo Rossi, Bettega, Tardelli e Causio. Negli
               anni 2000, dopo la fusione con Venaria, il club vinse
               l&apos;Eccellenza 2002-03 e arriv&ograve; alle semifinali
-              playoff di Serie D nel 2005-06 (contro il Monopoli) e nel
-              2006-07 (contro il Casale). Tra il 2012 e il 2017 cinque
+              playoff di Serie D perse poi contro il Monopoli e il
+              Casale. Tra il 2012 e il 2017 cinque
               stagioni di sospensione segnarono la pausa pi&ugrave; difficile
               della storia; nel 2022, dopo nuove fusioni e cambi di
               denominazione, una nuova cordata
