@@ -110,6 +110,12 @@ export function MobileSponsorStripClient({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${s.name} (sponsor principale)`}
+                  // tabIndex=-1 perche' il <ul> parent ha aria-hidden=true
+                  // (marquee decorativo per AT, la lista accessibile vive
+                  // nel <ul className="sr-only"> sotto). Senza tabIndex
+                  // gli a sarebbero focusabili da Tab ma invisibili a
+                  // screen reader.
+                  tabIndex={-1}
                   className="block"
                 >
                   {logo}

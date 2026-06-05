@@ -15,6 +15,15 @@
   --color-brand-gold: #dfb16c;
   --color-brand-white: #fefdfd;
 
+  /* Brand red scurito (#c41e22) per testi su sfondi chiari (banda
+     light-bg-0 / news body): brand-red puro fa solo 4.07:1 di contrast,
+     sotto la soglia WCAG AA 4.5:1 per testo normale. Questo darker
+     hex risale a 5.32:1, mantenendo la lettura rossoblu del brand.
+     Usare brand-red-dark SOLO su sfondi chiari (link inline news,
+     CTA su isole chiare). Su navy / surface-* usare brand-red puro
+     (gia contrast >7). */
+  --color-brand-red-dark: #c41e22;
+
   /* Scala navy — sfondi e superfici (mai nero puro) */
   --color-surface-0: #0a1428;
   --color-surface-1: #0f1d38;

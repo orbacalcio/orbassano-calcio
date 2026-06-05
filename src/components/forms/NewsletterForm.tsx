@@ -73,11 +73,11 @@ export function NewsletterForm() {
           lungo a sinistra, bottone "Registrati ora" stretto a destra.
           Su mobile fa stack verticale. */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-        <label htmlFor="email" className="sr-only">
+        <label htmlFor="newsletter-email" className="sr-only">
           Indirizzo email
         </label>
         <input
-          id="email"
+          id="newsletter-email"
           name="email"
           type="email"
           required
@@ -91,7 +91,8 @@ export function NewsletterForm() {
         </div>
       </div>
       <CheckboxField
-        id="privacy"
+        id="newsletter-privacy"
+        name="privacy"
         label={
           <>
             Acconsento al trattamento dei miei dati per ricevere la

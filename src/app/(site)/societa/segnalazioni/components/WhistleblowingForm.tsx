@@ -223,14 +223,16 @@ export function WhistleblowingForm() {
         <div className={isAnonimo ? "pointer-events-none opacity-50" : ""}>
           <div className="grid gap-5 sm:grid-cols-2">
             <TextField
-              id="cognomeNome"
+              id="segnalazione-cognomeNome"
+              name="cognomeNome"
               label="Cognome e Nome"
               autoComplete="name"
               maxLength={200}
               disabled={isAnonimo}
             />
             <TextField
-              id="email"
+              id="segnalazione-email"
+              name="email"
               label="Email"
               type="email"
               autoComplete="email"
@@ -238,7 +240,8 @@ export function WhistleblowingForm() {
               disabled={isAnonimo}
             />
             <TextField
-              id="telefono"
+              id="segnalazione-telefono"
+              name="telefono"
               label="Telefono (opzionale)"
               type="tel"
               autoComplete="tel"

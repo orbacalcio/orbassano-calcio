@@ -43,19 +43,22 @@ const TOKENS: Record<Variant, Tokens> = {
     heading: "text-light-ink-hi",
     strong: "text-light-ink-hi",
     blockquote: "text-light-ink-hi",
-    // Colore rosso brand SEMPRE attivo (affordance primaria);
+    // Colore rosso brand-DARK SEMPRE attivo (affordance primaria);
     // underline SOLO al hover (estetica editoriale pulita).
-    // `!text-brand-red` con bang perche' altrimenti perdiamo contro
+    // Usiamo brand-red-dark (#c41e22, contrast 5.32:1) invece di
+    // brand-red puro (#e91f22, contrast 4.07:1 = WCAG AA FAIL su
+    // light-bg-0). Vedi audit a11y 2026-06-05.
+    // `!text-...` con bang perche' altrimenti perdiamo contro
     // `.text-light-ink-hi` di <strong> quando un link e' anche
-    // grassetto (ordine alfabetico nel CSS Tailwind: brand-red <
-    // light-ink-hi vince l'ultimo). [&_strong]:!text-brand-red
-    // propaga il rosso anche allo strong interno. font-semibold
-    // mantiene il peso bold tipico dei link news (titoli rassegna
-    // stampa) anche fuori dai mark <strong>.
-    // hover:decoration-brand-red + decoration-2 + offset[3px]
+    // grassetto (ordine alfabetico nel CSS Tailwind: brand-red-dark
+    // vs light-ink-hi). [&_strong]:!text-brand-red-dark propaga
+    // il colore anche allo strong interno. font-semibold mantiene
+    // il peso bold tipico dei link news (titoli rassegna stampa)
+    // anche fuori dai mark <strong>.
+    // hover:decoration-brand-red-dark + decoration-2 + offset[3px]
     // customizzano l'underline che il wrapper (cn) attiva al hover.
     link:
-      "!text-brand-red hover:!text-brand-red/80 [&_strong]:!text-brand-red font-semibold hover:decoration-brand-red hover:decoration-2 hover:underline-offset-[3px]",
+      "!text-brand-red-dark hover:!text-brand-red-dark/80 [&_strong]:!text-brand-red-dark font-semibold hover:decoration-brand-red-dark hover:decoration-2 hover:underline-offset-[3px]",
     linkDisabled: "text-light-ink-mid",
   },
 };

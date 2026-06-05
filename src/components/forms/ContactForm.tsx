@@ -81,14 +81,16 @@ export function ContactForm() {
       <FormStatusMessage status={status} />
       <div className="grid gap-5 sm:grid-cols-2">
         <TextField
-          id="name"
+          id="contact-name"
+          name="name"
           label="Nome e cognome"
           required
           autoComplete="name"
           maxLength={120}
         />
         <TextField
-          id="email"
+          id="contact-email"
+          name="email"
           label="Email"
           type="email"
           required
@@ -96,21 +98,24 @@ export function ContactForm() {
           maxLength={180}
         />
         <TextField
-          id="phone"
+          id="contact-phone"
+          name="phone"
           label="Telefono (opzionale)"
           type="tel"
           autoComplete="tel"
           maxLength={40}
         />
         <TextField
-          id="subject"
+          id="contact-subject"
+          name="subject"
           label="Oggetto"
           required
           maxLength={140}
         />
       </div>
       <TextareaField
-        id="message"
+        id="contact-message"
+        name="message"
         label="Messaggio"
         required
         rows={6}
@@ -118,7 +123,8 @@ export function ContactForm() {
         helperText="Massimo 2000 caratteri."
       />
       <CheckboxField
-        id="privacy"
+        id="contact-privacy"
+        name="privacy"
         label={
           <>
             Ho letto e accetto l&apos;

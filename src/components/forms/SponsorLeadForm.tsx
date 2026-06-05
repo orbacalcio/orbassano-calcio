@@ -88,28 +88,32 @@ export function SponsorLeadForm() {
       <FormStatusMessage status={status} />
       <div className="grid gap-5 sm:grid-cols-2">
         <TextField
-          id="company"
+          id="sponsor-company"
+          name="company"
           label="Azienda / ragione sociale"
           required
           autoComplete="organization"
           maxLength={140}
         />
         <TextField
-          id="contactName"
+          id="sponsor-contactName"
+          name="contactName"
           label="Nome e cognome referente"
           required
           autoComplete="name"
           maxLength={120}
         />
         <TextField
-          id="role"
+          id="sponsor-role"
+          name="role"
           label="Ruolo aziendale"
           autoComplete="organization-title"
           maxLength={120}
           placeholder="CEO, Marketing Manager, ecc."
         />
         <TextField
-          id="email"
+          id="sponsor-email"
+          name="email"
           label="Email"
           type="email"
           required
@@ -117,14 +121,16 @@ export function SponsorLeadForm() {
           maxLength={180}
         />
         <TextField
-          id="phone"
+          id="sponsor-phone"
+          name="phone"
           label="Telefono"
           type="tel"
           autoComplete="tel"
           maxLength={40}
         />
         <TextField
-          id="website"
+          id="sponsor-website"
+          name="website"
           label="Sito web aziendale (opzionale)"
           type="url"
           autoComplete="url"
@@ -134,13 +140,13 @@ export function SponsorLeadForm() {
       </div>
       <div className="flex flex-col gap-2">
         <label
-          htmlFor="packageType"
+          htmlFor="sponsor-packageType"
           className="text-ink-mid font-mono text-[11px] tracking-[0.15em] uppercase"
         >
           Pacchetto di interesse
         </label>
         <select
-          id="packageType"
+          id="sponsor-packageType"
           name="packageType"
           defaultValue=""
           className="border-border bg-surface-2 text-ink-hi focus:border-brand-gold focus:outline-none w-full rounded-xl border px-4 py-3 text-sm transition-colors"
@@ -156,7 +162,8 @@ export function SponsorLeadForm() {
         </select>
       </div>
       <TextareaField
-        id="message"
+        id="sponsor-message"
+        name="message"
         label="Raccontaci cosa hai in mente"
         required
         rows={6}
@@ -164,7 +171,8 @@ export function SponsorLeadForm() {
         helperText="Obiettivi, timing della campagna, audience che vuoi raggiungere. Più dettagli ci dai, più la proposta sarà mirata."
       />
       <CheckboxField
-        id="privacy"
+        id="sponsor-privacy"
+        name="privacy"
         label={
           <>
             Ho letto e accetto l&apos;

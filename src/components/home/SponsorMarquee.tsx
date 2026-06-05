@@ -127,6 +127,13 @@ export async function SponsorMarquee() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.name}
+                  // tabIndex=-1 perche' il <ul> parent ha aria-hidden=true
+                  // (il marquee e' decorativo per AT; la lista accessibile
+                  // pulita vive nel <ul className="sr-only"> sotto). Senza
+                  // tabIndex=-1 i link sarebbero focusabili da Tab ma
+                  // invisibili a screen reader: confusione totale. Restano
+                  // click-abili da mouse.
+                  tabIndex={-1}
                   className="block"
                 >
                   <SponsorLogo

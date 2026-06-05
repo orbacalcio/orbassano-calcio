@@ -10,6 +10,16 @@ import { cn } from "@/lib/cn";
  */
 type BaseProps = {
   id: string;
+  /**
+   * Nome del campo nella FormData. Default = id. Va valorizzato
+   * esplicitamente quando lo stesso campo (es. "email") appare in
+   * piu' form sulla stessa pagina (contact + newsletter + sponsor):
+   * gli id devono restare univoci per evitare collisioni HTML
+   * (label htmlFor → input id), ma il name sul lato server deve
+   * restare semplice ("email" per tutti) per coerenza con i parser
+   * server action.
+   */
+  name?: string;
   label: React.ReactNode;
   required?: boolean;
   helperText?: string;
@@ -27,6 +37,7 @@ const inputClass =
 
 export function TextField({
   id,
+  name,
   label,
   required,
   helperText,
@@ -43,7 +54,7 @@ export function TextField({
       </label>
       <input
         id={id}
-        name={id}
+        name={name ?? id}
         type={type}
         required={required}
         aria-invalid={Boolean(error)}
@@ -66,6 +77,7 @@ export function TextField({
 
 export function TextareaField({
   id,
+  name,
   label,
   required,
   helperText,
@@ -82,7 +94,7 @@ export function TextareaField({
       </label>
       <textarea
         id={id}
-        name={id}
+        name={name ?? id}
         required={required}
         rows={rows}
         aria-invalid={Boolean(error)}
@@ -110,6 +122,7 @@ export function TextareaField({
  */
 export function RadioField({
   id,
+  name,
   label,
   required,
   helperText,
@@ -121,6 +134,7 @@ export function RadioField({
   options: ReadonlyArray<{ value: string; label: string }>;
   defaultValue?: string;
 }) {
+  const fieldName = name ?? id;
   return (
     <fieldset
       className={cn("flex flex-col gap-2", className)}
@@ -139,7 +153,7 @@ export function RadioField({
           >
             <input
               type="radio"
-              name={id}
+              name={fieldName}
               value={opt.value}
               required={required}
               defaultChecked={defaultValue === opt.value}
@@ -167,6 +181,7 @@ export function RadioField({
  */
 export function MultiCheckboxField({
   id,
+  name,
   label,
   required,
   helperText,
@@ -176,6 +191,7 @@ export function MultiCheckboxField({
 }: BaseProps & {
   options: ReadonlyArray<{ value: string; label: string }>;
 }) {
+  const fieldName = name ?? id;
   return (
     <fieldset
       className={cn("flex flex-col gap-2", className)}
@@ -194,7 +210,7 @@ export function MultiCheckboxField({
           >
             <input
               type="checkbox"
-              name={id}
+              name={fieldName}
               value={opt.value}
               className="border-border bg-surface-2 accent-brand-gold mt-1 h-4 w-4 shrink-0 rounded border"
             />
@@ -215,6 +231,7 @@ export function MultiCheckboxField({
 
 export function CheckboxField({
   id,
+  name,
   label,
   required,
   helperText,
@@ -231,7 +248,7 @@ export function CheckboxField({
       >
         <input
           id={id}
-          name={id}
+          name={name ?? id}
           type="checkbox"
           required={required}
           aria-invalid={Boolean(error)}
