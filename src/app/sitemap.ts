@@ -37,8 +37,11 @@ const STATIC_ROUTES: Array<{
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/news", changeFrequency: "weekly", priority: 0.9 },
   { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
-  // /squadre hub rimossa 2026-05-17 (pattern juventus.com: niente
-  // landing generica). Esiste ancora come URL ma non indicizzata.
+  // /squadre hub reintrodotta 2026-06-05 dopo audit pre-go-live: il
+  // drawer ora espone "Panoramica" → /squadre, quindi la pagina e'
+  // navigation-promoted e merita coerenza nei segnali SEO
+  // (indicizzabile + nel sitemap). Vedi NavigationDrawer.tsx commenti.
+  { path: "/squadre", changeFrequency: "weekly", priority: 0.8 },
   // /squadre/settore-giovanile e' una vista categoria (hub SGS con
   // 4 card U14-U17 + Open Days/Tornei + modulo iscrizione), non
   // mappata da teamSlugs (non corrisponde a uno slug team).
@@ -48,9 +51,10 @@ const STATIC_ROUTES: Array<{
   // sono ESCLUSE dal calendarEntries dinamico sotto (richiesta utente
   // 2026-05-17: il calendario SG vive solo sulla pagina aggregata).
   { path: "/squadre/settore-giovanile/calendario", changeFrequency: "weekly", priority: 0.7 },
-  // /calendario esiste ma rimossa dal sitemap 2026-05-17 (richiesta
-  // utente): hub aggregato non utile, gli accordion drawer linkano
-  // direttamente ai calendari per categoria.
+  // /calendario hub reintrodotta 2026-06-05 (stesso ragionamento di
+  // /squadre: ora linkata da drawer "Panoramica" sotto Calendario,
+  // merita coerenza SEO).
+  { path: "/calendario", changeFrequency: "weekly", priority: 0.7 },
   { path: "/settore-giovanile/summer-camp", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tornei", changeFrequency: "monthly", priority: 0.6 },
   // Hub archivio stagioni passate. Sezione di puro discovery: le pagine
@@ -58,8 +62,9 @@ const STATIC_ROUTES: Array<{
   // da calendarEntries dinamico sotto (la query string non ha bisogno
   // di entry sitemap dedicate).
   { path: "/archivio", changeFrequency: "monthly", priority: 0.5 },
-  // /societa hub rimossa 2026-05-17 stesso pattern di /squadre.
-  // Le sotto-pagine /societa/storia, /organigramma, etc. restano qui.
+  // /societa hub reintrodotta 2026-06-05 (stesso pattern di /squadre
+  // e /calendario: drawer "Panoramica" → /societa, coerenza SEO).
+  { path: "/societa", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/storia", changeFrequency: "monthly", priority: 0.7 },
   { path: "/societa/organigramma", changeFrequency: "monthly", priority: 0.6 },
   { path: "/societa/impianti", changeFrequency: "monthly", priority: 0.6 },

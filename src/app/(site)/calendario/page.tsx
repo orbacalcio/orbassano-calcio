@@ -11,10 +11,10 @@ export const metadata: Metadata = {
   title: "Calendari",
   description:
     "Tutti i calendari di ASD Orbassano Calcio: Prima Squadra, Juniores e Settore Giovanile (U14-U17). Scegli la squadra e accedi al calendario completo con tutte le partite di campionato e amichevoli.",
-  // Hub navigabile dal menu drawer ma esclusa dal sitemap (decisione
-  // 2026-05-17). noindex+follow: Google segue i link verso i calendari
-  // per squadra ma non indicizza questa overview generica.
-  robots: { index: false, follow: true },
+  // Reintrodotta come hub indicizzabile 2026-06-05: il drawer ora
+  // espone "Panoramica" → /calendario come primo child del menu
+  // Calendario, quindi la pagina e' navigation-promoted e merita
+  // coerenza nei segnali SEO (indicizzabile + nel sitemap).
 };
 
 /**
@@ -44,6 +44,7 @@ type CalendarioPageSettings = {
   calendarioPageTitle?: string | null;
   calendarioPageSubtitle?: string | null;
   calendarioPageSections?: CalendarioPageSection[] | null;
+  currentSeason?: string | null;
 };
 
 const FALLBACK_HEADER = {
@@ -150,6 +151,50 @@ export default async function CalendarioPage() {
           </div>
         </Container>
       </header>
+
+      {/* Striscia statistiche su navy chiaro per spezzare hero scuro
+          dal banda chiara. Coerente con /squadre. */}
+      <section
+        aria-label="Numeri del calendario"
+        className="bg-surface-1 border-border/40 border-y"
+      >
+        <Container className="py-10 lg:py-14" size="wide">
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+            <li className="flex flex-col items-center text-center">
+              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
+                {settings.currentSeason ?? "2026/2027"}
+              </span>
+              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
+                Stagione corrente
+              </span>
+            </li>
+            <li className="flex flex-col items-center text-center">
+              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
+                3
+              </span>
+              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
+                Categorie
+              </span>
+            </li>
+            <li className="flex flex-col items-center text-center">
+              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
+                6
+              </span>
+              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
+                Squadre
+              </span>
+            </li>
+            <li className="flex flex-col items-center text-center">
+              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
+                155+
+              </span>
+              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
+                Partite all&apos;anno
+              </span>
+            </li>
+          </ul>
+        </Container>
+      </section>
 
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">

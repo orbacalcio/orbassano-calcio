@@ -42,11 +42,17 @@ function buildSections(opts: {
 
   // /squadre/settore-giovanile è una vista categoria, non una squadra
   // singola: mostrato sempre se almeno una squadra del settore è attiva.
-  // NB: voce "Tutte le squadre" → /squadre rimossa 2026-05-17 (pattern
-  // juventus.com: il menu navega direttamente alla squadra, niente
-  // landing page hub generica). La pagina /squadre esiste ancora come
-  // URL diretto ma non e' linkata dal menu/sitemap/mappa.
-  const teamsChildren: DrawerSection["children"] = [];
+  // NB: voce "Panoramica" → /squadre reintrodotta 2026-06-05 dopo audit
+  // pre-go-live: senza Panoramica la parent label "Squadre" diventa
+  // solo toggle accordion (vedi rendering drawer: isAccordion =
+  // children.length > 1), rendendo la pagina hub irraggiungibile dal
+  // menu. Pattern split (children + Panoramica come primo item) e' la
+  // soluzione UX standard quando la pagina hub esiste e merita
+  // navigazione diretta. Coerente: /squadre torna indicizzabile e
+  // nel sitemap (decisione 2026-06-05).
+  const teamsChildren: DrawerSection["children"] = [
+    { href: "/squadre", label: "Panoramica" },
+  ];
   if (teamSlugs.has("prima-squadra")) {
     teamsChildren.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
   }
@@ -70,13 +76,16 @@ function buildSections(opts: {
   // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
   // sono di fatto eventi a calendario, non sezioni squadre.
 
-  // Accordion Calendario: sub-link per categoria. "Tutti i calendari"
-  // (pagina hub /calendario) e' stata rimossa 2026-05-17 su richiesta
-  // utente — la pagina /calendario esiste ancora come URL diretto ma
-  // non e' piu' linkata da nessuna parte. Sub-link puntano direttamente
-  // al calendario della categoria; in coda Archivio + eventi
-  // extra-campionato (Tornei, Open Days) — vedi ordine sotto.
-  const calendarioChildren: DrawerSection["children"] = [];
+  // Accordion Calendario: sub-link per categoria. "Panoramica"
+  // → /calendario reintrodotta 2026-06-05 dopo audit pre-go-live
+  // (stesso motivo di /squadre: senza il primo item la parent label
+  // resta solo toggle accordion, pagina hub irraggiungibile da
+  // menu). Sub-link puntano direttamente al calendario della
+  // categoria; in coda Archivio + eventi extra-campionato (Tornei,
+  // Summer Camp) — vedi ordine sotto.
+  const calendarioChildren: DrawerSection["children"] = [
+    { href: "/calendario", label: "Panoramica" },
+  ];
   if (teamSlugs.has("prima-squadra")) {
     calendarioChildren.push({
       href: "/squadre/prima-squadra/calendario",
@@ -146,13 +155,13 @@ function buildSections(opts: {
     {
       href: "/societa",
       label: "Società",
-      // Voce "Panoramica" → /societa rimossa 2026-05-17 (pattern
-      // juventus.com: niente landing hub, naviga direttamente alle
-      // sotto-pagine). /societa esiste ancora come URL diretto ma
-      // non e' linkata dal menu/sitemap/mappa.
-      // Codice Etico + Segnalazioni mostrati solo se governance flag
-      // attivo (vedi src/lib/features.ts).
+      // Voce "Panoramica" → /societa reintrodotta 2026-06-05 dopo
+      // audit pre-go-live (vedi /squadre + /calendario sopra). La
+      // pagina hub /societa torna indicizzabile e nel sitemap. Codice
+      // Etico + Segnalazioni mostrati solo se governance flag attivo
+      // (vedi src/lib/features.ts).
       children: [
+        { href: "/societa", label: "Panoramica" },
         { href: "/societa/storia", label: "Storia" },
         { href: "/societa/organigramma", label: "Organigramma" },
         { href: "/societa/impianti", label: "Impianti sportivi" },

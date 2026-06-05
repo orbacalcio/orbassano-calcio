@@ -11,11 +11,10 @@ export const metadata: Metadata = {
   title: "Società",
   description:
     "ASD Orbassano Calcio dal 1930: storia, organigramma, impianti sportivi e informazioni di biglietteria.",
-  // Hub navigabile dal menu drawer ma esclusa dal sitemap (decisione
-  // 2026-05-17). noindex+follow per coerenza SEO con sitemap, Google
-  // segue i link interni alle sotto-pagine (storia, organigramma,
-  // impianti, biglietteria) ma non indicizza questa overview.
-  robots: { index: false, follow: true },
+  // Reintrodotta come hub indicizzabile 2026-06-05: il drawer ora
+  // espone "Panoramica" → /societa come primo child del menu Societa,
+  // quindi la pagina e' navigation-promoted e merita coerenza nei
+  // segnali SEO (indicizzabile + nel sitemap).
 };
 
 const BASE_HUB_CARDS = [
@@ -103,6 +102,14 @@ export default function SocietaPage() {
         </Container>
       </header>
 
+      {/* StoryNumbers spostato SUBITO sotto hero (era in fondo prima
+          del 2026-06-05): da' wow factor immediato alla landing
+          /societa, parallelo al pattern adottato su /squadre con la
+          stat strip dorata. */}
+      <RevealOnScroll>
+        <StoryNumbers />
+      </RevealOnScroll>
+
       {/* Hub card su banda chiara: card scure (SocietaHubCard) interne.
           Grid lg-3 colonne — stesso pattern di TeamsCards in homepage,
           rows da 3. Con flag governance attivo, 6 card = 2 righe piene.
@@ -118,10 +125,6 @@ export default function SocietaPage() {
           </RevealOnScroll>
         </Container>
       </section>
-
-      <RevealOnScroll>
-        <StoryNumbers />
-      </RevealOnScroll>
     </>
   );
 }
