@@ -357,7 +357,7 @@ async function CategoryView({
                   </h2>
                   <p className="text-ink-mid text-sm leading-relaxed">
                     Memorial, triangolari, manifestazioni: tutte le
-                    date dei tornei a cui partecipa il Settore Giovanile.
+                    date dei tornei a cui partecipano i nostri ragazzi.
                   </p>
                   <span className="text-brand-gold inline-flex items-center gap-2 text-xs font-semibold tracking-[0.1em] uppercase">
                     Vai al calendario
