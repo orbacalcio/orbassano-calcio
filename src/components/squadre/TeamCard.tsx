@@ -8,7 +8,6 @@ type Props = { team: TeamSummary };
 export function TeamCard({ team }: Props) {
   const subtitle =
     team.subcategory && team.subcategory !== team.name ? team.subcategory : null;
-  const showCount = team.playerCount > 0;
   return (
     <Link
       href={`/squadre/${team.slug}`}
@@ -42,21 +41,16 @@ export function TeamCard({ team }: Props) {
         />
       </div>
       <div className="flex flex-col gap-2 p-6">
-        <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
-          {team.name}
-        </h3>
-        {subtitle && <span className="text-ink-mid text-sm">{subtitle}</span>}
-        <div className="text-ink-low mt-2 flex items-center justify-between text-xs">
-          <span className="font-mono tracking-wide">
-            {showCount
-              ? `${team.playerCount} atleti`
-              : (team.season ?? "—")}
-          </span>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.01em] uppercase">
+            {team.name}
+          </h3>
           <ArrowUpRight
             size={16}
-            className="text-brand-gold opacity-0 transition-opacity group-hover:opacity-100"
+            className="text-brand-gold mt-1 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
           />
         </div>
+        {subtitle && <span className="text-ink-mid text-sm">{subtitle}</span>}
       </div>
     </Link>
   );
