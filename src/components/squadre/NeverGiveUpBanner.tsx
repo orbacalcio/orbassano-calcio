@@ -31,7 +31,7 @@ export function NeverGiveUpBanner() {
   return (
     <section
       aria-label="Lo spirito Orbassano"
-      className="bg-surface-0 border-border/40 relative overflow-hidden border-y py-14 sm:py-20 lg:py-28"
+      className="bg-surface-0 relative overflow-hidden py-14 sm:py-20 lg:py-28"
     >
       <Container size="wide" className="flex flex-col items-center text-center">
         <motion.p

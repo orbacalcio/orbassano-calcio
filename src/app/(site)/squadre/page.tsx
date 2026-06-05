@@ -105,7 +105,7 @@ export default async function SquadrePage() {
 
   return (
     <>
-      <header className="border-border/50 relative overflow-hidden border-b">
+      <header className="bg-surface-0 relative overflow-hidden">
         <div
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
