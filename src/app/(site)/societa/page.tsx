@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "Società",
   description:
     "ASD Orbassano Calcio dal 1930: storia, organigramma, impianti sportivi e informazioni di biglietteria.",
+  // Hub navigabile dal menu drawer ma esclusa dal sitemap (decisione
+  // 2026-05-17). noindex+follow per coerenza SEO con sitemap, Google
+  // segue i link interni alle sotto-pagine (storia, organigramma,
+  // impianti, biglietteria) ma non indicizza questa overview.
+  robots: { index: false, follow: true },
 };
 
 const BASE_HUB_CARDS = [

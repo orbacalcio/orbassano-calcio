@@ -236,7 +236,30 @@ export default async function TeamOrCategoryPage({
   // vive ora su /squadre/prima-squadra/rosa.
   if (slug === "prima-squadra") {
     const hub = await fetchPrimaSquadraHub();
-    return <PrimaSquadraHub {...hub} />;
+    // SportsTeam + BreadcrumbList JSON-LD: la Prima Squadra e' la
+    // landing piu' importante della sezione team. Senza questi schema
+    // Google non puo' associare la pagina al team Orbassano in search
+    // results, e SportsEvent del calendario referenzia un @id mai
+    // emesso (rompendo il grafo).
+    return (
+      <>
+        <JsonLd
+          data={buildSportsTeamLd({
+            slug: "prima-squadra",
+            name: "Prima Squadra A.S.D. Orbassano Calcio",
+            season: "2026/2027",
+            league: "Prima Categoria Piemonte VdA",
+          })}
+        />
+        <JsonLd
+          data={buildBreadcrumbLd([
+            { name: "Home", url: "/" },
+            { name: "Prima Squadra", url: "/squadre/prima-squadra" },
+          ])}
+        />
+        <PrimaSquadraHub {...hub} />
+      </>
+    );
   }
 
   const team = await fetchTeamBySlug(slug);

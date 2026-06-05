@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: "Squadre",
   description:
     "Le squadre di ASD Orbassano Calcio: Prima Squadra (Prima Categoria), Juniores Under 19 e Settore Giovanile (U17, U16, U15, U14).",
+  // Hub navigabile dal menu drawer ma volutamente esclusa dal sitemap
+  // (decisione 2026-05-17, pattern juventus.com). noindex+follow per
+  // evitare segnali SEO incoerenti: Google segue i link interni alle
+  // squadre individuali ma non indicizza questa hub generica.
+  robots: { index: false, follow: true },
 };
 
 // Le 3 macro-categorie federali del club. La query teamsListQuery

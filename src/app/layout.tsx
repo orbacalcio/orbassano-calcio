@@ -63,10 +63,15 @@ export const metadata: Metadata = {
   // sovrascrivono → ogni pagina dichiarerebbe canonical = homepage
   // (duplicate content per Google). Ogni page.tsx setta il proprio
   // canonical esplicito (relativo, risolto via metadataBase).
+  // NB: niente `openGraph.url` qui. Stesso ragionamento del canonical
+  // sopra: un `url` ereditato dal root layout farebbe sì che ogni share
+  // (WhatsApp, Facebook, Threads, LinkedIn, Telegram) di una pagina
+  // figlia trasmetta come og:url la homepage invece dell'URL effettivo
+  // della pagina, mandando il click sempre alla home. Senza default,
+  // Next.js usa automaticamente il canonical della pagina.
   openGraph: {
     type: "website",
     locale: "it_IT",
-    url: "https://www.orbassanocalcio.com",
     siteName: "ASD Orbassano Calcio",
     title: "ASD Orbassano Calcio — Dal 1930 il calcio di Orbassano",
     description:

@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: "Calendari",
   description:
     "Tutti i calendari di ASD Orbassano Calcio: Prima Squadra, Juniores e Settore Giovanile (U14-U17). Scegli la squadra e accedi al calendario completo con tutte le partite di campionato e amichevoli.",
+  // Hub navigabile dal menu drawer ma esclusa dal sitemap (decisione
+  // 2026-05-17). noindex+follow: Google segue i link verso i calendari
+  // per squadra ma non indicizza questa overview generica.
+  robots: { index: false, follow: true },
 };
 
 /**
