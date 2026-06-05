@@ -95,27 +95,27 @@ export function PalmaresList() {
       </header>
 
       <div className="relative mt-10 grid gap-12 lg:grid-cols-2">
-        <div className="flex flex-col gap-5">
-          <span className="text-ink-mid font-mono text-xs tracking-[0.15em] uppercase">
+        <div className="flex flex-col gap-6">
+          <span className="text-ink-mid font-mono text-sm tracking-[0.18em] uppercase">
             Trofei vinti
           </span>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-5">
             {TITLES.map((t) => (
               <li
                 key={t.competition}
-                className="border-border/50 flex flex-col gap-1 border-l-2 pl-4"
+                className="border-border/50 flex flex-col gap-1.5 border-l-2 pl-5"
               >
                 <div className="flex items-baseline gap-2">
                   {t.count && (
-                    <span className="font-display text-brand-gold text-2xl leading-none font-black tracking-[0.005em]">
+                    <span className="font-display text-brand-gold text-3xl leading-none font-black tracking-[0.005em] lg:text-4xl">
                       {t.count}×
                     </span>
                   )}
-                  <span className="font-display text-ink-hi text-base leading-tight font-bold tracking-[0.005em] uppercase">
+                  <span className="font-display text-ink-hi text-lg leading-tight font-bold tracking-[0.005em] uppercase lg:text-xl">
                     {t.competition}
                   </span>
                 </div>
-                <span className="text-ink-mid font-mono text-xs tracking-wide">
+                <span className="text-ink-mid font-mono text-sm tracking-wide">
                   {t.details}
                 </span>
               </li>
@@ -123,20 +123,20 @@ export function PalmaresList() {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-5">
-          <span className="text-ink-mid font-mono text-xs tracking-[0.15em] uppercase">
+        <div className="flex flex-col gap-6">
+          <span className="text-ink-mid font-mono text-sm tracking-[0.18em] uppercase">
             Piazzamenti notevoli
           </span>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-5">
             {PLACEMENTS.map((p) => (
               <li
                 key={p.competition}
-                className="border-border/40 flex flex-col gap-1 border-l-2 pl-4"
+                className="border-border/40 flex flex-col gap-1.5 border-l-2 pl-5"
               >
-                <span className="font-display text-ink-hi text-base leading-tight font-bold tracking-[0.005em] uppercase">
+                <span className="font-display text-ink-hi text-lg leading-tight font-bold tracking-[0.005em] uppercase lg:text-xl">
                   {p.competition}
                 </span>
-                <span className="text-ink-mid font-mono text-xs tracking-wide">
+                <span className="text-ink-mid font-mono text-sm tracking-wide">
                   {p.details}
                 </span>
               </li>
