@@ -56,8 +56,6 @@ export function NeverGiveUpBanner() {
           }}
         >
           Never give up
-          <br />
-          Since 1930
         </motion.p>
       </Container>
     </section>
