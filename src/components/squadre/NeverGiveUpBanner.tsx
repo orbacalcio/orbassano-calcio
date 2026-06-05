@@ -31,27 +31,8 @@ export function NeverGiveUpBanner() {
   return (
     <section
       aria-label="Lo spirito Orbassano"
-      className="bg-surface-0 relative overflow-hidden py-14 sm:py-20 lg:py-28"
+      className="bg-surface-0 relative py-14 sm:py-20 lg:py-28"
     >
-      {/* Aurora gradient lineare verticale per continuita' col blob
-          del hero: parte da un blu tenue al top (matching il fade
-          del blob hero che svanisce al suo bottom) e va a surface-0
-          puro al middle. Sostituisce un secondo blob che creava
-          un edge "centro forte" sul boundary fra hero e banner.
-          Mask radiale orizzontale per concentrare al centro
-          (mimando il blob centrato del hero, non una banda piena). */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-64 sm:h-80"
-        style={{
-          backgroundImage:
-            "linear-gradient(to bottom, rgba(33,63,140,0.22) 0%, rgba(33,63,140,0) 100%)",
-          maskImage:
-            "radial-gradient(ellipse 65% 100% at center top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 65% 100% at center top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 75%)",
-        }}
-      />
       <Container size="wide" className="relative flex flex-col items-center text-center">
         <motion.p
           ref={titleRef}
