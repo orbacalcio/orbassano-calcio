@@ -6,10 +6,10 @@ import { Container } from "@/components/ui/Container";
 import { useFirstScrollDownReveal } from "@/lib/use-first-scroll-down-reveal";
 
 /**
- * Banner "NEVER GIVE UP / SINCE 1930" con strisce rossoblu' come fill
- * del testo + hover wow effect. Variante navy del Manifesto home
- * pensata come stacco tra hero scuro e bande chiare delle hub
- * (/squadre, /societa, /calendario).
+ * Banner "NEVER GIVE UP" con strisce rossoblu' come fill del testo +
+ * hover wow effect. Variante navy del Manifesto home pensata come
+ * stacco tra hero scuro e bande chiare delle hub
+ * (/squadre, /calendario, in futuro altre).
  *
  * Tecnica:
  * - `repeating-linear-gradient` rossoblu' applicato come background
@@ -21,8 +21,8 @@ import { useFirstScrollDownReveal } from "@/lib/use-first-scroll-down-reveal";
  * - Hover: loop infinito strisce + scale 1.02 + drop-shadow oro,
  *   CSS keyframe `manifesto-stripes-loop` in globals.css.
  *
- * Sfondo: bg-surface-0 (continuazione hero) con border-y per
- * separazione dal banda chiara delle card sotto.
+ * Sfondo: bg-surface-0 con blob blu al top per continuita' con
+ * l'aurora del hero della pagina che lo precede.
  */
 export function NeverGiveUpBanner() {
   const reduced = useReducedMotion();
@@ -31,8 +31,19 @@ export function NeverGiveUpBanner() {
   return (
     <section
       aria-label="Lo spirito Orbassano"
-      className="bg-surface-0 relative py-14 sm:py-20 lg:py-28"
+      className="bg-surface-0 relative overflow-hidden py-14 sm:py-20 lg:py-28"
     >
+      {/* Blob radiale blu identico a quello del hero,
+          posizionato al TOP del banner per estendere visivamente
+          l'aurora del hero dentro al banner: niente "edge" visibile
+          tra le due sezioni, transizione fluida. Mirror-image del
+          blob hero per simmetria, posizionato al bottom (-translate
+          y-1/2 sotto top-0 = blob centrato leggermente sopra il top
+          del banner). */}
+      <div
+        aria-hidden
+        className="bg-brand-blue/15 pointer-events-none absolute top-0 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
+      />
       <Container size="wide" className="relative flex flex-col items-center text-center">
         <motion.p
           ref={titleRef}

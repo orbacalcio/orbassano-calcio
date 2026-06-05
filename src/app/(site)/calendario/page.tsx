@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SocietaHubCard } from "@/components/societa/SocietaHubCard";
+import { NeverGiveUpBanner } from "@/components/squadre/NeverGiveUpBanner";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
@@ -131,7 +132,7 @@ export default async function CalendarioPage() {
 
   return (
     <>
-      <header className="border-border/50 relative overflow-hidden border-b">
+      <header className="bg-surface-0 relative overflow-hidden">
         <div
           aria-hidden
           className="bg-brand-blue/15 pointer-events-none absolute top-1/2 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
@@ -152,49 +153,10 @@ export default async function CalendarioPage() {
         </Container>
       </header>
 
-      {/* Striscia statistiche su navy chiaro per spezzare hero scuro
-          dal banda chiara. Coerente con /squadre. */}
-      <section
-        aria-label="Numeri del calendario"
-        className="bg-surface-1 border-border/40 border-y"
-      >
-        <Container className="py-10 lg:py-14" size="wide">
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
-            <li className="flex flex-col items-center text-center">
-              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
-                {settings.currentSeason ?? "2026/2027"}
-              </span>
-              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
-                Stagione corrente
-              </span>
-            </li>
-            <li className="flex flex-col items-center text-center">
-              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
-                3
-              </span>
-              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
-                Categorie
-              </span>
-            </li>
-            <li className="flex flex-col items-center text-center">
-              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
-                6
-              </span>
-              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
-                Squadre
-              </span>
-            </li>
-            <li className="flex flex-col items-center text-center">
-              <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
-                155+
-              </span>
-              <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
-                Partite all&apos;anno
-              </span>
-            </li>
-          </ul>
-        </Container>
-      </section>
+      {/* Banner "Never Give Up" — stesso pattern di /squadre: blob
+          blu al top per continuita con l'aurora del hero, strisce
+          rossoblu sul testo + hover effect. */}
+      <NeverGiveUpBanner />
 
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
