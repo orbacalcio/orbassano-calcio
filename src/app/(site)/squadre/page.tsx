@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NeverGiveUpBanner } from "@/components/squadre/NeverGiveUpBanner";
 import { TeamCard } from "@/components/squadre/TeamCard";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
@@ -102,20 +103,6 @@ export default async function SquadrePage() {
     };
   });
 
-  // Statistiche derivate dai team attivi caricati: una fotografia
-  // istantanea del club che da' carattere alla hub /squadre senza
-  // essere un valore CMS-driven (i numeri cambiano poco, sempre veri).
-  const totalPlayers = teams.reduce((acc, t) => acc + (t.playerCount ?? 0), 0);
-  const stats: Array<{ value: string; label: string }> = [
-    { value: "1930", label: "Dal" },
-    { value: String(teams.length), label: teams.length === 1 ? "Squadra" : "Squadre" },
-    {
-      value: String(totalPlayers),
-      label: totalPlayers === 1 ? "Atleta tesserato" : "Atleti tesserati",
-    },
-    { value: "9", label: "Stagioni in Serie D" },
-  ];
-
   return (
     <>
       <header className="border-border/50 relative overflow-hidden border-b">
@@ -141,33 +128,11 @@ export default async function SquadrePage() {
         </Container>
       </header>
 
-      {/* Striscia statistiche su navy piu' chiaro per spezzare
-          visivamente l'hero scuro dal banda chiara delle squadre.
-          Stessa logica della home StoryNumbersGrid ma compatta
-          (4 numeri grid 2x2 mobile, 4 col desktop) e con tone
-          dorato sui numeri per coerenza brand. */}
-      <section
-        aria-label="Numeri del club"
-        className="bg-surface-1 border-border/40 border-y"
-      >
-        <Container className="py-10 lg:py-14" size="wide">
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <li
-                key={stat.label}
-                className="flex flex-col items-center text-center"
-              >
-                <span className="font-display text-brand-gold text-5xl leading-none font-black tracking-[0.005em] md:text-6xl lg:text-7xl">
-                  {stat.value}
-                </span>
-                <span className="text-ink-mid font-mono text-[11px] font-semibold tracking-[0.2em] uppercase mt-3 md:text-xs">
-                  {stat.label}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
+      {/* Banner "NEVER GIVE UP / SINCE 1930" con strisce rossoblu'
+          sul testo (variante navy del Manifesto home). Spezza
+          visivamente hero scuro dal banda chiara delle squadre,
+          conferma identita brand prima della navigazione alle squadre. */}
+      <NeverGiveUpBanner />
 
       {/* Banda chiara con sezioni Section tone="light": titoli navy,
           card squadre interne scure (bg-surface-1) — pattern home. */}
