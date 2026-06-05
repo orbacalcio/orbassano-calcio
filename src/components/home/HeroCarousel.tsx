@@ -347,12 +347,14 @@ export function HeroCarousel({
       </div>
 
       {/* Indicatori slide (pallini) — tappabili, hit-area 44px (h-11).
-          Solo con piu' di una slide e SOLO su mobile/tablet (lg:hidden):
-          su desktop l'hero e' art-directed e bastano autoplay +
-          hover-pausa. Su touch sono l'unico modo per capire che ci
-          sono piu' slide e saltare a una. */}
+          Visibili su tutti i breakpoint (richiesta utente 2026-06-05):
+          su desktop fanno capire al volo che l'hero ha piu' slide e
+          permettono di saltare manualmente, su mobile sono l'unico
+          modo dato che hover non e' disponibile.
+          Stile pill: pallino bianco solido inattivo, pillola oro
+          larga attiva (pattern juventus.com / serie A). */}
       {slides.length > 1 && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1 md:bottom-6 lg:hidden">
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1.5 md:bottom-6 lg:bottom-8">
           {slides.map((s, i) => {
             const isActive = i === index;
             return (
@@ -367,8 +369,8 @@ export function HeroCarousel({
                 <span
                   aria-hidden
                   className={cn(
-                    "block h-1.5 rounded-full transition-all duration-300",
-                    isActive ? "bg-brand-gold w-6" : "bg-ink-hi/40 w-1.5",
+                    "block h-1.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.5)] transition-all duration-300",
+                    isActive ? "bg-brand-gold w-7" : "bg-brand-white w-1.5",
                   )}
                 />
               </button>
