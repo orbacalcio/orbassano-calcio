@@ -30,6 +30,7 @@ type Payload = {
   subject?: unknown;
   message?: unknown;
   privacy?: unknown;
+  _honeypot?: unknown;
 };
 
 export async function POST(req: NextRequest) {
@@ -57,6 +58,14 @@ export async function POST(req: NextRequest) {
       { ok: false, error: "Payload JSON non valido." },
       { status: 400 },
     );
+  }
+
+  // Honeypot anti-bot: campo invisibile lato form. Se valorizzato,
+  // e' quasi certamente un bot scraper che compila ogni input. Diamo
+  // 200 OK fake (l'attaccante non capisce di essere bloccato → non
+  // ritenta). NESSUN log spam: il rate-limit IP-based prende quello.
+  if (typeof body._honeypot === "string" && body._honeypot.length > 0) {
+    return NextResponse.json({ ok: true });
   }
 
   const name = trimToMax(String(body.name ?? ""), 120);

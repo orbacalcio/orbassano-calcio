@@ -23,6 +23,7 @@ export function NewsletterForm() {
       firstName: "",
       email: String(formData.get("email") ?? ""),
       privacy: formData.get("privacy") === "on",
+      _honeypot: String(formData.get("_honeypot") ?? ""),
     };
 
     if (!payload.privacy) {
@@ -109,6 +110,18 @@ export function NewsletterForm() {
           </>
         }
         required
+      />
+
+      {/* Honeypot anti-bot: input nascosto fuori viewport, riempito
+          solo da bot scrapers. La API route /api/newsletter verifica
+          _honeypot e blocca silenziosamente (200 OK fake) se valorizzato. */}
+      <input
+        type="text"
+        name="_honeypot"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
     </form>
   );

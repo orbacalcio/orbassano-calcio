@@ -41,6 +41,7 @@ export function SponsorLeadForm() {
       packageType: String(formData.get("packageType") ?? ""),
       message: String(formData.get("message") ?? ""),
       privacy: formData.get("privacy") === "on",
+      _honeypot: String(formData.get("_honeypot") ?? ""),
     };
 
     if (!payload.privacy) {
@@ -190,6 +191,17 @@ export function SponsorLeadForm() {
         }
         required
       />
+
+      {/* Honeypot anti-bot: vedi commento ContactForm. */}
+      <input
+        type="text"
+        name="_honeypot"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+
       <SubmitButton label="Invia richiesta" />
     </form>
   );

@@ -34,6 +34,7 @@ export function ContactForm() {
       subject: String(formData.get("subject") ?? ""),
       message: String(formData.get("message") ?? ""),
       privacy: formData.get("privacy") === "on",
+      _honeypot: String(formData.get("_honeypot") ?? ""),
     };
 
     if (!payload.privacy) {
@@ -141,6 +142,21 @@ export function ContactForm() {
         }
         required
       />
+
+      {/* Honeypot anti-bot: input nascosto fuori viewport. Gli umani
+          non lo vedono (e non possono compilarlo via tastiera, vedi
+          tabIndex={-1} + aria-hidden). I bot generici riempiono ogni
+          input visibile via DOM scraping → se _honeypot arriva
+          valorizzato server-side, blocca silenziosamente. */}
+      <input
+        type="text"
+        name="_honeypot"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+
       <SubmitButton label="Invia messaggio" />
     </form>
   );

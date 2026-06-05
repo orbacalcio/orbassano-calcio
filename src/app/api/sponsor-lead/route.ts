@@ -63,6 +63,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Honeypot anti-bot: vedi commento /api/contact. 200 OK fake.
+  if (typeof body._honeypot === "string" && body._honeypot.length > 0) {
+    return NextResponse.json({ ok: true });
+  }
+
   const company = trimToMax(String(body.company ?? ""), 140);
   const contactName = trimToMax(String(body.contactName ?? ""), 120);
   const role = trimToMax(String(body.role ?? ""), 120);

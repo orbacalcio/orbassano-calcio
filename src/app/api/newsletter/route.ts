@@ -30,6 +30,7 @@ type Payload = {
   firstName?: unknown;
   email?: unknown;
   privacy?: unknown;
+  _honeypot?: unknown;
 };
 
 const BREVO_LIST_ID = process.env.BREVO_NEWSLETTER_LIST_ID;
@@ -62,6 +63,11 @@ export async function POST(req: NextRequest) {
       { ok: false, error: "Payload JSON non valido." },
       { status: 400 },
     );
+  }
+
+  // Honeypot anti-bot: vedi commento /api/contact. 200 OK fake.
+  if (typeof body._honeypot === "string" && body._honeypot.length > 0) {
+    return NextResponse.json({ ok: true });
   }
 
   const firstName = trimToMax(String(body.firstName ?? ""), 80);
