@@ -80,10 +80,12 @@ html {
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* Smooth scroll universale per anchor link e scroll programmati.
-     Il blocco prefers-reduced-motion in fondo lo riporta a 'auto'
-     per chi richiede meno movimento. */
-  scroll-behavior: smooth;
+  /* NB: scroll-behavior:smooth NON e' qui (era prima, causava scroll
+     animato visibile a ogni navigazione di rotta Next.js: lo
+     scrollTo(0,0) programmatico veniva intercettato dalla regola
+     globale e diventava uno scroll-up dalla posizione corrente).
+     Smooth e' ora scoped solo a html:has(:target) sotto, attivo SOLO
+     quando un anchor (#id) e' selezionato — Next nav non setta :target. */
   /* Barre fisse in alto (MobileTopbar 55px + margine = 95px su <lg;
      Topbar 78px su lg): senza questo, ogni anchor (#id) e lo skip-link
      atterrerebbero col target nascosto sotto le barre. scroll-padding-top
@@ -95,6 +97,39 @@ html {
      non crea un nuovo scroll context, position:fixed e
      scroll-behavior continuano a funzionare. */
   overflow-x: clip;
+}
+
+/* Smooth scroll riattivato SOLO quando un anchor (#id) e' bersaglio
+   attivo (post-click anchor link, deep-link da URL #section, skip-link).
+   Next.js navigation non triggera :target → non c'e' smooth → scroll
+   to top istantaneo, senza l'effetto "scuotimento" pre-routing. */
+html:has(:target) {
+  scroll-behavior: smooth;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   View Transitions API (Next 16 + React <ViewTransition>)
+   ──────────────────────────────────────────────────────────────────────
+   Cross-fade morbido tra pagine: 150ms exit + 210ms enter overlapped.
+   Attivo solo nei browser che supportano l'API (Chrome/Edge 111+,
+   Safari 18+); negli altri navigation e' istantanea (degrada
+   gracefully senza errori).
+   La classe ".page-fade" e' attivata dal componente
+   <ViewTransition enter="page-fade" exit="page-fade"> in app/layout.tsx.
+*/
+::view-transition-old(.page-fade) {
+  animation: 150ms ease-out both page-fade-out;
+}
+::view-transition-new(.page-fade) {
+  animation: 210ms ease-in 150ms both page-fade-in;
+}
+@keyframes page-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 body {

@@ -1,5 +1,11 @@
+/// <reference types="react/canary" />
+// Triple-slash reference (NOT runtime import) per esporre il type
+// `ViewTransition` (Next 16 + React 19 canary): senza, TS non riconosce
+// il named export. NB: non si puo' usare `import "react/canary"` perche'
+// quel subpath non esiste runtime e rompe il bundler.
 import type { Metadata, Viewport } from "next";
 import { Big_Shoulders, Geist_Mono, Inter } from "next/font/google";
+import { ViewTransition } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -128,7 +134,16 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="bg-surface-0 text-ink-hi font-body flex min-h-full flex-col">
-        {children}
+        {/* ViewTransition wrap: cross-fade morbido tra rotte Next.
+            classe "page-fade" definita in globals.css come
+            ::view-transition-old(.page-fade) + ::view-transition-new
+            con keyframes opacity 0→1 e 1→0. default="none" evita
+            animazioni indesiderate su transition non-route (Suspense,
+            setState). Browser senza View Transitions API → navigation
+            istantanea silente, zero degrado. */}
+        <ViewTransition enter="page-fade" exit="page-fade" default="none">
+          {children}
+        </ViewTransition>
         <JsonLd data={buildOrganizationLd()} />
         <JsonLd data={buildWebsiteLd()} />
         {/* Vercel Web Analytics + Speed Insights: first-party, no

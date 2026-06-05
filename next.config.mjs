@@ -180,6 +180,14 @@ const comingSoonActive = process.env.COMING_SOON_MODE === "true";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    // Abilita il componente <ViewTransition> di React (Next 16):
+    // page transitions cross-fade native (browser View Transitions API)
+    // su route navigation. Vedi app/layout.tsx e ::view-transition-*
+    // in globals.css. Browser non-supportati: navigation istantanea
+    // (zero degrado, zero errori).
+    viewTransition: true,
+  },
   images: {
     // Formati moderni in ordine di preferenza. AVIF prima (~30% piu'
     // leggero del WebP a parita' di qualita') con fallback WebP per
