@@ -10,6 +10,7 @@ import {
   fetchTechnicalStaff,
   type TeamSummary,
   type TechnicalStaffMember,
+  type TechnicalStaffTier,
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
@@ -167,34 +168,73 @@ export default async function SquadrePage() {
   );
 }
 
+/**
+ * Definizione dei gruppi (tier) Staff tecnico — ordine + label.
+ * Coerente con `src/sanity/schemaTypes/technicalStaff.ts` opt.list.
+ * Se in futuro si aggiunge/rinomina un tier, aggiornare entrambi i file.
+ */
+const STAFF_TIERS: Array<{ key: TechnicalStaffTier; label: string }> = [
+  { key: "1-direzione", label: "Direzione tecnica" },
+  { key: "2-allenatori", label: "Allenatori" },
+  { key: "3-preparatori", label: "Preparatori" },
+  { key: "4-medico", label: "Staff medico" },
+  { key: "5-logistica", label: "Logistica e magazzino" },
+];
+
 function TechnicalStaffSection({
   staff,
 }: {
   staff: TechnicalStaffMember[];
 }) {
+  // Raggruppa per tier (fallback "1-direzione" per documenti legacy
+  // senza tier). I gruppi vuoti NON vengono renderizzati, per non
+  // mostrare un eyebrow orfano. L'ordinamento entro gruppo arriva
+  // gia' da GROQ (order ASC).
+  const grouped = new Map<TechnicalStaffTier, TechnicalStaffMember[]>();
+  for (const member of staff) {
+    const tier: TechnicalStaffTier = member.tier ?? "1-direzione";
+    const list = grouped.get(tier) ?? [];
+    list.push(member);
+    grouped.set(tier, list);
+  }
+
+  const nonEmptyTiers = STAFF_TIERS.filter(
+    (t) => (grouped.get(t.key)?.length ?? 0) > 0,
+  );
+  if (nonEmptyTiers.length === 0) return null;
+
   return (
-    <section
-      aria-label="Staff tecnico"
-      className="flex flex-col gap-6"
-    >
+    <section aria-label="Staff tecnico" className="flex flex-col gap-10">
       <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
         Staff tecnico
       </h2>
-      <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
-        {staff.map((s) => (
-          <li
-            key={s._id}
-            className="border-border/40 flex flex-col gap-1 border-b pb-4"
-          >
-            <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
-              {s.role}
-            </span>
-            <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl">
-              {s.name}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-10 lg:gap-12">
+        {nonEmptyTiers.map((tier) => {
+          const members = grouped.get(tier.key) ?? [];
+          return (
+            <div key={tier.key} className="flex flex-col gap-5">
+              <span className="text-brand-gold font-display text-xs font-bold tracking-[0.22em] uppercase md:text-sm">
+                {tier.label}
+              </span>
+              <ul className="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+                {members.map((s) => (
+                  <li
+                    key={s._id}
+                    className="border-border/40 flex flex-col gap-1 border-b pb-4"
+                  >
+                    <span className="text-ink-mid font-mono text-xs tracking-[0.12em] uppercase">
+                      {s.role}
+                    </span>
+                    <span className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl">
+                      {s.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }

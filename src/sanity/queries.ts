@@ -193,13 +193,17 @@ export const settingsQuery = defineQuery(`
 
 // Staff tecnico club-wide (direttore sportivo / tecnico / responsabile
 // settore giovanile, etc.) per la sezione finale di /squadre. Filtra
-// isActive != false, ordina per `order` ascendente.
+// isActive != false, ordina per `tier` ASC (es. "1-direzione" prima di
+// "2-allenatori") e poi per `order` ASC entro il gruppo. Documenti
+// senza tier vengono fallback al primo gruppo "1-direzione" lato
+// rendering (vedi TechnicalStaffSection in src/app/(site)/squadre/page.tsx).
 export const technicalStaffQuery = defineQuery(`
   *[_type == "technicalStaff" && isActive != false]
-  | order(coalesce(order, 999) asc){
+  | order(coalesce(tier, "1-direzione") asc, coalesce(order, 999) asc){
     _id,
     name,
-    role
+    role,
+    tier
   }
 `);
 

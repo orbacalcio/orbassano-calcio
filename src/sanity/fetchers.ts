@@ -67,10 +67,18 @@ export async function fetchMainSponsors(): Promise<MainSponsor[]> {
 
 // ---------- Staff tecnico club-wide -------------------------------------------------
 
+export type TechnicalStaffTier =
+  | "1-direzione"
+  | "2-allenatori"
+  | "3-preparatori"
+  | "4-medico"
+  | "5-logistica";
+
 export type TechnicalStaffMember = {
   _id: string;
   name: string;
   role: string;
+  tier: TechnicalStaffTier | null;
 };
 
 export async function fetchTechnicalStaff(): Promise<TechnicalStaffMember[]> {

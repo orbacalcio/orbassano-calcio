@@ -30,6 +30,25 @@ export const technicalStaff = defineType({
       initialValue: true,
     }),
     defineField({
+      name: "tier",
+      title: "Livello / Gruppo",
+      description:
+        "Sezione in cui appare sulla pagina /squadre. I gruppi vuoti non vengono mostrati. Il prefisso numerico nel valore serve solo a ordinare le sezioni; nel sito si vede solo il titolo del gruppo.",
+      type: "string",
+      options: {
+        list: [
+          { title: "Direzione tecnica", value: "1-direzione" },
+          { title: "Allenatori", value: "2-allenatori" },
+          { title: "Preparatori", value: "3-preparatori" },
+          { title: "Staff medico", value: "4-medico" },
+          { title: "Logistica e magazzino", value: "5-logistica" },
+        ],
+        layout: "dropdown",
+      },
+      validation: (r) => r.required(),
+      initialValue: "1-direzione",
+    }),
+    defineField({
       name: "role",
       title: "Ruolo",
       description:
@@ -45,9 +64,9 @@ export const technicalStaff = defineType({
     }),
     defineField({
       name: "order",
-      title: "Ordine di visualizzazione",
+      title: "Ordine entro il gruppo",
       description:
-        "Numero che decide la posizione nella griglia (più basso = prima). Riordinabili con drag-and-drop nella lista Studio.",
+        "Numero che decide la posizione nella griglia del proprio gruppo (più basso = prima). Riordinabili con drag-and-drop nella lista Studio.",
       type: "number",
     }),
   ],
@@ -55,17 +74,38 @@ export const technicalStaff = defineType({
     select: {
       title: "name",
       subtitle: "role",
+      tier: "tier",
       isActive: "isActive",
     },
-    prepare({ title, subtitle, isActive }) {
+    prepare({ title, subtitle, tier, isActive }) {
       const active = isActive !== false;
+      const tierLabel =
+        tier === "1-direzione"
+          ? "Direzione"
+          : tier === "2-allenatori"
+            ? "Allenatori"
+            : tier === "3-preparatori"
+              ? "Preparatori"
+              : tier === "4-medico"
+                ? "Staff medico"
+                : tier === "5-logistica"
+                  ? "Logistica"
+                  : "—";
       return {
         title: active ? title : `(disattivato) ${title ?? ""}`,
-        subtitle,
+        subtitle: `${tierLabel} · ${subtitle ?? "—"}`,
       };
     },
   },
   orderings: [
+    {
+      title: "Gruppo + ordine",
+      name: "tierThenOrder",
+      by: [
+        { field: "tier", direction: "asc" },
+        { field: "order", direction: "asc" },
+      ],
+    },
     {
       title: "Ordine manuale",
       name: "manual",
