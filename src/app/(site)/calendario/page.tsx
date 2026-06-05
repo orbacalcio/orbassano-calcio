@@ -67,7 +67,7 @@ const CARD_SLOTS: Array<{
     number: "01",
     category: "Prima Squadra",
     href: "/squadre/prima-squadra/calendario",
-    fallbackEyebrow: "01 — Calendario senior",
+    fallbackEyebrow: "Calendario senior",
     fallbackTitle: "Prima Squadra",
     fallbackDescription:
       "Prima Categoria Piemonte VdA. Tutte le partite di campionato, amichevoli, risultati e tabellini ufficiali.",
@@ -76,7 +76,7 @@ const CARD_SLOTS: Array<{
     number: "02",
     category: "Juniores",
     href: "/squadre/juniores/calendario",
-    fallbackEyebrow: "02 — Calendario Juniores",
+    fallbackEyebrow: "Calendario Juniores",
     fallbackTitle: "Juniores",
     fallbackDescription:
       "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra.",
@@ -85,7 +85,7 @@ const CARD_SLOTS: Array<{
     number: "03",
     category: "Settore Giovanile",
     href: "/squadre/settore-giovanile/calendario",
-    fallbackEyebrow: "03 — Settore Giovanile U14-U17",
+    fallbackEyebrow: "Settore Giovanile U14-U17",
     fallbackTitle: "Settore Giovanile Scolastico",
     fallbackDescription:
       "Tutti i calendari Under 17, Under 16, Under 15 e Under 14 raccolti in un'unica vista cronologica.",

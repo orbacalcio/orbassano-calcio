@@ -46,19 +46,19 @@ const SECTIONS: Array<{
 }> = [
   {
     category: "Prima Squadra",
-    fallbackEyebrow: "01 — La punta di diamante",
+    fallbackEyebrow: "La punta di diamante",
     fallbackTitle: "Prima Squadra",
     cols: "lg:grid-cols-3",
   },
   {
     category: "Juniores",
-    fallbackEyebrow: "02 — Il ponte verso il senior",
+    fallbackEyebrow: "Il ponte verso il senior",
     fallbackTitle: "Juniores",
     cols: "lg:grid-cols-3",
   },
   {
     category: "Settore Giovanile",
-    fallbackEyebrow: "03 — Da qui passa il futuro",
+    fallbackEyebrow: "Da qui passa il futuro",
     fallbackTitle: "Settore Giovanile",
     cols: "sm:grid-cols-2 lg:grid-cols-4",
   },
