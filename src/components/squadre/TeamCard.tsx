@@ -48,8 +48,9 @@ export function TeamCard({ team }: Props) {
         {subtitle && <span className="text-ink-mid text-sm">{subtitle}</span>}
         <div className="text-ink-low mt-2 flex items-center justify-between text-xs">
           <span className="font-mono tracking-wide">
-            {team.season ?? "—"}
-            {showCount ? ` · ${team.playerCount} atleti` : ""}
+            {showCount
+              ? `${team.playerCount} atleti`
+              : (team.season ?? "—")}
           </span>
           <ArrowUpRight
             size={16}
