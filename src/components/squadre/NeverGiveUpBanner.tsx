@@ -33,16 +33,24 @@ export function NeverGiveUpBanner() {
       aria-label="Lo spirito Orbassano"
       className="bg-surface-0 relative overflow-hidden py-14 sm:py-20 lg:py-28"
     >
-      {/* Blob radiale blu identico a quello del hero /squadre,
-          posizionato al TOP del banner per estendere visivamente
-          l'aurora del hero dentro al banner: niente "edge" visibile
-          tra le due sezioni, transizione fluida. Mirror-image del
-          blob hero per simmetria, posizionato al bottom (-translate
-          y-1/2 sotto top-0 = blob centrato leggermente sopra il top
-          del banner). */}
+      {/* Aurora gradient lineare verticale per continuita' col blob
+          del hero: parte da un blu tenue al top (matching il fade
+          del blob hero che svanisce al suo bottom) e va a surface-0
+          puro al middle. Sostituisce un secondo blob che creava
+          un edge "centro forte" sul boundary fra hero e banner.
+          Mask radiale orizzontale per concentrare al centro
+          (mimando il blob centrato del hero, non una banda piena). */}
       <div
         aria-hidden
-        className="bg-brand-blue/15 pointer-events-none absolute top-0 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-64 sm:h-80"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, rgba(33,63,140,0.22) 0%, rgba(33,63,140,0) 100%)",
+          maskImage:
+            "radial-gradient(ellipse 65% 100% at center top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 65% 100% at center top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 75%)",
+        }}
       />
       <Container size="wide" className="relative flex flex-col items-center text-center">
         <motion.p
