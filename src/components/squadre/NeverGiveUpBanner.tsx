@@ -33,7 +33,18 @@ export function NeverGiveUpBanner() {
       aria-label="Lo spirito Orbassano"
       className="bg-surface-0 relative overflow-hidden py-14 sm:py-20 lg:py-28"
     >
-      <Container size="wide" className="flex flex-col items-center text-center">
+      {/* Blob radiale blu identico a quello del hero /squadre,
+          posizionato al TOP del banner per estendere visivamente
+          l'aurora del hero dentro al banner: niente "edge" visibile
+          tra le due sezioni, transizione fluida. Mirror-image del
+          blob hero per simmetria, posizionato al bottom (-translate
+          y-1/2 sotto top-0 = blob centrato leggermente sopra il top
+          del banner). */}
+      <div
+        aria-hidden
+        className="bg-brand-blue/15 pointer-events-none absolute top-0 left-1/2 h-96 w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
+      />
+      <Container size="wide" className="relative flex flex-col items-center text-center">
         <motion.p
           ref={titleRef}
           className="font-display cursor-default leading-[0.9] font-black tracking-[0.005em] uppercase transition-transform duration-300 ease-out hover:scale-[1.02] hover:[animation:manifesto-stripes-loop_1.4s_linear_infinite] hover:[filter:drop-shadow(0_0_40px_rgba(223,177,108,0.85))]"
