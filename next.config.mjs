@@ -96,6 +96,14 @@ const cspReportOnly = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'self'",
+  // report-uri (legacy, ~80% browser): endpoint che riceve violation
+  // report quando una risorsa viene bloccata. Vedi /api/csp-report.
+  // Senza, il passaggio Report-Only → enforce e' cieco.
+  "report-uri /api/csp-report",
+  // report-to (moderno, paired con header Reporting-Endpoints sotto):
+  // Chrome/Edge/Firefox moderni preferiscono questo. Il nome
+  // "csp-endpoint" deve combaciare con la chiave in Reporting-Endpoints.
+  "report-to csp-endpoint",
   // NB: 'upgrade-insecure-requests' NON e' qui. E' ignorato dal browser
   // quando consegnato in una policy Report-Only (genera il warning
   // DevTools "directive ... is ignored when delivered in a report-only
@@ -133,6 +141,15 @@ const securityHeaders = [
     key: "Content-Security-Policy-Report-Only",
     value: cspReportOnly,
   },
+  // Reporting-Endpoints: dichiarazione moderna degli endpoint di
+  // reporting (paired con `report-to csp-endpoint` nella CSP sopra).
+  // Browser-only feature: i browser legacy che non la capiscono
+  // ricadono su `report-uri` (gia' nella policy). Vedi
+  // src/app/api/csp-report/route.ts per la logica server-side.
+  {
+    key: "Reporting-Endpoints",
+    value: 'csp-endpoint="/api/csp-report"',
+  },
 ];
 
 /**
@@ -164,6 +181,11 @@ const comingSoonActive = process.env.COMING_SOON_MODE === "true";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Formati moderni in ordine di preferenza. AVIF prima (~30% piu'
+    // leggero del WebP a parita' di qualita') con fallback WebP per
+    // browser legacy. Next.js serve automaticamente il primo formato
+    // supportato dall'Accept header del browser.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
