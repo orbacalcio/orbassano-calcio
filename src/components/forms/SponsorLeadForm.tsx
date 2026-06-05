@@ -63,8 +63,7 @@ export function SponsorLeadForm() {
       }
       setStatus({
         kind: "success",
-        message:
-          "Richiesta inviata. Il direttore generale ti contatterà entro 5 giorni lavorativi con la proposta su misura.",
+        message: "Grazie per il tuo messaggio. Verrai ricontattato al più presto.",
       });
       const form = document.getElementById(
         "sponsor-lead-form",
