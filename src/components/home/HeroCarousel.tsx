@@ -106,9 +106,17 @@ export function HeroCarousel({
   const kenBurnsContinuous = !reduced && !isMobile;
 
   // Autoplay: setTimeout per slide perche' la durata puo' variare.
+  // La prima slide (index === 0) IGNORA lo stato `paused`: hover sopra
+  // di lei non blocca mai l'avanzamento (richiesta utente 2026-06-05).
+  // Razionale: la slide #1 e' la copertina, deve scorrere via veloce
+  // per mostrare le altre. Le slide successive invece pausano su
+  // hover come prima (utente che vuole leggere una specifica slide).
   useEffect(() => {
     const autoplayActive =
-      config.autoplayEnabled && !reduced && !paused && slides.length > 1;
+      config.autoplayEnabled &&
+      !reduced &&
+      slides.length > 1 &&
+      (!paused || index === 0);
     if (!autoplayActive) return;
 
     const current = slides[index];
@@ -131,6 +139,8 @@ export function HeroCarousel({
     config.autoplayEnabled,
     config.slideDurationS,
     transitionS,
+    // index gia' in dep ma serve esplicitarne il ruolo nella nuova
+    // condizione `index === 0` che bypassa il pause.
   ]);
 
   // isTransitioning gating: attivo durante la coreografia, spento al termine.
