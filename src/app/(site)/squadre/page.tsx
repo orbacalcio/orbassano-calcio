@@ -65,6 +65,7 @@ type SquadrePageSettings = {
     eyebrow?: string | null;
     title?: string | null;
   }> | null;
+  currentSeason?: string | null;
 };
 
 async function fetchSquadrePageSettings(): Promise<SquadrePageSettings> {
@@ -161,7 +162,10 @@ export default async function SquadrePage() {
           solo se almeno un membro attivo nel CMS. */}
       {technicalStaff.length > 0 && (
         <Container className="py-16 lg:py-24" size="wide">
-          <TechnicalStaffSection staff={technicalStaff} />
+          <TechnicalStaffSection
+            staff={technicalStaff}
+            currentSeason={settings.currentSeason ?? null}
+          />
         </Container>
       )}
     </>
@@ -183,8 +187,10 @@ const STAFF_TIERS: Array<{ key: TechnicalStaffTier; label: string }> = [
 
 function TechnicalStaffSection({
   staff,
+  currentSeason,
 }: {
   staff: TechnicalStaffMember[];
+  currentSeason: string | null;
 }) {
   // Raggruppa per tier (fallback "1-direzione" per documenti legacy
   // senza tier). I gruppi vuoti NON vengono renderizzati, per non
@@ -205,9 +211,16 @@ function TechnicalStaffSection({
 
   return (
     <section aria-label="Staff tecnico" className="flex flex-col gap-10">
-      <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
-        Staff tecnico
-      </h2>
+      <div className="flex flex-col gap-3">
+        {currentSeason && (
+          <span className="text-brand-gold font-mono text-xs tracking-[0.22em] uppercase md:text-sm">
+            Stagione {currentSeason}
+          </span>
+        )}
+        <h2 className="font-display text-brand-gold/30 text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] font-black tracking-[0.005em] uppercase">
+          Staff tecnico
+        </h2>
+      </div>
       <div className="flex flex-col gap-10 lg:gap-12">
         {nonEmptyTiers.map((tier) => {
           const members = grouped.get(tier.key) ?? [];
