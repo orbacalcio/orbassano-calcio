@@ -19,6 +19,7 @@ import {
   type PrimaSquadraHubData,
 } from "@/components/squadre/PrimaSquadraHub";
 import { TeamCard } from "@/components/squadre/TeamCard";
+import { TeamHeroFallback } from "@/components/squadre/TeamHeroFallback";
 import { Container } from "@/components/ui/Container";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import {
@@ -486,10 +487,7 @@ export function TeamView({
             />
           </>
         ) : (
-          <div
-            aria-hidden
-            className="from-surface-2 via-surface-1 to-brand-blue/30 absolute inset-0 bg-gradient-to-br"
-          />
+          <TeamHeroFallback teamName={team.name} />
         )}
         {/* Altezza allineata all'hero della home (min-h-dvh = 100dvh).
             dvh gestisce la barra browser dinamica su mobile. Su tutti i
