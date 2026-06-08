@@ -36,7 +36,11 @@ export function TeamHeroFallback({ teamName }: { teamName: string }) {
         aria-hidden
         viewBox="0 0 1200 800"
         preserveAspectRatio="xMidYMid slice"
-        className="text-ink-hi/20 absolute inset-0 h-full w-full"
+        // hidden md:block (>=768px): mobile = pulito col solo stemma,
+        // tablet/desktop = pitch lines decorativo. Decisione 2026-06-06:
+        // su mobile l'hero e' alto/stretto, le pitch lines si comprimono
+        // male e affollano lo spazio col watermark + h1.
+        className="text-ink-hi/20 absolute inset-0 hidden h-full w-full md:block"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
@@ -66,10 +70,12 @@ export function TeamHeroFallback({ teamName }: { teamName: string }) {
       </svg>
 
       {/* Watermark nome squadra: display 900 oro/13% in basso a sx,
-          taglia il viewport per dare scala epica (clamp 4-12rem). */}
+          taglia il viewport per dare scala epica (clamp 4-12rem).
+          hidden md:flex (>=768px): su mobile lasciamo solo lo stemma
+          centrato (decisione 2026-06-06, idem pitch lines). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end overflow-hidden px-4 pb-8 md:px-12 md:pb-12"
+        className="pointer-events-none absolute inset-x-0 bottom-0 hidden items-end overflow-hidden px-4 pb-8 md:flex md:px-12 md:pb-12"
       >
         <span
           className="font-display text-brand-gold/[0.13] leading-[0.85] font-black tracking-[0.005em] uppercase"
