@@ -17,10 +17,12 @@ import {
   ShieldAlert,
   ShieldCheck,
   Swords,
+  Trash2,
   Trophy,
   Users,
 } from "lucide-react";
 import type { StructureBuilder, StructureResolver } from "sanity/structure";
+import { PlayersBulkDelete } from "./components/PlayersBulkDelete";
 
 /**
  * Desk Structure custom per lo Studio.
@@ -263,7 +265,33 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.listItem()
                 .title("Giocatori")
                 .icon(Users)
-                .child(S.documentTypeList("player").title("Giocatori")),
+                .child(
+                  S.list()
+                    .title("Giocatori")
+                    .items([
+                      S.listItem()
+                        .title("Tutti i giocatori")
+                        .icon(Users)
+                        .child(
+                          S.documentTypeList("player").title(
+                            "Tutti i giocatori",
+                          ),
+                        ),
+                      // Tool custom per cancellazione in blocco con
+                      // multi-select (checkbox + seleziona tutti +
+                      // filtro). Sanity v3 standard documentTypeList
+                      // non supporta multi-select; questo view fa
+                      // GROQ diretto + client.transaction().delete().
+                      S.listItem()
+                        .title("Cancella in blocco")
+                        .icon(Trash2)
+                        .child(
+                          S.component(PlayersBulkDelete)
+                            .id("players-bulk-delete")
+                            .title("Cancella giocatori in blocco"),
+                        ),
+                    ]),
+                ),
             ]),
         ),
 
