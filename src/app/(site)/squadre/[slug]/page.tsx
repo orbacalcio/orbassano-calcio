@@ -707,8 +707,8 @@ function RosterEmptyPlaceholder({ season }: { season: string | null }) {
         Rosa
       </h2>
       <p className="text-ink-mid max-w-xl text-base leading-relaxed">
-        I tesseramenti{season ? ` ${season}` : ""} non sono ancora stati
-        pubblicati. Torna presto.
+        Il gruppo rossoblù{season ? ` della stagione ${season}` : ""} sta
+        prendendo forma. Annunci ufficiali a breve.
       </p>
     </section>
   );
