@@ -706,7 +706,9 @@ function RosterEmptyPlaceholder({ season }: { season: string | null }) {
       </h2>
       <p className="text-ink-mid max-w-xl text-base leading-relaxed">
         Il gruppo rossoblù{season ? ` della stagione ${season}` : ""} sta
-        prendendo forma. Annunci ufficiali a breve.
+        prendendo forma.
+        <br />
+        Annunci ufficiali a breve.
       </p>
     </section>
   );
