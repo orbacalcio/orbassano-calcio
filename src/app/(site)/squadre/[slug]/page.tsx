@@ -496,8 +496,16 @@ export function TeamView({
           className="relative flex min-h-dvh flex-col justify-end gap-4 py-16 lg:py-24"
           size="wide"
         >
+          {/* Eyebrow display: mostra la forma estesa "Settore Giovanile
+              Scolastico" (termine ufficiale per pagina pubblica, vedi
+              docs/TERMINOLOGY.md). Il valore Sanity team.category resta
+              "Settore Giovanile" perche' usato come chiave di filtro
+              in molti punti del codice (page hub, archivio, calendario,
+              breadcrumb). Mappiamo solo per il display. */}
           <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-            {team.category}
+            {team.category === "Settore Giovanile"
+              ? "Settore Giovanile Scolastico"
+              : team.category}
           </span>
           <h1 className="font-display text-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
             {title}
