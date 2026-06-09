@@ -13,6 +13,7 @@ import {
   MapPin,
   Milestone,
   Newspaper,
+  School,
   Shield,
   ShieldAlert,
   ShieldCheck,
@@ -324,6 +325,62 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("openDay")
                 .title("Summer Camp")
                 .icon(CalendarCheck),
+            ]),
+        ),
+
+      // ----- ACADEMY ---------------------------------------------------
+      // Sezione editoriale a 4 pagine (home + iscriviti + programma +
+      // informazioni). Tutti i contenuti vivono nel singleton `settings`,
+      // fieldset scuolaCalcio* (legacy field names, internal-only).
+      // I 4 shortcut sotto aprono lo stesso documento settings con
+      // un ID alias diverso (S.editor().id(...)) — lo Studio mostra
+      // il documento intero ma navigare da qui aiuta a trovare
+      // velocemente il fieldset giusto (collapsible).
+      // Richiesta utente 2026-06-09: spostato da "Impostazioni globali"
+      // a top-level, simile pattern del Settore Giovanile.
+      S.listItem()
+        .title("Academy")
+        .icon(School)
+        .child(
+          S.list()
+            .title("Academy")
+            .items([
+              S.listItem()
+                .title("Pagina home")
+                .icon(Cog)
+                .child(
+                  S.editor()
+                    .id("settings-academy-home")
+                    .schemaType("settings")
+                    .documentId("settings"),
+                ),
+              S.listItem()
+                .title("Pagina iscrizione")
+                .icon(Cog)
+                .child(
+                  S.editor()
+                    .id("settings-academy-iscriviti")
+                    .schemaType("settings")
+                    .documentId("settings"),
+                ),
+              S.listItem()
+                .title("Programma tecnico")
+                .icon(CalendarDays)
+                .child(
+                  S.editor()
+                    .id("settings-academy-programma")
+                    .schemaType("settings")
+                    .documentId("settings"),
+                ),
+              S.listItem()
+                .title("Informazioni")
+                .icon(MapPin)
+                .child(
+                  S.editor()
+                    .id("settings-academy-informazioni")
+                    .schemaType("settings")
+                    .documentId("settings"),
+                ),
             ]),
         ),
 
