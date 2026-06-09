@@ -69,9 +69,14 @@ function buildSections(opts: {
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile Scolastico",
   });
-  if (teamSlugs.has("scuola-calcio")) {
-    teamsChildren.push({ href: "/squadre/scuola-calcio", label: "Scuola Calcio" });
-  }
+  // Scuola Calcio: sezione editoriale a 4 pagine (home + iscriviti +
+  // programma + informazioni), NON dipende dal documento team Sanity
+  // `scuola-calcio` (oggi isActive:false, gestito separatamente).
+  // Voce sempre presente (decisione 2026-06-06).
+  teamsChildren.push({
+    href: "/squadre/scuola-calcio",
+    label: "Scuola Calcio",
+  });
   // NB: Open Days + Tornei NON sono piu' qui (richiesta utente
   // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
   // sono di fatto eventi a calendario, non sezioni squadre.

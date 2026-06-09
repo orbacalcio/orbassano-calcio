@@ -28,14 +28,13 @@ const wixRedirects = [
     source: "/settore-giovanile-e-scolastico-orbassano",
     destination: "/squadre/settore-giovanile",
   },
-  // /scuola-calcio-orbassano → /squadre/settore-giovanile (2026-06-05):
-  // il team `scuola-calcio` su Sanity e' isActive:false (gestita oggi
-  // da Sporting Orbassano, fuori dal nostro tesseramento), quindi
-  // /squadre/scuola-calcio ritornerebbe 404. Reindirizziamo al settore
-  // giovanile che e' il sostituto operativo piu' naturale. Quando il
-  // club reintegrera' la Scuola Calcio, basta riattivare il team in
-  // Studio e cambiare questa destination.
-  { source: "/scuola-calcio-orbassano", destination: "/squadre/settore-giovanile" },
+  // /scuola-calcio-orbassano → /squadre/scuola-calcio (2026-06-06):
+  // reintegrata la Scuola Calcio nel sito con sezione editoriale a 4
+  // pagine (home + iscriviti + programma + informazioni). La sezione
+  // NON dipende dal documento team Sanity `scuola-calcio` (resta
+  // isActive:false): le 4 pagine vivono nel singleton settings
+  // (fieldset scuolaCalcio*). Vedi src/app/(site)/squadre/scuola-calcio/.
+  { source: "/scuola-calcio-orbassano", destination: "/squadre/scuola-calcio" },
   { source: "/sponsor-e-partner-orbassano-calcio", destination: "/sponsor" },
   { source: "/sponsorship-asd-orbassano-calcio", destination: "/sponsor" },
   { source: "/partnership-asd-orbassano-calcio", destination: "/sponsor/partner" },

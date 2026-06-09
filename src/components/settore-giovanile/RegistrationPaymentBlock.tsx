@@ -19,9 +19,20 @@ type Props = {
   moduleUrl: string | null;
   iban: string;
   phone: string;
+  /**
+   * Email destinataria del modulo iscrizione + contatti. Default
+   * SGS_EMAIL (Settore Giovanile). Override per altre sezioni che
+   * usano lo stesso blocco con email dedicata (es. Scuola Calcio).
+   */
+  email?: string;
 };
 
-export function RegistrationPaymentBlock({ moduleUrl, iban, phone }: Props) {
+export function RegistrationPaymentBlock({
+  moduleUrl,
+  iban,
+  phone,
+  email = SGS_EMAIL,
+}: Props) {
   const phoneHref = `tel:${phone.replace(/\s/g, "")}`;
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -52,10 +63,10 @@ export function RegistrationPaymentBlock({ moduleUrl, iban, phone }: Props) {
           Compila e firma il modulo scaricabile dal pulsante qui sotto,
           poi invialo via mail all&apos;indirizzo{" "}
           <a
-            href={`mailto:${SGS_EMAIL}`}
+            href={`mailto:${email}`}
             className="text-brand-gold hover:underline"
           >
-            {SGS_EMAIL}
+            {email}
           </a>
           .
         </p>
@@ -146,10 +157,10 @@ export function RegistrationPaymentBlock({ moduleUrl, iban, phone }: Props) {
           <li className="flex items-center gap-2">
             <Mail size={14} className="shrink-0" aria-hidden />
             <a
-              href={`mailto:${SGS_EMAIL}`}
+              href={`mailto:${email}`}
               className="hover:text-ink-hi transition-colors"
             >
-              {SGS_EMAIL}
+              {email}
             </a>
           </li>
         </ul>
