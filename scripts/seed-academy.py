@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Seed dei campi Scuola Calcio sul singleton `settings` Sanity.
+Seed dei campi Academy sul singleton `settings` Sanity.
 
 Adatta lo stile editoriale di camp.torinofc.it (Toro Camp) al brand
 ASD Orbassano Calcio. Da eseguire UNA VOLTA dopo la creazione dello
@@ -9,7 +9,7 @@ schema (Step 1) per riempire i campi vuoti con contenuti di base.
 L'admin del club può poi editare/sovrascrivere ogni campo da Studio.
 
 Uso:
-  python scripts/seed-scuola-calcio.py
+  python scripts/seed-academy.py
   (richiede SANITY_API_WRITE_TOKEN in .env.local)
 """
 
@@ -75,7 +75,7 @@ def price(label, value):
 
 intro_blocks = [
     block(
-        "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. "
+        "La Academy dell'Orbassano Calcio è il primo passo nel grande gioco. "
         "Qui i bambini scoprono il calcio come sport, come gruppo e come scuola di vita, "
         "sotto la guida di tecnici qualificati FIGC."
     ),
@@ -131,7 +131,7 @@ faq_home = [
 
 iscr_intro = [
     block(
-        "Iscriversi alla Scuola Calcio Orbassano è semplice: una prova gratuita per conoscerci, "
+        "Iscriversi alla Academy Orbassano è semplice: una prova gratuita per conoscerci, "
         "il modulo PDF da compilare, il bonifico della quota. Niente form online, ci occupiamo "
         "noi di accompagnarti in ogni passaggio."
     ),
@@ -140,7 +140,7 @@ iscr_intro = [
 iscr_payment_note = (
     "Il pagamento può essere effettuato in unica soluzione oppure in due tranche "
     "(50% all'iscrizione + 50% entro gennaio). Sconto fratelli: -10% sulla seconda quota. "
-    "Causale bonifico: 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'."
+    "Causale bonifico: 'Iscrizione Academy 2026/2027 + Nome Cognome del bambino + anno di nascita'."
 )
 
 prog_timeline = [
@@ -203,7 +203,7 @@ info_faq = [
 ]
 
 patch_set = {
-    "scHeroEyebrow": "Scuola Calcio",
+    "scHeroEyebrow": "Academy",
     "scHeroTitle": "Cresciamo insieme, dal 1930",
     "scIntroBlocks": intro_blocks,
     "scUspCards": usp_cards,

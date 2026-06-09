@@ -50,10 +50,10 @@ const STATIC_ROUTES: Array<{
   // ESCLUSA dal sitemap (EMERGENCY HIDE 2026-06-06): le pagine sono
   // accessibili solo sul dominio Vercel preview, non sul dominio
   // pubblico. Riaggiungere quando l'utente da' l'ok per il go-live.
-  // { path: "/squadre/scuola-calcio", changeFrequency: "monthly", priority: 0.8 },
-  // { path: "/squadre/scuola-calcio/iscriviti", changeFrequency: "monthly", priority: 0.7 },
-  // { path: "/squadre/scuola-calcio/programma", changeFrequency: "monthly", priority: 0.6 },
-  // { path: "/squadre/scuola-calcio/informazioni", changeFrequency: "monthly", priority: 0.6 },
+  // { path: "/squadre/academy", changeFrequency: "monthly", priority: 0.8 },
+  // { path: "/squadre/academy/iscriviti", changeFrequency: "monthly", priority: 0.7 },
+  // { path: "/squadre/academy/programma", changeFrequency: "monthly", priority: 0.6 },
+  // { path: "/squadre/academy/informazioni", changeFrequency: "monthly", priority: 0.6 },
   // Calendario aggregato Settore Giovanile (raggruppa match U14-U17).
   // Le pagine /squadre/under-XX/calendario singole esistono ancora ma
   // sono ESCLUSE dal calendarEntries dinamico sotto (richiesta utente

@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Hub 4-box stile PrimaSquadraHub adattato per la Scuola Calcio.
+ * Hub 4-box stile PrimaSquadraHub adattato per la Academy.
  * 4 box full-bleed con foto di sfondo, overlay navy multiply,
  * titolo overlay e bordo verticale rossoblu' (pattern juventus.com).
  *
- * I 4 box puntano a: /squadre/scuola-calcio/iscriviti, /programma,
+ * I 4 box puntano a: /squadre/academy/iscriviti, /programma,
  * /informazioni, e un'ancora #faq in pagina (FAQ accordion sotto).
  *
  * Quando un'immagine manca, fallback con gradient navy + nome del box.
@@ -20,7 +20,7 @@ export type Hub4BoxItem = {
 export function ScuolaCalcioHub4Box({ boxes }: { boxes: Hub4BoxItem[] }) {
   return (
     <section
-      aria-label="Esplora la Scuola Calcio"
+      aria-label="Esplora la Academy"
       className="grid grid-cols-1 gap-px bg-border/40 sm:grid-cols-2"
     >
       {boxes.map((box) => (

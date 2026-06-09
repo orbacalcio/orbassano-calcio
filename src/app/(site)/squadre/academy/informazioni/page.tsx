@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
-import { FaqAccordion } from "@/components/scuola-calcio/FaqAccordion";
-import { InfoVenueBlock } from "@/components/scuola-calcio/InfoVenueBlock";
+import { FaqAccordion } from "@/components/academy/FaqAccordion";
+import { InfoVenueBlock } from "@/components/academy/InfoVenueBlock";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -13,10 +13,10 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio/informazioni" },
-  title: "Informazioni Scuola Calcio",
+  alternates: { canonical: "/squadre/academy/informazioni" },
+  title: "Informazioni Academy",
   description:
-    "Sede, prezzi e info pratiche della Scuola Calcio Orbassano: Centro Sportivo Aldo Porta, quote stagione 2026/2027, cosa è incluso, FAQ logistiche e contatti.",
+    "Sede, prezzi e info pratiche della Academy Orbassano: Centro Sportivo Aldo Porta, quote stagione 2026/2027, cosa è incluso, FAQ logistiche e contatti.",
 };
 
 // Fallback editoriali brand-voice.
@@ -90,10 +90,10 @@ export default async function ScuolaCalcioInformazioniPage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Academy", url: "/squadre/academy" },
           {
             name: "Informazioni",
-            url: "/squadre/scuola-calcio/informazioni",
+            url: "/squadre/academy/informazioni",
           },
         ])}
       />
@@ -107,7 +107,7 @@ export default async function ScuolaCalcioInformazioniPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Scuola Calcio · Informazioni
+              Academy · Informazioni
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Sede, prezzi, info pratiche

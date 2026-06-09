@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FaqAccordion } from "@/components/scuola-calcio/FaqAccordion";
-import { ScuolaCalcioHub4Box } from "@/components/scuola-calcio/Hub4Box";
-import { UspCards } from "@/components/scuola-calcio/UspCards";
+import { FaqAccordion } from "@/components/academy/FaqAccordion";
+import { ScuolaCalcioHub4Box } from "@/components/academy/Hub4Box";
+import { UspCards } from "@/components/academy/UspCards";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
@@ -17,16 +17,16 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio" },
-  title: "Scuola Calcio",
+  alternates: { canonical: "/squadre/academy" },
+  title: "Academy",
   description:
-    "La Scuola Calcio di ASD Orbassano Calcio: il primo passo nel grande gioco. Tecnici qualificati FIGC, kit ufficiale incluso, dai 5 ai 13 anni al Centro Sportivo Aldo Porta.",
+    "La Academy di ASD Orbassano Calcio: il primo passo nel grande gioco. Tecnici qualificati FIGC, kit ufficiale incluso, dai 5 ai 13 anni al Centro Sportivo Aldo Porta.",
 };
 
 // Fallback editoriali brand-voice: usati quando i campi del singleton
 // `settings.scuolaCalcioHome` sono ancora vuoti su Sanity. Quando
 // l'admin popola i campi da Studio, i valori CMS vincono.
-const FALLBACK_HERO_EYEBROW = "Scuola Calcio";
+const FALLBACK_HERO_EYEBROW = "Academy";
 const FALLBACK_HERO_TITLE = "Cresciamo insieme, dal 1930";
 
 const FALLBACK_USP: UspCard[] = [
@@ -110,17 +110,17 @@ export default async function ScuolaCalcioHomePage() {
   const hubBoxes = [
     {
       title: "Iscriviti",
-      href: "/squadre/scuola-calcio/iscriviti",
+      href: "/squadre/academy/iscriviti",
       image: data.hubBox1Image,
     },
     {
       title: "Programma",
-      href: "/squadre/scuola-calcio/programma",
+      href: "/squadre/academy/programma",
       image: data.hubBox2Image,
     },
     {
       title: "Informazioni",
-      href: "/squadre/scuola-calcio/informazioni",
+      href: "/squadre/academy/informazioni",
       image: data.hubBox3Image,
     },
     {
@@ -136,7 +136,7 @@ export default async function ScuolaCalcioHomePage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Academy", url: "/squadre/academy" },
         ])}
       />
 
@@ -236,7 +236,7 @@ export default async function ScuolaCalcioHomePage() {
               inizia la stagione con i colori rossoblù.
             </p>
             <Link
-              href="/squadre/scuola-calcio/iscriviti"
+              href="/squadre/academy/iscriviti"
               className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
             >
               Iscriviti adesso

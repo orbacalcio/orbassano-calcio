@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { FasceEtaGrid } from "@/components/scuola-calcio/FasceEtaGrid";
-import { SettimanaTimeline } from "@/components/scuola-calcio/SettimanaTimeline";
-import { StaffCoachCard } from "@/components/scuola-calcio/StaffCoachCard";
+import { FasceEtaGrid } from "@/components/academy/FasceEtaGrid";
+import { SettimanaTimeline } from "@/components/academy/SettimanaTimeline";
+import { StaffCoachCard } from "@/components/academy/StaffCoachCard";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -13,10 +13,10 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio/programma" },
-  title: "Programma tecnico Scuola Calcio",
+  alternates: { canonical: "/squadre/academy/programma" },
+  title: "Programma tecnico Academy",
   description:
-    "Timeline settimanale degli allenamenti, fasce d'età FIGC (Piccoli Amici, Primi Calci, Pulcini, Esordienti) e staff coach della Scuola Calcio Orbassano. Allenatori qualificati, focus su gioco e crescita.",
+    "Timeline settimanale degli allenamenti, fasce d'età FIGC (Piccoli Amici, Primi Calci, Pulcini, Esordienti) e staff coach della Academy Orbassano. Allenatori qualificati, focus su gioco e crescita.",
 };
 
 // Fallback timeline brand-voice — settimana tipo, una volta che il
@@ -119,10 +119,10 @@ export default async function ScuolaCalcioProgrammaPage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Academy", url: "/squadre/academy" },
           {
             name: "Programma",
-            url: "/squadre/scuola-calcio/programma",
+            url: "/squadre/academy/programma",
           },
         ])}
       />
@@ -136,7 +136,7 @@ export default async function ScuolaCalcioProgrammaPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Scuola Calcio · Programma tecnico
+              Academy · Programma tecnico
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Come si allena chi cresce con noi
@@ -247,7 +247,7 @@ export default async function ScuolaCalcioProgrammaPage() {
                 Staff coach
               </span>
               <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-                Lo staff dei tecnici qualificati FIGC della Scuola Calcio
+                Lo staff dei tecnici qualificati FIGC della Academy
                 Orbassano è in fase di definizione. Annunci ufficiali a
                 breve.
               </p>

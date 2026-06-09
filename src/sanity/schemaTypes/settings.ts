@@ -63,31 +63,31 @@ export const settings = defineType({
         "Immagini di sfondo dei 4 box (La Rosa · Le ultime news · Calendario e risultati · Classifica) della pagina /squadre/prima-squadra e link esterno alla classifica.",
       options: { collapsible: true, collapsed: true },
     },
-    // ── Scuola Calcio: 4 fieldset (una per pagina), pattern Toro Camp ──
+    // ── Academy: 4 fieldset (una per pagina), pattern Toro Camp ──
     {
       name: "scuolaCalcioHome",
-      title: "Pagina /squadre/scuola-calcio — home",
+      title: "Pagina /squadre/academy — home",
       description:
-        "Hero, intro, 4 USP card, immagini dei 4 box hub (Iscriviti · Programma · Informazioni · FAQ) e domande frequenti della landing principale della Scuola Calcio.",
+        "Hero, intro, 4 USP card, immagini dei 4 box hub (Iscriviti · Programma · Informazioni · FAQ) e domande frequenti della landing principale dell'Academy.",
       options: { collapsible: true, collapsed: true },
     },
     {
       name: "scuolaCalcioIscriviti",
-      title: "Pagina /squadre/scuola-calcio/iscriviti",
+      title: "Pagina /squadre/academy/iscriviti",
       description:
         "Quota annuale, quota iscrizione, note bonifico, IBAN, contatti dedicati, PDF del modulo iscrizione, flag per abilitare un form online (default: solo PDF + email + bonifico).",
       options: { collapsible: true, collapsed: true },
     },
     {
       name: "scuolaCalcioProgramma",
-      title: "Pagina /squadre/scuola-calcio/programma",
+      title: "Pagina /squadre/academy/programma",
       description:
         "Timeline settimanale allenamenti, fasce di età con focus tecnico e staff coach con qualifiche FIGC.",
       options: { collapsible: true, collapsed: true },
     },
     {
       name: "scuolaCalcioInformazioni",
-      title: "Pagina /squadre/scuola-calcio/informazioni",
+      title: "Pagina /squadre/academy/informazioni",
       description:
         "Sede + mappa, tabella prezzi, cosa è incluso nell'iscrizione, FAQ pratiche.",
       options: { collapsible: true, collapsed: true },
@@ -668,7 +668,7 @@ export const settings = defineType({
       title: "Hero — eyebrow",
       fieldset: "scuolaCalcioHome",
       description:
-        "Frase corta sopra il titolo h1 (es. 'Scuola Calcio'). Visualizzata in oro maiuscolo tracking ampio.",
+        "Frase corta sopra il titolo h1 (es. 'Academy'). Visualizzata in oro maiuscolo tracking ampio.",
       type: "string",
     }),
     defineField({
@@ -683,7 +683,7 @@ export const settings = defineType({
       title: "Intro — paragrafi descrittivi",
       fieldset: "scuolaCalcioHome",
       description:
-        "Sezione testo sotto l'hero. Spiega in 2-3 paragrafi cos'è la Scuola Calcio Orbassano, valori, approccio. Supporta grassetto/corsivo/link.",
+        "Sezione testo sotto l'hero. Spiega in 2-3 paragrafi cos'è la Academy Orbassano, valori, approccio. Supporta grassetto/corsivo/link.",
       type: "array",
       of: [{ type: "block" }],
     }),
@@ -692,7 +692,7 @@ export const settings = defineType({
       title: "USP — 4 card valori",
       fieldset: "scuolaCalcioHome",
       description:
-        "4 card numerate con i punti di forza della Scuola Calcio (es. 'Tecnici qualificati FIGC', 'Sicurezza prima di tutto', 'Gioco + crescita personale', 'Kit incluso').",
+        "4 card numerate con i punti di forza dell'Academy (es. 'Tecnici qualificati FIGC', 'Sicurezza prima di tutto', 'Gioco + crescita personale', 'Kit incluso').",
       type: "array",
       validation: (r) => r.max(4),
       of: [
@@ -825,7 +825,7 @@ export const settings = defineType({
     }),
     defineField({
       name: "scIscrModuleFile",
-      title: "Modulo iscrizione Scuola Calcio (PDF)",
+      title: "Modulo iscrizione Academy (PDF)",
       fieldset: "scuolaCalcioIscriviti",
       description:
         "PDF del modulo da scaricare, compilare, firmare e inviare. Quando esce la stagione successiva basta sostituirlo: l'URL del file resta dinamico.",
@@ -996,7 +996,7 @@ export const settings = defineType({
     }),
     defineField({
       name: "scProgStaff",
-      title: "Staff coach — allenatori Scuola Calcio",
+      title: "Staff coach — allenatori Academy",
       fieldset: "scuolaCalcioProgramma",
       description:
         "Allenatori con qualifiche FIGC. Inline: aggiungi/rimuovi senza creare documenti separati.",

@@ -33,7 +33,7 @@ const wixRedirects = [
   // sviluppata ma deve restare nascosta su orbassanocalcio.com fino
   // al go-live ufficiale. Le 4 pagine sono accessibili SOLO sul
   // dominio Vercel preview (orbassano-calcio.vercel.app).
-  // RIPRISTINARE a /squadre/scuola-calcio quando si rimuove
+  // RIPRISTINARE a /squadre/academy quando si rimuove
   // scuolaCalcioEmergencyHide piu' giu' in questo file.
   { source: "/scuola-calcio-orbassano", destination: "/squadre/settore-giovanile" },
   { source: "/sponsor-e-partner-orbassano-calcio", destination: "/sponsor" },
@@ -268,12 +268,12 @@ const nextConfig = {
     // Le 4 pagine Scuola Calcio devono essere visibili SOLO sul
     // dominio Vercel preview (orbassano-calcio.vercel.app) finche'
     // l'admin non da' l'ok pubblico. Su orbassanocalcio.com (apex +
-    // www) qualunque richiesta a /squadre/scuola-calcio* viene
+    // www) qualunque richiesta a /squadre/academy* viene
     // reindirizzata a /squadre (homepage hub squadre).
     // Da rimuovere quando l'utente conferma il go-live della sezione.
     const scuolaCalcioEmergencyHide = [
       {
-        source: "/squadre/scuola-calcio",
+        source: "/squadre/academy",
         has: [
           { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
         ],
@@ -281,7 +281,7 @@ const nextConfig = {
         permanent: false,
       },
       {
-        source: "/squadre/scuola-calcio/:path*",
+        source: "/squadre/academy/:path*",
         has: [
           { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
         ],
