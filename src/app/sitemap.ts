@@ -46,14 +46,14 @@ const STATIC_ROUTES: Array<{
   // 4 card U14-U17 + Open Days/Tornei + modulo iscrizione), non
   // mappata da teamSlugs (non corrisponde a uno slug team).
   { path: "/squadre/settore-giovanile", changeFrequency: "weekly", priority: 0.8 },
-  // Scuola Calcio — sezione editoriale a 4 pagine (home + iscriviti +
-  // programma + informazioni), reintrodotta 2026-06-06. NON dipende
-  // dal documento team Sanity `scuola-calcio` (isActive:false): le
-  // pagine vivono nel singleton settings. Tutte e 4 nel sitemap.
-  { path: "/squadre/scuola-calcio", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/squadre/scuola-calcio/iscriviti", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/squadre/scuola-calcio/programma", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/squadre/scuola-calcio/informazioni", changeFrequency: "monthly", priority: 0.6 },
+  // Scuola Calcio — sezione editoriale a 4 pagine TEMPORANEAMENTE
+  // ESCLUSA dal sitemap (EMERGENCY HIDE 2026-06-06): le pagine sono
+  // accessibili solo sul dominio Vercel preview, non sul dominio
+  // pubblico. Riaggiungere quando l'utente da' l'ok per il go-live.
+  // { path: "/squadre/scuola-calcio", changeFrequency: "monthly", priority: 0.8 },
+  // { path: "/squadre/scuola-calcio/iscriviti", changeFrequency: "monthly", priority: 0.7 },
+  // { path: "/squadre/scuola-calcio/programma", changeFrequency: "monthly", priority: 0.6 },
+  // { path: "/squadre/scuola-calcio/informazioni", changeFrequency: "monthly", priority: 0.6 },
   // Calendario aggregato Settore Giovanile (raggruppa match U14-U17).
   // Le pagine /squadre/under-XX/calendario singole esistono ancora ma
   // sono ESCLUSE dal calendarEntries dinamico sotto (richiesta utente

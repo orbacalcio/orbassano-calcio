@@ -28,13 +28,14 @@ const wixRedirects = [
     source: "/settore-giovanile-e-scolastico-orbassano",
     destination: "/squadre/settore-giovanile",
   },
-  // /scuola-calcio-orbassano → /squadre/scuola-calcio (2026-06-06):
-  // reintegrata la Scuola Calcio nel sito con sezione editoriale a 4
-  // pagine (home + iscriviti + programma + informazioni). La sezione
-  // NON dipende dal documento team Sanity `scuola-calcio` (resta
-  // isActive:false): le 4 pagine vivono nel singleton settings
-  // (fieldset scuolaCalcio*). Vedi src/app/(site)/squadre/scuola-calcio/.
-  { source: "/scuola-calcio-orbassano", destination: "/squadre/scuola-calcio" },
+  // /scuola-calcio-orbassano → /squadre/settore-giovanile
+  // (EMERGENCY HIDE 2026-06-06): la sezione Scuola Calcio e' stata
+  // sviluppata ma deve restare nascosta su orbassanocalcio.com fino
+  // al go-live ufficiale. Le 4 pagine sono accessibili SOLO sul
+  // dominio Vercel preview (orbassano-calcio.vercel.app).
+  // RIPRISTINARE a /squadre/scuola-calcio quando si rimuove
+  // scuolaCalcioEmergencyHide piu' giu' in questo file.
+  { source: "/scuola-calcio-orbassano", destination: "/squadre/settore-giovanile" },
   { source: "/sponsor-e-partner-orbassano-calcio", destination: "/sponsor" },
   { source: "/sponsorship-asd-orbassano-calcio", destination: "/sponsor" },
   { source: "/partnership-asd-orbassano-calcio", destination: "/sponsor/partner" },
@@ -263,12 +264,41 @@ const nextConfig = {
         permanent: true,
       },
     ];
+    // ─── EMERGENCY HIDE 2026-06-06 ────────────────────────────────
+    // Le 4 pagine Scuola Calcio devono essere visibili SOLO sul
+    // dominio Vercel preview (orbassano-calcio.vercel.app) finche'
+    // l'admin non da' l'ok pubblico. Su orbassanocalcio.com (apex +
+    // www) qualunque richiesta a /squadre/scuola-calcio* viene
+    // reindirizzata a /squadre (homepage hub squadre).
+    // Da rimuovere quando l'utente conferma il go-live della sezione.
+    const scuolaCalcioEmergencyHide = [
+      {
+        source: "/squadre/scuola-calcio",
+        has: [
+          { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
+        ],
+        destination: "/squadre",
+        permanent: false,
+      },
+      {
+        source: "/squadre/scuola-calcio/:path*",
+        has: [
+          { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
+        ],
+        destination: "/squadre",
+        permanent: false,
+      },
+    ];
     const wixMapped = wixRedirects.map((r) => ({
       source: r.source,
       destination: r.destination,
       permanent: true,
     }));
-    return [...wixMapped, ...internalRedirects];
+    return [
+      ...scuolaCalcioEmergencyHide,
+      ...wixMapped,
+      ...internalRedirects,
+    ];
   },
   async headers() {
     return [
