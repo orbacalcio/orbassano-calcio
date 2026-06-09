@@ -330,14 +330,10 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
 
       // ----- ACADEMY ---------------------------------------------------
       // Sezione editoriale a 4 pagine (home + iscriviti + programma +
-      // informazioni). Tutti i contenuti vivono nel singleton `settings`,
-      // fieldset scuolaCalcio* (legacy field names, internal-only).
-      // I 4 shortcut sotto aprono lo stesso documento settings con
-      // un ID alias diverso (S.editor().id(...)) — lo Studio mostra
-      // il documento intero ma navigare da qui aiuta a trovare
-      // velocemente il fieldset giusto (collapsible).
-      // Richiesta utente 2026-06-09: spostato da "Impostazioni globali"
-      // a top-level, simile pattern del Settore Giovanile.
+      // informazioni). 4 SINGLETON DEDICATI (richiesta utente
+      // 2026-06-09): cliccando una voce sotto Academy si apre SOLO
+      // il documento con i campi di quella pagina, non l'intero
+      // singleton settings.
       S.listItem()
         .title("Academy")
         .icon(School)
@@ -347,39 +343,39 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
             .items([
               S.listItem()
                 .title("Pagina home")
-                .icon(Cog)
+                .icon(School)
                 .child(
                   S.editor()
-                    .id("settings-academy-home")
-                    .schemaType("settings")
-                    .documentId("settings"),
+                    .id("academy-home")
+                    .schemaType("academyHome")
+                    .documentId("academy-home"),
                 ),
               S.listItem()
                 .title("Pagina iscrizione")
-                .icon(Cog)
+                .icon(Coins)
                 .child(
                   S.editor()
-                    .id("settings-academy-iscriviti")
-                    .schemaType("settings")
-                    .documentId("settings"),
+                    .id("academy-iscriviti")
+                    .schemaType("academyIscriviti")
+                    .documentId("academy-iscriviti"),
                 ),
               S.listItem()
                 .title("Programma tecnico")
                 .icon(CalendarDays)
                 .child(
                   S.editor()
-                    .id("settings-academy-programma")
-                    .schemaType("settings")
-                    .documentId("settings"),
+                    .id("academy-programma")
+                    .schemaType("academyProgramma")
+                    .documentId("academy-programma"),
                 ),
               S.listItem()
                 .title("Informazioni")
                 .icon(MapPin)
                 .child(
                   S.editor()
-                    .id("settings-academy-informazioni")
-                    .schemaType("settings")
-                    .documentId("settings"),
+                    .id("academy-informazioni")
+                    .schemaType("academyInformazioni")
+                    .documentId("academy-informazioni"),
                 ),
             ]),
         ),

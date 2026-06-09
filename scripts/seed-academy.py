@@ -246,37 +246,54 @@ info_faq = [
         "Eventuali camp estivi o sessioni intermedie sono annunciati separatamente."),
 ]
 
-patch_set = {
-    "scHeroEyebrow": "Academy",
-    "scHeroTitle": "Cresciamo insieme, dal 1930",
-    "scIntroBlocks": intro_blocks,
-    "scUspCards": usp_cards,
-    "scFaq": faq_home,
-    "scIscrIntro": iscr_intro,
-    "scIscrPaymentNote": iscr_payment_note,
-    "scIscrContactEmail": "sgs@orbassanocalcio.com",
-    "scIscrContactPhone": "+39 327 779 3326",
-    "scIscrEnableOnlineForm": False,
-    "scProgTimeline": prog_timeline,
-    "scProgFasce": prog_fasce,
-    "scInfoHeroPitch": (
-        "Una stagione da rossoblù al Centro Sportivo Aldo Porta. "
-        "Tutto quello che ti serve sapere prima di iscrivere tuo figlio."
-    ),
-    "scInfoAgeRange": "Dai 5 ai 13 anni",
-    "scInfoMaxGroup": 15,
-    "scInfoVenueName": "Centro Sportivo Aldo Porta",
-    "scInfoVenueAddress": "Via Ignazio Silone, 4 · 10043 Orbassano (TO)",
-    "scInfoMapsUrl": "https://www.google.com/maps/search/?api=1&query=Centro+Sportivo+Aldo+Porta+Orbassano",
-    "scInfoIncluded": info_included,
-    "scInfoPriceTable": info_prices,
-    "scInfoDiscounts": info_discounts,
-    "scInfoPayments": info_payments,
-    "scInfoCancellation": info_cancellation,
-    "scInfoContactEmail": "sgs@orbassanocalcio.com",
-    "scInfoContactPhone": "+39 327 779 3326",
-    "scInfoFaq": info_faq,
-}
+# 4 documenti dedicati (singleton). Ognuno con id fisso.
+docs = [
+    {
+        "_id": "academy-home",
+        "_type": "academyHome",
+        "scHeroEyebrow": "Academy",
+        "scHeroTitle": "Cresciamo insieme, dal 1930",
+        "scIntroBlocks": intro_blocks,
+        "scUspCards": usp_cards,
+        "scFaq": faq_home,
+    },
+    {
+        "_id": "academy-iscriviti",
+        "_type": "academyIscriviti",
+        "scIscrIntro": iscr_intro,
+        "scIscrPaymentNote": iscr_payment_note,
+        "scIscrContactEmail": "sgs@orbassanocalcio.com",
+        "scIscrContactPhone": "+39 327 779 3326",
+        "scIscrEnableOnlineForm": False,
+    },
+    {
+        "_id": "academy-programma",
+        "_type": "academyProgramma",
+        "scProgTimeline": prog_timeline,
+        "scProgFasce": prog_fasce,
+    },
+    {
+        "_id": "academy-informazioni",
+        "_type": "academyInformazioni",
+        "scInfoHeroPitch": (
+            "Una stagione da rossoblù al Centro Sportivo Aldo Porta. "
+            "Tutto quello che ti serve sapere prima di iscrivere tuo figlio."
+        ),
+        "scInfoAgeRange": "Dai 5 ai 13 anni",
+        "scInfoMaxGroup": 15,
+        "scInfoVenueName": "Centro Sportivo Aldo Porta",
+        "scInfoVenueAddress": "Via Ignazio Silone, 4 · 10043 Orbassano (TO)",
+        "scInfoMapsUrl": "https://www.google.com/maps/search/?api=1&query=Centro+Sportivo+Aldo+Porta+Orbassano",
+        "scInfoIncluded": info_included,
+        "scInfoPriceTable": info_prices,
+        "scInfoDiscounts": info_discounts,
+        "scInfoPayments": info_payments,
+        "scInfoCancellation": info_cancellation,
+        "scInfoContactEmail": "sgs@orbassanocalcio.com",
+        "scInfoContactPhone": "+39 327 779 3326",
+        "scInfoFaq": info_faq,
+    },
+]
 
 
 def get_token():
@@ -300,7 +317,33 @@ def main():
         print("ERRORE: SANITY_API_WRITE_TOKEN mancante in .env.local")
         sys.exit(1)
 
-    mutation = {"mutations": [{"patch": {"id": "settings", "set": patch_set}}]}
+    # createOrReplace per ogni documento Academy (idempotente: ri-eseguibile
+    # senza creare duplicati, sovrascrive valori esistenti). Pulisce
+    # eventuali doc orfani con stesso _id.
+    mutations = [{"createOrReplace": doc} for doc in docs]
+    # Cleanup: unset dei field Academy ancora presenti sul singleton
+    # settings (legacy dopo migrazione a documenti dedicati).
+    legacy_fields = [
+        "scHeroImage", "scHeroEyebrow", "scHeroTitle", "scIntroBlocks",
+        "scUspCards", "scHubBox1Image", "scHubBox2Image", "scHubBox3Image",
+        "scHubBox4Image", "scFaq",
+        "scIscrIntro", "scIscrQuotaAnnuale", "scIscrQuotaIscrizione",
+        "scIscrPaymentNote", "scIscrModuleFile", "scIscrIban",
+        "scIscrContactEmail", "scIscrContactPhone", "scIscrEnableOnlineForm",
+        "scProgTimeline", "scProgFasce", "scProgStaff",
+        "scInfoHeroPitch", "scInfoAgeRange", "scInfoMaxGroup",
+        "scInfoVenueName", "scInfoVenueAddress", "scInfoMapsUrl",
+        "scInfoIncluded", "scInfoPriceTable", "scInfoDiscounts",
+        "scInfoPayments", "scInfoCancellation",
+        "scInfoContactEmail", "scInfoContactPhone", "scInfoFaq",
+    ]
+    mutations.append({
+        "patch": {
+            "id": "settings",
+            "unset": legacy_fields,
+        }
+    })
+    mutation = {"mutations": mutations}
     body = json.dumps(mutation).encode("utf-8")
 
     url = "https://yqrs8njn.api.sanity.io/v2024-01-01/data/mutate/production"

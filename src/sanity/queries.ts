@@ -191,13 +191,14 @@ export const settingsQuery = defineQuery(`
   }
 `);
 
-// ─── Scuola Calcio — 4 query GROQ, una per pagina ────────────────────
-// Ognuna estrae solo i campi del rispettivo fieldset del singleton
-// settings + risolve gli asset URL. Cache tag uniforme ["settings"]
-// (vedi webhook /api/revalidate).
+// ─── Academy — 4 query GROQ, una per pagina ──────────────────────────
+// Ognuna estrae i campi del rispettivo singleton dedicato. Cache tag
+// per type (vedi webhook /api/revalidate): academyHome, academyIscriviti,
+// academyProgramma, academyInformazioni. I field name interni restano
+// `scXxx` (legacy, no rename per evitare churn nei fetcher TS).
 
 export const scuolaCalcioHomeQuery = defineQuery(`
-  *[_type == "settings"][0]{
+  *[_type == "academyHome"][0]{
     "heroImage": scHeroImage.asset->url,
     "heroImageLqip": scHeroImage.asset->metadata.lqip,
     scHeroEyebrow,
@@ -213,7 +214,7 @@ export const scuolaCalcioHomeQuery = defineQuery(`
 `);
 
 export const scuolaCalcioIscrivitiQuery = defineQuery(`
-  *[_type == "settings"][0]{
+  *[_type == "academyIscriviti"][0]{
     scIscrIntro,
     scIscrQuotaAnnuale,
     scIscrQuotaIscrizione,
@@ -227,7 +228,7 @@ export const scuolaCalcioIscrivitiQuery = defineQuery(`
 `);
 
 export const scuolaCalcioProgrammaQuery = defineQuery(`
-  *[_type == "settings"][0]{
+  *[_type == "academyProgramma"][0]{
     "timeline": scProgTimeline[]{ day, startTime, endTime, activity, ageGroup },
     "fasce": scProgFasce[] | order(coalesce(order, 999) asc){
       label, ageRange, focus,
@@ -245,7 +246,7 @@ export const scuolaCalcioProgrammaQuery = defineQuery(`
 `);
 
 export const scuolaCalcioInformazioniQuery = defineQuery(`
-  *[_type == "settings"][0]{
+  *[_type == "academyInformazioni"][0]{
     scInfoHeroPitch,
     scInfoAgeRange,
     scInfoMaxGroup,

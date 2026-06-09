@@ -14,7 +14,7 @@ import { revalidateSecret } from "@/sanity/env.server";
  * 1. Project Settings → API → Webhooks → Add webhook
  * 2. URL: https://www.orbassanocalcio.com/api/revalidate
  * 3. Trigger: Create / Update / Delete
- * 4. Filter: _type in ['sponsor', 'news', 'match', 'player', 'team', 'heroSlide', 'settings', 'clubOfficial', 'technicalStaff', 'facility', 'timelineEvent', 'club', 'competition', 'opponent', 'riferimentiOperativi', 'trasparenza5x1000', 'gallery', 'openDay', 'tournament']
+ * 4. Filter: _type in ['sponsor', 'news', 'match', 'player', 'team', 'heroSlide', 'settings', 'clubOfficial', 'technicalStaff', 'facility', 'timelineEvent', 'club', 'competition', 'opponent', 'riferimentiOperativi', 'trasparenza5x1000', 'gallery', 'openDay', 'tournament', 'academyHome', 'academyIscriviti', 'academyProgramma', 'academyInformazioni']
  *    NB: 'segnalazione' NON deve essere nella whitelist webhook
  *        (privacy + non viene letto dal sito pubblico).
  * 5. Secret: copiare in env var SANITY_REVALIDATE_SECRET

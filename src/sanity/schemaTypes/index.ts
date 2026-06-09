@@ -1,3 +1,7 @@
+import { academyHome } from "./academyHome";
+import { academyInformazioni } from "./academyInformazioni";
+import { academyIscriviti } from "./academyIscriviti";
+import { academyProgramma } from "./academyProgramma";
 import { club } from "./club";
 import { clubOfficial } from "./clubOfficial";
 import { competition } from "./competition";
@@ -24,6 +28,12 @@ export const schemaTypes = [
   // Singletons / globali
   settings,
   riferimentiOperativi,
+  // Academy: 4 singleton dedicati (uno per pagina del sito).
+  // Esposti come voci top-level nel sidebar Studio (vedi structure.ts).
+  academyHome,
+  academyIscriviti,
+  academyProgramma,
+  academyInformazioni,
   // Object inline
   staffMember,
   // Documents core

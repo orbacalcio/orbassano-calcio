@@ -1446,7 +1446,7 @@ export async function fetchScuolaCalcioHome(): Promise<ScuolaCalcioHomeData> {
     const data = await sanityClient.fetch(
       scuolaCalcioHomeQuery,
       {},
-      { next: { tags: ["settings"] } },
+      { next: { tags: ["academyHome"] } },
     );
     if (!data) return empty;
     return {
@@ -1496,7 +1496,7 @@ export async function fetchScuolaCalcioIscriviti(): Promise<ScuolaCalcioIscrivit
     const data = await sanityClient.fetch(
       scuolaCalcioIscrivitiQuery,
       {},
-      { next: { tags: ["settings"] } },
+      { next: { tags: ["academyIscriviti"] } },
     );
     if (!data) return empty;
     return {
@@ -1559,7 +1559,7 @@ export async function fetchScuolaCalcioProgramma(): Promise<ScuolaCalcioProgramm
     const data = await sanityClient.fetch(
       scuolaCalcioProgrammaQuery,
       {},
-      { next: { tags: ["settings"] } },
+      { next: { tags: ["academyProgramma"] } },
     );
     if (!data) return empty;
     return {
@@ -1626,7 +1626,7 @@ export async function fetchScuolaCalcioInformazioni(): Promise<ScuolaCalcioInfor
     const data = await sanityClient.fetch(
       scuolaCalcioInformazioniQuery,
       {},
-      { next: { tags: ["settings"] } },
+      { next: { tags: ["academyInformazioni"] } },
     );
     if (!data) return empty;
     return {
