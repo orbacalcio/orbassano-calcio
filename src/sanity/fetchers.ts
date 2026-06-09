@@ -24,6 +24,10 @@ import {
   openDaysQuery,
   playerBySlugQuery,
   riferimentiOperativiQuery,
+  scuolaCalcioHomeQuery,
+  scuolaCalcioInformazioniQuery,
+  scuolaCalcioIscrivitiQuery,
+  scuolaCalcioProgrammaQuery,
   settingsQuery,
   archivePastMatchesByTeamQuery,
   settoreGiovanileSeasonsQuery,
@@ -1387,5 +1391,225 @@ export async function fetchTournaments(): Promise<TournamentEntry[]> {
   } catch (err) {
     console.error("[fetchTournaments]", err);
     return [];
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// SCUOLA CALCIO — 4 fetcher per le 4 pagine della sezione
+// ════════════════════════════════════════════════════════════════════
+// Tutti i dati vivono nel singleton `settings` (vedi
+// src/sanity/schemaTypes/settings.ts, fieldset scuolaCalcio*).
+// Cache tag uniforme "settings" — il webhook /api/revalidate
+// invalida tutto quando il singleton viene salvato.
+// NB: PortableTextBlock e' gia' importato sopra (in cima al file).
+
+export type UspCard = {
+  number: string;
+  title: string;
+  description: string;
+};
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type ScuolaCalcioHomeData = {
+  heroImage: string | null;
+  heroImageLqip: string | null;
+  scHeroEyebrow: string | null;
+  scHeroTitle: string | null;
+  scIntroBlocks: PortableTextBlock[] | null;
+  uspCards: UspCard[];
+  hubBox1Image: string | null;
+  hubBox2Image: string | null;
+  hubBox3Image: string | null;
+  hubBox4Image: string | null;
+  faq: FaqItem[];
+};
+
+export async function fetchScuolaCalcioHome(): Promise<ScuolaCalcioHomeData> {
+  const empty: ScuolaCalcioHomeData = {
+    heroImage: null,
+    heroImageLqip: null,
+    scHeroEyebrow: null,
+    scHeroTitle: null,
+    scIntroBlocks: null,
+    uspCards: [],
+    hubBox1Image: null,
+    hubBox2Image: null,
+    hubBox3Image: null,
+    hubBox4Image: null,
+    faq: [],
+  };
+  try {
+    const data = await sanityClient.fetch(
+      scuolaCalcioHomeQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    if (!data) return empty;
+    return {
+      heroImage: data.heroImage ?? null,
+      heroImageLqip: data.heroImageLqip ?? null,
+      scHeroEyebrow: data.scHeroEyebrow ?? null,
+      scHeroTitle: data.scHeroTitle ?? null,
+      scIntroBlocks: (data.scIntroBlocks as PortableTextBlock[] | null) ?? null,
+      uspCards: (data.uspCards ?? []) as UspCard[],
+      hubBox1Image: data.hubBox1Image ?? null,
+      hubBox2Image: data.hubBox2Image ?? null,
+      hubBox3Image: data.hubBox3Image ?? null,
+      hubBox4Image: data.hubBox4Image ?? null,
+      faq: (data.faq ?? []) as FaqItem[],
+    };
+  } catch (err) {
+    console.error("[fetchScuolaCalcioHome]", err);
+    return empty;
+  }
+}
+
+export type ScuolaCalcioIscrivitiData = {
+  scIscrIntro: PortableTextBlock[] | null;
+  scIscrQuotaAnnuale: number | null;
+  scIscrQuotaIscrizione: number | null;
+  scIscrPaymentNote: string | null;
+  moduleFileUrl: string | null;
+  scIscrIban: string | null;
+  scIscrContactEmail: string | null;
+  scIscrContactPhone: string | null;
+  scIscrEnableOnlineForm: boolean;
+};
+
+export async function fetchScuolaCalcioIscriviti(): Promise<ScuolaCalcioIscrivitiData> {
+  const empty: ScuolaCalcioIscrivitiData = {
+    scIscrIntro: null,
+    scIscrQuotaAnnuale: null,
+    scIscrQuotaIscrizione: null,
+    scIscrPaymentNote: null,
+    moduleFileUrl: null,
+    scIscrIban: null,
+    scIscrContactEmail: null,
+    scIscrContactPhone: null,
+    scIscrEnableOnlineForm: false,
+  };
+  try {
+    const data = await sanityClient.fetch(
+      scuolaCalcioIscrivitiQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    if (!data) return empty;
+    return {
+      scIscrIntro: (data.scIscrIntro as PortableTextBlock[] | null) ?? null,
+      scIscrQuotaAnnuale: data.scIscrQuotaAnnuale ?? null,
+      scIscrQuotaIscrizione: data.scIscrQuotaIscrizione ?? null,
+      scIscrPaymentNote: data.scIscrPaymentNote ?? null,
+      moduleFileUrl: data.moduleFileUrl ?? null,
+      scIscrIban: data.scIscrIban ?? null,
+      scIscrContactEmail: data.scIscrContactEmail ?? null,
+      scIscrContactPhone: data.scIscrContactPhone ?? null,
+      scIscrEnableOnlineForm: data.scIscrEnableOnlineForm === true,
+    };
+  } catch (err) {
+    console.error("[fetchScuolaCalcioIscriviti]", err);
+    return empty;
+  }
+}
+
+export type ScuolaCalcioTimelineSlot = {
+  day: string;
+  startTime: string | null;
+  endTime: string | null;
+  activity: string | null;
+  ageGroup: string | null;
+};
+
+export type ScuolaCalcioFascia = {
+  label: string;
+  ageRange: string;
+  focus: PortableTextBlock[] | null;
+  image: string | null;
+  imageLqip: string | null;
+  order: number | null;
+};
+
+export type ScuolaCalcioCoach = {
+  name: string;
+  role: string;
+  qualifications: string | null;
+  photo: string | null;
+  photoLqip: string | null;
+  bio: string | null;
+  order: number | null;
+};
+
+export type ScuolaCalcioProgrammaData = {
+  timeline: ScuolaCalcioTimelineSlot[];
+  fasce: ScuolaCalcioFascia[];
+  staff: ScuolaCalcioCoach[];
+};
+
+export async function fetchScuolaCalcioProgramma(): Promise<ScuolaCalcioProgrammaData> {
+  const empty: ScuolaCalcioProgrammaData = {
+    timeline: [],
+    fasce: [],
+    staff: [],
+  };
+  try {
+    const data = await sanityClient.fetch(
+      scuolaCalcioProgrammaQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    if (!data) return empty;
+    return {
+      timeline: (data.timeline ?? []) as ScuolaCalcioTimelineSlot[],
+      fasce: (data.fasce ?? []) as ScuolaCalcioFascia[],
+      staff: (data.staff ?? []) as ScuolaCalcioCoach[],
+    };
+  } catch (err) {
+    console.error("[fetchScuolaCalcioProgramma]", err);
+    return empty;
+  }
+}
+
+export type PriceRow = { label: string; value: string };
+
+export type ScuolaCalcioInformazioniData = {
+  scInfoVenueName: string | null;
+  scInfoVenueAddress: string | null;
+  scInfoMapsUrl: string | null;
+  included: string[];
+  priceTable: PriceRow[];
+  faq: FaqItem[];
+};
+
+export async function fetchScuolaCalcioInformazioni(): Promise<ScuolaCalcioInformazioniData> {
+  const empty: ScuolaCalcioInformazioniData = {
+    scInfoVenueName: null,
+    scInfoVenueAddress: null,
+    scInfoMapsUrl: null,
+    included: [],
+    priceTable: [],
+    faq: [],
+  };
+  try {
+    const data = await sanityClient.fetch(
+      scuolaCalcioInformazioniQuery,
+      {},
+      { next: { tags: ["settings"] } },
+    );
+    if (!data) return empty;
+    return {
+      scInfoVenueName: data.scInfoVenueName ?? null,
+      scInfoVenueAddress: data.scInfoVenueAddress ?? null,
+      scInfoMapsUrl: data.scInfoMapsUrl ?? null,
+      included: (data.included ?? []) as string[],
+      priceTable: (data.priceTable ?? []) as PriceRow[],
+      faq: (data.faq ?? []) as FaqItem[],
+    };
+  } catch (err) {
+    console.error("[fetchScuolaCalcioInformazioni]", err);
+    return empty;
   }
 }

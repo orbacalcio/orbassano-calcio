@@ -191,6 +191,70 @@ export const settingsQuery = defineQuery(`
   }
 `);
 
+// ─── Scuola Calcio — 4 query GROQ, una per pagina ────────────────────
+// Ognuna estrae solo i campi del rispettivo fieldset del singleton
+// settings + risolve gli asset URL. Cache tag uniforme ["settings"]
+// (vedi webhook /api/revalidate).
+
+export const scuolaCalcioHomeQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    "heroImage": scHeroImage.asset->url,
+    "heroImageLqip": scHeroImage.asset->metadata.lqip,
+    scHeroEyebrow,
+    scHeroTitle,
+    scIntroBlocks,
+    "uspCards": scUspCards[]{ number, title, description },
+    "hubBox1Image": scHubBox1Image.asset->url,
+    "hubBox2Image": scHubBox2Image.asset->url,
+    "hubBox3Image": scHubBox3Image.asset->url,
+    "hubBox4Image": scHubBox4Image.asset->url,
+    "faq": scFaq[]{ question, answer }
+  }
+`);
+
+export const scuolaCalcioIscrivitiQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    scIscrIntro,
+    scIscrQuotaAnnuale,
+    scIscrQuotaIscrizione,
+    scIscrPaymentNote,
+    "moduleFileUrl": scIscrModuleFile.asset->url,
+    scIscrIban,
+    scIscrContactEmail,
+    scIscrContactPhone,
+    scIscrEnableOnlineForm
+  }
+`);
+
+export const scuolaCalcioProgrammaQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    "timeline": scProgTimeline[]{ day, startTime, endTime, activity, ageGroup },
+    "fasce": scProgFasce[] | order(coalesce(order, 999) asc){
+      label, ageRange, focus,
+      "image": image.asset->url,
+      "imageLqip": image.asset->metadata.lqip,
+      order
+    },
+    "staff": scProgStaff[] | order(coalesce(order, 999) asc){
+      name, role, qualifications,
+      "photo": photo.asset->url,
+      "photoLqip": photo.asset->metadata.lqip,
+      bio, order
+    }
+  }
+`);
+
+export const scuolaCalcioInformazioniQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    scInfoVenueName,
+    scInfoVenueAddress,
+    scInfoMapsUrl,
+    "included": scInfoIncluded[],
+    "priceTable": scInfoPriceTable[]{ label, value },
+    "faq": scInfoFaq[]{ question, answer }
+  }
+`);
+
 // Staff tecnico club-wide (direttore sportivo / tecnico / responsabile
 // settore giovanile, etc.) per la sezione finale di /squadre. Filtra
 // isActive != false, ordina per `tier` ASC (es. "1-direzione" prima di
