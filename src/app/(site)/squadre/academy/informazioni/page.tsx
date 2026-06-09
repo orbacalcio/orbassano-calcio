@@ -1,14 +1,29 @@
 import type { Metadata } from "next";
-import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Mail,
+  Phone,
+  ShieldAlert,
+} from "lucide-react";
+import { DiscountsBlock } from "@/components/academy/DiscountsBlock";
 import { FaqAccordion } from "@/components/academy/FaqAccordion";
 import { InfoVenueBlock } from "@/components/academy/InfoVenueBlock";
+import { PaymentTimelineBlock } from "@/components/academy/PaymentTimelineBlock";
+import {
+  StatCardsRow,
+  type StatCardItem,
+} from "@/components/academy/StatCardsRow";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchScuolaCalcioInformazioni,
+  type DiscountRow,
   type FaqItem,
+  type PaymentRow,
   type PriceRow,
 } from "@/sanity/fetchers";
 
@@ -16,14 +31,22 @@ export const metadata: Metadata = {
   alternates: { canonical: "/squadre/academy/informazioni" },
   title: "Informazioni Academy",
   description:
-    "Sede, prezzi e info pratiche della Academy Orbassano: Centro Sportivo Aldo Porta, quote stagione 2026/2027, cosa è incluso, FAQ logistiche e contatti.",
+    "Tutte le info pratiche dell'Academy Orbassano: sede, prezzi, sconti famiglie, scadenze pagamento, politica cancellazione, contatti. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
 };
 
-// Fallback editoriali brand-voice.
+// ─── Fallback editoriali brand-voice ─────────────────────────────────
+const FALLBACK_HERO_PITCH =
+  "Una stagione da rossoblù al Centro Sportivo Aldo Porta. Tutto quello che ti serve sapere prima di iscrivere tuo figlio.";
+const FALLBACK_AGE_RANGE = "Dai 5 ai 13 anni";
+const FALLBACK_MAX_GROUP = 15;
 const FALLBACK_VENUE_NAME = "Centro Sportivo Aldo Porta";
 const FALLBACK_VENUE_ADDRESS = "Via Ignazio Silone, 4 · 10043 Orbassano (TO)";
 const FALLBACK_MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=Centro+Sportivo+Aldo+Porta+Orbassano";
+const FALLBACK_PHONE = "+39 327 779 3326";
+const FALLBACK_EMAIL = "sgs@orbassanocalcio.com";
+const FALLBACK_CANCELLATION =
+  "In caso di ritiro: rimborso del 50% della quota residua se comunicato entro 30 giorni prima dell'inizio della stagione. Dopo l'inizio non sono previsti rimborsi, salvo gravi motivi medici certificati (in quel caso rimborso del 100% sulle sessioni non frequentate). Per richieste contatta la segreteria.";
 
 const FALLBACK_INCLUDED: string[] = [
   "Tessera FIGC + assicurazione integrata",
@@ -31,15 +54,45 @@ const FALLBACK_INCLUDED: string[] = [
   "Materiale tecnico (palloni, casacche, conetti)",
   "Visite mediche sportive non agonistiche organizzate dal club",
   "Accesso a tornei e amichevoli organizzati dal club",
+  "Attestato di partecipazione + valutazione tecnica fine stagione",
 ];
 
 const FALLBACK_PRICE_TABLE: PriceRow[] = [
   { label: "Quota annuale", value: "Da pubblicare" },
   { label: "Quota iscrizione una tantum", value: "Da pubblicare" },
-  { label: "Sconto fratelli", value: "-10% sulla seconda quota" },
+];
+
+const FALLBACK_DISCOUNTS: DiscountRow[] = [
   {
-    label: "Rateizzazione",
-    value: "2 tranche (50% iscrizione + 50% gennaio)",
+    label: "Sconto fratelli",
+    value: "-10%",
+    condition: "Sulla seconda quota e successive. Cumulabile con altri sconti.",
+  },
+  {
+    label: "Iscrizione anticipata",
+    value: "-5%",
+    condition: "Per chi formalizza l'iscrizione entro il 15 luglio.",
+  },
+  {
+    label: "Porta un amico",
+    value: "-5%",
+    condition:
+      "Se un tuo amico si iscrive citando il tuo nome, entrambi ricevete lo sconto.",
+  },
+];
+
+const FALLBACK_PAYMENTS: PaymentRow[] = [
+  {
+    milestone: "All'iscrizione",
+    deadline: "Entro 7 giorni dalla prova",
+    amount: "50% della quota annuale",
+    note: "Bonifico bancario con causale 'Iscrizione Academy 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
+  },
+  {
+    milestone: "Saldo",
+    deadline: "Entro 31 gennaio 2027",
+    amount: "50% della quota annuale",
+    note: "Stessa modalità: bonifico bancario, ricevuta da inviare via email alla segreteria.",
   },
 ];
 
@@ -71,18 +124,36 @@ const FALLBACK_FAQ: FaqItem[] = [
   },
 ];
 
-export default async function ScuolaCalcioInformazioniPage() {
+export default async function AcademyInformazioniPage() {
   const data = await fetchScuolaCalcioInformazioni();
 
+  const heroPitch = data.scInfoHeroPitch?.trim() || FALLBACK_HERO_PITCH;
+  const ageRange = data.scInfoAgeRange?.trim() || FALLBACK_AGE_RANGE;
+  const maxGroup = data.scInfoMaxGroup ?? FALLBACK_MAX_GROUP;
   const venueName = data.scInfoVenueName?.trim() || FALLBACK_VENUE_NAME;
   const venueAddress =
     data.scInfoVenueAddress?.trim() || FALLBACK_VENUE_ADDRESS;
   const mapsUrl = data.scInfoMapsUrl?.trim() || FALLBACK_MAPS_URL;
+  const phone = data.scInfoContactPhone?.trim() || FALLBACK_PHONE;
+  const email = data.scInfoContactEmail?.trim() || FALLBACK_EMAIL;
+  const cancellation =
+    data.scInfoCancellation?.trim() || FALLBACK_CANCELLATION;
   const included =
     data.included.length > 0 ? data.included : FALLBACK_INCLUDED;
   const priceTable =
     data.priceTable.length > 0 ? data.priceTable : FALLBACK_PRICE_TABLE;
+  const discounts =
+    data.discounts.length > 0 ? data.discounts : FALLBACK_DISCOUNTS;
+  const payments =
+    data.payments.length > 0 ? data.payments : FALLBACK_PAYMENTS;
   const faq = data.faq.length > 0 ? data.faq : FALLBACK_FAQ;
+
+  const stats: StatCardItem[] = [
+    { value: "5-13", label: "Età ammesse (anni)" },
+    { value: String(maxGroup), label: "Max per gruppo" },
+    { value: "2-3", label: "Allenamenti settimanali" },
+    { value: "1", label: "Sede unica" },
+  ];
 
   return (
     <>
@@ -110,68 +181,85 @@ export default async function ScuolaCalcioInformazioniPage() {
               Academy · Informazioni
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
-              Sede, prezzi, info pratiche
+              Tutto quello che ti serve
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Tutto quello che ti serve sapere per organizzare l&apos;inizio
-              della stagione del tuo bambino.
+              {heroPitch}
             </p>
           </div>
         </Container>
       </header>
 
-      {/* 2 col: Sede + Cosa è incluso */}
+      <section className="bg-surface-1 border-y border-border/40">
+        <Container className="py-10 lg:py-14" size="wide">
+          <StatCardsRow items={stats} />
+        </Container>
+      </section>
+
       <section className="bg-surface-0">
         <Container className="py-16 lg:py-20" size="wide">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <InfoVenueBlock
-              name={venueName}
-              address={venueAddress}
-              mapsUrl={mapsUrl}
-            />
-            <article
-              aria-labelledby="included-title"
-              className="border-border bg-surface-1 flex flex-col gap-5 rounded-2xl border p-6 md:p-8"
-            >
-              <div className="flex items-start gap-3">
-                <CheckCircle2
-                  size={28}
-                  className="text-brand-gold mt-1 shrink-0"
-                  aria-hidden
-                />
-                <div className="flex flex-col gap-1">
-                  <span className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
-                    Cosa è incluso
-                  </span>
-                  <h2
-                    id="included-title"
-                    className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl"
-                  >
-                    Nella quota
-                  </h2>
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-3">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                Sede e cosa è incluso
+              </span>
+              <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
+                Sede unica, tutto compreso
+              </h2>
+              <p className="text-ink-mid max-w-2xl text-sm leading-relaxed md:text-base">
+                {ageRange} · gruppi piccoli per garantire attenzione individuale
+                · kit ufficiale + assicurazione FIGC inclusi nella quota.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <InfoVenueBlock
+                name={venueName}
+                address={venueAddress}
+                mapsUrl={mapsUrl}
+              />
+              <article
+                aria-labelledby="included-title"
+                className="border-border bg-surface-1 flex flex-col gap-5 rounded-2xl border p-6 md:p-8"
+              >
+                <div className="flex items-start gap-3">
+                  <CheckCircle2
+                    size={28}
+                    className="text-brand-gold mt-1 shrink-0"
+                    aria-hidden
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
+                      Cosa è incluso
+                    </span>
+                    <h3
+                      id="included-title"
+                      className="font-display text-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl"
+                    >
+                      Nella quota
+                    </h3>
+                  </div>
                 </div>
-              </div>
-              <ul className="flex flex-col gap-3">
-                {included.map((item) => (
-                  <li
-                    key={item}
-                    className="text-ink-mid flex items-start gap-3 text-sm leading-relaxed md:text-base"
-                  >
-                    <CheckCircle2
-                      size={18}
-                      className="text-brand-red mt-0.5 shrink-0"
-                      aria-hidden
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
+                <ul className="flex flex-col gap-3">
+                  {included.map((item) => (
+                    <li
+                      key={item}
+                      className="text-ink-mid flex items-start gap-3 text-sm leading-relaxed md:text-base"
+                    >
+                      <CheckCircle2
+                        size={18}
+                        className="text-brand-red mt-0.5 shrink-0"
+                        aria-hidden
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Tabella prezzi */}
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
           <div className="flex flex-col gap-10">
@@ -204,19 +292,154 @@ export default async function ScuolaCalcioInformazioniPage() {
         </Container>
       </section>
 
-      {/* FAQ */}
+      {discounts.length > 0 && (
+        <section className="bg-surface-0">
+          <Container className="py-16 lg:py-20" size="wide">
+            <div className="flex flex-col gap-10">
+              <div className="flex flex-col gap-3">
+                <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                  Sconti famiglie
+                </span>
+                <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
+                  Si può risparmiare
+                </h2>
+                <p className="text-ink-mid max-w-2xl text-sm leading-relaxed md:text-base">
+                  Sconti applicabili al momento dell&apos;iscrizione.
+                  Cumulabili fino a un massimo del -30%. Per dettagli contatta
+                  la segreteria.
+                </p>
+              </div>
+              <DiscountsBlock discounts={discounts} />
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {payments.length > 0 && (
+        <section className="bg-light-bg-0">
+          <Container className="py-16 lg:py-20" size="wide">
+            <div className="flex flex-col gap-10">
+              <div className="flex flex-col gap-3">
+                <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                  Scadenze pagamento
+                </span>
+                <h2 className="font-display text-light-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
+                  Come e quando si paga
+                </h2>
+              </div>
+              <div className="max-w-3xl">
+                <PaymentTimelineBlock payments={payments} />
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
+
       <section className="bg-surface-0">
+        <Container className="py-16 lg:py-20" size="wide">
+          <div className="max-w-3xl flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                Politica di cancellazione
+              </span>
+              <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-4xl">
+                Se cambi idea
+              </h2>
+            </div>
+            <article className="border-border bg-surface-1 flex items-start gap-4 rounded-2xl border p-6 md:p-8">
+              <ShieldAlert
+                size={28}
+                className="text-brand-gold mt-1 shrink-0"
+                aria-hidden
+              />
+              <p className="text-ink-mid text-sm leading-relaxed md:text-base">
+                {cancellation}
+              </p>
+            </article>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-3">
               <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
                 FAQ
               </span>
-              <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
+              <h2 className="font-display text-light-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
                 Info pratiche frequenti
               </h2>
             </div>
-            <FaqAccordion items={faq} />
+            <div className="bg-surface-0 rounded-2xl p-4 md:p-8 lg:p-10">
+              <FaqAccordion items={faq} />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-surface-0">
+        <Container className="py-16 lg:py-24" size="wide">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
+            <div className="flex flex-col gap-4">
+              <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
+                Contatti diretti
+              </span>
+              <h2 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-4xl lg:text-5xl">
+                Parliamone
+              </h2>
+              <p className="text-ink-mid text-sm leading-relaxed md:text-base">
+                Hai una domanda specifica? Scrivici o chiamaci, ti rispondiamo
+                entro 48 ore.
+              </p>
+              <ul className="flex flex-col gap-3 mt-2">
+                <li className="text-ink-mid flex items-center gap-2 text-sm">
+                  <Phone
+                    size={16}
+                    className="text-brand-gold shrink-0"
+                    aria-hidden
+                  />
+                  <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    className="hover:text-ink-hi transition-colors"
+                  >
+                    {phone}
+                  </a>
+                </li>
+                <li className="text-ink-mid flex items-center gap-2 text-sm">
+                  <Mail
+                    size={16}
+                    className="text-brand-gold shrink-0"
+                    aria-hidden
+                  />
+                  <a
+                    href={`mailto:${email}`}
+                    className="hover:text-ink-hi transition-colors"
+                  >
+                    {email}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="border-border bg-surface-1 flex flex-col gap-5 rounded-2xl border p-6 md:p-10">
+              <span className="text-brand-gold font-display text-xs font-bold tracking-[0.2em] uppercase">
+                Pronto?
+              </span>
+              <h3 className="font-display text-ink-hi text-3xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-4xl">
+                Iscrivi tuo figlio
+              </h3>
+              <p className="text-ink-mid text-sm leading-relaxed">
+                Prova gratuita, modulo PDF, bonifico. La segreteria ti
+                accompagna in ogni passaggio.
+              </p>
+              <Link
+                href="/squadre/academy/iscriviti"
+                className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold mt-2 inline-flex w-fit items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                Vai all&apos;iscrizione
+                <ArrowRight size={16} aria-hidden />
+              </Link>
+            </div>
           </div>
         </Container>
       </section>

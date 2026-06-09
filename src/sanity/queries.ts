@@ -246,11 +246,19 @@ export const scuolaCalcioProgrammaQuery = defineQuery(`
 
 export const scuolaCalcioInformazioniQuery = defineQuery(`
   *[_type == "settings"][0]{
+    scInfoHeroPitch,
+    scInfoAgeRange,
+    scInfoMaxGroup,
     scInfoVenueName,
     scInfoVenueAddress,
     scInfoMapsUrl,
     "included": scInfoIncluded[],
     "priceTable": scInfoPriceTable[]{ label, value },
+    "discounts": scInfoDiscounts[]{ label, value, condition },
+    "payments": scInfoPayments[]{ milestone, deadline, amount, note },
+    scInfoCancellation,
+    scInfoContactEmail,
+    scInfoContactPhone,
     "faq": scInfoFaq[]{ question, answer }
   }
 `);

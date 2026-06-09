@@ -71,6 +71,27 @@ def price(label, value):
     return {"_type": "object", "_key": _k(), "label": label, "value": value}
 
 
+def discount(label, value, condition):
+    return {
+        "_type": "object",
+        "_key": _k(),
+        "label": label,
+        "value": value,
+        "condition": condition,
+    }
+
+
+def payment(milestone, deadline, amount, note):
+    return {
+        "_type": "object",
+        "_key": _k(),
+        "milestone": milestone,
+        "deadline": deadline,
+        "amount": amount,
+        "note": note,
+    }
+
+
 # ── Contenuti ─────────────────────────────────────────────────────────
 
 intro_blocks = [
@@ -181,9 +202,32 @@ info_included = [
 info_prices = [
     price("Quota annuale", "Da pubblicare"),
     price("Quota iscrizione una tantum", "Da pubblicare"),
-    price("Sconto fratelli", "-10% sulla seconda quota"),
-    price("Rateizzazione", "2 tranche (50% iscrizione + 50% gennaio)"),
 ]
+
+info_discounts = [
+    discount("Sconto fratelli", "-10%",
+             "Sulla seconda quota e successive. Cumulabile con altri sconti."),
+    discount("Iscrizione anticipata", "-5%",
+             "Per chi formalizza l'iscrizione entro il 15 luglio."),
+    discount("Porta un amico", "-5%",
+             "Se un tuo amico si iscrive citando il tuo nome, entrambi ricevete lo sconto."),
+]
+
+info_payments = [
+    payment("All'iscrizione", "Entro 7 giorni dalla prova",
+            "50% della quota annuale",
+            "Bonifico bancario con causale 'Iscrizione Academy 2026/2027 + Nome Cognome del bambino + anno di nascita'."),
+    payment("Saldo", "Entro 31 gennaio 2027",
+            "50% della quota annuale",
+            "Stessa modalità: bonifico bancario, ricevuta da inviare via email alla segreteria."),
+]
+
+info_cancellation = (
+    "In caso di ritiro: rimborso del 50% della quota residua se comunicato entro 30 giorni "
+    "prima dell'inizio della stagione. Dopo l'inizio non sono previsti rimborsi, salvo gravi "
+    "motivi medici certificati (in quel caso rimborso del 100% sulle sessioni non frequentate). "
+    "Per richieste contatta la segreteria."
+)
 
 info_faq = [
     faq("Dove si trova il Centro Sportivo Aldo Porta?",
@@ -215,11 +259,22 @@ patch_set = {
     "scIscrEnableOnlineForm": False,
     "scProgTimeline": prog_timeline,
     "scProgFasce": prog_fasce,
+    "scInfoHeroPitch": (
+        "Una stagione da rossoblù al Centro Sportivo Aldo Porta. "
+        "Tutto quello che ti serve sapere prima di iscrivere tuo figlio."
+    ),
+    "scInfoAgeRange": "Dai 5 ai 13 anni",
+    "scInfoMaxGroup": 15,
     "scInfoVenueName": "Centro Sportivo Aldo Porta",
     "scInfoVenueAddress": "Via Ignazio Silone, 4 · 10043 Orbassano (TO)",
     "scInfoMapsUrl": "https://www.google.com/maps/search/?api=1&query=Centro+Sportivo+Aldo+Porta+Orbassano",
     "scInfoIncluded": info_included,
     "scInfoPriceTable": info_prices,
+    "scInfoDiscounts": info_discounts,
+    "scInfoPayments": info_payments,
+    "scInfoCancellation": info_cancellation,
+    "scInfoContactEmail": "sgs@orbassanocalcio.com",
+    "scInfoContactPhone": "+39 327 779 3326",
     "scInfoFaq": info_faq,
 }
 

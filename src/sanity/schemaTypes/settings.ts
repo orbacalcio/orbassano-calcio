@@ -1054,8 +1054,147 @@ export const settings = defineType({
     }),
 
     // ════════════════════════════════════════════════════════════════
-    // SCUOLA CALCIO — pagina /informazioni
+    // ACADEMY — pagina /informazioni (struttura stile Toro Camp)
     // ════════════════════════════════════════════════════════════════
+    defineField({
+      name: "scInfoHeroPitch",
+      title: "Hero — pitch sotto al titolo",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Frase di 1-2 righe sotto il titolo h1 della pagina /informazioni. Es. 'Una stagione da rossoblù al Centro Sportivo Aldo Porta'.",
+      type: "text",
+      rows: 2,
+    }),
+    defineField({
+      name: "scInfoAgeRange",
+      title: "Età ammesse (label)",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Es. 'Dai 5 ai 13 anni'. Mostrato come stat insieme al numero max gruppo.",
+      type: "string",
+    }),
+    defineField({
+      name: "scInfoMaxGroup",
+      title: "Massimo per gruppo",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Numero massimo di bambini per gruppo di allenamento (es. 15).",
+      type: "number",
+      validation: (r) => r.min(1).max(50),
+    }),
+    defineField({
+      name: "scInfoDiscounts",
+      title: "Sconti famiglie / early-bird",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Lista sconti applicabili (es. Sconto fratelli -10%, Iscrizione anticipata entro 15 lug -5%).",
+      type: "array",
+      of: [
+        defineField({
+          name: "discount",
+          title: "Sconto",
+          type: "object",
+          fields: [
+            defineField({
+              name: "label",
+              title: "Nome sconto",
+              type: "string",
+              description: "Es. 'Sconto fratelli', 'Iscrizione anticipata'.",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "value",
+              title: "Valore",
+              type: "string",
+              description: "Es. '-10%', '-€30', '50% sulla seconda quota'.",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "condition",
+              title: "Condizione",
+              type: "string",
+              description:
+                "Es. 'Sulla seconda quota', 'Iscritti entro il 15 luglio', 'Famiglie 3+ figli'.",
+            }),
+          ],
+          preview: {
+            select: { title: "label", subtitle: "value" },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: "scInfoPayments",
+      title: "Timeline pagamenti / scadenze",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Calendario delle scadenze di pagamento (es. iscrizione settembre, saldo gennaio).",
+      type: "array",
+      of: [
+        defineField({
+          name: "payment",
+          title: "Scadenza",
+          type: "object",
+          fields: [
+            defineField({
+              name: "milestone",
+              title: "Milestone",
+              type: "string",
+              description:
+                "Es. 'All'iscrizione', 'Entro 31 gennaio', 'Saldo finale'.",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "deadline",
+              title: "Scadenza (label)",
+              type: "string",
+              description:
+                "Es. 'Settembre 2026', 'Entro 31 gen 2027', '30 giorni dall'iscrizione'.",
+            }),
+            defineField({
+              name: "amount",
+              title: "Importo / percentuale",
+              type: "string",
+              description: "Es. '50% della quota annuale', '€175'.",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "note",
+              title: "Nota",
+              type: "text",
+              rows: 2,
+            }),
+          ],
+          preview: {
+            select: { title: "milestone", subtitle: "amount" },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: "scInfoCancellation",
+      title: "Politica di cancellazione",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Cosa succede se il bambino si ritira dalla Academy. Rimborso, percentuale trattenuta, casi medici, scadenze.",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "scInfoContactEmail",
+      title: "Email contatti diretti pagina informazioni",
+      fieldset: "scuolaCalcioInformazioni",
+      description:
+        "Email mostrata nella sezione 'Contatti' della pagina /informazioni. Se vuoto, riusa email dal fieldset Iscrizione.",
+      type: "string",
+    }),
+    defineField({
+      name: "scInfoContactPhone",
+      title: "Telefono contatti diretti pagina informazioni",
+      fieldset: "scuolaCalcioInformazioni",
+      description: "Numero diretto/whatsapp visibile in fondo pagina.",
+      type: "string",
+    }),
     defineField({
       name: "scInfoVenueName",
       title: "Sede — nome",

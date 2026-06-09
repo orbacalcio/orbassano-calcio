@@ -1575,22 +1575,51 @@ export async function fetchScuolaCalcioProgramma(): Promise<ScuolaCalcioProgramm
 
 export type PriceRow = { label: string; value: string };
 
+export type DiscountRow = {
+  label: string;
+  value: string;
+  condition: string | null;
+};
+
+export type PaymentRow = {
+  milestone: string;
+  deadline: string | null;
+  amount: string;
+  note: string | null;
+};
+
 export type ScuolaCalcioInformazioniData = {
+  scInfoHeroPitch: string | null;
+  scInfoAgeRange: string | null;
+  scInfoMaxGroup: number | null;
   scInfoVenueName: string | null;
   scInfoVenueAddress: string | null;
   scInfoMapsUrl: string | null;
   included: string[];
   priceTable: PriceRow[];
+  discounts: DiscountRow[];
+  payments: PaymentRow[];
+  scInfoCancellation: string | null;
+  scInfoContactEmail: string | null;
+  scInfoContactPhone: string | null;
   faq: FaqItem[];
 };
 
 export async function fetchScuolaCalcioInformazioni(): Promise<ScuolaCalcioInformazioniData> {
   const empty: ScuolaCalcioInformazioniData = {
+    scInfoHeroPitch: null,
+    scInfoAgeRange: null,
+    scInfoMaxGroup: null,
     scInfoVenueName: null,
     scInfoVenueAddress: null,
     scInfoMapsUrl: null,
     included: [],
     priceTable: [],
+    discounts: [],
+    payments: [],
+    scInfoCancellation: null,
+    scInfoContactEmail: null,
+    scInfoContactPhone: null,
     faq: [],
   };
   try {
@@ -1601,11 +1630,19 @@ export async function fetchScuolaCalcioInformazioni(): Promise<ScuolaCalcioInfor
     );
     if (!data) return empty;
     return {
+      scInfoHeroPitch: data.scInfoHeroPitch ?? null,
+      scInfoAgeRange: data.scInfoAgeRange ?? null,
+      scInfoMaxGroup: data.scInfoMaxGroup ?? null,
       scInfoVenueName: data.scInfoVenueName ?? null,
       scInfoVenueAddress: data.scInfoVenueAddress ?? null,
       scInfoMapsUrl: data.scInfoMapsUrl ?? null,
       included: (data.included ?? []) as string[],
       priceTable: (data.priceTable ?? []) as PriceRow[],
+      discounts: (data.discounts ?? []) as DiscountRow[],
+      payments: (data.payments ?? []) as PaymentRow[],
+      scInfoCancellation: data.scInfoCancellation ?? null,
+      scInfoContactEmail: data.scInfoContactEmail ?? null,
+      scInfoContactPhone: data.scInfoContactPhone ?? null,
       faq: (data.faq ?? []) as FaqItem[],
     };
   } catch (err) {
