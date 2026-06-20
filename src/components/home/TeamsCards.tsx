@@ -49,10 +49,10 @@ const CARD_SLOTS = [
   },
   {
     number: "02",
-    href: "/squadre/juniores",
+    href: "/squadre/juniores-u19",
     fallbackTitle: "Juniores",
     fallbackDescription:
-      "Campionato Juniores. Under 19 rossoblù, ultimo gradino prima del salto in Prima Squadra.",
+      "Under 19 + Under 18 rossoblù: gli ultimi gradini prima del salto in Prima Squadra.",
   },
   {
     number: "03",

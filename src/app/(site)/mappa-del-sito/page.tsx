@@ -100,7 +100,8 @@ export default async function MappaDelSitoPage() {
       title: "Calendari & eventi",
       links: [
         { href: "/squadre/prima-squadra/calendario", label: "Calendario Prima Squadra" },
-        { href: "/squadre/juniores/calendario", label: "Calendario Juniores" },
+        { href: "/squadre/juniores-u19/calendario", label: "Calendario Juniores U19" },
+        { href: "/squadre/juniores-under-18/calendario", label: "Calendario Juniores U18" },
         {
           href: "/squadre/settore-giovanile/calendario",
           label: "Calendario Settore Giovanile (aggregato)",

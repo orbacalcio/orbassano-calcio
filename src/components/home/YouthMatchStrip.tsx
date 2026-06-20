@@ -49,11 +49,11 @@ const OUR_LOGO_NAME = "Orbassano Calcio";
 type TeamRow = { slug: string; label: string };
 
 const JUNIORES_TEAMS: TeamRow[] = [
-  { slug: "juniores", label: "Juniores" },
+  { slug: "juniores-u19", label: "Juniores U19" },
+  { slug: "juniores-under-18", label: "Juniores U18" },
 ];
 
 const SCOLASTICO_TEAMS: TeamRow[] = [
-  { slug: "allievi-under-18", label: "Under 18" },
   { slug: "allievi-under-17", label: "Under 17" },
   { slug: "allievi-under-16", label: "Under 16" },
   { slug: "giovanissimi-under-15", label: "Under 15" },

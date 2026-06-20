@@ -75,11 +75,11 @@ const CARD_SLOTS: Array<{
   {
     number: "02",
     category: "Juniores",
-    href: "/squadre/juniores/calendario",
+    href: "/squadre/juniores-u19/calendario",
     fallbackEyebrow: "Calendario Juniores",
-    fallbackTitle: "Juniores",
+    fallbackTitle: "Juniores U19",
     fallbackDescription:
-      "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra.",
+      "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra. La squadra Under 18 ha il suo calendario su /squadre/juniores-under-18/calendario.",
   },
   {
     number: "03",

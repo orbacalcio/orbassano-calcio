@@ -92,8 +92,17 @@ function buildSections(opts: {
   if (teamSlugs.has("prima-squadra")) {
     squadreItems.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
   }
-  if (teamSlugs.has("juniores")) {
-    squadreItems.push({ href: "/squadre/juniores", label: "Juniores" });
+  if (teamSlugs.has("juniores-u19")) {
+    squadreItems.push({
+      href: "/squadre/juniores-u19",
+      label: "Juniores U19",
+    });
+  }
+  if (teamSlugs.has("juniores-under-18")) {
+    squadreItems.push({
+      href: "/squadre/juniores-under-18",
+      label: "Juniores U18",
+    });
   }
   squadreItems.push({
     href: "/squadre/settore-giovanile",
