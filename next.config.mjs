@@ -263,6 +263,22 @@ const nextConfig = {
         destination: "/squadre/settore-giovanile",
         permanent: true,
       },
+      // 2026-06-20: lo slug "juniores" (single team U19) e' stato
+      // rinominato in "juniores-u19" su Sanity per fare spazio al
+      // nuovo team "juniores-under-18". Redirect 308 dei vecchi URL
+      // per preservare link esterni / SEO / cache Google.
+      // Coperto: /squadre/juniores (team detail), /calendario,
+      // /<player-slug> (rosa dettaglio), qualsiasi sotto-path.
+      {
+        source: "/squadre/juniores",
+        destination: "/squadre/juniores-u19",
+        permanent: true,
+      },
+      {
+        source: "/squadre/juniores/:path*",
+        destination: "/squadre/juniores-u19/:path*",
+        permanent: true,
+      },
     ];
     // ─── EMERGENCY HIDE 2026-06-06 ────────────────────────────────
     // Le 4 pagine Scuola Calcio devono essere visibili SOLO sul
