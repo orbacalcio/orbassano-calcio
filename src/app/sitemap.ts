@@ -149,6 +149,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /squadre/settore-giovanile/calendario (gia' inclusa in STATIC_ROUTES).
   // Slug coerenti con team.slug.current su Sanity (vedi structure.ts).
   const SG_TEAM_SLUGS = new Set([
+    "allievi-under-18",
     "allievi-under-17",
     "allievi-under-16",
     "giovanissimi-under-15",

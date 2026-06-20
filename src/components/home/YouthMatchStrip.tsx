@@ -53,6 +53,7 @@ const JUNIORES_TEAMS: TeamRow[] = [
 ];
 
 const SCOLASTICO_TEAMS: TeamRow[] = [
+  { slug: "allievi-under-18", label: "Under 18" },
   { slug: "allievi-under-17", label: "Under 17" },
   { slug: "allievi-under-16", label: "Under 16" },
   { slug: "giovanissimi-under-15", label: "Under 15" },
