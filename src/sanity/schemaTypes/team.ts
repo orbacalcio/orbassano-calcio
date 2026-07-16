@@ -158,7 +158,9 @@ export const team = defineType({
     }),
     defineField({
       name: "staff",
-      title: "Staff tecnico",
+      title: "Staff della squadra (allenatore + collaboratori)",
+      description:
+        "Allenatore, vice, preparatore, dirigente accompagnatore di QUESTA squadra. Compare su /squadre/[slug]/rosa sotto la rosa giocatori. La prima voce con ruolo che contiene 'allenatore', 'mister' o 'head coach' viene mostrata come Allenatore (box grande). Gli altri finiscono nella sezione Staff. Per lo staff club-wide (DS, DT, responsabile SGS) usa invece la voce di menu 'Staff tecnico club (pagina Squadre)'.",
       type: "array",
       of: [defineArrayMember({ type: "staffMember" })],
     }),

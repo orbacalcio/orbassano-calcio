@@ -17,9 +17,11 @@ import { defineField, defineType } from "sanity";
  */
 export const technicalStaff = defineType({
   name: "technicalStaff",
-  title: "Staff tecnico",
+  title: "Staff tecnico club (pagina Squadre)",
   type: "document",
   icon: Briefcase,
+  description:
+    "Staff club-wide (DS, DT, responsabile SGS, preparatore atletico ecc.) mostrato in fondo alla pagina /squadre, sotto le card squadre. Per l'allenatore + collaboratori di UNA singola squadra usa invece il campo 'Staff della squadra' dentro il documento della squadra.",
   fields: [
     defineField({
       name: "isActive",

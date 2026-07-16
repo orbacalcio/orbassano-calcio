@@ -206,12 +206,16 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                       // alla pagina /squadre con la stessa grafica
                       // della YouthStaffSection (watermark gold +
                       // griglia ruolo/nome).
+                      // NB titolo esplicito "club (pagina Squadre)" per
+                      // disambiguare dallo "Staff della squadra" (array
+                      // inline dentro il documento team, mostrato invece
+                      // sulla rosa della singola squadra).
                       S.listItem()
-                        .title("Staff tecnico")
+                        .title("Staff tecnico club (pagina Squadre)")
                         .icon(Briefcase)
                         .child(
                           S.documentTypeList("technicalStaff")
-                            .title("Staff tecnico")
+                            .title("Staff tecnico club (pagina Squadre)")
                             .defaultOrdering([
                               { field: "order", direction: "asc" },
                             ]),
