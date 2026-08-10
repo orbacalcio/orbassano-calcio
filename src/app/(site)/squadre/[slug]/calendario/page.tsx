@@ -66,10 +66,15 @@ export default async function CalendarioPage({
       : teamCurrentSeason;
   const matches = await fetchMatchesByTeam(slug, season);
 
-  // Header competition-led: prendiamo il nome del campionato dalla
-  // prima competition disponibile nei match, oppure fallback a
-  // team.league (legacy). Se vuoto, mostriamo solo il titolo squadra.
-  const firstComp = matches[0]?.competition;
+  // Header competition-led: preferiamo sempre il CAMPIONATO, non la
+  // prima competition in ordine di data. Senza questo filtro, quando
+  // esiste una coppa che parte prima del campionato (caso tipico: Coppa
+  // Piemonte a fine agosto, campionato a metà settembre) l'header della
+  // pagina mostrerebbe la coppa al posto del campionato di riferimento.
+  // Fallback a matches[0] per le squadre che hanno solo coppe/amichevoli.
+  const firstComp =
+    matches.find((m) => m.competition?.category === "championship")
+      ?.competition ?? matches[0]?.competition;
   const competitionLabel =
     firstComp?.shortName ?? firstComp?.name ?? team.league ?? null;
   const groupLabel = firstComp?.group ?? team.group ?? null;
