@@ -563,23 +563,25 @@ export function TeamView({
       {team.category !== "Prima Squadra" && (
         <Link
           href={`/squadre/${team.slug}/calendario`}
-          className="group bg-surface-1 border-border hover:bg-surface-2 focus-visible:outline-brand-gold block border-b transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2"
+          className="group bg-brand-red hover:bg-brand-red-dark focus-visible:outline-brand-gold block transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2"
         >
           <Container
             size="wide"
             className="flex min-h-16 items-center justify-between gap-4 lg:min-h-20"
           >
-            <span className="font-display text-ink-hi group-hover:text-brand-gold flex items-center gap-3 text-lg font-extrabold tracking-[0.12em] uppercase transition-colors md:text-xl">
+            {/* Su fondo rosso l'oro scende a 2.3:1: icona, testo e freccia
+                vanno tutti in brand-white (4.5:1 a questa dimensione). */}
+            <span className="font-display text-brand-white flex items-center gap-3 text-xl font-extrabold tracking-[0.12em] uppercase md:text-2xl">
               <CalendarDays
-                size={22}
-                className="text-brand-gold shrink-0"
+                size={24}
+                className="shrink-0"
                 aria-hidden
               />
               Calendario e risultati
             </span>
             <ArrowRight
-              size={20}
-              className="text-brand-gold shrink-0 transition-transform group-hover:translate-x-1"
+              size={22}
+              className="text-brand-white shrink-0 transition-transform group-hover:translate-x-1"
               aria-hidden
             />
           </Container>
