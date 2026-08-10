@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/cn";
 import { APP_TIME_ZONE, getRomeDateParts } from "@/lib/date";
 import type { MatchSummary } from "@/sanity/fetchers";
+import { CompetitionIcon } from "./CompetitionIcon";
 import { MatchDatePill } from "./MatchDatePill";
 import { TeamLogo } from "./TeamLogo";
 
@@ -303,8 +304,12 @@ export function MatchCard({
           (!teamBadge ||
             competitionLabel.trim().toLowerCase() !==
               teamBadge.trim().toLowerCase()) && (
-            <span className="font-display text-ink-mid text-xs font-bold tracking-[0.1em] uppercase truncate">
-              {competitionLabel}
+            <span className="font-display text-ink-mid flex items-center gap-1.5 text-xs font-bold tracking-[0.1em] uppercase">
+              <CompetitionIcon
+                category={match.competition?.category}
+                className="text-brand-gold shrink-0"
+              />
+              <span className="truncate">{competitionLabel}</span>
             </span>
           )}
         <div className="flex flex-wrap items-center gap-1.5">
