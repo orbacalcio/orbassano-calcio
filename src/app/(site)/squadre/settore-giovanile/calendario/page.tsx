@@ -174,14 +174,16 @@ export default async function CalendarioSettoreGiovanilePage({
           <EmptyPlaceholder />
         ) : (
           // Lista unica condivisa con le altre pagine calendario:
-          // ordinamento decrescente, "Carica altro", filtro per
-          // categoria (U14/U15/U16/U17) e badge squadra su ogni card.
+          // ordinamento crescente ancorato alla prossima partita,
+          // paginazione nelle due direzioni, filtro per categoria
+          // (U14/U15/U16/U17) e badge squadra su ogni card.
           <CalendarioFlatList
             matches={matches}
             ourTeamSlug=""
             ourTeamName="Orbassano Calcio"
             showTeamBadge
             enableCategoryFilter
+            nowIso={new Date().toISOString()}
           />
         )}
       </Container>

@@ -15,9 +15,20 @@ import { MatchCard } from "./MatchCard";
  * dalla prima giornata all'ultima. Le partite sono raggruppate per mese
  * (mesi in ordine crescente).
  *
- * Paginazione "Carica altro" (richiesta utente 2026-05-21): di default
- * mostra solo le prime `initialCount` partite per non rendere la pagina
- * enorme; il bottone rivela `STEP` partite in piu' alla volta.
+ * Finestra ancorata alla PROSSIMA PARTITA (richiesta utente
+ * 2026-08-10): la lista non parte dalla prima giornata della stagione
+ * ma da poco prima della prossima gara in programma, cosi' a campionato
+ * in corso non serve paginare per arrivare al match che interessa.
+ * Restano visibili `PAST_CONTEXT` gare gia' giocate come contesto, e
+ * due bottoni espandono la finestra all'indietro e in avanti.
+ * A stagione non ancora iniziata l'ancora e' la prima partita (quindi
+ * si parte dall'inizio); a stagione conclusa la finestra si aggancia
+ * in fondo, sulle ultime gare disputate.
+ *
+ * `nowIso` arriva dal server (le pagine calendario sono renderizzate on
+ * demand) invece di essere letto con Date.now() in fase di render: cosi'
+ * SSR e hydration calcolano la stessa ancora e non c'e' mismatch.
+ * Senza la prop il componente parte dalla prima partita, come prima.
  *
  * Modalita' aggregata (Settore Giovanile): se i match sono
  * MatchAggregated (`showTeamBadge`), ogni card usa il proprio
@@ -41,6 +52,9 @@ const ITALIAN_MONTHS = [
 ];
 
 const STEP = 8;
+
+/** Gare gia' giocate mostrate sopra la prossima, come contesto. */
+const PAST_CONTEXT = 2;
 
 type AnyMatch = MatchSummary | MatchAggregated;
 
@@ -89,6 +103,9 @@ type Props = {
   /** Mostra i chip filtro per squadra/categoria (vista SG aggregata). */
   enableCategoryFilter?: boolean;
   initialCount?: number;
+  /** Istante del render lato server (ISO). Ancora la finestra iniziale
+   *  alla prossima partita; se assente si parte dalla prima. */
+  nowIso?: string;
 };
 
 export function CalendarioFlatList({
@@ -98,9 +115,13 @@ export function CalendarioFlatList({
   showTeamBadge = false,
   enableCategoryFilter = false,
   initialCount = STEP,
+  nowIso,
 }: Props) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [visibleCount, setVisibleCount] = useState(initialCount);
+  // Quante partite rivelare oltre la finestra iniziale, nelle due
+  // direzioni. Si azzerano al cambio di categoria.
+  const [pastExtra, setPastExtra] = useState(0);
+  const [futureCount, setFutureCount] = useState(initialCount);
 
   // Categorie distinte (teamName) per i chip filtro, ordine alfabetico.
   const categories = useMemo(() => {
@@ -125,6 +146,29 @@ export function CalendarioFlatList({
     );
   }, [matches, activeCategory, enableCategoryFilter]);
 
+  // Indice della prossima partita in programma. Se sono tutte giocate
+  // vale sorted.length; senza `nowIso` resta 0 (si parte dall'inizio).
+  const anchor = useMemo(() => {
+    if (!nowIso) return 0;
+    const now = new Date(nowIso).getTime();
+    if (Number.isNaN(now)) return 0;
+    const i = sorted.findIndex((m) => new Date(m.date).getTime() >= now);
+    return i === -1 ? sorted.length : i;
+  }, [sorted, nowIso]);
+
+  // Finestra visibile [start, end).
+  const { start, end } = useMemo(() => {
+    const len = sorted.length;
+    if (anchor >= len) {
+      // Stagione conclusa: aggancio in fondo, sulle ultime disputate.
+      return { start: Math.max(0, len - initialCount - pastExtra), end: len };
+    }
+    return {
+      start: Math.max(0, anchor - PAST_CONTEXT - pastExtra),
+      end: Math.min(len, anchor + futureCount),
+    };
+  }, [anchor, sorted.length, pastExtra, futureCount, initialCount]);
+
   if (matches.length === 0) {
     return (
       <div className="border-border/40 bg-surface-1 rounded-2xl border border-dashed p-10 text-center">
@@ -139,13 +183,14 @@ export function CalendarioFlatList({
     );
   }
 
-  const visible = sorted.slice(0, visibleCount);
-  const groups = groupByMonth(visible);
-  const hasMore = visibleCount < sorted.length;
+  const groups = groupByMonth(sorted.slice(start, end));
+  const hasPast = start > 0;
+  const hasMore = end < sorted.length;
 
   function handleCategory(cat: string) {
     setActiveCategory(cat);
-    setVisibleCount(initialCount);
+    setPastExtra(0);
+    setFutureCount(initialCount);
   }
 
   return (
@@ -161,6 +206,18 @@ export function CalendarioFlatList({
             ...categories.map((c) => ({ value: c, label: c })),
           ]}
         />
+      )}
+
+      {hasPast && (
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => setPastExtra((p) => p + STEP)}
+            className="border-border text-ink-hi hover:border-brand-gold hover:text-brand-gold focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-6 py-3 font-display text-sm font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            Partite precedenti
+          </button>
+        </div>
       )}
 
       {groups.map((g) => (
@@ -191,7 +248,7 @@ export function CalendarioFlatList({
         <div className="flex justify-center pt-2">
           <button
             type="button"
-            onClick={() => setVisibleCount((c) => c + STEP)}
+            onClick={() => setFutureCount((c) => c + STEP)}
             className="border-border text-ink-hi hover:border-brand-gold hover:text-brand-gold focus-visible:outline-brand-gold inline-flex items-center gap-2 rounded-full border px-6 py-3 font-display text-sm font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             Carica altre partite

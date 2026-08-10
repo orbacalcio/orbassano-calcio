@@ -182,6 +182,7 @@ export default async function CalendarioPage({
           matches={matches}
           ourTeamSlug={slug}
           ourTeamName={team.displayName || "Orbassano Calcio"}
+          nowIso={new Date().toISOString()}
         />
       </Container>
     </>
