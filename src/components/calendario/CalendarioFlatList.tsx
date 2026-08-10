@@ -10,9 +10,10 @@ import { MatchCard } from "./MatchCard";
  * Vista calendario "piatta" condivisa da tutte le pagine calendario
  * (Prima Squadra, Juniores, per-squadra e Settore Giovanile aggregato).
  *
- * Ordinamento DECRESCENTE (richiesta utente 2026-05-21): in cima la
- * partita piu' recente, scendendo verso le piu' vecchie. Le partite
- * sono raggruppate per mese (mesi in ordine decrescente).
+ * Ordinamento CRESCENTE (richiesta utente 2026-08-10, sostituisce il
+ * decrescente del 2026-05-21): si legge come un calendario stampato,
+ * dalla prima giornata all'ultima. Le partite sono raggruppate per mese
+ * (mesi in ordine crescente).
  *
  * Paginazione "Carica altro" (richiesta utente 2026-05-21): di default
  * mostra solo le prime `initialCount` partite per non rendere la pagina
@@ -58,9 +59,9 @@ function monthLabel(iso: string): string {
 }
 
 /**
- * Raggruppa per mese mantenendo l'ordine di inserimento (gia'
- * decrescente perche' la lista in ingresso e' ordinata desc). Quindi
- * mesi desc, e all'interno di ogni mese le partite restano desc.
+ * Raggruppa per mese mantenendo l'ordine di inserimento (gia' crescente
+ * perche' la lista in ingresso e' ordinata asc). Quindi mesi asc, e
+ * all'interno di ogni mese le partite restano asc.
  */
 function groupByMonth(
   matches: AnyMatch[],
@@ -111,7 +112,7 @@ export function CalendarioFlatList({
     return Array.from(set).sort((a, b) => a.localeCompare(b, "it"));
   }, [matches, enableCategoryFilter]);
 
-  // Filtro categoria + ordinamento decrescente per data.
+  // Filtro categoria + ordinamento crescente per data.
   const sorted = useMemo(() => {
     const filtered =
       enableCategoryFilter && activeCategory !== "all"
@@ -120,7 +121,7 @@ export function CalendarioFlatList({
           )
         : matches;
     return [...filtered].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
   }, [matches, activeCategory, enableCategoryFilter]);
 
