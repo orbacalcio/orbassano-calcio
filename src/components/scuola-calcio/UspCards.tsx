@@ -1,19 +1,19 @@
 import type { UspCard } from "@/sanity/fetchers";
 
 /**
- * 4 card numerate con i punti di forza della Academy.
+ * 4 card numerate con i punti di forza della Scuola Calcio.
  * Pattern visivo: numero gigante oro/40% a watermark, titolo display
  * bold uppercase, descrizione body. Hover: bordo rossoblu' sopra +
  * numero passa a oro pieno.
  *
  * I dati arrivano da settings.scUspCards (array di {number, title,
  * description}) — se vuoto/parziale la pagina non rendera' questa
- * sezione (controllo in /squadre/academy/page.tsx).
+ * sezione (controllo in /squadre/scuola-calcio/page.tsx).
  */
 export function UspCards({ cards }: { cards: UspCard[] }) {
   return (
     <section
-      aria-label="Punti di forza della Academy"
+      aria-label="Punti di forza della Scuola Calcio"
       className="grid grid-cols-1 gap-px bg-border/40 sm:grid-cols-2 lg:grid-cols-4"
     >
       {cards.map((card) => (

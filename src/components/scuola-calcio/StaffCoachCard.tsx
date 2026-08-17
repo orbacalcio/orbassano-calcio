@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { ScuolaCalcioCoach } from "@/sanity/fetchers";
 
 /**
- * Card singolo coach Academy: foto ritratto (o fallback navy
+ * Card singolo coach Scuola Calcio: foto ritratto (o fallback navy
  * con iniziali), nome, ruolo, qualifiche FIGC, bio breve.
  *
  * Layout: foto verticale 3:4 in alto + dati sotto, navy card.

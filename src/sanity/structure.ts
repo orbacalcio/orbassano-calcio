@@ -334,18 +334,21 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
             ]),
         ),
 
-      // ----- ACADEMY ---------------------------------------------------
+      // ----- SCUOLA CALCIO ---------------------------------------------
       // Sezione editoriale a 4 pagine (home + iscriviti + programma +
       // informazioni). 4 SINGLETON DEDICATI (richiesta utente
-      // 2026-06-09): cliccando una voce sotto Academy si apre SOLO
-      // il documento con i campi di quella pagina, non l'intero
+      // 2026-06-09): cliccando una voce sotto Scuola Calcio si apre
+      // SOLO il documento con i campi di quella pagina, non l'intero
       // singleton settings.
+      // NB: i type name dei documenti restano `academy*` (e i loro id
+      // `academy-*`): rinominarli richiederebbe una migration Sanity
+      // dei 4 singleton gia' popolati. Cambiate solo le label utente.
       S.listItem()
-        .title("Academy")
+        .title("Scuola Calcio")
         .icon(School)
         .child(
           S.list()
-            .title("Academy")
+            .title("Scuola Calcio")
             .items([
               S.listItem()
                 .title("Pagina home")

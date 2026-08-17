@@ -86,8 +86,9 @@ function buildSections(opts: {
   activeTeamSlugs: string[];
 }) {
   const teamSlugs = new Set(opts.activeTeamSlugs);
-  // Squadre footer: solo 3 voci (Prima Squadra, Juniores, Settore
-  // Giovanile). La Scuola Calcio non esiste come categoria del club.
+  // Squadre footer: Prima Squadra, Juniores (U19/U18), Settore
+  // Giovanile e — dal go-live 2026-08-17 — Scuola Calcio (categoria
+  // Esordienti, annate 2014 e 2015).
   const squadreItems: Array<{ href: string; label: string }> = [];
   if (teamSlugs.has("prima-squadra")) {
     squadreItems.push({ href: "/squadre/prima-squadra", label: "Prima Squadra" });
@@ -107,6 +108,10 @@ function buildSections(opts: {
   squadreItems.push({
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile Scolastico",
+  });
+  squadreItems.push({
+    href: "/squadre/scuola-calcio",
+    label: "Scuola Calcio",
   });
   squadreItems.push({
     href: "/settore-giovanile/summer-camp",

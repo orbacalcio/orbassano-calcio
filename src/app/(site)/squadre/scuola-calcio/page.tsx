@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FaqAccordion } from "@/components/academy/FaqAccordion";
-import { ScuolaCalcioHub4Box } from "@/components/academy/Hub4Box";
-import { UspCards } from "@/components/academy/UspCards";
+import { FaqAccordion } from "@/components/scuola-calcio/FaqAccordion";
+import { ScuolaCalcioHub4Box } from "@/components/scuola-calcio/Hub4Box";
+import { UspCards } from "@/components/scuola-calcio/UspCards";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { PortableTextBody } from "@/components/ui/PortableTextBody";
@@ -17,16 +17,22 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/academy" },
-  title: "Academy",
+  alternates: { canonical: "/squadre/scuola-calcio" },
+  title: "Scuola Calcio",
   description:
-    "La Academy di ASD Orbassano Calcio: il primo passo nel grande gioco. Tecnici qualificati FIGC, kit ufficiale incluso, dai 5 ai 13 anni al Centro Sportivo Aldo Porta.",
+    "La Scuola Calcio di ASD Orbassano Calcio riparte dagli Esordienti: annate 2014 e 2015, calcio a 9, tecnici qualificati FIGC e kit ufficiale incluso al Centro Sportivo Aldo Porta.",
 };
 
 // Fallback editoriali brand-voice: usati quando i campi del singleton
-// `settings.scuolaCalcioHome` sono ancora vuoti su Sanity. Quando
-// l'admin popola i campi da Studio, i valori CMS vincono.
-const FALLBACK_HERO_EYEBROW = "Academy";
+// `academyHome` sono ancora vuoti su Sanity. Quando l'admin popola i
+// campi da Studio, i valori CMS vincono.
+//
+// Stagione 2026/2027: la Scuola Calcio riparte con la sola categoria
+// Esordienti (annate 2014 e 2015). I testi qui sotto NON devono
+// promettere fasce non attive (Piccoli Amici, Primi Calci, Pulcini):
+// quando il club aprira' altre annate si aggiornano insieme alle
+// fasce in /squadre/scuola-calcio/programma.
+const FALLBACK_HERO_EYEBROW = "Scuola Calcio";
 const FALLBACK_HERO_TITLE = "Cresciamo insieme, dal 1930";
 
 const FALLBACK_USP: UspCard[] = [
@@ -44,9 +50,9 @@ const FALLBACK_USP: UspCard[] = [
   },
   {
     number: "03",
-    title: "Gioco prima di tutto",
+    title: "Il gioco prima del risultato",
     description:
-      "Il calcio è gioco. Le sedute privilegiano il divertimento, l'autonomia tecnica e il rispetto del compagno. Risultati e classifiche restano in secondo piano fino agli Esordienti.",
+      "Agli Esordienti si passa al calcio a 9 e si comincia a competere davvero. Ma nelle nostre sedute vengono prima il divertimento, l'autonomia tecnica e il rispetto del compagno: nessun ragazzo resta in panchina per la classifica.",
   },
   {
     number: "04",
@@ -58,14 +64,14 @@ const FALLBACK_USP: UspCard[] = [
 
 const FALLBACK_FAQ: FaqItem[] = [
   {
-    question: "Da che età si può iscrivere mio figlio?",
+    question: "Quali annate accogliete?",
     answer:
-      "Accogliamo bambini dai 5 anni compiuti (Piccoli Amici) fino ai 13 anni (Esordienti). Per la categoria Giovanissimi/Allievi vedi le squadre del Settore Giovanile Scolastico.",
+      "Per la stagione 2026/2027 la Scuola Calcio è attiva sulla categoria Esordienti: annate 2014 e 2015. I nati nel 2013 e prima trovano posto nelle squadre del Settore Giovanile Scolastico (Giovanissimi e Allievi).",
   },
   {
     question: "Quanti allenamenti alla settimana sono previsti?",
     answer:
-      "Da 2 a 3 sedute settimanali a seconda della fascia d'età, della durata di 60-90 minuti. Le partite si giocano in genere il sabato mattina.",
+      "Due sedute settimanali da 90 minuti, più la partita del fine settimana. Gli orari definitivi vengono confermati dalla segreteria a inizio stagione.",
   },
   {
     question: "I tecnici sono qualificati?",
@@ -95,7 +101,7 @@ const FALLBACK_FAQ: FaqItem[] = [
   {
     question: "Mio figlio può fare anche il portiere?",
     answer:
-      "Certo. Già dai Pulcini è prevista la differenziazione del lavoro per i portieri, con sedute specifiche dedicate da parte di un preparatore qualificato.",
+      "Certo. Agli Esordienti il lavoro dei portieri è differenziato, con sedute specifiche curate da un preparatore qualificato.",
   },
 ];
 
@@ -110,17 +116,17 @@ export default async function ScuolaCalcioHomePage() {
   const hubBoxes = [
     {
       title: "Iscriviti",
-      href: "/squadre/academy/iscriviti",
+      href: "/squadre/scuola-calcio/iscriviti",
       image: data.hubBox1Image,
     },
     {
       title: "Programma",
-      href: "/squadre/academy/programma",
+      href: "/squadre/scuola-calcio/programma",
       image: data.hubBox2Image,
     },
     {
       title: "Informazioni",
-      href: "/squadre/academy/informazioni",
+      href: "/squadre/scuola-calcio/informazioni",
       image: data.hubBox3Image,
     },
     {
@@ -136,7 +142,7 @@ export default async function ScuolaCalcioHomePage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Academy", url: "/squadre/academy" },
+          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
         ])}
       />
 
@@ -232,11 +238,11 @@ export default async function ScuolaCalcioHomePage() {
               Pronti a scendere in campo?
             </h2>
             <p className="text-ink-mid max-w-xl text-base leading-relaxed lg:text-lg">
-              Compila il modulo di iscrizione, scegli la fascia d&apos;età e
-              inizia la stagione con i colori rossoblù.
+              Annate 2014 e 2015: compila il modulo di iscrizione e inizia la
+              stagione con i colori rossoblù.
             </p>
             <Link
-              href="/squadre/academy/iscriviti"
+              href="/squadre/scuola-calcio/iscriviti"
               className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
             >
               Iscriviti adesso

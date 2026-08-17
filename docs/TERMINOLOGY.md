@@ -93,6 +93,33 @@ distinti su Sanity con slug specifici.
 
 ---
 
+## Sotto-categorie Scuola Calcio
+
+Attiva dal go-live del 2026-08-17 con la sola categoria **Esordienti**
+(annate 2014 e 2015). Le altre fasce FIGC dell'attività di base
+(Pulcini, Primi Calci, Piccoli Amici) NON sono attive: non vanno
+nominate nell'UI pubblica finché il club non le apre.
+
+| Forma | Uso |
+|---|---|
+| "Scuola Calcio" | Nome della sezione. Enum CMS `team.category`, label drawer, footer, breadcrumb, Studio. |
+| "Esordienti" | Nome della categoria federale. H2, eyebrow, FAQ. |
+| "Esordienti 2015" / "Esordienti 2014" | Le due annate, nelle card di `/squadre/scuola-calcio/programma`. |
+| "Annate 2014 e 2015" | Forma compatta per stat, sottotitoli, slot timeline. |
+
+⚠️ **Mai** "Academy" / "Soccer Academy" nell'UI pubblica: la sezione è
+stata rinominata 2026-08-17 su richiesta del club. Restano `academy*`
+solo i **type name** dei 4 singleton Sanity (`academyHome`,
+`academyIscriviti`, `academyProgramma`, `academyInformazioni`) e i
+loro document id: rinominarli richiederebbe una migration dei
+documenti già popolati. Sono identificatori interni, mai visibili.
+
+⚠️ `docs/DATA_ORBASSANO.md` §Scuola Calcio elenca le annate 2014-2015
+come **Pulcini**: era il mapping della stagione in cui il documento è
+stato scritto. Per la 2026/2027 le annate 2014-2015 sono **Esordienti**.
+
+---
+
 ## Altre entità
 
 ### Squadra principale
@@ -161,5 +188,11 @@ Quando aggiungi/sposti una squadra:
    con `label` short ("Under 16")
 7. Verifica [src/app/sitemap.ts](../src/app/sitemap.ts) `SG_TEAM_SLUGS` se è
    squadra del SGS
+8. Se la macro-categoria non ha ancora una sezione su
+   [/squadre](../src/app/(site)/squadre/page.tsx), aggiungila a `SECTIONS`:
+   senza, la squadra resta attiva ma invisibile. Attenzione agli slug che
+   collidono con rotte statiche sotto `/squadre/` (oggi:
+   `settore-giovanile`, `scuola-calcio`) — il segmento statico vince sul
+   dinamico `[slug]` e la pagina squadra diventa irraggiungibile.
 
 NON serve toccare i file delle pagine `/squadre/[slug]` — sono dinamiche.

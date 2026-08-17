@@ -37,7 +37,6 @@ type DrawerSection = {
 function buildSections(opts: {
   hasPartners: boolean;
   activeTeamSlugs: string[];
-  showAcademy: boolean;
 }): DrawerSection[] {
   const teamSlugs = new Set(opts.activeTeamSlugs);
 
@@ -82,19 +81,15 @@ function buildSections(opts: {
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile Scolastico",
   });
-  // Academy: sezione editoriale a 4 pagine in fase di review.
-  // EMERGENCY HIDE 2026-06-06: voce visibile SOLO sul dominio Vercel
-  // preview (orbassano-calcio.vercel.app), nascosta su
-  // orbassanocalcio.com finche' l'utente non da' l'ok pubblico.
-  // showAcademy viene calcolato runtime nel parent (vedi
-  // useEffect window.location.hostname sotto). Quando si rimuove il
-  // hide, basta forzare showAcademy: true sempre.
-  if (opts.showAcademy) {
-    teamsChildren.push({
-      href: "/squadre/academy",
-      label: "Academy",
-    });
-  }
+  // Scuola Calcio: sezione editoriale a 4 pagine (categoria
+  // Esordienti, annate 2014 e 2015). Pubblica dal go-live 2026-08-17,
+  // prima era nascosta dietro un check host-based (emergency hide
+  // 2026-06-06). Mostrata sempre: le pagine sono editoriali e
+  // rispondono anche senza contenuti CMS popolati (fallback statici).
+  teamsChildren.push({
+    href: "/squadre/scuola-calcio",
+    label: "Scuola Calcio",
+  });
   // NB: Open Days + Tornei NON sono piu' qui (richiesta utente
   // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
   // sono di fatto eventi a calendario, non sezioni squadre.
@@ -231,24 +226,9 @@ export function NavigationDrawer({
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  // EMERGENCY HIDE 2026-06-06: voce drawer "Academy" visibile SOLO
-  // sul dominio Vercel preview. Su orbassanocalcio.com resta nascosta
-  // fino al go-live ufficiale. Calcolo runtime client-side via
-  // window.location.hostname; SSR / first paint = false (no flash).
-  // rAF defer per evitare cascading renders (regola
-  // react-hooks/set-state-in-effect).
-  const [showAcademy, setShowAcademy] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const host = window.location.hostname;
-    const isProd = /(^|\.)orbassanocalcio\.com$/.test(host);
-    const raf = requestAnimationFrame(() => setShowAcademy(!isProd));
-    return () => cancelAnimationFrame(raf);
-  }, []);
   const sections = buildSections({
     hasPartners,
     activeTeamSlugs,
-    showAcademy,
   });
 
   useEffect(() => {

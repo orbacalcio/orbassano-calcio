@@ -2,9 +2,9 @@ import { School } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della home Academy (/squadre/academy).
+ * Singleton: contenuti della home Scuola Calcio (/squadre/scuola-calcio).
  * Documento unico con id fisso "academy-home" — il sidebar Studio
- * lo espone come voce dedicata sotto top-level "Academy".
+ * lo espone come voce dedicata sotto top-level "Scuola Calcio".
  *
  * I field name (scXxx) restano legacy per ridurre churn dei
  * fetcher TypeScript già scritti su `ScuolaCalcioHomeData` —
@@ -12,7 +12,7 @@ import { defineField, defineType } from "sanity";
  */
 export const academyHome = defineType({
   name: "academyHome",
-  title: "Academy — Pagina home",
+  title: "Scuola Calcio — Pagina home",
   type: "document",
   icon: School,
   fields: [
@@ -20,7 +20,7 @@ export const academyHome = defineType({
       name: "scHeroImage",
       title: "Hero — immagine di sfondo",
       description:
-        "Foto in cima alla pagina /squadre/academy (es. bambini in allenamento). Se vuota, viene usato il fallback navy + stemma + pitch lines.",
+        "Foto in cima alla pagina /squadre/scuola-calcio (es. bambini in allenamento). Se vuota, viene usato il fallback navy + stemma + pitch lines.",
       type: "image",
       options: { hotspot: true },
     }),
@@ -28,7 +28,7 @@ export const academyHome = defineType({
       name: "scHeroEyebrow",
       title: "Hero — eyebrow",
       description:
-        "Frase corta sopra il titolo h1 (es. 'Academy'). Visualizzata in oro maiuscolo tracking ampio.",
+        "Frase corta sopra il titolo h1 (es. 'Scuola Calcio'). Visualizzata in oro maiuscolo tracking ampio.",
       type: "string",
     }),
     defineField({
@@ -41,7 +41,7 @@ export const academyHome = defineType({
       name: "scIntroBlocks",
       title: "Intro — paragrafi descrittivi",
       description:
-        "Sezione testo sotto l'hero. Spiega in 2-3 paragrafi cos'è l'Academy Orbassano, valori, approccio. Supporta grassetto/corsivo/link.",
+        "Sezione testo sotto l'hero. Spiega in 2-3 paragrafi cos'è la Scuola Calcio dell'Orbassano, valori, approccio. Supporta grassetto/corsivo/link.",
       type: "array",
       of: [{ type: "block" }],
     }),
@@ -49,7 +49,7 @@ export const academyHome = defineType({
       name: "scUspCards",
       title: "USP — 4 card valori",
       description:
-        "4 card numerate con i punti di forza dell'Academy (es. 'Tecnici qualificati FIGC', 'Sicurezza prima di tutto', 'Gioco + crescita personale', 'Kit incluso').",
+        "4 card numerate con i punti di forza della Scuola Calcio (es. 'Tecnici qualificati FIGC', 'Sicurezza prima di tutto', 'Gioco + crescita personale', 'Kit incluso').",
       type: "array",
       validation: (r) => r.max(4),
       of: [
@@ -138,6 +138,6 @@ export const academyHome = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Academy — Pagina home" }),
+    prepare: () => ({ title: "Scuola Calcio — Pagina home" }),
   },
 });

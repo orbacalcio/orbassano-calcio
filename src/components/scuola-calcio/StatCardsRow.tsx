@@ -3,7 +3,7 @@
  * "2 allenamenti settimanali"). Numerica grande oro, label sotto.
  *
  * Pattern visivo riusato dalla stat strip /calendario, semplificato
- * per stat informative della Academy.
+ * per stat informative della Scuola Calcio.
  */
 export type StatCardItem = {
   value: string;

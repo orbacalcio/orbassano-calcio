@@ -2,12 +2,12 @@ import { MapPin } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della pagina /squadre/academy/informazioni.
+ * Singleton: contenuti della pagina /squadre/scuola-calcio/informazioni.
  * Documento unico id fisso "academy-informazioni".
  */
 export const academyInformazioni = defineType({
   name: "academyInformazioni",
-  title: "Academy — Informazioni",
+  title: "Scuola Calcio — Informazioni",
   type: "document",
   icon: MapPin,
   fields: [
@@ -125,7 +125,7 @@ export const academyInformazioni = defineType({
       name: "scInfoCancellation",
       title: "Politica di cancellazione",
       description:
-        "Cosa succede se il bambino si ritira dall'Academy. Rimborso, percentuale trattenuta, casi medici, scadenze.",
+        "Cosa succede se il bambino si ritira dalla Scuola Calcio. Rimborso, percentuale trattenuta, casi medici, scadenze.",
       type: "text",
       rows: 4,
     }),
@@ -231,6 +231,6 @@ export const academyInformazioni = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Academy — Informazioni" }),
+    prepare: () => ({ title: "Scuola Calcio — Informazioni" }),
   },
 });

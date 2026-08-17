@@ -28,14 +28,11 @@ const wixRedirects = [
     source: "/settore-giovanile-e-scolastico-orbassano",
     destination: "/squadre/settore-giovanile",
   },
-  // /scuola-calcio-orbassano → /squadre/settore-giovanile
-  // (EMERGENCY HIDE 2026-06-06): la sezione Scuola Calcio e' stata
-  // sviluppata ma deve restare nascosta su orbassanocalcio.com fino
-  // al go-live ufficiale. Le 4 pagine sono accessibili SOLO sul
-  // dominio Vercel preview (orbassano-calcio.vercel.app).
-  // RIPRISTINARE a /squadre/academy quando si rimuove
-  // scuolaCalcioEmergencyHide piu' giu' in questo file.
-  { source: "/scuola-calcio-orbassano", destination: "/squadre/settore-giovanile" },
+  // Go-live Scuola Calcio 2026-08-17: la sezione e' pubblica, quindi
+  // la vecchia URL Wix torna a puntare alla sua destinazione naturale
+  // (era temporaneamente dirottata su /squadre/settore-giovanile
+  // durante l'emergency hide del 2026-06-06).
+  { source: "/scuola-calcio-orbassano", destination: "/squadre/scuola-calcio" },
   { source: "/sponsor-e-partner-orbassano-calcio", destination: "/sponsor" },
   { source: "/sponsorship-asd-orbassano-calcio", destination: "/sponsor" },
   { source: "/partnership-asd-orbassano-calcio", destination: "/sponsor/partner" },
@@ -280,29 +277,24 @@ const nextConfig = {
         permanent: true,
       },
     ];
-    // ─── EMERGENCY HIDE 2026-06-06 ────────────────────────────────
-    // Le 4 pagine Scuola Calcio devono essere visibili SOLO sul
-    // dominio Vercel preview (orbassano-calcio.vercel.app) finche'
-    // l'admin non da' l'ok pubblico. Su orbassanocalcio.com (apex +
-    // www) qualunque richiesta a /squadre/academy* viene
-    // reindirizzata a /squadre (homepage hub squadre).
-    // Da rimuovere quando l'utente conferma il go-live della sezione.
-    const scuolaCalcioEmergencyHide = [
+    // Go-live Scuola Calcio 2026-08-17: rimosso l'emergency hide
+    // host-based del 2026-06-06 che dirottava /squadre/academy* su
+    // /squadre quando la richiesta arrivava da orbassanocalcio.com.
+    // La sezione ora vive su /squadre/scuola-calcio ed e' pubblica su
+    // tutti i domini. Le vecchie URL /squadre/academy* non sono mai
+    // state indicizzate (esclusa dal sitemap + redirect host-based),
+    // ma il redirect qui sotto le copre per i link condivisi in
+    // anteprima dal club durante la review.
+    const academyRenameRedirects = [
       {
         source: "/squadre/academy",
-        has: [
-          { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
-        ],
-        destination: "/squadre",
-        permanent: false,
+        destination: "/squadre/scuola-calcio",
+        permanent: true,
       },
       {
         source: "/squadre/academy/:path*",
-        has: [
-          { type: "host", value: "(www\\.)?orbassanocalcio\\.com" },
-        ],
-        destination: "/squadre",
-        permanent: false,
+        destination: "/squadre/scuola-calcio/:path*",
+        permanent: true,
       },
     ];
     const wixMapped = wixRedirects.map((r) => ({
@@ -311,7 +303,7 @@ const nextConfig = {
       permanent: true,
     }));
     return [
-      ...scuolaCalcioEmergencyHide,
+      ...academyRenameRedirects,
       ...wixMapped,
       ...internalRedirects,
     ];

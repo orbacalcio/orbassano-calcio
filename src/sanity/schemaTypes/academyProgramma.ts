@@ -2,12 +2,12 @@ import { CalendarDays } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della pagina /squadre/academy/programma.
+ * Singleton: contenuti della pagina /squadre/scuola-calcio/programma.
  * Documento unico id fisso "academy-programma".
  */
 export const academyProgramma = defineType({
   name: "academyProgramma",
-  title: "Academy — Programma tecnico",
+  title: "Scuola Calcio — Programma tecnico",
   type: "document",
   icon: CalendarDays,
   fields: [
@@ -63,10 +63,10 @@ export const academyProgramma = defineType({
             }),
             defineField({
               name: "ageGroup",
-              title: "Fascia d'età (opzionale)",
+              title: "Annata / fascia (opzionale)",
               type: "string",
               description:
-                "Se lo slot è dedicato a una fascia specifica (es. 'Piccoli Amici').",
+                "Se lo slot è dedicato a un gruppo specifico (es. 'Annate 2014-2015', 'Esordienti 2014').",
             }),
           ],
           preview: {
@@ -88,9 +88,9 @@ export const academyProgramma = defineType({
     }),
     defineField({
       name: "scProgFasce",
-      title: "Fasce d'età — focus tecnico per età",
+      title: "Annate — focus tecnico",
       description:
-        "Una card per ogni fascia d'età FIGC (es. Piccoli Amici 5-7, Primi Calci 8-9, Pulcini 10-11, Esordienti 12-13).",
+        "Una card per ogni annata attiva. Stagione 2026/2027: 'Esordienti 2015' (primo anno) e 'Esordienti 2014' (secondo anno). Se apri altre fasce FIGC (Pulcini, Primi Calci, Piccoli Amici) aggiungile qui.",
       type: "array",
       of: [
         defineField({
@@ -100,15 +100,15 @@ export const academyProgramma = defineType({
           fields: [
             defineField({
               name: "label",
-              title: "Nome fascia",
+              title: "Nome annata",
               type: "string",
               description:
-                "Es. 'Piccoli Amici', 'Primi Calci', 'Pulcini', 'Esordienti'.",
+                "Es. 'Esordienti 2015', 'Esordienti 2014'.",
               validation: (r) => r.required(),
             }),
             defineField({
               name: "ageRange",
-              title: "Range età (es. '5-7 anni')",
+              title: "Anno di corso (es. 'Primo anno · Under 12')",
               type: "string",
               validation: (r) => r.required(),
             }),
@@ -138,7 +138,7 @@ export const academyProgramma = defineType({
     }),
     defineField({
       name: "scProgStaff",
-      title: "Staff coach — allenatori Academy",
+      title: "Staff coach — allenatori Scuola Calcio",
       description:
         "Allenatori con qualifiche FIGC. Inline: aggiungi/rimuovi senza creare documenti separati.",
       type: "array",
@@ -195,6 +195,6 @@ export const academyProgramma = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Academy — Programma tecnico" }),
+    prepare: () => ({ title: "Scuola Calcio — Programma tecnico" }),
   },
 });

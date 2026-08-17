@@ -2,12 +2,12 @@ import { Coins } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della pagina /squadre/academy/iscriviti.
+ * Singleton: contenuti della pagina /squadre/scuola-calcio/iscriviti.
  * Documento unico id fisso "academy-iscriviti".
  */
 export const academyIscriviti = defineType({
   name: "academyIscriviti",
-  title: "Academy — Pagina iscrizione",
+  title: "Scuola Calcio — Pagina iscrizione",
   type: "document",
   icon: Coins,
   fields: [
@@ -44,7 +44,7 @@ export const academyIscriviti = defineType({
     }),
     defineField({
       name: "scIscrModuleFile",
-      title: "Modulo iscrizione Academy (PDF)",
+      title: "Modulo iscrizione Scuola Calcio (PDF)",
       description:
         "PDF del modulo da scaricare, compilare, firmare e inviare. Quando esce la stagione successiva basta sostituirlo: l'URL del file resta dinamico.",
       type: "file",
@@ -79,6 +79,6 @@ export const academyIscriviti = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Academy — Pagina iscrizione" }),
+    prepare: () => ({ title: "Scuola Calcio — Pagina iscrizione" }),
   },
 });

@@ -7,14 +7,14 @@ import {
   Phone,
   ShieldAlert,
 } from "lucide-react";
-import { DiscountsBlock } from "@/components/academy/DiscountsBlock";
-import { FaqAccordion } from "@/components/academy/FaqAccordion";
-import { InfoVenueBlock } from "@/components/academy/InfoVenueBlock";
-import { PaymentTimelineBlock } from "@/components/academy/PaymentTimelineBlock";
+import { DiscountsBlock } from "@/components/scuola-calcio/DiscountsBlock";
+import { FaqAccordion } from "@/components/scuola-calcio/FaqAccordion";
+import { InfoVenueBlock } from "@/components/scuola-calcio/InfoVenueBlock";
+import { PaymentTimelineBlock } from "@/components/scuola-calcio/PaymentTimelineBlock";
 import {
   StatCardsRow,
   type StatCardItem,
-} from "@/components/academy/StatCardsRow";
+} from "@/components/scuola-calcio/StatCardsRow";
 import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -28,16 +28,18 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/academy/informazioni" },
-  title: "Informazioni Academy",
+  alternates: { canonical: "/squadre/scuola-calcio/informazioni" },
+  title: "Informazioni Scuola Calcio",
   description:
-    "Tutte le info pratiche dell'Academy Orbassano: sede, prezzi, sconti famiglie, scadenze pagamento, politica cancellazione, contatti. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
+    "Tutte le info pratiche della Scuola Calcio dell'Orbassano: annate 2014 e 2015, sede, prezzi, sconti famiglie, scadenze pagamento, politica cancellazione, contatti. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
 };
 
 // ─── Fallback editoriali brand-voice ─────────────────────────────────
 const FALLBACK_HERO_PITCH =
   "Una stagione da rossoblù al Centro Sportivo Aldo Porta. Tutto quello che ti serve sapere prima di iscrivere tuo figlio.";
-const FALLBACK_AGE_RANGE = "Dai 5 ai 13 anni";
+// Stagione 2026/2027: unica categoria attiva Esordienti. Il campo CMS
+// `scInfoAgeRange` sovrascrive questo fallback quando popolato.
+const FALLBACK_AGE_RANGE = "Annate 2014 e 2015 · categoria Esordienti";
 const FALLBACK_MAX_GROUP = 15;
 const FALLBACK_VENUE_NAME = "Centro Sportivo Aldo Porta";
 const FALLBACK_VENUE_ADDRESS = "Via Ignazio Silone, 4 · 10043 Orbassano (TO)";
@@ -86,7 +88,7 @@ const FALLBACK_PAYMENTS: PaymentRow[] = [
     milestone: "All'iscrizione",
     deadline: "Entro 7 giorni dalla prova",
     amount: "50% della quota annuale",
-    note: "Bonifico bancario con causale 'Iscrizione Academy 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
+    note: "Bonifico bancario con causale 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
   },
   {
     milestone: "Saldo",
@@ -124,7 +126,7 @@ const FALLBACK_FAQ: FaqItem[] = [
   },
 ];
 
-export default async function AcademyInformazioniPage() {
+export default async function ScuolaCalcioInformazioniPage() {
   const data = await fetchScuolaCalcioInformazioni();
 
   const heroPitch = data.scInfoHeroPitch?.trim() || FALLBACK_HERO_PITCH;
@@ -149,9 +151,9 @@ export default async function AcademyInformazioniPage() {
   const faq = data.faq.length > 0 ? data.faq : FALLBACK_FAQ;
 
   const stats: StatCardItem[] = [
-    { value: "5-13", label: "Età ammesse (anni)" },
+    { value: "2014-2015", label: "Annate ammesse" },
     { value: String(maxGroup), label: "Max per gruppo" },
-    { value: "2-3", label: "Allenamenti settimanali" },
+    { value: "2", label: "Allenamenti settimanali" },
     { value: "1", label: "Sede unica" },
   ];
 
@@ -161,10 +163,10 @@ export default async function AcademyInformazioniPage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Academy", url: "/squadre/academy" },
+          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
           {
             name: "Informazioni",
-            url: "/squadre/academy/informazioni",
+            url: "/squadre/scuola-calcio/informazioni",
           },
         ])}
       />
@@ -178,7 +180,7 @@ export default async function AcademyInformazioniPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Academy · Informazioni
+              Scuola Calcio · Informazioni
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Tutto quello che ti serve
@@ -433,7 +435,7 @@ export default async function AcademyInformazioniPage() {
                 accompagna in ogni passaggio.
               </p>
               <Link
-                href="/squadre/academy/iscriviti"
+                href="/squadre/scuola-calcio/iscriviti"
                 className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold mt-2 inline-flex w-fit items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 Vai all&apos;iscrizione

@@ -3,7 +3,7 @@ import type { DiscountRow } from "@/sanity/fetchers";
 
 /**
  * Lista degli sconti famiglie / early-bird applicabili all'iscrizione
- * Academy. Card a 3 colonne (responsive), pattern visivo coerente con
+ * Scuola Calcio. Card a 3 colonne (responsive), pattern visivo coerente con
  * Toro Camp informazioni-i-camp.
  */
 export function DiscountsBlock({ discounts }: { discounts: DiscountRow[] }) {

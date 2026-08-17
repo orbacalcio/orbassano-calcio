@@ -9,10 +9,10 @@ import { buildBreadcrumbLd } from "@/lib/json-ld";
 import { fetchScuolaCalcioIscriviti } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/academy/iscriviti" },
-  title: "Iscriviti alla Academy",
+  alternates: { canonical: "/squadre/scuola-calcio/iscriviti" },
+  title: "Iscriviti alla Scuola Calcio",
   description:
-    "Iscrizione alla Academy Orbassano: quote, modulo PDF da scaricare e modalità di pagamento bonifico. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
+    "Iscrizione alla Scuola Calcio dell'Orbassano, annate 2014 e 2015 (categoria Esordienti): quote, modulo PDF da scaricare e pagamento con bonifico. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
 };
 
 // Fallback editoriali brand-voice.
@@ -20,7 +20,7 @@ const FALLBACK_PHONE = "+39 327 779 3326";
 const FALLBACK_EMAIL = "sgs@orbassanocalcio.com";
 const FALLBACK_IBAN = "IBAN da pubblicare";
 const FALLBACK_PAYMENT_NOTE =
-  "Il pagamento può essere effettuato in unica soluzione oppure in due tranche (50% all'iscrizione + 50% entro gennaio). Sconto fratelli: -10% sulla seconda quota. Causale bonifico: 'Iscrizione Academy 2026/2027 + Nome Cognome del bambino + anno di nascita'.";
+  "Il pagamento può essere effettuato in unica soluzione oppure in due tranche (50% all'iscrizione + 50% entro gennaio). Sconto fratelli: -10% sulla seconda quota. Causale bonifico: 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.";
 
 // Iscrizione in 3 step (pattern Toro Camp semplificato).
 const ISCRIZIONE_STEPS: Array<{
@@ -63,10 +63,10 @@ export default async function ScuolaCalcioIscrivitiPage() {
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
           { name: "Squadre", url: "/squadre" },
-          { name: "Academy", url: "/squadre/academy" },
+          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
           {
             name: "Iscriviti",
-            url: "/squadre/academy/iscriviti",
+            url: "/squadre/scuola-calcio/iscriviti",
           },
         ])}
       />
@@ -81,14 +81,15 @@ export default async function ScuolaCalcioIscrivitiPage() {
         <Container className="relative py-16 lg:py-24" size="wide">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
-              Academy · Iscrizione 2026/2027
+              Scuola Calcio · Iscrizione 2026/2027
             </span>
             <h1 className="font-display text-ink-hi text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
               Iscriviti in 3 step
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Prova gratuita, modulo PDF e bonifico. Nessun form online da
-              compilare: il club ti accompagna in ogni passaggio.
+              Aperte le iscrizioni per la categoria Esordienti, annate 2014 e
+              2015. Prova gratuita, modulo PDF e bonifico: nessun form online da
+              compilare, il club ti accompagna in ogni passaggio.
             </p>
           </div>
         </Container>
