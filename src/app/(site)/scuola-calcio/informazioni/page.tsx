@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/scuola-calcio/informazioni" },
   title: "Informazioni Scuola Calcio",
   description:
-    "Tutte le info pratiche della Scuola Calcio dell'Orbassano: annate 2014 e 2015 (categoria Esordienti, calcio a 9), cosa è incluso nella quota, politica di cancellazione e contatti della segreteria. Stagione 2026/2027.",
+    "Tutte le info pratiche della Scuola Calcio dell'Orbassano: annate 2015 e 2014 (categoria Esordienti, calcio a 9), cosa è compreso nella quota, politica di cancellazione e contatti della segreteria. Stagione 2026/2027.",
 };
 
 // ─── Fallback editoriali brand-voice ─────────────────────────────────
@@ -159,10 +159,12 @@ export default async function ScuolaCalcioInformazioniPage() {
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-3">
               <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
-                {venueName ? "Sede e cosa è incluso" : "Cosa è incluso"}
+                {venueName ? "Sede e quota" : "La quota"}
               </span>
+              {/* Non "tutto compreso": il kit ufficiale e' a parte
+                  (decisione del club 2026-08-17). */}
               <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
-                {venueName ? "Sede unica, tutto compreso" : "Tutto compreso"}
+                Cosa è compreso
               </h2>
               <p className="text-ink-mid max-w-2xl text-sm leading-relaxed md:text-base">
                 {ageRange} · gruppi piccoli per garantire attenzione

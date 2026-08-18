@@ -119,7 +119,7 @@ export default async function ScuolaCalcioIscrivitiPage() {
                   Quote stagione 2026/2027
                 </span>
                 <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
-                  Una sola tariffa, tutto incluso
+                  Cosa è compreso
                 </h2>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
