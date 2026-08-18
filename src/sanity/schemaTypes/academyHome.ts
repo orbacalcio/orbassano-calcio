@@ -34,8 +34,10 @@ export const academyHome = defineType({
     defineField({
       name: "scHeroTitle",
       title: "Hero — titolo H1",
-      description: "Titolo principale della landing (es. 'Cresciamo insieme').",
-      type: "string",
+      description:
+        "Titolo principale della landing (es. 'Cresciamo insieme'). Gli a capo che inserisci qui vengono rispettati sul sito: usali per decidere dove spezzare il titolo.",
+      type: "text",
+      rows: 2,
     }),
     defineField({
       name: "scIntroBlocks",

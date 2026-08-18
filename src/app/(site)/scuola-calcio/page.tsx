@@ -190,7 +190,11 @@ export default async function ScuolaCalcioHomePage() {
           <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase md:text-base">
             {heroEyebrow}
           </span>
-          <h1 className="font-display text-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] uppercase md:text-6xl lg:text-7xl">
+          {/* whitespace-pre-line: gli a capo inseriti nel campo
+              "Hero — titolo H1" su Studio vengono rispettati, cosi' il
+              club decide dove spezzare il titolo senza toccare il
+              codice. Gli spazi restano collassati. */}
+          <h1 className="font-display text-ink-hi max-w-4xl text-5xl leading-[0.92] font-extrabold tracking-[0.005em] whitespace-pre-line uppercase md:text-6xl lg:text-7xl">
             {heroTitle}
           </h1>
         </Container>

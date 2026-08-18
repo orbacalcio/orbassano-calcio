@@ -88,6 +88,11 @@ const HOME_SET: Record<string, unknown> = {
   // su tutte le superfici (richiesta utente 2026-08-17).
   scHeroEyebrow: "Scuola Calcio",
 
+  // A capo dopo "rossoblu" (richiesta club 2026-08-17): l'h1 ha
+  // whitespace-pre-line, quindi la sequenza di escape qui sotto
+  // spezza davvero la riga sul sito.
+  scHeroTitle: "Diventa rossoblù\ninsieme a noi",
+
   scIntroBlocks: [
     block(
       "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. Per la stagione 2026/2027 ripartiamo dalla categoria Esordienti, annate 2015 e 2014: calcio a 9, sotto la guida di tecnici qualificati FIGC.",
