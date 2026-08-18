@@ -184,11 +184,13 @@ const INFO_SET: Record<string, unknown> = {
   // Le due risposte citavano l'erba sintetica di un campo specifico.
   'scInfoFaq[_key=="5bda5b82de4e"].answer':
     "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale rossoblù, che è a parte rispetto alla quota, viene consegnato dopo l'ordine in segreteria.",
-  // Il kit NON e' compreso: fuori dall'elenco "Nella quota".
+  // Fuori dall'elenco "Nella quota": il kit ufficiale e le visite
+  // mediche, che il club non fornisce (decisioni 2026-08-17). Il
+  // certificato medico non agonistico resta a carico della famiglia,
+  // ed e' infatti richiesto fra i documenti di iscrizione.
   scInfoIncluded: [
     "Tessera FIGC + assicurazione integrata",
     "Materiale tecnico (palloni, casacche, conetti)",
-    "Visite mediche sportive non agonistiche organizzate dal club",
     "Accesso a tornei e amichevoli organizzati dal club",
   ],
   'scInfoFaq[_key=="ac3d6433525f"].answer':

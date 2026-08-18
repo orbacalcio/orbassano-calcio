@@ -51,7 +51,6 @@ const FALLBACK_CANCELLATION =
 const FALLBACK_INCLUDED: string[] = [
   "Tessera FIGC + assicurazione integrata",
   "Materiale tecnico (palloni, casacche, conetti)",
-  "Visite mediche sportive non agonistiche organizzate dal club",
   "Accesso a tornei e amichevoli organizzati dal club",
   "Attestato di partecipazione + valutazione tecnica fine stagione",
 ];
