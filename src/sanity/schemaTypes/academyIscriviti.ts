@@ -44,9 +44,9 @@ export const academyIscriviti = defineType({
     }),
     defineField({
       name: "scIscrModuleFile",
-      title: "Modulo iscrizione Scuola Calcio (PDF)",
+      title: "Modulo iscrizione Scuola Calcio (PDF) — NON IN USO",
       description:
-        "PDF del modulo da scaricare, compilare, firmare e inviare. Quando esce la stagione successiva basta sostituirlo: l'URL del file resta dinamico.",
+        "⚠️ Attualmente NON mostrato sul sito: per la stagione 2026/2027 l'iscrizione la gestisce direttamente la segreteria, senza modulo da scaricare (decisione del 2026-08-17). Caricare un PDF qui non lo fa comparire sulla pagina. Per riattivare la card serve un intervento sul codice: showModule in /scuola-calcio/iscriviti, piu' l'aggiornamento dei 3 step che oggi dicono 'nessun modulo da scaricare'.",
       type: "file",
       options: { accept: "application/pdf" },
     }),

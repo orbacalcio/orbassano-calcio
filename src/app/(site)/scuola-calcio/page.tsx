@@ -86,7 +86,7 @@ const FALLBACK_FAQ: FaqItem[] = [
   {
     question: "Come e quando si paga l'iscrizione?",
     answer:
-      "Dopo la prova si compila il modulo PDF e si effettua il bonifico della quota annuale. È possibile rateizzare in due tranche parlando con la segreteria.",
+      "Dopo la prova gratuita è la segreteria a occuparsi dell'iscrizione: raccoglie dati e documenti e ti indica come effettuare il bonifico della quota.",
   },
   {
     question: "Il kit è davvero gratuito?",
@@ -237,8 +237,8 @@ export default async function ScuolaCalcioHomePage() {
               Pronti a scendere in campo?
             </h2>
             <p className="text-ink-mid max-w-xl text-base leading-relaxed lg:text-lg">
-              Annate 2014 e 2015: compila il modulo di iscrizione e inizia la
-              stagione con i colori rossoblù.
+              Annate 2015 e 2014: contatta la segreteria e inizia la stagione
+              con i colori rossoblù.
             </p>
             <Link
               href="/scuola-calcio/iscriviti"

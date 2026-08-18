@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/scuola-calcio/iscriviti" },
   title: "Iscriviti alla Scuola Calcio",
   description:
-    "Iscrizione alla Scuola Calcio dell'Orbassano, annate 2014 e 2015 (categoria Esordienti): prova gratuita, modulo PDF da scaricare e pagamento con bonifico. Stagione 2026/2027.",
+    "Iscrizione alla Scuola Calcio dell'Orbassano, annate 2015 e 2014 (categoria Esordienti): prova gratuita, pratica curata dalla segreteria e pagamento con bonifico. Stagione 2026/2027.",
 };
 
 // Fallback editoriali brand-voice.
@@ -38,15 +38,15 @@ const ISCRIZIONE_STEPS: Array<{
   },
   {
     number: "02",
-    title: "Compila il modulo",
+    title: "Iscrizione in segreteria",
     description:
-      "Scarica il PDF, compila tutti i campi, firma da entrambi i genitori. Allegata copia documento + tessera sanitaria del bambino + certificato medico non agonistico.",
+      "Nessun modulo da scaricare o stampare: è la segreteria a raccogliere i dati del bambino, i documenti e le firme dei genitori, e a curare il tesseramento FIGC.",
   },
   {
     number: "03",
     title: "Bonifico e conferma",
     description:
-      "Effettua il bonifico della quota (anche in due tranche) e invia il modulo firmato + ricevuta via email. La segreteria conferma l'iscrizione entro 48 ore.",
+      "Effettua il bonifico e invia la ricevuta via email. La segreteria conferma l'iscrizione entro 48 ore.",
   },
 ];
 
@@ -87,9 +87,9 @@ export default async function ScuolaCalcioIscrivitiPage() {
               Iscriviti in 3 step
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Aperte le iscrizioni per la categoria Esordienti, annate 2014 e
-              2015. Prova gratuita, modulo PDF e bonifico: nessun form online da
-              compilare, il club ti accompagna in ogni passaggio.
+              Aperte le iscrizioni per la categoria Esordienti, annate 2015 e
+              2014. Prova gratuita, poi la pratica la cura direttamente la
+              segreteria: nessun modulo da scaricare, nessun form online.
             </p>
           </div>
         </Container>
@@ -197,20 +197,23 @@ export default async function ScuolaCalcioIscrivitiPage() {
         </Container>
       </section>
 
-      {/* Modulo iscrizione + info bonifico (riuso RegistrationPaymentBlock) */}
+      {/* Info bonifico (riuso RegistrationPaymentBlock senza la card
+          modulo: per la Scuola Calcio 2026/2027 l'iscrizione la gestisce
+          la segreteria, non c'e' un PDF da scaricare). */}
       <section className="bg-surface-0">
         <Container className="py-16 lg:py-20" size="wide">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-3">
               <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
-                Modulo + pagamento
+                Pagamento
               </span>
               <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
-                Tutto quello che ti serve
+                Come si paga
               </h2>
             </div>
             <RegistrationPaymentBlock
-              moduleUrl={data.moduleFileUrl}
+              showModule={false}
+              moduleUrl={null}
               iban={iban}
               phone={phone}
               email={email}
@@ -224,14 +227,14 @@ export default async function ScuolaCalcioIscrivitiPage() {
         <Container className="py-12 lg:py-16" size="wide">
           <div className="flex flex-col gap-6 max-w-3xl">
             <h3 className="font-display text-light-ink-hi text-2xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-3xl">
-              Cosa allegare al modulo
+              Cosa serve per l&apos;iscrizione
             </h3>
             <ul className="flex flex-col gap-3">
               {[
-                "Copia documento d'identità di entrambi i genitori",
-                "Copia tessera sanitaria del bambino",
+                "Documento d'identità di entrambi i genitori",
+                "Tessera sanitaria del bambino",
                 "Certificato medico di idoneità sportiva non agonistica (in corso di validità)",
-                "Ricevuta del bonifico (anche solo della prima tranche)",
+                "Ricevuta del bonifico",
                 "2 foto formato tessera del bambino (per tesseramento FIGC)",
               ].map((item) => (
                 <li

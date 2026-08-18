@@ -18,6 +18,9 @@
  *   sezione "Settimana tipo" del programma sparisce dalla pagina.
  * - PREZZI: da decidere. Tabella quote, sconti e scadenze pagamento
  *   svuotati; le rispettive sezioni spariscono dalla pagina.
+ * - MODULO PDF: non previsto. L'iscrizione la cura la segreteria, la
+ *   card "Modulo iscrizione" non viene renderizzata (showModule=false
+ *   in /scuola-calcio/iscriviti) e i testi non la citano piu'.
  *
  * Usa `patch().set()` / `.unset()` con selettori per `_key` dove
  * possibile: tocca SOLO i campi elencati, gli edit manuali dell'admin
@@ -108,6 +111,8 @@ const HOME_SET: Record<string, unknown> = {
     "Per la stagione 2026/2027 la Scuola Calcio è attiva sulla categoria Esordienti: annate 2015 e 2014, calcio a 9. I nati nel 2013 e prima trovano posto nelle squadre del Settore Giovanile Scolastico (Giovanissimi e Allievi).",
   'scFaq[_key=="f74abb439568"].answer':
     "La programmazione settimanale della stagione 2026/2027 è in fase di definizione. Appena è pronta la pubblichiamo qui e la segreteria la comunica alle famiglie iscritte.",
+  'scFaq[_key=="b29fc380756f"].answer':
+    "Dopo la prova gratuita è la segreteria a occuparsi dell'iscrizione: raccoglie dati e documenti e ti indica come effettuare il bonifico della quota.",
   'scFaq[_key=="55a310241e35"].answer':
     "Certo. Agli Esordienti il lavoro dei portieri è differenziato, con sedute specifiche curate da un preparatore qualificato.",
 };
@@ -177,7 +182,7 @@ const INFO_UNSET = [
 const ISCR_SET: Record<string, unknown> = {
   scIscrIntro: [
     block(
-      "Iscriversi alla Scuola Calcio dell'Orbassano è semplice: una prova gratuita per conoscerci, il modulo PDF da compilare, il bonifico della quota. Per la stagione 2026/2027 sono aperte le iscrizioni per la categoria Esordienti, annate 2015 e 2014. Niente form online, ci occupiamo noi di accompagnarti in ogni passaggio.",
+      "Iscriversi alla Scuola Calcio dell'Orbassano è semplice: una prova gratuita per conoscerci, poi ci pensa la segreteria. Per la stagione 2026/2027 sono aperte le iscrizioni per la categoria Esordienti, annate 2015 e 2014. Nessun modulo da scaricare e nessun form online: raccogliamo noi dati e documenti e ti accompagniamo in ogni passaggio.",
     ),
   ],
 };

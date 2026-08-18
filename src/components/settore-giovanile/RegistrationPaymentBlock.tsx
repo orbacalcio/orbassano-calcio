@@ -20,6 +20,15 @@ type Props = {
   iban: string;
   phone: string;
   /**
+   * Mostra la card "Modulo iscrizione". Default true: se manca il PDF
+   * la card resta con il placeholder "Modulo in pubblicazione".
+   * Passare false quando la sezione non prevede affatto un modulo da
+   * scaricare — es. Scuola Calcio 2026/2027, dove l'iscrizione la
+   * gestisce direttamente la segreteria. In quel caso resta la sola
+   * card Pagamento, a piena larghezza.
+   */
+  showModule?: boolean;
+  /**
    * Email destinataria del modulo iscrizione + contatti. Default
    * SGS_EMAIL (Settore Giovanile). Override per altre sezioni che
    * usano lo stesso blocco con email dedicata (es. Scuola Calcio).
@@ -32,11 +41,13 @@ export function RegistrationPaymentBlock({
   iban,
   phone,
   email = SGS_EMAIL,
+  showModule = true,
 }: Props) {
   const phoneHref = `tel:${phone.replace(/\s/g, "")}`;
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className={`grid gap-4 ${showModule ? "md:grid-cols-2" : ""}`}>
       {/* Blocco ISCRIVITI ORA */}
+      {showModule && (
       <section
         aria-labelledby="iscriviti-ora"
         className="border-border bg-surface-1 flex flex-col gap-5 rounded-2xl border p-6 md:p-8"
@@ -87,6 +98,7 @@ export function RegistrationPaymentBlock({
           </span>
         )}
       </section>
+      )}
 
       {/* Blocco PAGAMENTO */}
       <section
