@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/scuola-calcio" },
   title: "Scuola Calcio",
   description:
-    "La Scuola Calcio di ASD Orbassano Calcio riparte dagli Esordienti: annate 2014 e 2015, calcio a 9, tecnici qualificati FIGC e kit ufficiale incluso nella quota.",
+    "La Scuola Calcio di ASD Orbassano Calcio riparte dagli Esordienti: annate 2015 e 2014, calcio a 9. Fair play, educazione e crescita dei ragazzi prima del risultato, con tecnici qualificati FIGC.",
 };
 
 // Fallback editoriali brand-voice: usati quando i campi del singleton
@@ -35,30 +35,35 @@ export const metadata: Metadata = {
 const FALLBACK_HERO_EYEBROW = "Scuola Calcio";
 const FALLBACK_HERO_TITLE = "Cresciamo insieme, dal 1930";
 
+// Ordine dei valori dettato dalla societa' (2026-08-17): prima il
+// fair play, poi l'educazione, e mai il risultato davanti alla
+// crescita dei ragazzi — e' il principio fondante del club. Le
+// competenze tecniche e la sicurezza vengono dopo, non perche' contino
+// meno ma perche' non sono cio' che definisce la societa'.
 const FALLBACK_USP: UspCard[] = [
   {
     number: "01",
-    title: "Tecnici qualificati FIGC",
+    title: "Fair play",
     description:
-      "Ogni gruppo ha allenatori abilitati FIGC con esperienza nel settore giovanile e formazione continua. Il rapporto allenatore/atleti è ridotto per garantire attenzione individuale.",
+      "Rispetto per l'avversario, per l'arbitro e per il compagno, dentro e fuori dal campo. È il primo metro con cui misuriamo una stagione: prima di qualsiasi punto in classifica.",
   },
   {
     number: "02",
-    title: "Sicurezza al primo posto",
+    title: "Educazione",
     description:
-      "Impianto omologato, assicurazione FIGC inclusa, personale qualificato per il pronto intervento. Spogliatoi e accessi dedicati alle famiglie.",
+      "Il campo è una scuola. Puntualità, impegno, rispetto delle regole e dello spogliatoio: quello che i ragazzi imparano qui se lo portano fuori, molto oltre il calcio.",
   },
   {
     number: "03",
-    title: "Il gioco prima del risultato",
+    title: "La crescita prima del risultato",
     description:
-      "Agli Esordienti si passa al calcio a 9 e si comincia a competere davvero. Ma nelle nostre sedute vengono prima il divertimento, l'autonomia tecnica e il rispetto del compagno: nessun ragazzo resta in panchina per la classifica.",
+      "Mai il risultato davanti alla crescita dei ragazzi: è il principio su cui è costruita la società. Tutti giocano, nessuno resta in panchina per la classifica.",
   },
   {
     number: "04",
-    title: "Kit ufficiale incluso",
+    title: "Tecnici qualificati FIGC",
     description:
-      "Ogni iscritto riceve il kit ufficiale rossoblù: maglia, pantaloncini, calzettoni. Senza costi aggiuntivi. I colori del club li vivi dal primo giorno.",
+      "Allenatori abilitati FIGC con formazione continua e un rapporto allenatore/atleti ridotto, per seguire ogni ragazzo. Impianto omologato e assicurazione FIGC compresa nel tesseramento.",
   },
 ];
 
@@ -89,14 +94,14 @@ const FALLBACK_FAQ: FaqItem[] = [
       "Dopo la prova gratuita è la segreteria a occuparsi dell'iscrizione: raccoglie dati e documenti e ti indica come effettuare il bonifico della quota.",
   },
   {
-    question: "Il kit è davvero gratuito?",
+    question: "Il kit è compreso nella quota?",
     answer:
-      "Sì, il kit base (maglia + pantaloncini + calzettoni) è incluso nella quota. Eventuali accessori extra (zaino, k-way, secondo set) sono opzionali.",
+      "No, il kit ufficiale rossoblù è a parte. La segreteria indica costo e modalità per ordinarlo al momento dell'iscrizione.",
   },
   {
     question: "Cosa serve per la prima lezione?",
     answer:
-      "Scarpe da ginnastica con suola adatta all'erba sintetica (non tacchetti in metallo) e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
+      "Scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale rossoblù viene consegnato dopo l'ordine in segreteria.",
   },
   {
     question: "Mio figlio può fare anche il portiere?",

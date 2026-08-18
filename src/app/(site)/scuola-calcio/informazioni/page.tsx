@@ -50,7 +50,6 @@ const FALLBACK_CANCELLATION =
 
 const FALLBACK_INCLUDED: string[] = [
   "Tessera FIGC + assicurazione integrata",
-  "Kit ufficiale rossoblù (maglia + pantaloncini + calzettoni)",
   "Materiale tecnico (palloni, casacche, conetti)",
   "Visite mediche sportive non agonistiche organizzate dal club",
   "Accesso a tornei e amichevoli organizzati dal club",
@@ -61,7 +60,7 @@ const FALLBACK_FAQ: FaqItem[] = [
   {
     question: "Cosa devo portare agli allenamenti?",
     answer:
-      "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
+      "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale rossoblù, che è a parte rispetto alla quota, viene consegnato dopo l'ordine in segreteria.",
   },
   {
     question: "Cosa succede in caso di pioggia?",
@@ -166,8 +165,9 @@ export default async function ScuolaCalcioInformazioniPage() {
                 {venueName ? "Sede unica, tutto compreso" : "Tutto compreso"}
               </h2>
               <p className="text-ink-mid max-w-2xl text-sm leading-relaxed md:text-base">
-                {ageRange} · gruppi piccoli per garantire attenzione individuale
-                · kit ufficiale + assicurazione FIGC inclusi nella quota.
+                {ageRange} · gruppi piccoli per garantire attenzione
+                individuale · tessera e assicurazione FIGC comprese nel
+                tesseramento. Il kit ufficiale è a parte.
               </p>
             </div>
             {/* Due colonne solo quando la sede e' pubblicata: altrimenti

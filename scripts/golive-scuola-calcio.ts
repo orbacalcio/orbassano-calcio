@@ -18,6 +18,11 @@
  *   sezione "Settimana tipo" del programma sparisce dalla pagina.
  * - PREZZI: da decidere. Tabella quote, sconti e scadenze pagamento
  *   svuotati; le rispettive sezioni spariscono dalla pagina.
+ * - VALORI: ordine dettato dalla societa'. Prima il fair play, poi
+ *   l'educazione, e mai il risultato davanti alla crescita dei
+ *   ragazzi (principio fondante). Tecnici e sicurezza vengono dopo.
+ * - KIT: NON e' incluso nella quota. Nessun testo deve dirlo gratuito
+ *   o compreso; costo e modalita' li comunica la segreteria.
  * - MODULO PDF: non previsto. L'iscrizione la cura la segreteria, la
  *   card "Modulo iscrizione" non viene renderizzata (showModule=false
  *   in /scuola-calcio/iscriviti) e i testi non la citano piu'.
@@ -92,19 +97,34 @@ const HOME_SET: Record<string, unknown> = {
     ),
   ],
 
-  // USP 02: il testo dell'admin descriveva nel dettaglio il Centro
-  // Sportivo Summer 40 (campi, spogliatoi, ristorazione). L'impianto
-  // non e' ancora deciso, quindi resta il concetto — sicurezza e
-  // qualita' della struttura — senza nominarlo.
-  'scUspCards[_key=="1212ec79f926"].title': "Sicurezza al primo posto",
-  'scUspCards[_key=="1212ec79f926"].description':
-    "Impianto omologato, assicurazione FIGC inclusa e personale qualificato per il pronto intervento. Spogliatoi e accessi dedicati alle famiglie. La sede della stagione 2026/2027 viene comunicata a breve.",
+  // Le 4 card riscritte nell'ordine dei valori della societa'. I _key
+  // restano quelli del seed: cambia il contenuto, non la posizione
+  // nell'array, quindi `number` va riassegnato coerentemente.
+  //
+  // 01 f07da0349859 (era "Tecnici qualificati FIGC")
+  'scUspCards[_key=="f07da0349859"].number': "01",
+  'scUspCards[_key=="f07da0349859"].title': "Fair play",
+  'scUspCards[_key=="f07da0349859"].description':
+    "Rispetto per l'avversario, per l'arbitro e per il compagno, dentro e fuori dal campo. È il primo metro con cui misuriamo una stagione: prima di qualsiasi punto in classifica.",
 
-  // USP 03: "risultati in secondo piano fino agli Esordienti" non
-  // regge piu' ora che gli Esordienti sono l'unica categoria attiva.
-  'scUspCards[_key=="69c0a8cc800f"].title': "Il gioco prima del risultato",
+  // 02 1212ec79f926 (era "Sicurezza al primo posto")
+  'scUspCards[_key=="1212ec79f926"].number': "02",
+  'scUspCards[_key=="1212ec79f926"].title': "Educazione",
+  'scUspCards[_key=="1212ec79f926"].description':
+    "Il campo è una scuola. Puntualità, impegno, rispetto delle regole e dello spogliatoio: quello che i ragazzi imparano qui se lo portano fuori, molto oltre il calcio.",
+
+  // 03 69c0a8cc800f (era "Il gioco prima del risultato")
+  'scUspCards[_key=="69c0a8cc800f"].number': "03",
+  'scUspCards[_key=="69c0a8cc800f"].title': "La crescita prima del risultato",
   'scUspCards[_key=="69c0a8cc800f"].description':
-    "Agli Esordienti si passa al calcio a 9 e si comincia a competere davvero. Ma nelle nostre sedute vengono prima il divertimento, l'autonomia tecnica e il rispetto del compagno: nessun ragazzo resta in panchina per la classifica.",
+    "Mai il risultato davanti alla crescita dei ragazzi: è il principio su cui è costruita la società. Tutti giocano, nessuno resta in panchina per la classifica.",
+
+  // 04 f48206afd7c6 (era "Kit ufficiale incluso" — il kit NON e'
+  // compreso nella quota, lo slot passa a tecnici + sicurezza)
+  'scUspCards[_key=="f48206afd7c6"].number': "04",
+  'scUspCards[_key=="f48206afd7c6"].title': "Tecnici qualificati FIGC",
+  'scUspCards[_key=="f48206afd7c6"].description':
+    "Allenatori abilitati FIGC con formazione continua e un rapporto allenatore/atleti ridotto, per seguire ogni ragazzo. Impianto omologato e assicurazione FIGC compresa nel tesseramento.",
 
   'scFaq[_key=="92d52ce5503c"].question': "Quali annate accogliete?",
   'scFaq[_key=="92d52ce5503c"].answer':
@@ -113,6 +133,9 @@ const HOME_SET: Record<string, unknown> = {
     "La programmazione settimanale della stagione 2026/2027 è in fase di definizione. Appena è pronta la pubblichiamo qui e la segreteria la comunica alle famiglie iscritte.",
   'scFaq[_key=="b29fc380756f"].answer':
     "Dopo la prova gratuita è la segreteria a occuparsi dell'iscrizione: raccoglie dati e documenti e ti indica come effettuare il bonifico della quota.",
+  'scFaq[_key=="c7d96f0335c6"].question': "Il kit è compreso nella quota?",
+  'scFaq[_key=="c7d96f0335c6"].answer':
+    "No, il kit ufficiale rossoblù è a parte. La segreteria indica costo e modalità per ordinarlo al momento dell'iscrizione.",
   'scFaq[_key=="55a310241e35"].answer':
     "Certo. Agli Esordienti il lavoro dei portieri è differenziato, con sedute specifiche curate da un preparatore qualificato.",
 };
@@ -160,7 +183,14 @@ const INFO_SET: Record<string, unknown> = {
     "Tutto quello che ti serve sapere prima di iscrivere tuo figlio alla stagione rossoblù.",
   // Le due risposte citavano l'erba sintetica di un campo specifico.
   'scInfoFaq[_key=="5bda5b82de4e"].answer':
-    "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
+    "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale rossoblù, che è a parte rispetto alla quota, viene consegnato dopo l'ordine in segreteria.",
+  // Il kit NON e' compreso: fuori dall'elenco "Nella quota".
+  scInfoIncluded: [
+    "Tessera FIGC + assicurazione integrata",
+    "Materiale tecnico (palloni, casacche, conetti)",
+    "Visite mediche sportive non agonistiche organizzate dal club",
+    "Accesso a tornei e amichevoli organizzati dal club",
+  ],
   'scInfoFaq[_key=="ac3d6433525f"].answer':
     "Gli allenamenti proseguono normalmente. Solo in caso di temporale o allerta meteo il club comunica l'annullamento via gruppo genitori.",
 };

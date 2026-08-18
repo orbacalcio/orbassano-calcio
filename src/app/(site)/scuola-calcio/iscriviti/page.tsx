@@ -145,7 +145,7 @@ export default async function ScuolaCalcioIscrivitiPage() {
                       €{data.scIscrQuotaAnnuale}
                     </span>
                     <span className="text-ink-low text-xs">
-                      Kit ufficiale, materiale, allenamenti, partite
+                      Materiale tecnico, allenamenti, partite
                     </span>
                   </div>
                 )}
