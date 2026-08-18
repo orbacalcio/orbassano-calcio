@@ -17,10 +17,10 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio" },
+  alternates: { canonical: "/scuola-calcio" },
   title: "Scuola Calcio",
   description:
-    "La Scuola Calcio di ASD Orbassano Calcio riparte dagli Esordienti: annate 2014 e 2015, calcio a 9, tecnici qualificati FIGC e kit ufficiale incluso al Centro Sportivo Aldo Porta.",
+    "La Scuola Calcio di ASD Orbassano Calcio riparte dagli Esordienti: annate 2014 e 2015, calcio a 9, tecnici qualificati FIGC e kit ufficiale incluso nella quota.",
 };
 
 // Fallback editoriali brand-voice: usati quando i campi del singleton
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 // Esordienti (annate 2014 e 2015). I testi qui sotto NON devono
 // promettere fasce non attive (Piccoli Amici, Primi Calci, Pulcini):
 // quando il club aprira' altre annate si aggiornano insieme alle
-// fasce in /squadre/scuola-calcio/programma.
+// fasce in /scuola-calcio/programma.
 const FALLBACK_HERO_EYEBROW = "Scuola Calcio";
 const FALLBACK_HERO_TITLE = "Cresciamo insieme, dal 1930";
 
@@ -46,7 +46,7 @@ const FALLBACK_USP: UspCard[] = [
     number: "02",
     title: "Sicurezza al primo posto",
     description:
-      "Centro Sportivo Aldo Porta omologato, assicurazione FIGC inclusa, personale qualificato per il pronto intervento. Spogliatoi e accessi dedicati alle famiglie.",
+      "Impianto omologato, assicurazione FIGC inclusa, personale qualificato per il pronto intervento. Spogliatoi e accessi dedicati alle famiglie.",
   },
   {
     number: "03",
@@ -116,17 +116,17 @@ export default async function ScuolaCalcioHomePage() {
   const hubBoxes = [
     {
       title: "Iscriviti",
-      href: "/squadre/scuola-calcio/iscriviti",
+      href: "/scuola-calcio/iscriviti",
       image: data.hubBox1Image,
     },
     {
       title: "Programma",
-      href: "/squadre/scuola-calcio/programma",
+      href: "/scuola-calcio/programma",
       image: data.hubBox2Image,
     },
     {
       title: "Informazioni",
-      href: "/squadre/scuola-calcio/informazioni",
+      href: "/scuola-calcio/informazioni",
       image: data.hubBox3Image,
     },
     {
@@ -141,8 +141,7 @@ export default async function ScuolaCalcioHomePage() {
       <JsonLd
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
-          { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Scuola Calcio", url: "/scuola-calcio" },
         ])}
       />
 
@@ -242,7 +241,7 @@ export default async function ScuolaCalcioHomePage() {
               stagione con i colori rossoblù.
             </p>
             <Link
-              href="/squadre/scuola-calcio/iscriviti"
+              href="/scuola-calcio/iscriviti"
               className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
             >
               Iscriviti adesso

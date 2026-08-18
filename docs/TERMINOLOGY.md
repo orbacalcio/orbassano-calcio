@@ -93,19 +93,43 @@ distinti su Sanity con slug specifici.
 
 ---
 
-## Sotto-categorie Scuola Calcio
+## Scuola Calcio
 
-Attiva dal go-live del 2026-08-17 con la sola categoria **Esordienti**
-(annate 2014 e 2015). Le altre fasce FIGC dell'attività di base
-(Pulcini, Primi Calci, Piccoli Amici) NON sono attive: non vanno
-nominate nell'UI pubblica finché il club non le apre.
+Sezione **top-level** dal go-live del 2026-08-17: vive su
+`/scuola-calcio` ed è voce del menu principale al pari di Squadre, non
+una sua sotto-pagina. È l'attività di base FIGC e si rivolge ai
+genitori, un pubblico diverso da chi cerca rose e risultati.
+
+**Non ha documenti squadra.** Le annate attive vivono dentro le pagine
+editoriali della sezione, non come `team` su Sanity: niente rosa,
+niente calendario, niente card su `/squadre`.
+
+Categorie FIGC dell'attività di base e annate corrispondenti per la
+stagione 2026/2027 (grafica ufficiale del club):
+
+| Categoria | Formato | Annate | Attiva |
+|---|---|---|---|
+| Primi Calci | Calcio a 5 | 2020 · 2019 · 2018 | no |
+| Pulcini | Calcio a 7 | 2017 · 2016 | no |
+| **Esordienti** | **Calcio a 9** | **2015 · 2014** | **sì** |
+
+Le categorie non attive NON vanno nominate nell'UI pubblica finché il
+club non le apre.
 
 | Forma | Uso |
 |---|---|
-| "Scuola Calcio" | Nome della sezione. Enum CMS `team.category`, label drawer, footer, breadcrumb, Studio. |
+| "Scuola Calcio" | Nome della sezione. Enum CMS `team.category`, label menu, footer, breadcrumb, Studio. |
 | "Esordienti" | Nome della categoria federale. H2, eyebrow, FAQ. |
-| "Esordienti 2015" / "Esordienti 2014" | Le due annate, nelle card di `/squadre/scuola-calcio/programma`. |
-| "Annate 2014 e 2015" | Forma compatta per stat, sottotitoli, slot timeline. |
+| "Esordienti 2015" / "Esordienti 2014" | Le due annate, nelle card di `/scuola-calcio/programma`. |
+| "Annate 2015 e 2014" | Forma compatta per stat, sottotitoli, slot timeline. |
+| "Calcio a 9" | Formato di gioco della categoria. Eyebrow delle card annata, stat. |
+
+⚠️ **Sede e prezzi non sono pubblicati** (decisione utente
+2026-08-17). I campi esistono su Studio ma sono vuoti, e le sezioni
+corrispondenti — card Sede, tabella quote, sconti, scadenze pagamento
+— non vengono renderizzate finché non li compila l'admin. Non
+reintrodurre fallback statici con indirizzi o importi: sono
+informazioni su cui le famiglie prendono decisioni.
 
 ⚠️ **Mai** "Academy" / "Soccer Academy" nell'UI pubblica: la sezione è
 stata rinominata 2026-08-17 su richiesta del club. Restano `academy*`
@@ -115,8 +139,10 @@ loro document id: rinominarli richiederebbe una migration dei
 documenti già popolati. Sono identificatori interni, mai visibili.
 
 ⚠️ `docs/DATA_ORBASSANO.md` §Scuola Calcio elenca le annate 2014-2015
-come **Pulcini**: era il mapping della stagione in cui il documento è
-stato scritto. Per la 2026/2027 le annate 2014-2015 sono **Esordienti**.
+come **Pulcini** e mappa il redirect Wix su `/squadre/scuola-calcio`:
+erano i dati della stagione in cui il documento è stato scritto. Per
+la 2026/2027 vale la tabella qui sopra, e la sezione è su
+`/scuola-calcio`.
 
 ---
 

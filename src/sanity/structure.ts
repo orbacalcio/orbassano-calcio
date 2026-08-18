@@ -54,7 +54,10 @@ const CURRENT_SEASON = "2026/2027";
 // "Partite archiviate per squadra" e "Avversari per squadra". L'ordine
 // determina l'elenco. Macro-categorie: Prima Squadra → Juniores
 // (U19 + U18) → Settore Giovanile (Allievi U17/U16 + Giovanissimi
-// U15/U14) → Scuola Calcio. SLUG devono coincidere con
+// U15/U14). La Scuola Calcio NON e' in elenco: e' una sezione
+// editoriale (/scuola-calcio) senza documenti squadra, quindi non ha
+// partite da filtrare (decisione utente 2026-08-17).
+// SLUG devono coincidere con
 // team.slug.current su Sanity: in caso contrario le liste filtrate
 // appaiono vuote (bug 2026-05-18 + 2026-06-20: il vecchio slug
 // "juniores" e' stato rinominato in "juniores-u19" e l'U18 vive
@@ -67,7 +70,6 @@ const TEAM_ITEMS: Array<{ slug: string; label: string }> = [
   { slug: "allievi-under-16", label: "Allievi Under 16" },
   { slug: "giovanissimi-under-15", label: "Giovanissimi Under 15" },
   { slug: "giovanissimi-under-14", label: "Giovanissimi Under 14" },
-  { slug: "scuola-calcio", label: "Scuola Calcio" },
 ];
 
 function buildMatchesByTeam(S: StructureBuilder) {

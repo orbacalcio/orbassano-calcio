@@ -1,33 +1,29 @@
 /**
  * Go-live Scuola Calcio 2026/2027 — allineamento contenuti Sanity.
  *
- * Il codice del sito ha fallback editoriali corretti (annate 2014 e
- * 2015, categoria Esordienti), ma i 4 singleton su Sanity sono gia'
- * popolati dal seed del 2026-06-09 e VINCONO sui fallback. Senza
- * questo script il sito pubblicherebbe ancora "Dai 5 ai 13 anni" e le
- * quattro fasce Piccoli Amici / Primi Calci / Pulcini / Esordienti.
+ * Il codice del sito ha fallback editoriali corretti (categoria
+ * Esordienti, annate 2015 e 2014, calcio a 9), ma i 4 singleton su
+ * Sanity sono gia' popolati dal seed del 2026-06-09 e VINCONO sui
+ * fallback. Senza questo script il sito pubblicherebbe ancora "Dai 5
+ * ai 13 anni" e le quattro fasce Piccoli Amici / Primi Calci /
+ * Pulcini / Esordienti.
  *
- * Usa `patch().set()` con selettori per `_key` dove possibile: tocca
- * SOLO i campi elencati, gli edit manuali dell'admin sugli altri campi
- * restano intatti. Sicuro da rilanciare (idempotente).
+ * Decisioni utente 2026-08-17:
+ * - unica categoria attiva: Esordienti, annate 2015 e 2014
+ * - nessun documento squadra: la Scuola Calcio e' una sezione
+ *   editoriale, le annate vivono dentro le sue pagine
+ * - SEDE: da decidere. I campi restano su Studio ma vuoti, e la card
+ *   "Sede" non viene renderizzata finche' l'admin non li compila.
+ * - PREZZI: da decidere. Tabella quote, sconti e scadenze pagamento
+ *   svuotati; le rispettive sezioni spariscono dalla pagina.
  *
- * Cosa NON tocca di proposito:
- * - `academy-home.scIntroBlocks` cita "Centro Sportivo Summer 40"
- *   mentre `academy-informazioni.scInfoVenueName` dice "Centro
- *   Sportivo Aldo Porta". E' una incoerenza preesistente nel CMS: va
- *   risolta dal club, non indovinata qui.
- * - quote, sconti, scadenze, contatti: dati amministrativi.
+ * Usa `patch().set()` / `.unset()` con selettori per `_key` dove
+ * possibile: tocca SOLO i campi elencati, gli edit manuali dell'admin
+ * sugli altri campi restano intatti. Sicuro da rilanciare.
  *
  * Uso:
- *   pnpm tsx --env-file=.env.local scripts/golive-scuola-calcio.ts
  *   pnpm tsx --env-file=.env.local scripts/golive-scuola-calcio.ts --dry-run
- *   pnpm tsx --env-file=.env.local scripts/golive-scuola-calcio.ts --with-team
- *
- * `--with-team` rinomina anche il documento squadra `team.scuola-calcio`
- * in "Esordienti" (annate 2014 e 2015) con slug `esordienti`. Lo lascia
- * `isActive: false`: la pagina /squadre non ha una sezione "Scuola
- * Calcio" e lo slug `scuola-calcio` collide con la rotta editoriale
- * statica. Vedi nota in fondo al file.
+ *   pnpm tsx --env-file=.env.local scripts/golive-scuola-calcio.ts
  */
 import "dotenv/config";
 
@@ -50,7 +46,6 @@ if (!token) {
 }
 
 const dryRun = process.argv.includes("--dry-run");
-const withTeam = process.argv.includes("--with-team");
 
 const client = createClient({
   projectId,
@@ -75,44 +70,56 @@ function block(text: string) {
 
 // ─── academy-home ────────────────────────────────────────────────────
 // I selettori `_key` corrispondono agli item creati dal seed del
-// 2026-06-09. Se l'admin li ha cancellati e ricreati da Studio la
-// patch non trova il path e non fa nulla: lo script lo segnala.
-const HOME_PATCH: Record<string, unknown> = {
+// 2026-06-09 e ritoccati dall'admin. Se un item e' stato cancellato e
+// ricreato da Studio la patch su quel path non trova nulla: Sanity
+// ignora il singolo path, gli altri passano.
+const HOME_SET: Record<string, unknown> = {
+  // "Orbassano Soccer Academy" → la sezione si chiama Scuola Calcio
+  // su tutte le superfici (richiesta utente 2026-08-17).
   scHeroEyebrow: "Scuola Calcio",
-  // USP 03: la frase "fino agli Esordienti" non regge piu' ora che
-  // gli Esordienti sono l'unica categoria attiva.
+
+  scIntroBlocks: [
+    block(
+      "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. Per la stagione 2026/2027 ripartiamo dalla categoria Esordienti, annate 2015 e 2014: calcio a 9, due allenamenti a settimana e la gara del fine settimana, sotto la guida di tecnici qualificati FIGC.",
+    ),
+    block(
+      "Qui i ragazzi scoprono il calcio come sport, come gruppo e come scuola di vita, in un'atmosfera familiare che li accompagna fino al passaggio nel Settore Giovanile Scolastico.",
+    ),
+  ],
+
+  // USP 02: il testo dell'admin descriveva nel dettaglio il Centro
+  // Sportivo Summer 40 (campi, spogliatoi, ristorazione). L'impianto
+  // non e' ancora deciso, quindi resta il concetto — sicurezza e
+  // qualita' della struttura — senza nominarlo.
+  'scUspCards[_key=="1212ec79f926"].title': "Sicurezza al primo posto",
+  'scUspCards[_key=="1212ec79f926"].description':
+    "Impianto omologato, assicurazione FIGC inclusa e personale qualificato per il pronto intervento. Spogliatoi e accessi dedicati alle famiglie. La sede della stagione 2026/2027 viene comunicata a breve.",
+
+  // USP 03: "risultati in secondo piano fino agli Esordienti" non
+  // regge piu' ora che gli Esordienti sono l'unica categoria attiva.
   'scUspCards[_key=="69c0a8cc800f"].title': "Il gioco prima del risultato",
   'scUspCards[_key=="69c0a8cc800f"].description':
     "Agli Esordienti si passa al calcio a 9 e si comincia a competere davvero. Ma nelle nostre sedute vengono prima il divertimento, l'autonomia tecnica e il rispetto del compagno: nessun ragazzo resta in panchina per la classifica.",
+
   'scFaq[_key=="92d52ce5503c"].question': "Quali annate accogliete?",
   'scFaq[_key=="92d52ce5503c"].answer':
-    "Per la stagione 2026/2027 la Scuola Calcio è attiva sulla categoria Esordienti: annate 2014 e 2015. I nati nel 2013 e prima trovano posto nelle squadre del Settore Giovanile Scolastico (Giovanissimi e Allievi).",
+    "Per la stagione 2026/2027 la Scuola Calcio è attiva sulla categoria Esordienti: annate 2015 e 2014, calcio a 9. I nati nel 2013 e prima trovano posto nelle squadre del Settore Giovanile Scolastico (Giovanissimi e Allievi).",
   'scFaq[_key=="f74abb439568"].answer':
-    "Due sedute settimanali da 90 minuti, più la partita del fine settimana. Gli orari definitivi vengono confermati dalla segreteria a inizio stagione.",
+    "Due sedute settimanali da 90 minuti, più la gara del fine settimana. Gli orari definitivi vengono confermati dalla segreteria a inizio stagione.",
   'scFaq[_key=="55a310241e35"].answer':
     "Certo. Agli Esordienti il lavoro dei portieri è differenziato, con sedute specifiche curate da un preparatore qualificato.",
 };
 
-// Intro: riscritta per dichiarare le annate attive. Il nome
-// dell'impianto resta quello scelto dall'admin ("Summer 40") — vedi
-// nota sull'incoerenza in cima al file.
-const HOME_INTRO = [
-  block(
-    "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. Per la stagione 2026/2027 ripartiamo dalla categoria Esordienti, annate 2014 e 2015: calcio a 9, due allenamenti a settimana e la gara del fine settimana, sotto la guida di tecnici qualificati FIGC.",
-  ),
-  block(
-    "Il Centro Sportivo Summer 40 è la nostra casa: erba sintetica, spogliatoi, materiali professionali e un'atmosfera familiare che accompagna i ragazzi fino al passaggio nel Settore Giovanile Scolastico.",
-  ),
-];
-
 // ─── academy-programma ───────────────────────────────────────────────
-// Sostituzione strutturale: da 4 fasce (5-13 anni) a 2 annate.
+// Sostituzione strutturale: da 4 fasce (5-13 anni) alle 2 annate
+// attive. Etichette e formato di gioco presi dalla grafica ufficiale
+// del club: ESORDIENTI · CALCIO A 9 · 2015 2014.
 const PROG_FASCE = [
   {
     _type: "object",
     _key: key(),
     label: "Esordienti 2015",
-    ageRange: "Primo anno · Under 12",
+    ageRange: "Calcio a 9 · primo anno",
     order: 1,
     focus: [
       block(
@@ -124,7 +131,7 @@ const PROG_FASCE = [
     _type: "object",
     _key: key(),
     label: "Esordienti 2014",
-    ageRange: "Secondo anno · Under 13",
+    ageRange: "Calcio a 9 · secondo anno",
     order: 2,
     focus: [
       block(
@@ -142,7 +149,7 @@ const PROG_TIMELINE = [
     startTime: "18:00",
     endTime: "19:30",
     activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2014-2015",
+    ageGroup: "Annate 2015-2014",
   },
   {
     _type: "object",
@@ -151,7 +158,7 @@ const PROG_TIMELINE = [
     startTime: "18:00",
     endTime: "19:30",
     activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2014-2015",
+    ageGroup: "Annate 2015-2014",
   },
   {
     _type: "object",
@@ -160,74 +167,79 @@ const PROG_TIMELINE = [
     startTime: "10:00",
     endTime: "11:30",
     activity: "Gara del fine settimana",
-    ageGroup: "Annate 2014-2015",
+    ageGroup: "Annate 2015-2014",
   },
 ];
 
 // ─── academy-informazioni ────────────────────────────────────────────
-const INFO_PATCH: Record<string, unknown> = {
-  scInfoAgeRange: "Annate 2014 e 2015 · categoria Esordienti",
-  'scInfoPayments[_key=="617d1e2ebe98"].note':
-    "Bonifico bancario con causale 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
+const INFO_SET: Record<string, unknown> = {
+  scInfoAgeRange: "Annate 2015 e 2014 · categoria Esordienti",
+  scInfoHeroPitch:
+    "Tutto quello che ti serve sapere prima di iscrivere tuo figlio alla stagione rossoblù.",
+  // Le due risposte citavano l'erba sintetica di un campo specifico.
+  'scInfoFaq[_key=="5bda5b82de4e"].answer':
+    "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
+  'scInfoFaq[_key=="ac3d6433525f"].answer':
+    "Gli allenamenti proseguono normalmente. Solo in caso di temporale o allerta meteo il club comunica l'annullamento via gruppo genitori.",
 };
 
-// ─── academy-iscriviti ───────────────────────────────────────────────
-const ISCR_PATCH: Record<string, unknown> = {
-  scIscrPaymentNote:
-    "Il pagamento può essere effettuato in unica soluzione oppure in due tranche (50% all'iscrizione + 50% entro gennaio). Sconto fratelli: -10% sulla seconda quota. Causale bonifico: 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
-};
-
-const ISCR_INTRO = [
-  block(
-    "Iscriversi alla Scuola Calcio dell'Orbassano è semplice: una prova gratuita per conoscerci, il modulo PDF da compilare, il bonifico della quota. Per la stagione 2026/2027 sono aperte le iscrizioni per la categoria Esordienti, annate 2014 e 2015. Niente form online, ci occupiamo noi di accompagnarti in ogni passaggio.",
-  ),
+// Campi svuotati: sede e tutto quello che riguarda gli importi.
+// Restano editabili da Studio — appena l'admin li compila le sezioni
+// ricompaiono da sole, senza toccare il codice.
+const INFO_UNSET = [
+  'scInfoFaq[_key=="f2658eb8972c"]', // "Dove si trova il Centro Sportivo Aldo Porta?"
+  "scInfoVenueName",
+  "scInfoVenueAddress",
+  "scInfoMapsUrl",
+  "scInfoPriceTable",
+  "scInfoDiscounts",
+  "scInfoPayments",
 ];
 
-type Step = { id: string; label: string; patch: Record<string, unknown> };
+// ─── academy-iscriviti ───────────────────────────────────────────────
+const ISCR_SET: Record<string, unknown> = {
+  scIscrIntro: [
+    block(
+      "Iscriversi alla Scuola Calcio dell'Orbassano è semplice: una prova gratuita per conoscerci, il modulo PDF da compilare, il bonifico della quota. Per la stagione 2026/2027 sono aperte le iscrizioni per la categoria Esordienti, annate 2015 e 2014. Niente form online, ci occupiamo noi di accompagnarti in ogni passaggio.",
+    ),
+  ],
+};
+
+// La nota parlava di rate e sconto fratelli: condizioni commerciali
+// non ancora fissate. Via finche' non ci sono le quote.
+const ISCR_UNSET = ["scIscrPaymentNote"];
+
+type Step = {
+  id: string;
+  label: string;
+  set?: Record<string, unknown>;
+  unset?: string[];
+};
 
 const STEPS: Step[] = [
   {
     id: "academy-home",
     label: "Scuola Calcio — Pagina home",
-    patch: { ...HOME_PATCH, scIntroBlocks: HOME_INTRO },
+    set: HOME_SET,
   },
   {
     id: "academy-programma",
     label: "Scuola Calcio — Programma tecnico",
-    patch: { scProgFasce: PROG_FASCE, scProgTimeline: PROG_TIMELINE },
+    set: { scProgFasce: PROG_FASCE, scProgTimeline: PROG_TIMELINE },
   },
   {
     id: "academy-informazioni",
     label: "Scuola Calcio — Informazioni",
-    patch: INFO_PATCH,
+    set: INFO_SET,
+    unset: INFO_UNSET,
   },
   {
     id: "academy-iscriviti",
     label: "Scuola Calcio — Pagina iscrizione",
-    patch: { ...ISCR_PATCH, scIscrIntro: ISCR_INTRO },
+    set: ISCR_SET,
+    unset: ISCR_UNSET,
   },
 ];
-
-// Squadra unica "Esordienti" (annate 2014 + 2015), scelta dall'utente
-// 2026-08-17. Riusa il doc `team.scuola-calcio` gia' esistente invece
-// di crearne uno nuovo e lasciarne uno orfano.
-//
-// isActive resta false: la pagina /squadre non ha una sezione per la
-// macro-categoria "Scuola Calcio" (vedi SECTIONS in
-// src/app/(site)/squadre/page.tsx), quindi la squadra non avrebbe
-// nessun punto di ingresso. Slug spostato da `scuola-calcio` a
-// `esordienti` perche' `/squadre/scuola-calcio` e' ora la rotta
-// statica della sezione editoriale e vincerebbe sul segmento dinamico
-// `[slug]`, rendendo la pagina squadra irraggiungibile.
-const TEAM_PATCH: Record<string, unknown> = {
-  name: "Esordienti",
-  displayName: "Orbassano Calcio",
-  slug: { _type: "slug", current: "esordienti" },
-  category: "Scuola Calcio",
-  subcategory: "Annate 2014 e 2015",
-  season: "2026/2027",
-  isActive: false,
-};
 
 async function main() {
   console.log(
@@ -236,41 +248,27 @@ async function main() {
       "\n",
   );
 
-  const steps = withTeam
-    ? [
-        ...STEPS,
-        {
-          id: "team.scuola-calcio",
-          label: "Squadra Esordienti (slug → esordienti, resta disattivata)",
-          patch: TEAM_PATCH,
-        },
-      ]
-    : STEPS;
-
-  for (const step of steps) {
-    const paths = Object.keys(step.patch);
+  for (const step of STEPS) {
+    const setPaths = Object.keys(step.set ?? {});
+    const unsetPaths = step.unset ?? [];
     if (dryRun) {
       console.log(`  · ${step.label} (${step.id})`);
-      for (const p of paths) console.log(`      ${p}`);
+      for (const p of setPaths) console.log(`      set   ${p}`);
+      for (const p of unsetPaths) console.log(`      unset ${p}`);
       continue;
     }
     try {
-      await client
-        .patch(step.id)
-        .set(step.patch)
-        .commit({ visibility: "async" });
-      console.log(`  ✓ ${step.label} (${step.id}) — ${paths.length} campi`);
+      let patch = client.patch(step.id);
+      if (setPaths.length > 0) patch = patch.set(step.set ?? {});
+      if (unsetPaths.length > 0) patch = patch.unset(unsetPaths);
+      await patch.commit({ visibility: "async" });
+      console.log(
+        `  ✓ ${step.label} (${step.id}) — ${setPaths.length} set, ${unsetPaths.length} unset`,
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`  ✗ ${step.label} (${step.id}) →`, msg);
     }
-  }
-
-  if (!withTeam) {
-    console.log(
-      "\nNB: documento squadra non toccato. Rilancia con --with-team per\n" +
-        "    rinominare team.scuola-calcio in 'Esordienti' (resta disattivato).",
-    );
   }
 
   console.log(

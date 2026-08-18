@@ -32,7 +32,7 @@ const wixRedirects = [
   // la vecchia URL Wix torna a puntare alla sua destinazione naturale
   // (era temporaneamente dirottata su /squadre/settore-giovanile
   // durante l'emergency hide del 2026-06-06).
-  { source: "/scuola-calcio-orbassano", destination: "/squadre/scuola-calcio" },
+  { source: "/scuola-calcio-orbassano", destination: "/scuola-calcio" },
   { source: "/sponsor-e-partner-orbassano-calcio", destination: "/sponsor" },
   { source: "/sponsorship-asd-orbassano-calcio", destination: "/sponsor" },
   { source: "/partnership-asd-orbassano-calcio", destination: "/sponsor/partner" },
@@ -277,23 +277,35 @@ const nextConfig = {
         permanent: true,
       },
     ];
-    // Go-live Scuola Calcio 2026-08-17: rimosso l'emergency hide
-    // host-based del 2026-06-06 che dirottava /squadre/academy* su
-    // /squadre quando la richiesta arrivava da orbassanocalcio.com.
-    // La sezione ora vive su /squadre/scuola-calcio ed e' pubblica su
-    // tutti i domini. Le vecchie URL /squadre/academy* non sono mai
-    // state indicizzate (esclusa dal sitemap + redirect host-based),
-    // ma il redirect qui sotto le copre per i link condivisi in
-    // anteprima dal club durante la review.
-    const academyRenameRedirects = [
+    // Go-live Scuola Calcio 2026-08-17.
+    //
+    // 1. Rimosso l'emergency hide host-based del 2026-06-06, che
+    //    dirottava /squadre/academy* su /squadre quando la richiesta
+    //    arrivava da orbassanocalcio.com.
+    // 2. La sezione e' stata promossa a top-level /scuola-calcio: e'
+    //    voce del menu principale al pari di Squadre, non una sua
+    //    sotto-pagina. Nessuna delle vecchie URL e' mai stata
+    //    indicizzata (fuori dal sitemap + redirect host-based), ma le
+    //    copriamo entrambe per i link condivisi dal club in review.
+    const scuolaCalcioLegacyRedirects = [
       {
         source: "/squadre/academy",
-        destination: "/squadre/scuola-calcio",
+        destination: "/scuola-calcio",
         permanent: true,
       },
       {
         source: "/squadre/academy/:path*",
-        destination: "/squadre/scuola-calcio/:path*",
+        destination: "/scuola-calcio/:path*",
+        permanent: true,
+      },
+      {
+        source: "/squadre/scuola-calcio",
+        destination: "/scuola-calcio",
+        permanent: true,
+      },
+      {
+        source: "/squadre/scuola-calcio/:path*",
+        destination: "/scuola-calcio/:path*",
         permanent: true,
       },
     ];
@@ -303,7 +315,7 @@ const nextConfig = {
       permanent: true,
     }));
     return [
-      ...academyRenameRedirects,
+      ...scuolaCalcioLegacyRedirects,
       ...wixMapped,
       ...internalRedirects,
     ];

@@ -9,18 +9,20 @@ import { buildBreadcrumbLd } from "@/lib/json-ld";
 import { fetchScuolaCalcioIscriviti } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio/iscriviti" },
+  alternates: { canonical: "/scuola-calcio/iscriviti" },
   title: "Iscriviti alla Scuola Calcio",
   description:
-    "Iscrizione alla Scuola Calcio dell'Orbassano, annate 2014 e 2015 (categoria Esordienti): quote, modulo PDF da scaricare e pagamento con bonifico. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
+    "Iscrizione alla Scuola Calcio dell'Orbassano, annate 2014 e 2015 (categoria Esordienti): prova gratuita, modulo PDF da scaricare e pagamento con bonifico. Stagione 2026/2027.",
 };
 
 // Fallback editoriali brand-voice.
 const FALLBACK_PHONE = "+39 327 779 3326";
 const FALLBACK_EMAIL = "sgs@orbassanocalcio.com";
 const FALLBACK_IBAN = "IBAN da pubblicare";
-const FALLBACK_PAYMENT_NOTE =
-  "Il pagamento può essere effettuato in unica soluzione oppure in due tranche (50% all'iscrizione + 50% entro gennaio). Sconto fratelli: -10% sulla seconda quota. Causale bonifico: 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.";
+// Nessun fallback per la nota di pagamento (decisione utente
+// 2026-08-17): rateizzazioni e sconti sono condizioni commerciali che
+// il club non ha ancora fissato. Se il campo CMS e' vuoto il paragrafo
+// non viene renderizzato.
 
 // Iscrizione in 3 step (pattern Toro Camp semplificato).
 const ISCRIZIONE_STEPS: Array<{
@@ -54,19 +56,17 @@ export default async function ScuolaCalcioIscrivitiPage() {
   const phone = data.scIscrContactPhone?.trim() || FALLBACK_PHONE;
   const email = data.scIscrContactEmail?.trim() || FALLBACK_EMAIL;
   const iban = data.scIscrIban?.trim() || FALLBACK_IBAN;
-  const paymentNote =
-    data.scIscrPaymentNote?.trim() || FALLBACK_PAYMENT_NOTE;
+  const paymentNote = data.scIscrPaymentNote?.trim() || null;
 
   return (
     <>
       <JsonLd
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
-          { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Scuola Calcio", url: "/scuola-calcio" },
           {
             name: "Iscriviti",
-            url: "/squadre/scuola-calcio/iscriviti",
+            url: "/scuola-calcio/iscriviti",
           },
         ])}
       />
@@ -150,9 +150,11 @@ export default async function ScuolaCalcioIscrivitiPage() {
                   </div>
                 )}
               </div>
-              <p className="text-ink-mid max-w-3xl text-sm leading-relaxed md:text-base">
-                {paymentNote}
-              </p>
+              {paymentNote && (
+                <p className="text-ink-mid max-w-3xl text-sm leading-relaxed md:text-base">
+                  {paymentNote}
+                </p>
+              )}
             </div>
           </Container>
         </section>

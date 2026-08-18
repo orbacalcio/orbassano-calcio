@@ -8,7 +8,7 @@ import type { UspCard } from "@/sanity/fetchers";
  *
  * I dati arrivano da settings.scUspCards (array di {number, title,
  * description}) — se vuoto/parziale la pagina non rendera' questa
- * sezione (controllo in /squadre/scuola-calcio/page.tsx).
+ * sezione (controllo in /scuola-calcio/page.tsx).
  */
 export function UspCards({ cards }: { cards: UspCard[] }) {
   return (

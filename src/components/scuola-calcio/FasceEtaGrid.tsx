@@ -3,9 +3,10 @@ import { PortableTextBody } from "@/components/ui/PortableTextBody";
 import type { ScuolaCalcioFascia } from "@/sanity/fetchers";
 
 /**
- * Grid card fasce d'età (Piccoli Amici, Primi Calci, Pulcini,
- * Esordienti, etc.). Ogni card mostra: foto rappresentativa, range
- * età, label fascia e focus tecnico (PortableText).
+ * Grid card delle annate attive della Scuola Calcio (es. "Esordienti
+ * 2015", "Esordienti 2014"). Ogni card mostra: foto rappresentativa,
+ * formato di gioco + anno di corso, nome dell'annata e focus tecnico
+ * (PortableText).
  *
  * Layout responsive: 1 col mobile, 2 col tablet, 3 col desktop.
  */

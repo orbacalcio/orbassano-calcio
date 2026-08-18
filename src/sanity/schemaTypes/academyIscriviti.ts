@@ -2,7 +2,7 @@ import { Coins } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della pagina /squadre/scuola-calcio/iscriviti.
+ * Singleton: contenuti della pagina /scuola-calcio/iscriviti.
  * Documento unico id fisso "academy-iscriviti".
  */
 export const academyIscriviti = defineType({

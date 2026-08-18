@@ -6,7 +6,7 @@ import Link from "next/link";
  * 4 box full-bleed con foto di sfondo, overlay navy multiply,
  * titolo overlay e bordo verticale rossoblu' (pattern juventus.com).
  *
- * I 4 box puntano a: /squadre/scuola-calcio/iscriviti, /programma,
+ * I 4 box puntano a: /scuola-calcio/iscriviti, /programma,
  * /informazioni, e un'ancora #faq in pagina (FAQ accordion sotto).
  *
  * Quando un'immagine manca, fallback con gradient navy + nome del box.

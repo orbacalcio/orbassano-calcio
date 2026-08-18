@@ -81,15 +81,6 @@ function buildSections(opts: {
     href: "/squadre/settore-giovanile",
     label: "Settore Giovanile Scolastico",
   });
-  // Scuola Calcio: sezione editoriale a 4 pagine (categoria
-  // Esordienti, annate 2014 e 2015). Pubblica dal go-live 2026-08-17,
-  // prima era nascosta dietro un check host-based (emergency hide
-  // 2026-06-06). Mostrata sempre: le pagine sono editoriali e
-  // rispondono anche senza contenuti CMS popolati (fallback statici).
-  teamsChildren.push({
-    href: "/squadre/scuola-calcio",
-    label: "Scuola Calcio",
-  });
   // NB: Open Days + Tornei NON sono piu' qui (richiesta utente
   // 2026-05-17). Sono passati sotto l'accordion Calendario perche'
   // sono di fatto eventi a calendario, non sezioni squadre.
@@ -148,8 +139,8 @@ function buildSections(opts: {
     label: "Summer Camp",
   });
 
-  // 5 voci main in ordine fisso: News · Squadre · Calendario · Gallery ·
-  // Società. Sponsor vive nelle voci secondarie (sidebarOverflowItems).
+  // 6 voci main in ordine fisso: News · Squadre · Scuola Calcio ·
+  // Calendario · Gallery · Società. Sponsor vive nelle voci secondarie (sidebarOverflowItems).
   // Calendario promossa a main 2026-05-17 con sottomenu accordion per
   // categoria (richiesta utente). Gallery promossa a top-level (era
   // /news/gallery sotto News).
@@ -165,6 +156,22 @@ function buildSections(opts: {
       href: "/squadre",
       label: "Squadre",
       children: teamsChildren,
+    },
+    // Scuola Calcio: voce main al pari di Squadre (richiesta utente
+    // 2026-08-17), non un figlio dell'accordion Squadre. E' l'attivita'
+    // di base FIGC — categoria Esordienti, annate 2014 e 2015 — con un
+    // percorso di iscrizione proprio, rivolto a un pubblico (genitori)
+    // diverso da chi cerca rose e risultati. Mostrata sempre: le 4
+    // pagine sono editoriali e reggono anche senza contenuti CMS.
+    {
+      href: "/scuola-calcio",
+      label: "Scuola Calcio",
+      children: [
+        { href: "/scuola-calcio", label: "Panoramica" },
+        { href: "/scuola-calcio/iscriviti", label: "Iscriviti" },
+        { href: "/scuola-calcio/programma", label: "Programma" },
+        { href: "/scuola-calcio/informazioni", label: "Informazioni" },
+      ],
     },
     {
       href: "/calendario",

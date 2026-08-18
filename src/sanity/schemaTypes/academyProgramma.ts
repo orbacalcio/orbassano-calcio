@@ -2,7 +2,7 @@ import { CalendarDays } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della pagina /squadre/scuola-calcio/programma.
+ * Singleton: contenuti della pagina /scuola-calcio/programma.
  * Documento unico id fisso "academy-programma".
  */
 export const academyProgramma = defineType({

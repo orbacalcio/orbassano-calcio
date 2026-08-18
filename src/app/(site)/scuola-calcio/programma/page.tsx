@@ -13,7 +13,7 @@ import {
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio/programma" },
+  alternates: { canonical: "/scuola-calcio/programma" },
   title: "Programma tecnico Scuola Calcio",
   description:
     "Settimana tipo, focus tecnico delle annate 2014 e 2015 (categoria Esordienti, calcio a 9) e staff coach della Scuola Calcio dell'Orbassano. Allenatori qualificati FIGC.",
@@ -55,7 +55,7 @@ const FALLBACK_TIMELINE: ScuolaCalcioTimelineSlot[] = [
 const FALLBACK_FASCE: ScuolaCalcioFascia[] = [
   {
     label: "Esordienti 2015",
-    ageRange: "Primo anno · Under 12",
+    ageRange: "Calcio a 9 · primo anno",
     focus: null,
     image: null,
     imageLqip: null,
@@ -63,7 +63,7 @@ const FALLBACK_FASCE: ScuolaCalcioFascia[] = [
   },
   {
     label: "Esordienti 2014",
-    ageRange: "Secondo anno · Under 13",
+    ageRange: "Calcio a 9 · secondo anno",
     focus: null,
     image: null,
     imageLqip: null,
@@ -91,11 +91,10 @@ export default async function ScuolaCalcioProgrammaPage() {
       <JsonLd
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
-          { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Scuola Calcio", url: "/scuola-calcio" },
           {
             name: "Programma",
-            url: "/squadre/scuola-calcio/programma",
+            url: "/scuola-calcio/programma",
           },
         ])}
       />

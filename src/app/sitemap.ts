@@ -49,10 +49,10 @@ const STATIC_ROUTES: Array<{
   // Scuola Calcio — sezione editoriale a 4 pagine, pubblica dal
   // go-live 2026-08-17 (categoria Esordienti, annate 2014 e 2015).
   // Era esclusa dal sitemap durante l'emergency hide del 2026-06-06.
-  { path: "/squadre/scuola-calcio", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/squadre/scuola-calcio/iscriviti", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/squadre/scuola-calcio/programma", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/squadre/scuola-calcio/informazioni", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/scuola-calcio", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/scuola-calcio/iscriviti", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/scuola-calcio/programma", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/scuola-calcio/informazioni", changeFrequency: "monthly", priority: 0.6 },
   // Calendario aggregato Settore Giovanile (raggruppa match U14-U17).
   // Le pagine /squadre/under-XX/calendario singole esistono ancora ma
   // sono ESCLUSE dal calendarEntries dinamico sotto (richiesta utente

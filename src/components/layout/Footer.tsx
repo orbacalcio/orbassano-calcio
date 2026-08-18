@@ -110,7 +110,7 @@ function buildSections(opts: {
     label: "Settore Giovanile Scolastico",
   });
   squadreItems.push({
-    href: "/squadre/scuola-calcio",
+    href: "/scuola-calcio",
     label: "Scuola Calcio",
   });
   squadreItems.push({

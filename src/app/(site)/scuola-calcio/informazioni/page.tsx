@@ -21,30 +21,28 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchScuolaCalcioInformazioni,
-  type DiscountRow,
   type FaqItem,
-  type PaymentRow,
-  type PriceRow,
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/squadre/scuola-calcio/informazioni" },
+  alternates: { canonical: "/scuola-calcio/informazioni" },
   title: "Informazioni Scuola Calcio",
   description:
-    "Tutte le info pratiche della Scuola Calcio dell'Orbassano: annate 2014 e 2015, sede, prezzi, sconti famiglie, scadenze pagamento, politica cancellazione, contatti. Stagione 2026/2027 al Centro Sportivo Aldo Porta.",
+    "Tutte le info pratiche della Scuola Calcio dell'Orbassano: annate 2014 e 2015 (categoria Esordienti, calcio a 9), cosa è incluso nella quota, politica di cancellazione e contatti della segreteria. Stagione 2026/2027.",
 };
 
 // ─── Fallback editoriali brand-voice ─────────────────────────────────
 const FALLBACK_HERO_PITCH =
-  "Una stagione da rossoblù al Centro Sportivo Aldo Porta. Tutto quello che ti serve sapere prima di iscrivere tuo figlio.";
+  "Tutto quello che ti serve sapere prima di iscrivere tuo figlio alla stagione rossoblù.";
 // Stagione 2026/2027: unica categoria attiva Esordienti. Il campo CMS
 // `scInfoAgeRange` sovrascrive questo fallback quando popolato.
 const FALLBACK_AGE_RANGE = "Annate 2014 e 2015 · categoria Esordienti";
 const FALLBACK_MAX_GROUP = 15;
-const FALLBACK_VENUE_NAME = "Centro Sportivo Aldo Porta";
-const FALLBACK_VENUE_ADDRESS = "Via Ignazio Silone, 4 · 10043 Orbassano (TO)";
-const FALLBACK_MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Centro+Sportivo+Aldo+Porta+Orbassano";
+// Sede e prezzi NON hanno fallback (decisione utente 2026-08-17): il
+// club non ha ancora deciso impianto e quote. I campi esistono su
+// Studio ma sono vuoti, e le rispettive sezioni non vengono
+// renderizzate finche' non li popola. Mai inventare un indirizzo o un
+// importo: e' informazione che i genitori userebbero per decidere.
 const FALLBACK_PHONE = "+39 327 779 3326";
 const FALLBACK_EMAIL = "sgs@orbassanocalcio.com";
 const FALLBACK_CANCELLATION =
@@ -59,60 +57,16 @@ const FALLBACK_INCLUDED: string[] = [
   "Attestato di partecipazione + valutazione tecnica fine stagione",
 ];
 
-const FALLBACK_PRICE_TABLE: PriceRow[] = [
-  { label: "Quota annuale", value: "Da pubblicare" },
-  { label: "Quota iscrizione una tantum", value: "Da pubblicare" },
-];
-
-const FALLBACK_DISCOUNTS: DiscountRow[] = [
-  {
-    label: "Sconto fratelli",
-    value: "-10%",
-    condition: "Sulla seconda quota e successive. Cumulabile con altri sconti.",
-  },
-  {
-    label: "Iscrizione anticipata",
-    value: "-5%",
-    condition: "Per chi formalizza l'iscrizione entro il 15 luglio.",
-  },
-  {
-    label: "Porta un amico",
-    value: "-5%",
-    condition:
-      "Se un tuo amico si iscrive citando il tuo nome, entrambi ricevete lo sconto.",
-  },
-];
-
-const FALLBACK_PAYMENTS: PaymentRow[] = [
-  {
-    milestone: "All'iscrizione",
-    deadline: "Entro 7 giorni dalla prova",
-    amount: "50% della quota annuale",
-    note: "Bonifico bancario con causale 'Iscrizione Scuola Calcio 2026/2027 + Nome Cognome del bambino + anno di nascita'.",
-  },
-  {
-    milestone: "Saldo",
-    deadline: "Entro 31 gennaio 2027",
-    amount: "50% della quota annuale",
-    note: "Stessa modalità: bonifico bancario, ricevuta da inviare via email alla segreteria.",
-  },
-];
-
 const FALLBACK_FAQ: FaqItem[] = [
-  {
-    question: "Dove si trova il Centro Sportivo Aldo Porta?",
-    answer:
-      "In Via Ignazio Silone 4, a Orbassano (TO). Parcheggio gratuito davanti al campo. Servito dalle linee urbane GTT.",
-  },
   {
     question: "Cosa devo portare agli allenamenti?",
     answer:
-      "Borraccia personale, scarpe adatte (non tacchetti in metallo sull'erba sintetica) e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
+      "Borraccia personale, scarpe da calcio adatte al fondo del campo e parastinchi. Il kit ufficiale viene consegnato dopo l'iscrizione.",
   },
   {
     question: "Cosa succede in caso di pioggia?",
     answer:
-      "Il campo è in erba sintetica drenante: gli allenamenti continuano normalmente. Solo in caso di temporale o allerta meteo il club comunica l'annullamento via gruppo genitori.",
+      "Gli allenamenti proseguono normalmente. Solo in caso di temporale o allerta meteo il club comunica l'annullamento via gruppo genitori.",
   },
   {
     question: "Posso assistere agli allenamenti?",
@@ -132,29 +86,30 @@ export default async function ScuolaCalcioInformazioniPage() {
   const heroPitch = data.scInfoHeroPitch?.trim() || FALLBACK_HERO_PITCH;
   const ageRange = data.scInfoAgeRange?.trim() || FALLBACK_AGE_RANGE;
   const maxGroup = data.scInfoMaxGroup ?? FALLBACK_MAX_GROUP;
-  const venueName = data.scInfoVenueName?.trim() || FALLBACK_VENUE_NAME;
-  const venueAddress =
-    data.scInfoVenueAddress?.trim() || FALLBACK_VENUE_ADDRESS;
-  const mapsUrl = data.scInfoMapsUrl?.trim() || FALLBACK_MAPS_URL;
+  // Sede: renderizzata solo quando l'admin popola il nome impianto su
+  // Studio. Finche' e' vuoto la card non compare (niente indirizzo
+  // inventato). Vedi commento sui fallback in cima al file.
+  const venueName = data.scInfoVenueName?.trim() || null;
+  const venueAddress = data.scInfoVenueAddress?.trim() || null;
+  const mapsUrl = data.scInfoMapsUrl?.trim() || null;
   const phone = data.scInfoContactPhone?.trim() || FALLBACK_PHONE;
   const email = data.scInfoContactEmail?.trim() || FALLBACK_EMAIL;
   const cancellation =
     data.scInfoCancellation?.trim() || FALLBACK_CANCELLATION;
   const included =
     data.included.length > 0 ? data.included : FALLBACK_INCLUDED;
-  const priceTable =
-    data.priceTable.length > 0 ? data.priceTable : FALLBACK_PRICE_TABLE;
-  const discounts =
-    data.discounts.length > 0 ? data.discounts : FALLBACK_DISCOUNTS;
-  const payments =
-    data.payments.length > 0 ? data.payments : FALLBACK_PAYMENTS;
+  // Quote, sconti e scadenze: nessun fallback. Se il CMS e' vuoto le
+  // tre sezioni spariscono invece di mostrare importi placeholder.
+  const priceTable = data.priceTable;
+  const discounts = data.discounts;
+  const payments = data.payments;
   const faq = data.faq.length > 0 ? data.faq : FALLBACK_FAQ;
 
   const stats: StatCardItem[] = [
     { value: "2014-2015", label: "Annate ammesse" },
     { value: String(maxGroup), label: "Max per gruppo" },
     { value: "2", label: "Allenamenti settimanali" },
-    { value: "1", label: "Sede unica" },
+    { value: "9", label: "Giocatori in campo" },
   ];
 
   return (
@@ -162,11 +117,10 @@ export default async function ScuolaCalcioInformazioniPage() {
       <JsonLd
         data={buildBreadcrumbLd([
           { name: "Home", url: "/" },
-          { name: "Squadre", url: "/squadre" },
-          { name: "Scuola Calcio", url: "/squadre/scuola-calcio" },
+          { name: "Scuola Calcio", url: "/scuola-calcio" },
           {
             name: "Informazioni",
-            url: "/squadre/scuola-calcio/informazioni",
+            url: "/scuola-calcio/informazioni",
           },
         ])}
       />
@@ -203,22 +157,28 @@ export default async function ScuolaCalcioInformazioniPage() {
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-3">
               <span className="text-brand-gold font-display text-sm font-bold tracking-[0.2em] uppercase">
-                Sede e cosa è incluso
+                {venueName ? "Sede e cosa è incluso" : "Cosa è incluso"}
               </span>
               <h2 className="font-display text-ink-hi text-4xl leading-tight font-extrabold tracking-[0.005em] uppercase md:text-5xl">
-                Sede unica, tutto compreso
+                {venueName ? "Sede unica, tutto compreso" : "Tutto compreso"}
               </h2>
               <p className="text-ink-mid max-w-2xl text-sm leading-relaxed md:text-base">
                 {ageRange} · gruppi piccoli per garantire attenzione individuale
                 · kit ufficiale + assicurazione FIGC inclusi nella quota.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <InfoVenueBlock
-                name={venueName}
-                address={venueAddress}
-                mapsUrl={mapsUrl}
-              />
+            {/* Due colonne solo quando la sede e' pubblicata: altrimenti
+                la card "Nella quota" resta sola e a piena larghezza. */}
+            <div
+              className={`grid grid-cols-1 gap-6 ${venueName ? "md:grid-cols-2" : ""}`}
+            >
+              {venueName && (
+                <InfoVenueBlock
+                  name={venueName}
+                  address={venueAddress}
+                  mapsUrl={mapsUrl}
+                />
+              )}
               <article
                 aria-labelledby="included-title"
                 className="border-border bg-surface-1 flex flex-col gap-5 rounded-2xl border p-6 md:p-8"
@@ -262,6 +222,7 @@ export default async function ScuolaCalcioInformazioniPage() {
         </Container>
       </section>
 
+      {priceTable.length > 0 && (
       <section className="bg-light-bg-0">
         <Container className="py-16 lg:py-20" size="wide">
           <div className="flex flex-col gap-10">
@@ -293,6 +254,7 @@ export default async function ScuolaCalcioInformazioniPage() {
           </div>
         </Container>
       </section>
+      )}
 
       {discounts.length > 0 && (
         <section className="bg-surface-0">
@@ -435,7 +397,7 @@ export default async function ScuolaCalcioInformazioniPage() {
                 accompagna in ogni passaggio.
               </p>
               <Link
-                href="/squadre/scuola-calcio/iscriviti"
+                href="/scuola-calcio/iscriviti"
                 className="bg-brand-blue btn-wow-sweep btn-sweep-gold text-brand-white font-display hover:text-surface-0 focus-visible:text-surface-0 focus-visible:outline-brand-gold mt-2 inline-flex w-fit items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 Vai all&apos;iscrizione

@@ -2,7 +2,7 @@ import { School } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 /**
- * Singleton: contenuti della home Scuola Calcio (/squadre/scuola-calcio).
+ * Singleton: contenuti della home Scuola Calcio (/scuola-calcio).
  * Documento unico con id fisso "academy-home" — il sidebar Studio
  * lo espone come voce dedicata sotto top-level "Scuola Calcio".
  *
@@ -20,7 +20,7 @@ export const academyHome = defineType({
       name: "scHeroImage",
       title: "Hero — immagine di sfondo",
       description:
-        "Foto in cima alla pagina /squadre/scuola-calcio (es. bambini in allenamento). Se vuota, viene usato il fallback navy + stemma + pitch lines.",
+        "Foto in cima alla pagina /scuola-calcio (es. bambini in allenamento). Se vuota, viene usato il fallback navy + stemma + pitch lines.",
       type: "image",
       options: { hotspot: true },
     }),
