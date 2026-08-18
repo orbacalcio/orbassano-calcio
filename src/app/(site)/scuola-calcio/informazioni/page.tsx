@@ -105,10 +105,13 @@ export default async function ScuolaCalcioInformazioniPage() {
   const payments = data.payments;
   const faq = data.faq.length > 0 ? data.faq : FALLBACK_FAQ;
 
+  // 3 stat: solo dati certi. La frequenza degli allenamenti e' fuori
+  // finche' la programmazione settimanale non e' definita (stessa
+  // ragione per cui la sezione "Settimana tipo" del programma e la
+  // card Sede non vengono renderizzate).
   const stats: StatCardItem[] = [
-    { value: "2014-2015", label: "Annate ammesse" },
+    { value: "2015-2014", label: "Annate ammesse" },
     { value: String(maxGroup), label: "Max per gruppo" },
-    { value: "2", label: "Allenamenti settimanali" },
     { value: "9", label: "Giocatori in campo" },
   ];
 

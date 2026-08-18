@@ -71,7 +71,7 @@ const FALLBACK_FAQ: FaqItem[] = [
   {
     question: "Quanti allenamenti alla settimana sono previsti?",
     answer:
-      "Due sedute settimanali da 90 minuti, più la partita del fine settimana. Gli orari definitivi vengono confermati dalla segreteria a inizio stagione.",
+      "La programmazione settimanale della stagione 2026/2027 è in fase di definizione. Appena è pronta la pubblichiamo qui e la segreteria la comunica alle famiglie iscritte.",
   },
   {
     question: "I tecnici sono qualificati?",

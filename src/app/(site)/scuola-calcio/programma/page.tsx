@@ -9,44 +9,20 @@ import { buildBreadcrumbLd } from "@/lib/json-ld";
 import {
   fetchScuolaCalcioProgramma,
   type ScuolaCalcioFascia,
-  type ScuolaCalcioTimelineSlot,
 } from "@/sanity/fetchers";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/scuola-calcio/programma" },
   title: "Programma tecnico Scuola Calcio",
   description:
-    "Settimana tipo, focus tecnico delle annate 2014 e 2015 (categoria Esordienti, calcio a 9) e staff coach della Scuola Calcio dell'Orbassano. Allenatori qualificati FIGC.",
+    "Focus tecnico delle annate 2015 e 2014 (categoria Esordienti, calcio a 9) e staff coach della Scuola Calcio dell'Orbassano. Allenatori qualificati FIGC.",
 };
 
-// Fallback timeline brand-voice — settimana tipo, una volta che il
-// CMS e' popolato i valori reali sovrascrivono.
-//
-// Stagione 2026/2027: unica categoria attiva Esordienti (annate 2014 e
-// 2015). Due sedute infrasettimanali comuni + gara del sabato.
-const FALLBACK_TIMELINE: ScuolaCalcioTimelineSlot[] = [
-  {
-    day: "Martedì",
-    startTime: "18:00",
-    endTime: "19:30",
-    activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2014-2015",
-  },
-  {
-    day: "Giovedì",
-    startTime: "18:00",
-    endTime: "19:30",
-    activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2014-2015",
-  },
-  {
-    day: "Sabato",
-    startTime: "10:00",
-    endTime: "11:30",
-    activity: "Gara del fine settimana",
-    ageGroup: "Annate 2014-2015",
-  },
-];
+// Orari allenamenti: NESSUN fallback (decisione utente 2026-08-17).
+// La programmazione settimanale non e' ancora definita, come la sede.
+// Il campo `scProgTimeline` esiste su Studio ma e' vuoto: finche' resta
+// cosi' la sezione "Settimana tipo" non viene renderizzata. Appena
+// l'admin inserisce gli slot, ricompare da sola.
 
 // Le due annate della categoria Esordienti. Quando il club aprira'
 // altre fasce (Pulcini, Primi Calci, Piccoli Amici) si aggiungono qui
@@ -82,7 +58,7 @@ const FASCIA_DESCRIPTIONS: Record<string, string> = {
 export default async function ScuolaCalcioProgrammaPage() {
   const data = await fetchScuolaCalcioProgramma();
 
-  const timeline = data.timeline.length > 0 ? data.timeline : FALLBACK_TIMELINE;
+  const timeline = data.timeline;
   const fasce = data.fasce.length > 0 ? data.fasce : FALLBACK_FASCE;
   const staff = data.staff;
 
@@ -114,14 +90,16 @@ export default async function ScuolaCalcioProgrammaPage() {
               Come si allena chi cresce con noi
             </h1>
             <p className="text-ink-mid text-base leading-relaxed lg:text-lg">
-              Una settimana strutturata per le annate 2014 e 2015, con sedute
-              tecniche, gioco e gare. Tutti i tecnici sono abilitati FIGC.
+              Il percorso tecnico delle annate 2015 e 2014, categoria
+              Esordienti. Tutti i tecnici sono abilitati FIGC.
             </p>
           </div>
         </Container>
       </header>
 
-      {/* Timeline settimana */}
+      {/* Timeline settimana — solo quando il CMS ha degli slot. Vedi
+          nota sugli orari in cima al file. */}
+      {timeline.length > 0 && (
       <section className="bg-surface-0">
         <Container className="py-16 lg:py-20" size="wide">
           <div className="flex flex-col gap-10">
@@ -142,6 +120,7 @@ export default async function ScuolaCalcioProgrammaPage() {
           </div>
         </Container>
       </section>
+      )}
 
       {/* Fasce età con focus tecnico */}
       <section className="bg-light-bg-0">

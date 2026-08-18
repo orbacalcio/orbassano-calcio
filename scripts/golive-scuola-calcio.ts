@@ -14,6 +14,8 @@
  *   editoriale, le annate vivono dentro le sue pagine
  * - SEDE: da decidere. I campi restano su Studio ma vuoti, e la card
  *   "Sede" non viene renderizzata finche' l'admin non li compila.
+ * - ORARI ALLENAMENTI: da decidere. `scProgTimeline` svuotato, la
+ *   sezione "Settimana tipo" del programma sparisce dalla pagina.
  * - PREZZI: da decidere. Tabella quote, sconti e scadenze pagamento
  *   svuotati; le rispettive sezioni spariscono dalla pagina.
  *
@@ -80,7 +82,7 @@ const HOME_SET: Record<string, unknown> = {
 
   scIntroBlocks: [
     block(
-      "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. Per la stagione 2026/2027 ripartiamo dalla categoria Esordienti, annate 2015 e 2014: calcio a 9, due allenamenti a settimana e la gara del fine settimana, sotto la guida di tecnici qualificati FIGC.",
+      "La Scuola Calcio dell'Orbassano Calcio è il primo passo nel grande gioco. Per la stagione 2026/2027 ripartiamo dalla categoria Esordienti, annate 2015 e 2014: calcio a 9, sotto la guida di tecnici qualificati FIGC.",
     ),
     block(
       "Qui i ragazzi scoprono il calcio come sport, come gruppo e come scuola di vita, in un'atmosfera familiare che li accompagna fino al passaggio nel Settore Giovanile Scolastico.",
@@ -105,7 +107,7 @@ const HOME_SET: Record<string, unknown> = {
   'scFaq[_key=="92d52ce5503c"].answer':
     "Per la stagione 2026/2027 la Scuola Calcio è attiva sulla categoria Esordienti: annate 2015 e 2014, calcio a 9. I nati nel 2013 e prima trovano posto nelle squadre del Settore Giovanile Scolastico (Giovanissimi e Allievi).",
   'scFaq[_key=="f74abb439568"].answer':
-    "Due sedute settimanali da 90 minuti, più la gara del fine settimana. Gli orari definitivi vengono confermati dalla segreteria a inizio stagione.",
+    "La programmazione settimanale della stagione 2026/2027 è in fase di definizione. Appena è pronta la pubblichiamo qui e la segreteria la comunica alle famiglie iscritte.",
   'scFaq[_key=="55a310241e35"].answer':
     "Certo. Agli Esordienti il lavoro dei portieri è differenziato, con sedute specifiche curate da un preparatore qualificato.",
 };
@@ -141,35 +143,10 @@ const PROG_FASCE = [
   },
 ];
 
-const PROG_TIMELINE = [
-  {
-    _type: "object",
-    _key: key(),
-    day: "Martedì",
-    startTime: "18:00",
-    endTime: "19:30",
-    activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2015-2014",
-  },
-  {
-    _type: "object",
-    _key: key(),
-    day: "Giovedì",
-    startTime: "18:00",
-    endTime: "19:30",
-    activity: "Allenamento Esordienti",
-    ageGroup: "Annate 2015-2014",
-  },
-  {
-    _type: "object",
-    _key: key(),
-    day: "Sabato",
-    startTime: "10:00",
-    endTime: "11:30",
-    activity: "Gara del fine settimana",
-    ageGroup: "Annate 2015-2014",
-  },
-];
+// Orari allenamenti non ancora definiti (decisione utente
+// 2026-08-17): la timeline va svuotata, non riscritta. Il campo resta
+// su Studio e la sezione ricompare da sola quando l'admin lo popola.
+const PROG_UNSET = ["scProgTimeline"];
 
 // ─── academy-informazioni ────────────────────────────────────────────
 const INFO_SET: Record<string, unknown> = {
@@ -225,7 +202,8 @@ const STEPS: Step[] = [
   {
     id: "academy-programma",
     label: "Scuola Calcio — Programma tecnico",
-    set: { scProgFasce: PROG_FASCE, scProgTimeline: PROG_TIMELINE },
+    set: { scProgFasce: PROG_FASCE },
+    unset: PROG_UNSET,
   },
   {
     id: "academy-informazioni",

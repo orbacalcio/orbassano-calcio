@@ -124,12 +124,25 @@ club non le apre.
 | "Annate 2015 e 2014" | Forma compatta per stat, sottotitoli, slot timeline. |
 | "Calcio a 9" | Formato di gioco della categoria. Eyebrow delle card annata, stat. |
 
-⚠️ **Sede e prezzi non sono pubblicati** (decisione utente
-2026-08-17). I campi esistono su Studio ma sono vuoti, e le sezioni
-corrispondenti — card Sede, tabella quote, sconti, scadenze pagamento
-— non vengono renderizzate finché non li compila l'admin. Non
-reintrodurre fallback statici con indirizzi o importi: sono
-informazioni su cui le famiglie prendono decisioni.
+⚠️ **Sede, orari allenamenti e prezzi non sono pubblicati**
+(decisione utente 2026-08-17). I campi esistono su Studio ma sono
+vuoti, e le sezioni corrispondenti non vengono renderizzate finché non
+li compila l'admin:
+
+| Campo Studio vuoto | Sezione che sparisce |
+|---|---|
+| `scInfoVenueName` | card Sede in `/scuola-calcio/informazioni` |
+| `scProgTimeline` | "Settimana tipo" in `/scuola-calcio/programma` |
+| `scInfoPriceTable` | tabella quote |
+| `scInfoDiscounts` | sconti famiglie |
+| `scInfoPayments` | scadenze pagamento |
+| `scIscrPaymentNote` | nota sul bonifico in `/scuola-calcio/iscriviti` |
+
+Non reintrodurre fallback statici con indirizzi, orari o importi: sono
+informazioni su cui le famiglie prendono decisioni, e finché non le
+decide il club non esistono. Vale anche per le affermazioni derivate
+(«due sedute settimanali», stat «allenamenti settimanali»): se la
+programmazione non è definita, non va dichiarata da nessuna parte.
 
 ⚠️ **Mai** "Academy" / "Soccer Academy" nell'UI pubblica: la sezione è
 stata rinominata 2026-08-17 su richiesta del club. Restano `academy*`
