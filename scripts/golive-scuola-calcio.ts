@@ -91,7 +91,7 @@ const HOME_SET: Record<string, unknown> = {
   // A capo dopo "rossoblu" (richiesta club 2026-08-17): l'h1 ha
   // whitespace-pre-line, quindi la sequenza di escape qui sotto
   // spezza davvero la riga sul sito.
-  scHeroTitle: "Diventa rossoblù\ninsieme a noi",
+  scHeroTitle: "Diventa campione\ninsieme a noi",
 
   scIntroBlocks: [
     block(
