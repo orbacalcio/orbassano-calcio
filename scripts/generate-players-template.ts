@@ -29,7 +29,7 @@ const columns: Column[] = [
   { header: "role", example: "Centrocampista", note: "Uno tra: Portiere | Difensore | Centrocampista | Attaccante (con maiuscola)." },
   { header: "foot", example: "Destro", note: "Uno tra: Destro | Sinistro | Ambidestro." },
   { header: "nationality", example: "Italia", note: "Default 'Italia' se vuoto." },
-  { header: "teamSlug", example: "prima-squadra", note: "RICHIESTO. Slug della squadra in Sanity. Valori: prima-squadra | juniores | allievi-under-17 | allievi-under-16 | giovanissimi-under-15 | giovanissimi-under-14 | scuola-calcio." },
+  { header: "teamSlug", example: "prima-squadra", note: "RICHIESTO. Slug della squadra in Sanity. Valori: prima-squadra | juniores-u19 | juniores-under-18 | allievi-under-17 | allievi-under-16 | giovanissimi-under-15 | giovanissimi-under-14." },
   { header: "isCaptain", example: false, note: "true se capitano, false (o vuoto) altrimenti." },
   { header: "appearances", example: 0, note: "Presenze stagionali. Lascia 0 / vuoto se non disponibili." },
   { header: "goals", example: 0, note: "Gol stagionali." },

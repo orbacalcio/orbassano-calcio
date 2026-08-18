@@ -29,7 +29,7 @@ const columns: Column[] = [
   {
     header: "teamSlug",
     example: "prima-squadra",
-    note: "RICHIESTO. Slug della NOSTRA squadra. Valori: prima-squadra | juniores | under-17 | under-16 | under-15 | under-14 | scuola-calcio.",
+    note: "RICHIESTO. Slug della NOSTRA squadra. Valori: prima-squadra | juniores-u19 | juniores-under-18 | allievi-under-17 | allievi-under-16 | giovanissimi-under-15 | giovanissimi-under-14.",
   },
   {
     header: "competitionSlug",

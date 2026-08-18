@@ -1,7 +1,10 @@
 /**
  * One-shot per disattivare le feature in stand-by:
- * - team `scuola-calcio` → isActive: false
  * - facility `sporting-orbassano-stadio-mazzola` → isActive: false
+ *
+ * NB: qui c'era anche il team `scuola-calcio`. Il documento e' stato
+ * eliminato il 2026-08-17: la Scuola Calcio e' una sezione editoriale
+ * (/scuola-calcio) senza squadra associata.
  *
  * Usa `patch().set()` (non createOrReplace): NON sovrascrive gli
  * altri campi del documento, eventuali edit manuali fatti dall'admin
@@ -42,11 +45,6 @@ const client = createClient({
 });
 
 const PATCHES: Array<{ id: string; isActive: boolean; description: string }> = [
-  {
-    id: "team.scuola-calcio",
-    isActive: false,
-    description: "Team Scuola Calcio",
-  },
   {
     id: "facility.sporting-orbassano-stadio-mazzola",
     isActive: false,

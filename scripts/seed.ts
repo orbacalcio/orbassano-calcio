@@ -258,16 +258,10 @@ const teams: TeamSeed[] = [
       { role: "Dirigente accompagnatore", name: "Emiliano Mosca" },
     ],
   },
-  {
-    slugSrc: "scuola-calcio",
-    name: "Scuola Calcio",
-    category: "Scuola Calcio",
-    subcategory: "Piccoli Amici / Primi Calci / Pulcini / Esordienti",
-    season: "2026/2027",
-    order: 6,
-    staff: [],
-    isActive: false, // Scuola Calcio temporaneamente non attiva nel sito
-  },
+  // NB: nessun team "Scuola Calcio". Il documento e' stato eliminato il
+  // 2026-08-17: la Scuola Calcio e' una sezione editoriale
+  // (/scuola-calcio, 4 singleton academy*) e le annate attive vivono
+  // dentro le sue pagine, non come squadre con rosa e calendario.
 ];
 
 // ---------- ROSA PRIMA SQUADRA 2025/26 -----------------------------------------------
