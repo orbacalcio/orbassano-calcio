@@ -83,8 +83,11 @@ export const player = defineType({
     defineField({
       name: "team",
       title: "Squadra",
+      description:
+        "Obbligatorio: la rosa sul sito è costruita cercando i giocatori collegati alla squadra. Senza questo campo il giocatore resta invisibile anche se pubblicato.",
       type: "reference",
       to: [{ type: "team" }],
+      validation: (r) => r.required(),
     }),
     defineField({
       name: "isCaptain",
