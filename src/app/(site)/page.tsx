@@ -24,11 +24,15 @@ import { buildSportsTeamLd } from "@/lib/json-ld";
  *    tight in basso, stesso pattern delle news)
  * 4. Manifesto "Never give up since 1930"
  * 5. Storia in numeri
- * 6. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
- * 7. YouthMatchStrip — Juniores + Settore Giovanile Scolastico
- * 8. Tre card 01/02/03 per le aree del club (LE SQUADRE)
- * 9. Banner 5×1000 con CF in mono
- * 10. Marquee sponsor scorrimento infinito
+ * 6. Marquee sponsor scorrimento infinito — risalito qui dal fondo
+ *    pagina (richiesta utente 2026-09-07): in coda, sopra la newsletter,
+ *    lo vedeva solo chi scrollava tutto. Subito dopo il blocco
+ *    manifesto + numeri intercetta molti piu' lettori, e la strip
+ *    bianca dei loghi fa da stacco tra due sezioni navy.
+ * 7. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
+ * 8. YouthMatchStrip — Juniores + Settore Giovanile Scolastico
+ * 9. Tre card 01/02/03 per le aree del club (LE SQUADRE)
+ * 10. Banner 5×1000 con CF in mono
  * (11. Footer dark — viene da AppShell)
  *
  * Tutti i wrapper RevealOnScroll sono no-op (vedi RevealOnScroll.tsx):
@@ -65,6 +69,9 @@ export default function Home() {
         <StoryNumbers />
       </RevealOnScroll>
       <RevealOnScroll>
+        <SponsorMarquee />
+      </RevealOnScroll>
+      <RevealOnScroll>
         <VivLOrba />
       </RevealOnScroll>
       <RevealOnScroll>
@@ -75,9 +82,6 @@ export default function Home() {
       </RevealOnScroll>
       <RevealOnScroll>
         <Banner5x1000 />
-      </RevealOnScroll>
-      <RevealOnScroll>
-        <SponsorMarquee />
       </RevealOnScroll>
     </>
   );
