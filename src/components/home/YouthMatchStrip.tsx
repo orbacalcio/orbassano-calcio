@@ -10,6 +10,7 @@ import { TeamLogo } from "@/components/calendario/TeamLogo";
 import { Container } from "@/components/ui/Container";
 import { APP_TIME_ZONE } from "@/lib/date";
 import {
+  fetchActiveTeamSlugs,
   fetchLastMatchesByTeamSlugs,
   fetchNextMatchesByTeamSlugs,
   type YouthLastMatch,
@@ -59,8 +60,6 @@ const SCOLASTICO_TEAMS: TeamRow[] = [
   { slug: "giovanissimi-under-15", label: "Under 15" },
   { slug: "giovanissimi-under-14", label: "Under 14" },
 ];
-
-const ALL_TEAMS: TeamRow[] = [...JUNIORES_TEAMS, ...SCOLASTICO_TEAMS];
 
 function formatTimeOnly(iso: string): string {
   return new Date(iso).toLocaleTimeString("it-IT", {
@@ -382,7 +381,17 @@ function StripBlock({
  * altre squadre vive a meta' scroll, non subito sotto la Prima Squadra.
  */
 export async function YouthMatchStrip() {
-  const slugs = ALL_TEAMS.map((t) => t.slug);
+  // Le squadre disattivate in Studio (team.isActive = false, es. una
+  // categoria non iscritta quest'anno) escono dalla strip: niente riga
+  // e non contano nemmeno per la nota "Calendario in arrivo per le
+  // altre categorie". Le query a valle filtrano gia' i match per
+  // team->isActive; qui serve a ripulire le liste hardcoded.
+  const activeSlugs = new Set(await fetchActiveTeamSlugs());
+  const juniores = JUNIORES_TEAMS.filter((t) => activeSlugs.has(t.slug));
+  const scolastico = SCOLASTICO_TEAMS.filter((t) => activeSlugs.has(t.slug));
+  if (juniores.length === 0 && scolastico.length === 0) return null;
+
+  const slugs = [...juniores, ...scolastico].map((t) => t.slug);
   const [nextRows, lastRows] = await Promise.all([
     fetchNextMatchesByTeamSlugs(slugs),
     fetchLastMatchesByTeamSlugs(slugs),
@@ -412,21 +421,30 @@ export async function YouthMatchStrip() {
                 I risultati del vivaio rossoblù
               </span>
             </header>
-            <StripBlock
-              title="Juniores"
-              ariaLabel="Juniores · ultimi risultati e prossime partite"
-              teams={JUNIORES_TEAMS}
-              nextBySlug={nextBySlug}
-              lastBySlug={lastBySlug}
-            />
-            <div aria-hidden className="border-brand-gold/40 border-t" />
-            <StripBlock
-              title="Settore Giovanile Scolastico"
-              ariaLabel="Settore Giovanile Scolastico · ultimi risultati e prossime partite"
-              teams={SCOLASTICO_TEAMS}
-              nextBySlug={nextBySlug}
-              lastBySlug={lastBySlug}
-            />
+            {/* Un blocco senza squadre attive sparisce del tutto (niente
+                "Calendario in arrivo per tutte le categorie" per una
+                categoria che quest'anno non esiste). */}
+            {juniores.length > 0 && (
+              <StripBlock
+                title="Juniores"
+                ariaLabel="Juniores · ultimi risultati e prossime partite"
+                teams={juniores}
+                nextBySlug={nextBySlug}
+                lastBySlug={lastBySlug}
+              />
+            )}
+            {juniores.length > 0 && scolastico.length > 0 && (
+              <div aria-hidden className="border-brand-gold/40 border-t" />
+            )}
+            {scolastico.length > 0 && (
+              <StripBlock
+                title="Settore Giovanile Scolastico"
+                ariaLabel="Settore Giovanile Scolastico · ultimi risultati e prossime partite"
+                teams={scolastico}
+                nextBySlug={nextBySlug}
+                lastBySlug={lastBySlug}
+              />
+            )}
           </div>
         </Container>
       </div>

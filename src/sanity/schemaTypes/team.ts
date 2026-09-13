@@ -173,7 +173,7 @@ export const team = defineType({
       name: "isActive",
       title: "Attiva",
       description:
-        "Disattiva per nascondere la squadra dal sito senza cancellarla. La pagina dedicata risponde con 404, link nel menu/footer/mappa scompaiono. Riattivabile in qualsiasi momento.",
+        "Disattiva per nascondere la squadra dal sito senza cancellarla (es. categoria non iscritta in questa stagione). La pagina dedicata risponde con 404; link nel menu/footer/mappa, riga nei risultati in homepage, card nell'hub Calendari e partite nel calendario aggregato del Settore Giovanile scompaiono. L'archivio delle stagioni passate resta consultabile. Riattivabile in qualsiasi momento.",
       type: "boolean",
       initialValue: true,
     }),

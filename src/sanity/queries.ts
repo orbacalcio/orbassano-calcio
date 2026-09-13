@@ -399,6 +399,7 @@ export const archivePastMatchesByTeamQuery = defineQuery(`
 export const matchesBySettoreGiovanileQuery = defineQuery(`
   *[_type == "match"
     && team->category == "Settore Giovanile"
+    && team->isActive != false
     && competition->season == $season]
   | order(date asc){
     _id,
@@ -499,6 +500,7 @@ export const matchesByTeamSlugQuery = defineQuery(`
 export const nextMatchesByTeamSlugsQuery = defineQuery(`
   *[_type == "match"
     && team->slug.current in $slugs
+    && team->isActive != false
     && status == "scheduled"
     && date > now()]
   | order(date asc){
@@ -538,6 +540,7 @@ export const nextMatchesByTeamSlugsQuery = defineQuery(`
 export const lastMatchesByTeamSlugsQuery = defineQuery(`
   *[_type == "match"
     && team->slug.current in $slugs
+    && team->isActive != false
     && status == "finished"]
   | order(date desc){
     _id,

@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { HeaderMotif } from "@/components/ui/HeaderMotif";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { sanityClient } from "@/sanity/client";
+import { fetchTeamsByCategory } from "@/sanity/fetchers";
 import { settingsQuery } from "@/sanity/queries";
 
 export const metadata: Metadata = {
@@ -79,7 +80,7 @@ const CARD_SLOTS: Array<{
     fallbackEyebrow: "Calendario Juniores",
     fallbackTitle: "Juniores U19",
     fallbackDescription:
-      "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra. La squadra Under 18 ha il suo calendario su /squadre/juniores-under-18/calendario.",
+      "Campionato Juniores Under 19. Le gare del nostro ultimo gradino prima del salto in Prima Squadra.",
   },
   {
     number: "03",
@@ -106,8 +107,21 @@ async function fetchCalendarioPageSettings(): Promise<CalendarioPageSettings> {
 }
 
 export default async function CalendarioPage() {
-  const settings = await fetchCalendarioPageSettings();
+  // Le card Juniores e Settore Giovanile compaiono solo se la categoria
+  // ha almeno una squadra attiva (team.isActive): una categoria non
+  // iscritta quest'anno non deve avere una card che porta a un 404.
+  // fetchTeamsByCategory filtra gia' isActive != false lato query.
+  const [settings, juniores, scolastico] = await Promise.all([
+    fetchCalendarioPageSettings(),
+    fetchTeamsByCategory("Juniores"),
+    fetchTeamsByCategory("Settore Giovanile"),
+  ]);
   const cmsSections = settings.calendarioPageSections ?? [];
+  const activeSlots = CARD_SLOTS.filter((slot) => {
+    if (slot.category === "Juniores") return juniores.length > 0;
+    if (slot.category === "Settore Giovanile") return scolastico.length > 0;
+    return true;
+  });
 
   const header = {
     eyebrow:
@@ -117,13 +131,21 @@ export default async function CalendarioPage() {
       settings.calendarioPageSubtitle?.trim() || FALLBACK_HEADER.subtitle,
   };
 
-  const cards = CARD_SLOTS.map((slot) => {
+  const cards = activeSlots.map((slot, i) => {
     const cms = cmsSections.find((c) => c.category === slot.category);
+    // Juniores: link alla prima squadra attiva della categoria invece
+    // dello slug fisso, cosi' se un anno manca la U19 ma c'e' la U18 la
+    // card non porta a un 404.
+    const href =
+      slot.category === "Juniores" && juniores[0]
+        ? `/squadre/${juniores[0].slug}/calendario`
+        : slot.href;
     return {
-      number: slot.number,
+      // Rinumerate dopo il filtro: senza una categoria non si vede 01, 03.
+      number: String(i + 1).padStart(2, "0"),
       title: cms?.title?.trim() || slot.fallbackTitle,
       description: cms?.description?.trim() || slot.fallbackDescription,
-      href: slot.href,
+      href,
       // L'eyebrow numerato CMS-driven NON viene mostrato nelle card
       // (SocietaHubCard mostra solo number+title+description+CTA).
       // Resta come label gestionale Studio per identificare la card.
