@@ -28,6 +28,31 @@ type SanityWebhookBody = {
   _id?: string;
 };
 
+/**
+ * Propagazione tag: un documento modificato non invalida solo il tag
+ * omonimo, ma tutti i tag delle query che lo leggono via reference.
+ *
+ * Serve perche' le query sono taggate sul documento "principale" che
+ * interrogano, non su quelli che joinano. Le MatchCard ad esempio
+ * partono da `match` ma risolvono opponent → club (nome e logo
+ * dell'avversario) e competition (nome del campionato): la query e'
+ * taggata "match", quindi senza propagazione modificare un `club`
+ * invalidava il tag "club", che nessuna query usa. Risultato: pagine
+ * dinamiche aggiornate e pagine in cache (homepage) ferme al vecchio
+ * contenuto — vedi il caso Nichelino del 2026-09-18.
+ *
+ * `opponent` e `club` NON compaiono come tag in nessuna query: senza
+ * questa mappa le loro modifiche non rigenerano mai nulla.
+ *
+ * Ogni tipo non elencato invalida il proprio tag e basta.
+ */
+const TAG_FANOUT: Record<string, readonly string[]> = {
+  opponent: ["opponent", "match"],
+  club: ["club", "match"],
+  competition: ["competition", "match"],
+  team: ["team", "match", "player"],
+};
+
 export async function POST(req: NextRequest) {
   if (!revalidateSecret) {
     return NextResponse.json(
@@ -55,7 +80,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const tag = body._type;
-  revalidateTag(tag, "max");
-  return NextResponse.json({ ok: true, revalidated: tag, now: Date.now() });
+  const type = body._type;
+  const tags = TAG_FANOUT[type] ?? [type];
+  for (const tag of tags) {
+    revalidateTag(tag, "max");
+  }
+  return NextResponse.json({ ok: true, revalidated: tags, now: Date.now() });
 }
