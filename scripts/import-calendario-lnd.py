@@ -82,8 +82,12 @@ COMP_ID = "competition.prima-categoria-piemonte-2026-27"
 COMP_SLUG = "prima-categoria-piemonte-2026-27"
 TEAM_ID = "team.prima-squadra"
 
-# Come si chiama la NOSTRA squadra nelle fonti esterne.
-ORBASSANO_ALIASES = {"orbassano", "orbassanocalcio", "asdorbassanocalcio"}
+# Come si chiama la NOSTRA squadra nelle fonti esterne, gia' normalizzato
+# e senza spazi. Il confronto e' per UGUAGLIANZA, non per contenimento:
+# nei gironi provinciali c'e' "ORATORIO ORBASSANO CALCIO", una societa'
+# diversa. Col contenimento veniva scambiata per noi e il ritorno del
+# derby finiva registrato come Orbassano contro se stesso.
+ORBASSANO_EXACT = {"orbassano", "orbassanocalcio", "asdorbassanocalcio"}
 
 # Denominazioni pulite per i club creati ex novo. Le fonti LND sono in
 # maiuscolo e includono la forma giuridica ("S.R.L. S.S.D.", "ASD",
@@ -96,6 +100,13 @@ NAME_OVERRIDES = {
     "torinese 1894": ("Torinese 1894", "Torinese 1894"),
     "piossaschese": ("F.C. Piossaschese", "Piossaschese"),
     "piossasco": ("Piossasco", "Piossasco"),
+    # Provinciali Torino U16/U17 2026/27
+    "porporati": ("A.P.D. Porporati", "Porporati"),
+    "rapid di torino": ("Pol. Rapid di Torino", "Rapid Torino"),
+    "san paolo torino": ("San Paolo Torino", "San Paolo"),
+    "caprie green csa": ("Caprie Green Club", "Caprie"),
+    "tetti francesi rivalta": ("Tetti Francesi Rivalta", "Tetti Francesi"),
+    "valle di susa": ("Valle di Susa", "Valle di Susa"),
 }
 
 CET = timezone(timedelta(hours=1))   # ora solare
@@ -189,7 +200,23 @@ def slugify(s):
 
 
 def is_orbassano(name):
-    return any(a in norm(name).replace(" ", "") for a in ORBASSANO_ALIASES)
+    return norm(name).replace(" ", "") in ORBASSANO_EXACT
+
+
+def _prefix_match(a, b):
+    """True se una sequenza di parole apre l'altra.
+
+    Serve ad agganciare le denominazioni federali estese
+    ("SPORTING P.R." -> "Sporting Piscinese Riva") senza i falsi
+    positivi del contenimento su sottostringa, che faceva coincidere
+    "VALLE DI SUSA S.C." con "Susa Calcio" solo perché "susa" compare
+    in entrambe: sono due società diverse.
+    """
+    ta, tb = a.split(), b.split()
+    if not ta or not tb:
+        return False
+    n = min(len(ta), len(tb))
+    return ta[:n] == tb[:n]
 
 
 def match_club(name, clubs):
@@ -201,13 +228,13 @@ def match_club(name, clubs):
         for c in clubs:
             if norm(c.get(field)) == target:
                 return c
-    # Ultimo tentativo: uno contiene l'altro. Soglia a 4 caratteri per
-    # non far collidere sigle corte con nomi lunghi.
+    # Ultimo tentativo: prefisso di parole. Soglia a 4 caratteri per non
+    # far collidere sigle corte con nomi lunghi.
     if len(target) >= 4:
         for c in clubs:
             for field in ("name", "shortName"):
                 v = norm(c.get(field))
-                if v and len(v) >= 4 and (target in v or v in target):
+                if v and len(v) >= 4 and _prefix_match(target, v):
                     return c
     return None
 
