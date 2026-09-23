@@ -107,6 +107,17 @@ NAME_OVERRIDES = {
     "caprie green csa": ("Caprie Green Club", "Caprie"),
     "tetti francesi rivalta": ("Tetti Francesi Rivalta", "Tetti Francesi"),
     "valle di susa": ("Valle di Susa", "Valle di Susa"),
+    # Provinciali Torino U15 2026/27. "Perosa" è Perosa Argentina, da
+    # non confondere con Villar Perosa che è già in anagrafica.
+    "perosa": ("Perosa", "Perosa"),
+    "torino": ("Torino F.C.", "Torino"),
+}
+
+# Abbreviazioni federali che il confronto non scioglie da solo: la
+# normalizzazione scarta le iniziali puntate, quindi "S.SECONDO A.S.D."
+# si riduce a "secondo" e non aggancia più "San Secondo".
+ALIASES = {
+    "secondo": "san secondo",
 }
 
 CET = timezone(timedelta(hours=1))   # ora solare
@@ -224,6 +235,7 @@ def match_club(name, clubs):
     target = norm(name)
     if not target:
         return None
+    target = ALIASES.get(target, target)
     for field in ("name", "shortName"):
         for c in clubs:
             if norm(c.get(field)) == target:
