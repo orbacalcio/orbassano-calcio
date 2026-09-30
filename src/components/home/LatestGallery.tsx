@@ -41,12 +41,12 @@ export async function LatestGallery() {
     .filter((p) => p.src !== "");
 
   const photos = [...cloudinaryPhotos, ...sanityPhotos];
-  if (photos.length === 0) return null;
+  // Servono 5 foto per riempire la striscia.
+  if (photos.length < 5) return null;
 
   return (
     <LatestGalleryGrid
       title={gallery.title}
-      slug={gallery.slug}
       photos={photos}
     />
   );
