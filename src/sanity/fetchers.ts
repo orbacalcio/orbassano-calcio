@@ -13,6 +13,7 @@ import {
   galleriesPaginatedQuery,
   galleriesTotalCountQuery,
   galleryBySlugQuery,
+  latestGalleryQuery,
   allGallerySlugsQuery,
   lastMatchesByTeamSlugsQuery,
   mainSponsorsQuery,
@@ -1218,6 +1219,26 @@ export async function fetchGalleryBySlug(
     return (data ?? null) as GalleryDetail | null;
   } catch (err) {
     console.error("[fetchGalleryBySlug]", { slug }, err);
+    return null;
+  }
+}
+
+/** Ultimo album caricato (subset di GalleryDetail per la home). */
+export type LatestGallery = Pick<
+  GalleryDetail,
+  "_id" | "title" | "slug" | "uploadedAt" | "images" | "cloudinaryImages"
+>;
+
+export async function fetchLatestGallery(): Promise<LatestGallery | null> {
+  try {
+    const data = await sanityClient.fetch(
+      latestGalleryQuery,
+      {},
+      { next: { tags: ["gallery"] } },
+    );
+    return (data ?? null) as LatestGallery | null;
+  } catch (err) {
+    console.error("[fetchLatestGallery]", err);
     return null;
   }
 }

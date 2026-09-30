@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Banner5x1000 } from "@/components/home/Banner5x1000";
 import { Hero } from "@/components/home/Hero";
+import { LatestGallery } from "@/components/home/LatestGallery";
 import { Manifesto } from "@/components/home/Manifesto";
 import { MatchStrip } from "@/components/home/MatchStrip";
 import { NewsGrid } from "@/components/home/NewsGrid";
@@ -24,16 +25,18 @@ import { buildSportsTeamLd } from "@/lib/json-ld";
  *    tight in basso, stesso pattern delle news)
  * 4. Manifesto "Never give up since 1930"
  * 5. Storia in numeri
- * 6. Marquee sponsor scorrimento infinito — risalito qui dal fondo
+ * 6. Ultimo album: 5 foto a caso (sorteggio client a ogni visita)
+ *    dell'album caricato piu' di recente per data/ora CMS.
+ * 7. Marquee sponsor scorrimento infinito — risalito qui dal fondo
  *    pagina (richiesta utente 2026-09-07): in coda, sopra la newsletter,
  *    lo vedeva solo chi scrollava tutto. Subito dopo il blocco
  *    manifesto + numeri intercetta molti piu' lettori, e la strip
  *    bianca dei loghi fa da stacco tra due sezioni navy.
- * 7. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
- * 8. YouthMatchStrip — Juniores + Settore Giovanile Scolastico
- * 9. Tre card 01/02/03 per le aree del club (LE SQUADRE)
- * 10. Banner 5×1000 con CF in mono
- * (11. Footer dark — viene da AppShell)
+ * 8. Vivi l'Orba (Behold Instagram embed, fallback placeholder)
+ * 9. YouthMatchStrip — Juniores + Settore Giovanile Scolastico
+ * 10. Tre card 01/02/03 per le aree del club (LE SQUADRE)
+ * 11. Banner 5×1000 con CF in mono
+ * (12. Footer dark — viene da AppShell)
  *
  * Tutti i wrapper RevealOnScroll sono no-op (vedi RevealOnScroll.tsx):
  * l'animazione di slide-in `y: +32 -> 0` creava un effetto "salto verso
@@ -67,6 +70,9 @@ export default function Home() {
       </RevealOnScroll>
       <RevealOnScroll>
         <StoryNumbers />
+      </RevealOnScroll>
+      <RevealOnScroll>
+        <LatestGallery />
       </RevealOnScroll>
       <RevealOnScroll>
         <SponsorMarquee />

@@ -121,6 +121,37 @@ export const galleryBySlugQuery = defineQuery(`
   }
 `);
 
+// Ultimo album caricato (per data/ora "uploadedAt" del CMS, fallback
+// _createdAt), ignorando il pin "ordering": serve alla strip gallery
+// della homepage, che deve mostrare sempre l'album piu' recente.
+export const latestGalleryQuery = defineQuery(`
+  *[_type == "gallery" && defined(slug.current)]
+    | order(coalesce(uploadedAt, _createdAt) desc)[0]{
+    _id,
+    title,
+    "slug": slug.current,
+    uploadedAt,
+    "images": images[]{
+      _key,
+      asset,
+      hotspot,
+      crop,
+      alt,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "lqip": asset->metadata.lqip
+    },
+    "cloudinaryImages": cloudinaryImages[]{
+      _key,
+      public_id,
+      width,
+      height,
+      format,
+      context
+    }
+  }
+`);
+
 // Tutti gli slug per generateStaticParams su /gallery/[slug].
 export const allGallerySlugsQuery = defineQuery(`
   *[_type == "gallery" && defined(slug.current)].slug.current
