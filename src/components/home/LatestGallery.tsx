@@ -41,8 +41,8 @@ export async function LatestGallery() {
     .filter((p) => p.src !== "");
 
   const photos = [...cloudinaryPhotos, ...sanityPhotos];
-  // Servono 5 foto per riempire la striscia.
-  if (photos.length < 5) return null;
+  // Sotto le 3 foto (minimo mobile) la striscia non ha senso.
+  if (photos.length < 3) return null;
 
   return (
     <LatestGalleryGrid

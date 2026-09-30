@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/cn";
 
 export type LatestPhoto = {
   key: string;
@@ -10,7 +10,16 @@ export type LatestPhoto = {
   alt: string | null;
 };
 
-const PICK_COUNT = 5;
+// Foto visibili per breakpoint: 3 su mobile, 5 da md, 8 da xl. Se ne
+// sorteggiano sempre 8 e le eccedenti sono nascoste via CSS, cosi' il
+// numero si adatta al ridimensionamento della finestra senza JS.
+const PICK_COUNT = 8;
+
+function visibilityClass(index: number): string {
+  if (index >= 5) return "hidden xl:block";
+  if (index >= 3) return "hidden md:block";
+  return "block";
+}
 
 /** Fisher-Yates parziale: `count` elementi distinti a caso. */
 function pickRandom<T>(items: T[], count: number): T[] {
@@ -24,8 +33,10 @@ function pickRandom<T>(items: T[], count: number): T[] {
 }
 
 /**
- * Striscia di 5 foto uguali in orizzontale, senza testi ne' link
- * (richiesta utente 2026-09-30).
+ * Striscia a tutta larghezza di foto quadrate uguali (3/5/8 in base
+ * alla larghezza), senza testi ne' link (richiesta utente 2026-09-30).
+ * Flex con tile flex-1: le foto riempiono sempre tutta la riga, anche
+ * se l'album ne ha meno di 8.
  *
  * Il sorteggio avviene dopo il mount (requestAnimationFrame, stesso
  * pattern di MatchCountdown): l'HTML server e il primo render client
@@ -50,31 +61,32 @@ export function LatestGalleryGrid({
 
   return (
     <section aria-label={`Foto: ${title}`} className="py-10 lg:py-14">
-      <Container size="wide">
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-3 lg:gap-4">
-          {Array.from({ length: PICK_COUNT }, (_, i) => {
-            const photo = picked?.[i];
-            return (
-              <div
-                key={photo?.key ?? `slot-${i}`}
-                className="bg-surface-2 relative aspect-square overflow-hidden rounded-sm"
-              >
-                {photo && (
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt ?? `${title} — foto ${i + 1}`}
-                    fill
-                    sizes="(min-width: 1536px) 300px, 20vw"
-                    draggable={false}
-                    onContextMenu={(e) => e.preventDefault()}
-                    className="object-cover"
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </Container>
+      <div className="flex gap-1.5 sm:gap-2 lg:gap-3">
+        {Array.from({ length: Math.min(PICK_COUNT, photos.length) }, (_, i) => {
+          const photo = picked?.[i];
+          return (
+            <div
+              key={photo?.key ?? `slot-${i}`}
+              className={cn(
+                "bg-surface-2 relative aspect-square min-w-0 flex-1 overflow-hidden",
+                visibilityClass(i),
+              )}
+            >
+              {photo && (
+                <Image
+                  src={photo.src}
+                  alt={photo.alt ?? `${title} — foto ${i + 1}`}
+                  fill
+                  sizes="(min-width: 1280px) 12.5vw, (min-width: 768px) 20vw, 33vw"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="object-cover"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }

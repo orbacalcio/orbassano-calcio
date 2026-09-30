@@ -25,7 +25,7 @@ import { buildSportsTeamLd } from "@/lib/json-ld";
  *    tight in basso, stesso pattern delle news)
  * 4. Manifesto "Never give up since 1930"
  * 5. Storia in numeri
- * 6. Striscia 5 foto a caso (sorteggio client a ogni visita)
+ * 6. Striscia foto a caso (3/5/8 per breakpoint) (sorteggio client a ogni visita)
  *    dell'album caricato piu' di recente per data/ora CMS.
  * 7. Marquee sponsor scorrimento infinito — risalito qui dal fondo
  *    pagina (richiesta utente 2026-09-07): in coda, sopra la newsletter,
