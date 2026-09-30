@@ -298,7 +298,7 @@ export function GalleryViewer({ photos: images, albumTitle }: Props) {
                 aria-hidden
                 className="font-mono pointer-events-none absolute bottom-2 right-2 rounded bg-black/40 px-2 py-1 text-[10px] tracking-wider uppercase text-white/70 md:bottom-3 md:right-3 md:text-xs"
               >
-                © orbassanocalcio.com
+                orbassanocalcio.com
               </span>
             </motion.div>
 
