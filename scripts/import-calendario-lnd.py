@@ -118,6 +118,9 @@ NAME_OVERRIDES = {
 # si riduce a "secondo" e non aggancia più "San Secondo".
 ALIASES = {
     "secondo": "san secondo",
+    # Juniores U19 Pinerolo: "SPORTING CLUB BEIBORG ASD" e' il Beiborg
+    # gia' in anagrafica (U16 provinciali, "BEIBORG").
+    "sporting beiborg": "beiborg",
 }
 
 CET = timezone(timedelta(hours=1))   # ora solare
