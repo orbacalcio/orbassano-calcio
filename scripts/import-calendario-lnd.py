@@ -111,6 +111,10 @@ NAME_OVERRIDES = {
     # non confondere con Villar Perosa che è già in anagrafica.
     "perosa": ("Perosa", "Perosa"),
     "torino": ("Torino F.C.", "Torino"),
+    # Provinciali Torino U14 2026/27. "Next Gen Alpignano" è una società
+    # diversa dall'Alpignano già in anagrafica.
+    "next gen alpignano": ("Next Gen Alpignano", "Next Gen Alpignano"),
+    "nuova givolettese": ("Nuova Givolettese", "Givolettese"),
 }
 
 # Abbreviazioni federali che il confronto non scioglie da solo: la
